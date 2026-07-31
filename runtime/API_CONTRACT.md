@@ -24,6 +24,8 @@ embedded query newlines are JSON escapes.
 
 `MATCH` contains one canonical skill record and the shared response context.
 `NORMAL` contains no skill body or path unless required for a safe diagnostic.
+An explicit registry-discovery question returns `NORMAL / REGISTRY_STATUS` plus
+live metadata; it never loads a skill body.
 
 ```json
 {
@@ -55,6 +57,36 @@ embedded query newlines are JSON escapes.
 
 The adapter validates a returned skill path against the Skills AI root before
 reading it. The original prompt is never present in the response.
+
+## Registry status response
+
+```json
+{
+  "protocol": "skills-ai/1",
+  "result": "NORMAL",
+  "reason_code": "REGISTRY_STATUS",
+  "registry": {
+    "source_hash": "compiled source hash",
+    "route_counts": {"active": 45, "manual": 6, "off": 1},
+    "routes": {"active": [], "manual": [], "off": []},
+    "family_gates": {},
+    "component_gates": {}
+  },
+  "context": {}
+}
+```
+
+Hidden and deprecated identifiers are omitted from normal discovery. An
+explicit maintenance CLI request may include them. System and plugin skills are
+separate host-managed namespaces and are not represented here.
+
+## External change-request process
+
+`scripts/create_change_request.py --stdin-json` accepts a local JSON object and
+creates one Markdown file under `requests/pending/`. It is not a network API and
+does not edit, stage, commit, or launch a maintenance task. Its response returns
+the request id, path, workspace, next action, and a platform-neutral handoff
+prompt.
 
 ## Optional future service
 

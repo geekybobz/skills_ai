@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `1`.
+Protocol version: `2`.
 
 ## Operation selector
 
@@ -18,6 +18,7 @@ Protocol version: `1`.
 | write under Codex, Claude, or another external configuration root | [[protocols/repository/INSTALL_UNINSTALL\|INSTALL_UNINSTALL]] |
 | work beyond the authorized request | [[protocols/repository/SCOPE_EXPANSION\|SCOPE_EXPANSION]] |
 | change these governance rules | [[protocols/repository/PROTOCOL_AMENDMENT\|PROTOCOL_AMENDMENT]] |
+| request a Skills AI change from a task outside this workspace | [[protocols/repository/EXTERNAL_CHANGE_REQUEST\|EXTERNAL_CHANGE_REQUEST]] |
 
 Do not combine several cards by default. Pick the operation with the largest
 contract or lifecycle effect. A localized edit that changes a public contract
@@ -62,6 +63,16 @@ source of permission.
 7. Report the exact files, behavior, verification, and residual risk.
 8. Stage only the declared scope.
 
+## External-task boundary
+
+A task whose initial workspace is outside `/Users/billabobz/skills_ai` has no
+direct edit path into this repository. An explicit external change request
+authorizes only a new generated Markdown packet under `requests/pending/`.
+Implementation requires a dedicated maintenance task rooted here and scoped by
+the request, risk map, selected operation card, and change guard. Host workspace
+permissions must enforce read-only repository access plus the narrow request
+inbox; agent instructions alone are not a filesystem security boundary.
+
 ## Authority layers
 
 - `AGENTS.md` and `CLAUDE.md`: small platform entry pointers.
@@ -70,6 +81,7 @@ source of permission.
 - [[04_RISK_MAP]]: risk-specific restrictions.
 - `runtime/PROTOCOL.md`: router wire and lifecycle contract.
 - `registry/activation.md`: user-controlled routing state.
+- `requests/pending/`: external intent packets, never skill or routing source.
 
 The registry remains routing metadata. Repository governance is not a skill
 family and is not compiled into `runtime/router-manifest.json`.

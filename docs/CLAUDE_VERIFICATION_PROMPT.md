@@ -10,7 +10,8 @@ Your responsibility is the Claude side of the shared Skills AI contract. Read
 CLAUDE.md, docs/06_CHANGE_CONTROL.md, docs/04_RISK_MAP.md,
 protocols/repository/UPDATE_MIGRATE.md,
 protocols/repository/INSTALL_UNINSTALL.md, runtime/PROTOCOL.md, and
-runtime/API_CONTRACT.md. Inspect live Git status and preserve unrelated work.
+protocols/repository/EXTERNAL_CHANGE_REQUEST.md, runtime/API_CONTRACT.md.
+Inspect live Git status and preserve unrelated work.
 
 Verify the shared router contract read-only first. Do not implement, modify, or
 certify Codex-specific invocation, timeout, terminal-session, installation, or
@@ -23,8 +24,16 @@ Audit and test:
 - the 1-second Python-child and 3-second outer-hook timeout hierarchy;
 - fail-open behavior for no match, invalid output, missing router, timeout, and
   cancellation;
-- no prompt or skill-body leakage in diagnostics;
+- JSON arrays are invalid envelopes and do not route trigger text;
+- no prompt, child stderr path, or skill-body leakage in diagnostics;
+- realpath containment blocks an in-root symlink to an outside file;
+- foreign regular hook files are preserved, the first settings backup remains
+  immutable, and the latest replaced state uses the separate backup;
 - no Python or Node process left after repeated failures;
+- "What skills are saved in memory?" returns live active/manual/off registry
+  metadata without loading a skill body;
+- a Skills AI edit request from an external task receives the request-only
+  boundary and creates no canonical edit;
 - a fresh Claude session uses the hook and shared manifest rather than a copied
   skill catalog or remembered skill body.
 

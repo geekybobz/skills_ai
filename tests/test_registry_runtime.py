@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from registry_runtime import build_manifest, compact_context, load_manifest, route_request  # noqa: E402
+from registry_runtime import build_manifest, compact_context, load_manifest, registry_summary, route_request  # noqa: E402
 from install_runtime_adapter import check_adapter, install_adapter  # noqa: E402
 from compile_registry import atomic_write as atomic_write_manifest  # noqa: E402
 from toggle_registry import toggle  # noqa: E402
@@ -33,6 +33,29 @@ class RegistryRuntimeTests(unittest.TestCase):
         decision = route_request("What is the capital of France?", self.manifest)
         self.assertEqual("NORMAL", decision["result"])
         self.assertEqual("NO_SKILL_MATCH", decision["reason_code"])
+
+    def test_registry_discovery_returns_live_metadata_without_skill_body(self) -> None:
+        decision = route_request("What skills are saved in memory?", self.manifest)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertEqual("REGISTRY_STATUS", decision["reason_code"])
+        self.assertNotIn("skill", decision)
+        self.assertEqual(self.manifest["source_hash"], decision["registry"]["source_hash"])
+        self.assertEqual(45, decision["registry"]["route_counts"]["active"])
+        self.assertEqual(6, decision["registry"]["route_counts"]["manual"])
+        self.assertEqual(["quantum-job-collector"], decision["registry"]["routes"]["off"])
+        self.assertNotIn("hidden", decision["registry"]["routes"])
+
+    def test_registry_summary_can_include_hidden_only_for_maintenance(self) -> None:
+        normal = registry_summary(self.manifest)
+        maintenance = registry_summary(self.manifest, include_hidden=True)
+        self.assertNotIn("hidden", normal["routes"])
+        self.assertIn("hidden", maintenance["routes"])
+
+    def test_skills_ai_write_request_gets_external_change_boundary(self) -> None:
+        decision = route_request("Edit the Skills AI router", self.manifest)
+        self.assertNotEqual("REGISTRY_STATUS", decision["reason_code"])
+        boundary = decision["context"]["skills_ai_change_boundary"]
+        self.assertEqual("request-only-outside-maintenance-workspace", boundary["mode"])
 
     def test_math_loads_only_math_skill(self) -> None:
         decision = route_request("Derive the equation formula first with less story", self.manifest)
@@ -175,6 +198,22 @@ class RegistryRuntimeTests(unittest.TestCase):
         context = payload["hookSpecificOutput"]["additionalContext"]
         self.assertIn("Selected local skill: code-explainer", context)
         self.assertIn("voice=compact-professional", context)
+
+    def test_claude_hook_renders_registry_discovery_without_skill_body(self) -> None:
+        completed = subprocess.run(
+            ["node", str(ROOT / "adapters" / "claude" / "skills-ai-router.js"), "--root", str(ROOT)],
+            input=json.dumps({"prompt": "What skills are saved in memory?"}),
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        payload = json.loads(completed.stdout)
+        context = payload["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("Live Skills AI registry source", context)
+        self.assertIn("active skills (45)", context)
+        self.assertIn("manual skills (6)", context)
+        self.assertIn("off skills (1): quantum-job-collector", context)
+        self.assertNotIn("Selected local skill", context)
 
     def test_benchmark_fixture_expectations(self) -> None:
         cases = json.loads((ROOT / "tests" / "router_cases.json").read_text(encoding="utf-8"))

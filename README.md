@@ -11,6 +11,8 @@ Skill files are never modified — the registry only points at them.
 - Change control: [[docs/06_CHANGE_CONTROL|06_CHANGE_CONTROL]]
 - Build and release: [[docs/07_BUILD_AND_RELEASE|07_BUILD_AND_RELEASE]]
 - Runtime protocol/API: [[runtime/PROTOCOL|PROTOCOL]] · [[runtime/API_CONTRACT|API_CONTRACT]]
+- Live registry listing: `python3 scripts/list_registry.py`
+- External change-request inbox: [[requests/README|requests]]
 - Claude verification: [[docs/CLAUDE_VERIFICATION_PROMPT|CLAUDE_VERIFICATION_PROMPT]]
 - Legacy graph cards: [[cards/legacy/quantum-job-collector|quantum-job-collector]]
 - Proposed interaction protocol: [[docs/TODO_INTERACTION_PROTOCOL_PLAN|TODO_INTERACTION_PROTOCOL_PLAN]]
@@ -35,6 +37,10 @@ registry into `runtime/router-manifest.json`. The platform-neutral
 decision with a compact, structured response context. Thin adapters give Codex
 and Claude access to the same router, profile, manifest, and skill sources. No
 match, disabled routes, and ambiguous matches continue with normal behavior.
+Questions about available skills return live active/manual/off metadata rather
+than a remembered catalog. A task started outside this workspace can request a
+change only by creating one pending Markdown packet and handing it to a
+dedicated maintenance task.
 
 ## Families
 
@@ -74,6 +80,9 @@ to load, what it is *not* for, and what write risk it carries. Never skill conte
 - `scripts/benchmark_router.py` — measures route accuracy, latency, and context size
 - `scripts/install_runtime_adapter.py` — installs thin Codex or Claude adapters
 - `scripts/change_guard.py` — reports protected, external, generated, or out-of-scope changes
+- `scripts/list_registry.py` — reports live route and activation metadata without skill bodies
+- `scripts/create_change_request.py` — creates the narrow external-task request packet
+- `requests/` — pending review packets; never routing or skill source
 - `adapters/` — platform-specific access over the shared runtime core
 - `runtime/` — shared entry, compact response profile, and generated router manifest
 - `tests/` — deterministic routing cases and standard-library unit tests

@@ -86,6 +86,38 @@
       "state": "off"
     }
   },
+  "families": {
+    "build-ops": {
+      "boundary": "setup, deploy, auth code, debugging",
+      "path": "registry/build-ops.md",
+      "state": "active"
+    },
+    "career": {
+      "boundary": "career radar and job-search workflows",
+      "path": "registry/career.md",
+      "state": "off"
+    },
+    "compression": {
+      "boundary": "terse output, Caveman, review, commit",
+      "path": "registry/compression.md",
+      "state": "active"
+    },
+    "design": {
+      "boundary": "visual, layout, color, typography, print",
+      "path": "registry/design.md",
+      "state": "active"
+    },
+    "theory": {
+      "boundary": "LaTeX theory reference and math notes",
+      "path": "registry/theory.md",
+      "state": "active"
+    },
+    "ui-patterns": {
+      "boundary": "forms, navigation, search, product UX",
+      "path": "registry/ui-patterns.md",
+      "state": "active"
+    }
+  },
   "profile": {
     "default_depth": "standard",
     "fallback": "normal",

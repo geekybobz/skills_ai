@@ -25,6 +25,7 @@ class ChangeGuardTests(unittest.TestCase):
             "INSTALL_UNINSTALL.md",
             "SCOPE_EXPANSION.md",
             "PROTOCOL_AMENDMENT.md",
+            "EXTERNAL_CHANGE_REQUEST.md",
         }
         actual = {path.name for path in (ROOT / "protocols" / "repository").glob("*.md")}
         self.assertEqual(cards, actual)
@@ -69,6 +70,12 @@ class ChangeGuardTests(unittest.TestCase):
     def test_empty_scope_is_rejected(self) -> None:
         with self.assertRaises(GuardError):
             assess_change("edit", [])
+
+    def test_external_request_operation_is_limited_to_pending_inbox(self) -> None:
+        allowed = assess_change("request", ["requests/pending/request.md"])
+        blocked = assess_change("request", ["registry/design.md"])
+        self.assertEqual("allowed", allowed["status"])
+        self.assertEqual("blocked-by-invariant", blocked["status"])
 
 
 if __name__ == "__main__":

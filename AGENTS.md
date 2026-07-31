@@ -16,6 +16,11 @@ family registries on the normal task path.
 - Before any repository change, read `docs/06_CHANGE_CONTROL.md` and exactly one
   matching card under `protocols/repository/`. Unexpected scope needs an exact
   expansion report and user permission.
+- If this task's initial workspace is outside `/Users/billabobz/skills_ai`,
+  treat this repository as read-only. Even an explicit Skills AI change request
+  may only create one new packet through `scripts/create_change_request.py`,
+  then hand off to a dedicated maintenance task rooted here. Read
+  `protocols/repository/EXTERNAL_CHANGE_REQUEST.md`.
 - Never load a whole family. `design-with-claude/` alone is ~30k tokens.
 - Never edit skill files under `design-with-claude/`, `caveman/`, or `theory-reference/`
   unless explicitly asked. The registry describes; it does not rewrite.

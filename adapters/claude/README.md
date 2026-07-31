@@ -31,3 +31,8 @@ not own or certify Codex-specific invocation and terminal cleanup.
 
 This repository tests the hook protocol and shared routing core. A live Claude
 session test remains a Claude-side acceptance step.
+
+For explicit registry-discovery questions, the hook injects active, manual, and
+off route metadata from the current manifest without loading skill bodies. For
+write requests targeting Skills AI itself, it injects the shared external-task
+request-only boundary and maintenance workspace.

@@ -9,6 +9,8 @@ Protocol version: `skills-ai/1`.
   failure never blocks the original task.
 - Routing does not preload the Markdown hub, family registries, or remembered
   skill bodies.
+- Explicit registry-discovery questions return live manifest metadata without
+  loading a skill body.
 - The request text is never returned or written to diagnostics.
 - Skill selection grants no write, credential, network, or account authority.
 - Every one-shot router has a bounded input lifetime and exits after one reply.
@@ -51,6 +53,19 @@ include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
 `UNSUPPORTED_PROTOCOL`, `MANIFEST_UNAVAILABLE`,
 `SELECTED_SKILL_UNAVAILABLE`, `ROUTER_INTERNAL_ERROR`, `ADAPTER_TIMEOUT`, and
 `CANCELLED`.
+
+`REGISTRY_STATUS` is a non-skill metadata response. It keeps `result: NORMAL`
+and adds a `registry` object containing the source hash, active/manual/off route
+ids, gate summaries, hidden/deprecated counts, and the no-memory policy.
+
+## Repository-change boundary
+
+When a write-requested prompt explicitly targets Skills AI itself, the shared
+context identifies the external-task request-only boundary. A task started
+outside this workspace may create one pending request Markdown through
+`scripts/create_change_request.py`; canonical implementation belongs to a
+dedicated maintenance task rooted in this repository. Host permissions remain
+the hard enforcement layer.
 
 ## Lifecycle ownership
 

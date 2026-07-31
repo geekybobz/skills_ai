@@ -10,16 +10,18 @@ description: Route user-owned local skills through the fast Skills AI runtime. U
    JSON object: `{"protocol":"skills-ai/1","client":"codex","query":"..."}\n`.
    The router returns after one line without requiring EOF. Do not preload the
    Markdown hub or activation register.
-2. `MATCH`: load only the returned skill path, then perform the task.
-3. `NORMAL`: perform the task normally without a local skill.
-   Invalid input, router error, or timeout also continues normally.
-4. Never load an `off`, `hidden`, or `deprecated` route. A `manual` route needs
+2. `REGISTRY_STATUS` → answer from live metadata without remembered names or
+   skill bodies. `MATCH` → load only its path. `NORMAL` or error → continue.
+3. Never load an `off`, `hidden`, or `deprecated` route. A `manual` route needs
    an explicit matching request.
-5. Read `docs/00_SKILLS_HUB.md`, `registry/activation.md`, and the relevant
+4. Read `docs/00_SKILLS_HUB.md`, `registry/activation.md`, and the relevant
    registry only for registry maintenance, audits, or when the runtime reports
    a broken or stale manifest.
-6. Before writes, scripts, credentials, or external actions, apply the normal
-   project risk and permission rules. Skill selection never grants authority.
+5. Skill selection grants no authority. Apply project risk and permission rules
+   before writes, scripts, credentials, or external actions.
+6. Outside this workspace, never edit this repository: an explicit change may
+   only create one packet with `scripts/create_change_request.py`, then hand off
+   to a maintenance task rooted here.
 7. Treat the router as a bounded one-shot command. If its session remains active
    past the host deadline, terminate and reap that exact session, then continue
    the original task normally. Do not remember a static skill catalog or skill

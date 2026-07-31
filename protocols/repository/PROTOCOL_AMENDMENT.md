@@ -22,3 +22,7 @@ approval, update backlinks and validators, and prefer a separate commit so Git
 history preserves the motivation. Recheck protocols after repeated exceptions,
 source-of-truth conflicts, new irreversible actions, host-specific divergence,
 or a validation gap.
+
+An amendment requested from outside the Skills AI maintenance workspace first
+uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
+does not edit this protocol directly.

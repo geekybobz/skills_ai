@@ -21,6 +21,7 @@ python3 scripts/compile_registry.py
 python3 scripts/compile_registry.py --check
 python3 scripts/toggle_registry.py --check
 python3 scripts/validate_registry.py
+python3 scripts/list_registry.py
 ```
 
 ## Test and benchmark
@@ -55,15 +56,17 @@ acceptance; Claude owns live Claude acceptance.
 4. Timeout, invalid input, unavailable manifest, and adapter failure fail open.
 5. No test router process remains.
 6. Only one skill is returned and no family is preloaded.
-7. Staged files are within declared scope:
+7. Registry discovery lists live active/manual/off metadata without a skill body.
+8. External request creation writes one new file only under `requests/pending/`.
+9. Staged files are within declared scope:
 
 ```bash
 python3 scripts/change_guard.py check-staged --operation update --path <scoped-path>
 git diff --cached --check
 ```
 
-8. Documentation states platform ownership and unverified acceptance boundaries.
-9. The commit body records motivation, root cause, scope, tests, rollback, and
+10. Documentation states platform ownership and unverified acceptance boundaries.
+11. The commit body records motivation, root cause, scope, tests, rollback, and
    deliberately unchanged areas.
 
 ## Troubleshooting and rollback

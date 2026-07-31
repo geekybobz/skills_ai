@@ -41,6 +41,20 @@ OUTPUT_SHAPES = {
     "write": "audience -> facts -> draft -> factual check",
 }
 
+REGISTRY_DISCOVERY_PATTERNS = (
+    r"\b(list|show|display)\b.*\b(local\s+)?skills?\b",
+    r"\bskills?\b.*\b(available|saved|memory|registry|active|activated|manual|disabled|off)\b",
+    r"\bskills?\s+ai\s+(status|registry|skills?)\b",
+)
+
+SKILLS_AI_CHANGE_PATTERNS = (
+    r"\bskills?\s+ai\b",
+    r"\bskills ai\b",
+    r"\blocal skill (file|registry|router|hub)\b",
+    r"\b(caveman|design with claude|theory reference) skill\b",
+    r"\b(route skill|registry activation)\b",
+)
+
 
 class RegistryRuntimeError(RuntimeError):
     pass
@@ -260,6 +274,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         "schema_version": 1,
         "source_hash": fingerprint,
         "profile": profile,
+        "families": activation["families"],
         "routes": sorted(routes, key=lambda route: (route["family"], route["id"])),
         "components": activation["components"],
         "sources": source_records,
@@ -360,16 +375,83 @@ def _context_packet(manifest: dict[str, Any], operation: str, domain: str, acces
     }
 
 
+def registry_summary(manifest: dict[str, Any], *, include_hidden: bool = False) -> dict[str, Any]:
+    """Return live registry metadata without loading or exposing skill bodies."""
+    route_groups = {state: [] for state in sorted(VALID_STATES)}
+    for route in manifest["routes"]:
+        route_groups[route["state"]].append(route["id"])
+    family_groups = {state: [] for state in sorted(VALID_STATES)}
+    for family_id, family in manifest.get("families", {}).items():
+        family_groups[family["state"]].append(family_id)
+    component_groups = {state: [] for state in sorted(VALID_STATES)}
+    for component_id, component in manifest.get("components", {}).items():
+        component_groups[component["state"]].append(component_id)
+    for groups in (route_groups, family_groups, component_groups):
+        for values in groups.values():
+            values.sort()
+
+    visible_states = ("active", "manual", "off")
+    routes = {state: route_groups[state] for state in visible_states}
+    families = {state: family_groups[state] for state in visible_states}
+    components = {state: component_groups[state] for state in visible_states}
+    if include_hidden:
+        for state in ("hidden", "deprecated"):
+            routes[state] = route_groups[state]
+            families[state] = family_groups[state]
+            components[state] = component_groups[state]
+    return {
+        "source_hash": manifest["source_hash"],
+        "route_counts": {state: len(values) for state, values in route_groups.items()},
+        "routes": routes,
+        "family_gates": families,
+        "component_gates": components,
+        "hidden_policy": "hidden and deprecated identifiers are omitted unless maintenance explicitly requests them",
+    }
+
+
+def _is_registry_discovery(query: str) -> bool:
+    if _requested_access(query) == "write-requested":
+        return False
+    return any(re.search(pattern, query) for pattern in REGISTRY_DISCOVERY_PATTERNS)
+
+
+def _targets_skills_ai_change(query: str, access: str) -> bool:
+    return access == "write-requested" and any(
+        re.search(pattern, query) for pattern in SKILLS_AI_CHANGE_PATTERNS
+    )
+
+
+def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> None:
+    if not _targets_skills_ai_change(query, access):
+        return
+    context["skills_ai_change_boundary"] = {
+        "mode": "request-only-outside-maintenance-workspace",
+        "request_command": "python3 /Users/billabobz/skills_ai/scripts/create_change_request.py --stdin-json",
+        "maintenance_workspace": "/Users/billabobz/skills_ai",
+        "rule": "An external task may create one pending Markdown request but must not edit canonical Skills AI files.",
+    }
+
+
 def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     """Return MATCH or fail-open NORMAL without exposing the original prompt."""
     normalized_query = normalize(query)
     operation = _operation(normalized_query)
     access = _requested_access(normalized_query)
+    if _is_registry_discovery(normalized_query):
+        context = _context_packet(manifest, "explain", "skills-registry", "read-only")
+        return {
+            "result": "NORMAL",
+            "reason_code": "REGISTRY_STATUS",
+            "registry": registry_summary(manifest),
+            "context": context,
+        }
     if re.search(r"\bskillhub\s+normal\b", normalized_query):
+        context = _context_packet(manifest, operation, "general", access)
+        _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": "USER_NORMAL",
-            "context": _context_packet(manifest, operation, "general", access),
+            "context": context,
         }
 
     active_matches: list[tuple[int, dict[str, Any], list[str]]] = []
@@ -402,25 +484,31 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
 
     if not active_matches:
         reason = "DISABLED_SKILL" if inactive_matches else "NO_SKILL_MATCH"
+        context = _context_packet(manifest, operation, "general", access)
+        _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": reason,
-            "context": _context_packet(manifest, operation, "general", access),
+            "context": context,
         }
 
     active_matches.sort(key=lambda item: (-item[0], item[1]["id"]))
     top_score, selected, matched = active_matches[0]
     tied = [item for item in active_matches if item[0] == top_score and item[1]["id"] != selected["id"]]
     if tied:
+        context = _context_packet(manifest, operation, "general", access)
+        _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": "AMBIGUOUS_SKILL_MATCH",
-            "context": _context_packet(manifest, operation, "general", access),
+            "context": context,
         }
 
     domain = "mathematics" if selected["id"] == "caveman-math" else FAMILY_DOMAINS.get(selected["family"], "general")
     skill_file = ROOT / selected["path"]
     estimated_tokens = _estimated_tokens(skill_file) if skill_file.exists() else 0
+    context = _context_packet(manifest, operation, domain, access)
+    _apply_change_boundary(context, normalized_query, access)
     return {
         "result": "MATCH",
         "reason_code": "ACTIVE_SKILL_MATCH",
@@ -432,7 +520,7 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
             "matched_triggers": matched,
             "estimated_tokens": estimated_tokens,
         },
-        "context": _context_packet(manifest, operation, domain, access),
+        "context": context,
     }
 
 
@@ -451,4 +539,11 @@ def compact_context(decision: dict[str, Any]) -> str:
     if decision.get("skill"):
         parts.insert(2, f"skill={decision['skill']['id']}")
         parts.insert(3, f"path={decision['skill']['path']}")
+    if decision.get("registry"):
+        counts = decision["registry"]["route_counts"]
+        parts.insert(2, f"registry_source={decision['registry']['source_hash'][:12]}")
+        parts.insert(
+            3,
+            f"registry_routes=active:{counts['active']},manual:{counts['manual']},off:{counts['off']}",
+        )
     return "\n".join(parts)

@@ -14,3 +14,8 @@ python3 scripts/install_runtime_adapter.py --adapter codex --check
 
 The default target is `~/.codex/skills/skills-ai-registry/SKILL.md`. Use
 `--config-dir` for an alternate Codex configuration directory.
+
+Explicit registry-discovery questions are answered from returned live metadata.
+The entry does not retain a catalog or preload skill bodies. A Codex task
+started outside this repository uses the shared pending-request handoff instead
+of editing Skills AI directly.

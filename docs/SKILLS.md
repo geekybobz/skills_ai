@@ -10,3 +10,8 @@ invent or substitute a skill.
 Conditional: [[03_COMBO_MAP]] when two families match · [[04_RISK_MAP]] before
 any write · [[06_CHANGE_CONTROL]] plus one operation card before repository
 changes.
+
+An explicit question about available skills uses the live manifest summary; do
+not answer from remembered skill names. A task started outside this workspace
+uses [[protocols/repository/EXTERNAL_CHANGE_REQUEST]] and may write only one new
+packet under `requests/pending/` before a dedicated maintenance handoff.

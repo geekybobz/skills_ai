@@ -22,10 +22,12 @@ OPERATIONS = {
     "install",
     "scope",
     "protocol",
+    "request",
 }
 APPROVAL_OPERATIONS = {"move", "deprecate", "delete", "install", "scope", "protocol"}
 PROTECTED_PREFIXES = ("design-with-claude/", "caveman/", "theory-reference/")
 GENERATED_PATHS = {"runtime/router-manifest.json"}
+REQUEST_INBOX = "requests/pending"
 
 
 class GuardError(RuntimeError):
@@ -74,6 +76,8 @@ def required_checks(paths: Iterable[str]) -> list[str]:
                     "temporary Claude adapter install and check",
                 }
             )
+        if path.startswith("requests/") or path == "scripts/create_change_request.py":
+            checks.add("python3 -m unittest tests.test_change_request")
     return sorted(checks)
 
 
@@ -123,6 +127,14 @@ def assess_change(
             reasons.append("one or more targets are outside the repository")
         if protected:
             reasons.append("one or more targets are protected canonical or vendored collections")
+    if operation == "request":
+        outside_inbox = [
+            path for path in normalized
+            if path != REQUEST_INBOX and not path.startswith(REQUEST_INBOX + "/")
+        ]
+        if external or outside_inbox:
+            status = "blocked-by-invariant"
+            reasons.append("external request creation may write only under requests/pending")
     if staged_outside_scope:
         status = "blocked-by-invariant"
         reasons.append("staged files exist outside the declared scope")

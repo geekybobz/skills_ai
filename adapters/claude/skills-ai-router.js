@@ -58,6 +58,23 @@ function contextText(decision, root) {
     `shape=${context.output.shape}`,
     `contract=${context.response_contract.join(' ')}`,
   ];
+  if (context.skills_ai_change_boundary) {
+    const boundary = context.skills_ai_change_boundary;
+    lines.push(`Skills AI change boundary: ${boundary.rule}`);
+    lines.push(`Request generator: ${boundary.request_command}`);
+    lines.push(`Maintenance workspace: ${boundary.maintenance_workspace}`);
+  }
+  if (decision.registry) {
+    const registry = decision.registry;
+    lines.push(`Live Skills AI registry source: ${registry.source_hash.slice(0, 12)}`);
+    for (const state of ['active', 'manual', 'off']) {
+      const skills = registry.routes[state] || [];
+      lines.push(`${state} skills (${skills.length}): ${skills.join(', ') || 'none'}`);
+    }
+    lines.push(registry.hidden_policy);
+    lines.push('Answer from this live metadata. Do not substitute remembered skill names or load skill bodies.');
+    return lines.join('\n');
+  }
   if (decision.result !== 'MATCH') {
     lines.push('No local skill matched. Continue normally using the response context above.');
     return lines.join('\n');
