@@ -1,0 +1,4 @@
+[submodule "theory-reference"]
+	path = theory-reference
+	url = https://github.com/geekybobz/theory-reference.git
+
