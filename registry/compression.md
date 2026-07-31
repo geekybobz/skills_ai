@@ -1,7 +1,8 @@
 # Compression Registry
 
 Token-saving output modes, formula-first mathematics, compressed commit/review
-text, and subagent delegation.
+text, and subagent delegation. Check [[registry/activation]] before loading any
+row here.
 
 Canonical skill sources are under `caveman/skills/*`. Packaged mirrors remain
 tracked for installation but are hidden from Obsidian and never used for routing.
@@ -18,6 +19,13 @@ tracked for installation but are hidden from Obsidian and never used for routing
 | [[caveman/skills/cavecrew/SKILL\|cavecrew]] | when to spawn compressed subagents (investigator / builder / reviewer) | delegate, subagent, save context, spawn | doing the work inline |
 | [[caveman/skills/caveman-help/SKILL\|caveman-help]] | one-shot reference card for caveman modes and commands | caveman help, what caveman commands | activating a mode |
 | [[caveman/skills/caveman-stats/SKILL\|caveman-stats]] | token usage and savings, supplied by a hook | token stats, `/caveman-stats` | model-side estimation — it does not compute |
+
+## Components
+
+Large skills can expose toggled components in [[registry/activation]]. For
+`caveman`, current active components are base style, no-AI-trace hygiene,
+answer-first structure, equation rendering, pedagogy, safety clarity, and code
+preservation. Manual components include wenyan and statusline stats.
 
 ## Risk
 

@@ -11,10 +11,10 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 |---|---|---|---|
 | L0 | Entry notes | `#5B5BD6` indigo | `path:README.md OR path:docs/SKILLS.md` |
 | L1 | Global maps | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md` |
-| L2 | Registry family routes | `#2E7D32` green | `path:registry/` |
-| L3 | Skill cards *(reserved)* | `#EF6C00` orange | `path:cards/` |
-| L4 | Canonical skills and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:caveman/skills/ OR path:theory-reference/shared/phases/` |
-| L5 | Support, templates, scripts | `#546E7A` slate | `path:theory-reference/shared/templates/ OR path:theory-reference/scripts/ OR path:caveman/src/ OR path:caveman/docs/` |
+| L2 | Registry routes and activation | `#2E7D32` green | `path:registry/` |
+| L3 | Skill cards and parked legacy cards | `#EF6C00` orange | `path:cards/` |
+| L4 | Canonical skills, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:caveman/skills/ OR path:theory-reference/shared/phases/ OR path:external-skills/` |
+| L5 | Runtime, adapters, scripts, tests, templates | `#546E7A` slate | `path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:theory-reference/shared/templates/ OR path:theory-reference/scripts/ OR path:caveman/src/ OR path:caveman/docs/` |
 
 ## Reading the graph
 
@@ -27,7 +27,7 @@ flowchart LR
   classDef L4 fill:#6A1B9A,color:#fff,stroke:#3E0F5C
   classDef L5 fill:#546E7A,color:#fff,stroke:#29434E
 
-  A["L0 Entry"] --> B["L1 Global maps"] --> C["L2 Registry"] --> E["L4 Skill or phase"] --> F["L5 Support"]
+  A["L0 Entry"] --> B["L1 Global maps"] --> C["L2 Activation and Registry"] --> E["L4 Skill or phase"] --> F["L5 Support"]
   C -.-> D["L3 Cards (reserved)"] -.-> E
 
   class A L0
@@ -38,20 +38,20 @@ flowchart LR
   class F L5
 ```
 
-**Solid arrows are the agent's read path** — L0 → L1 → L2 → L4, two registry reads
-before a skill. L3 is dotted because it is a human/graph layer: it enriches the
-graph but is never on the agent's critical path.
+**Solid arrows are the agent's read path**: L0 -> L1 -> L2 activation -> one L2
+family registry -> L4. L3 is dotted because it is a human/graph layer: it
+enriches the graph but is never on the agent's critical path.
 
-## L3 is reserved and currently empty
+## L3 Cards
 
-`cards/` will hold one note per skill — frontmatter tags, aliases, and wikilinks to
-related skills — and **no skill content**. It is what turns the graph from a star
-into a network: `tag:`, backlinks, and the properties pane have nothing to index
-without it.
+`cards/` holds graph cards with frontmatter tags, aliases, and wikilinks to
+related skills, but no copied skill content. It is what turns the graph from a
+star into a network: `tag:`, backlinks, and the properties pane have something
+to index.
 
-It is deliberately unbuilt. Populating it means reading and evaluating each skill,
-which belongs to the per-skill restructuring pass, not to registry routing.
-The layer and its colour are reserved so that pass has somewhere to land.
+Use L3 cards for parked or legacy skills that should be visible in Obsidian
+while their activation routes remain `off`. These cards are not on the agent's
+critical routing path.
 
 ## Rule
 
@@ -61,8 +61,8 @@ Do not create a colour per skill, per family, or per topic.
 ## Adding a new family
 
 1. Add one file to `registry/` — it inherits **L2 green** automatically via `path:registry/`.
-2. Add a row to the route table in [[00_SKILLS_HUB]].
-3. Skill files sit in **L4**; templates, scripts and tests in **L5**.
+2. Add rows to [[registry/activation]] and the route table in [[00_SKILLS_HUB]].
+3. Skill files and external skill pointers sit in **L4**; templates, scripts and tests in **L5**.
 4. Add risk rows to [[04_RISK_MAP]] if the family writes anything.
 5. Reuse the layer colour. A new colour is only justified if the *layer model itself* changes.
 

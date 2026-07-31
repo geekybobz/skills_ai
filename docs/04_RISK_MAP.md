@@ -22,6 +22,11 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | `caveman-commit` | drafts a message only | does not run `git commit` |
 | `caveman-stats` | numbers come from a hook | the model does not compute or estimate them |
 | `cavecrew` | spawns subagents that can edit files | `cavecrew-builder` edits 1-2 files — scope it explicitly |
+| `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
+| registry runtime compile | atomically rewrites `runtime/router-manifest.json` | compile after registry changes, then run validator and router tests |
+| runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
+| `career` | parked external workflow | keep off until the family is reworked |
+| `quantum-job-collector` | network search plus writes under Quantum Career Radar `app/data/` | append via helper only; no browser, paid fallback, or cron unless the matching component is enabled |
 | `theory-reference` planning | writes plan + outlines after approval | no LaTeX during planning |
 | `theory-reference` chapter build | writes chapter LaTeX after approval | load rules and templates first |
 | `theory-reference` evaluate | edits approved outlines only | no LaTeX, no plan reorder without explicit sign-off |

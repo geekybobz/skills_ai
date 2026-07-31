@@ -1,8 +1,10 @@
 # Skills Registry Entry
 
-Read [[00_SKILLS_HUB]]. Everything routes from there.
+Normal tasks enter through `runtime/SKILL.md`, which selects one active skill or
+continues normally. Read [[00_SKILLS_HUB]] for registry maintenance and audits.
 
-Two registry reads before any skill: hub → one `registry/` file → the skill.
-No match → say so. Never invent a skill name.
+Route: hub → activation register → one enabled family registry → active skill
+or component. No active match → continue normally without a local skill. Never
+invent or substitute a skill.
 
 Conditional: [[03_COMBO_MAP]] when two families match · [[04_RISK_MAP]] before any write.

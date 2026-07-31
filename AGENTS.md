@@ -1,12 +1,17 @@
 # Skills registry — agent entry
 
-Before answering anything that might match a local skill, read `docs/00_SKILLS_HUB.md`.
+For a request that might benefit from a local skill, use the fast runtime entry
+in `runtime/SKILL.md`. Do not preload the Markdown hub, activation register, or
+family registries on the normal task path.
 
-Route: hub → **one** file in `registry/` → the skill file. Two registry reads, then stop.
-
-- No route matches → say "no skill here covers this". Never invent a skill name.
-- Task spans two families → `docs/03_COMBO_MAP.md` first.
-- About to write files, run scripts, or touch credentials → `docs/04_RISK_MAP.md` first.
+- Send the request to `scripts/route_skill.py` as JSON on stdin.
+- `MATCH` → load only the returned skill path.
+- `NORMAL` → continue normally without a local skill.
+- Never invent or substitute a skill. Disabled routes are not routable.
+- Skill selection never grants write, credential, network, or account authority.
+- For registry maintenance or a stale/broken manifest, read
+  `docs/00_SKILLS_HUB.md`, then `registry/activation.md`, then one family file.
+- Before registry writes or scripts, read `docs/04_RISK_MAP.md`.
 - Never load a whole family. `design-with-claude/` alone is ~30k tokens.
 - Never edit skill files under `design-with-claude/`, `caveman/`, or `theory-reference/`
   unless explicitly asked. The registry describes; it does not rewrite.
