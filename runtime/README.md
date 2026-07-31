@@ -7,13 +7,14 @@ human registry sources
   -> scripts/compile_registry.py
   -> router-manifest.json
   -> scripts/route_skill.py
-  -> MATCH(one skill) | NORMAL(fail-open)
+  -> interaction context + MATCH(one skill) | NORMAL(fail-open)
   -> thin Codex or Claude adapter
 ```
 
 Shared components:
 
-- `profile.json`: compact professional response contract.
+- `../interaction-protocol/protocol.json`: compact general contract and the
+  equation-led mathematical overlay.
 - `router-manifest.json`: generated activation and routing data.
 - `SKILL.md`: compact entry contract usable by platform adapters.
 - `scripts/registry_runtime.py`: compilation, deterministic selection, and
@@ -27,8 +28,8 @@ Shared components:
 - `API_CONTRACT.md`: versioned shared request and response schema.
 
 Platform code stays in `adapters/`. Adapters may translate lifecycle events and
-install locations, but must not duplicate route rules, profile rules, or skill
-selection logic.
+install locations, but must not duplicate route rules, interaction rules, or
+skill selection logic.
 
 No-match, disabled, hidden, deprecated, and ambiguous decisions are fail-open:
 the task continues normally without a local skill. Skill selection never grants

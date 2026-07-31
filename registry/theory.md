@@ -45,7 +45,7 @@ reorders nothing without explicit sign-off. See [[04_RISK_MAP]].
 ## Combines with
 
 Theory content → academic poster: pair with [[registry/design]] (`poster-lead`).
-Verbose notes → compress afterwards with [[registry/compression]] (`caveman-compress`).
+Keep notes focused at drafting time; no separate response-style compressor is required.
 
 ## Rules
 

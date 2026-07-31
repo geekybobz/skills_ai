@@ -43,6 +43,10 @@ flowchart LR
 | L4 | Canonical skills, external pointers, and theory phases |
 | L5 | Human guide, protocols, runtime, adapters, scripts, tests, and requests |
 
+`registry/interaction.md` is an L2 routing/control node. The canonical
+`interaction-protocol/protocol.json` is machine-readable configuration rather
+than a Markdown graph node, so it does not require a new layer or color.
+
 Validate both the documented policy and the live Obsidian graph:
 
 ```bash

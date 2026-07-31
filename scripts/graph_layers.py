@@ -35,8 +35,8 @@ LAYERS = (
     {
         "id": "L4",
         "query": (
-            "path:design-with-claude/ OR path:caveman/skills/ OR "
-            "path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR "
+            "path:design-with-claude/ OR path:theory-reference/SKILL.md OR "
+            "path:theory-reference/shared/SKILL.md OR "
             "path:theory-reference/shared/phases/ OR path:external-skills/"
         ),
         "color": "#6A1B9A",
@@ -45,7 +45,7 @@ LAYERS = (
         "id": "L5",
         "query": (
             "path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR "
-            "path:scripts/ OR path:tests/ OR path:requests/ OR path:caveman/ OR "
+            "path:scripts/ OR path:tests/ OR path:requests/ OR "
             "path:theory-reference/"
         ),
         "color": "#546E7A",

@@ -5,22 +5,22 @@
     "result": "NORMAL"
   },
   {
-    "name": "formula-first math",
-    "query": "Derive this equation formula first with less story",
-    "result": "MATCH",
-    "skill": "caveman-math"
+    "name": "automatic math interaction",
+    "query": "Derive the Euler-Lagrange equation",
+    "result": "NORMAL",
+    "interaction": "math"
   },
   {
-    "name": "brief response mode",
+    "name": "general concise interaction",
     "query": "Be brief and use fewer tokens in the reply",
-    "result": "MATCH",
-    "skill": "caveman"
+    "result": "NORMAL",
+    "interaction": "general"
   },
   {
-    "name": "commit message drafting",
+    "name": "commit message uses general protocol",
     "query": "Write a commit message for this change",
-    "result": "MATCH",
-    "skill": "caveman-commit"
+    "result": "NORMAL",
+    "interaction": "general"
   },
   {
     "name": "code explanation",
@@ -86,16 +86,10 @@
     "skill": "poster-lead"
   },
   {
-    "name": "manual file compression",
-    "query": "Compress this memory file",
-    "result": "MATCH",
-    "skill": "caveman-compress"
-  },
-  {
-    "name": "manual diff review",
+    "name": "diff review uses operation context",
     "query": "Review this code diff",
-    "result": "MATCH",
-    "skill": "caveman-review"
+    "result": "NORMAL",
+    "interaction": "general"
   },
   {
     "name": "professional email has normal fallback",

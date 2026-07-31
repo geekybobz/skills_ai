@@ -6,6 +6,7 @@
     {
       "name": "routing",
       "sources": [
+        "interaction-protocol/protocol.json",
         "scripts/registry_runtime.py",
         "scripts/route_skill.py",
         "runtime/PROTOCOL.md",

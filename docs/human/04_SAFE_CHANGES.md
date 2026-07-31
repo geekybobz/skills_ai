@@ -34,6 +34,10 @@ Selecting a skill is never permission. Deletion, external installation,
 credentials, account actions, Git-history rewrites, protocol changes, and
 unexpected expansion require their own explicit authority.
 
+The general and math interaction protocols only shape an answer. They do not
+grant permission or weaken any read-only, review, write, network, credential,
+or destructive-action boundary.
+
 ## Keeping this human guide current
 
 Relevant canonical sources are mapped to the human pages that explain them.

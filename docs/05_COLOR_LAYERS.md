@@ -13,8 +13,8 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 | L1 | Global maps | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
 | L2 | Registry routes and activation | `#2E7D32` green | `path:registry/` |
 | L3 | Skill cards and parked legacy cards | `#EF6C00` orange | `path:cards/` |
-| L4 | Canonical skills, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:caveman/skills/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
-| L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:caveman/ OR path:theory-reference/` |
+| L4 | Canonical skills, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
+| L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:theory-reference/` |
 
 ## Reading the graph
 

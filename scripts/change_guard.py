@@ -25,7 +25,7 @@ OPERATIONS = {
     "request",
 }
 APPROVAL_OPERATIONS = {"move", "deprecate", "delete", "install", "scope", "protocol"}
-PROTECTED_PREFIXES = ("design-with-claude/", "caveman/", "theory-reference/")
+PROTECTED_PREFIXES = ("design-with-claude/", "interaction-protocol/", "theory-reference/")
 GENERATED_PATHS = {"runtime/router-manifest.json"}
 REQUEST_INBOX = "requests/pending"
 
@@ -63,7 +63,7 @@ def required_checks(paths: Iterable[str]) -> list[str]:
             checks.add("python3 scripts/graph_layers.py --check")
         if path == "registry/activation.md" or path.startswith("registry/") or path in {
             "docs/00_SKILLS_HUB.md",
-            "runtime/profile.json",
+            "interaction-protocol/protocol.json",
         }:
             checks.update(
                 {

@@ -15,24 +15,25 @@ flowchart TD
     ROOT["skills_ai/"] --> ENTRY["AGENTS.md and CLAUDE.md<br/>small platform entry rules"]
     ROOT --> DOCS["docs/<br/>governance and human guide"]
     ROOT --> REG["registry/<br/>routes and activation"]
-    ROOT --> RUN["runtime/<br/>protocol, profile, manifest"]
+    ROOT --> IP["interaction-protocol/<br/>general and math response contract"]
+    ROOT --> RUN["runtime/<br/>wire protocol and manifest"]
     ROOT --> SCRIPT["scripts/<br/>compile, route, validate, install"]
     ROOT --> ADAPT["adapters/<br/>Codex and Claude access"]
     ROOT --> TEST["tests/<br/>routing and lifecycle checks"]
-    ROOT --> SKILLS["skill collections<br/>design, Caveman, theory, external"]
+    ROOT --> SKILLS["skill collections<br/>design, theory, external"]
     ROOT --> REQ["requests/<br/>review-only external change inbox"]
 
     classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
     classDef source fill:#2E7D32,color:#fff,stroke:#1B5E20
     classDef support fill:#546E7A,color:#fff,stroke:#29434E
     class ROOT,ENTRY entry
-    class REG,RUN,SKILLS source
+    class REG,IP,RUN,SKILLS source
     class DOCS,SCRIPT,ADAPT,TEST,REQ support
 ```
 
 The registry describes where skills live. It does not copy skill bodies into
-routing files. Canonical Caveman skills live under `caveman/skills/`, while
-`theory-reference/` remains a separate Git submodule.
+routing files. The interaction protocol is shared response context rather than
+a task skill, while `theory-reference/` remains a separate Git submodule.
 
 ## What Codex and Claude share
 
@@ -43,7 +44,7 @@ flowchart LR
     CA --> CORE["Shared Python router"]
     HA --> CORE
     CORE --> MAN["Shared manifest"]
-    CORE --> PROFILE["Shared response profile"]
+    CORE --> PROFILE["Shared general and math interaction protocol"]
     CORE --> SOURCES["Same registry and skill sources"]
 
     classDef host fill:#5B5BD6,color:#fff,stroke:#32327A

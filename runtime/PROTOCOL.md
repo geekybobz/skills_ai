@@ -5,6 +5,8 @@ Protocol version: `skills-ai/1`.
 ## Invariants
 
 - One request selects at most one active/manual skill or returns `NORMAL`.
+- The interaction protocol is response context, not a task skill. The general
+  contract and optional math overlay do not consume the one-skill limit.
 - No match, invalid input, timeout, unavailable manifest, or expected adapter
   failure never blocks the original task.
 - Routing does not preload the Markdown hub, family registries, or remembered
@@ -19,6 +21,25 @@ Protocol version: `skills-ai/1`.
 - The request text is never returned or written to diagnostics.
 - Skill selection grants no write, credential, network, or account authority.
 - Every one-shot router has a bounded input lifetime and exits after one reply.
+
+## Interaction protocols
+
+`interaction.general` gives the result first and adds only enough polished
+context to understand and use it. `interaction.math` leads with equations and
+mathematical reasoning, followed by short supporting context. Its automatic
+gate requires mathematical intent rather than a lone keyword and ignores code,
+paths, filenames, URLs, settings, search, parser, and rendering mentions.
+
+Activation behavior is exact:
+
+- `active`: automatic and explicit math selection;
+- `manual`: explicit `/interaction math` selection only;
+- `off`: no math overlay; and
+- `/interaction general`: per-request general override.
+
+The shared router returns the selected interaction mode and reason in every
+context packet. Adapters must render that context without duplicating the
+detection rules.
 
 ## Framing
 

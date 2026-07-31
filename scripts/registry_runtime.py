@@ -13,7 +13,7 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "runtime" / "router-manifest.json"
-PROFILE_PATH = ROOT / "runtime" / "profile.json"
+PROFILE_PATH = ROOT / "interaction-protocol" / "protocol.json"
 HUB_PATH = ROOT / "docs" / "00_SKILLS_HUB.md"
 ACTIVATION_PATH = ROOT / "registry" / "activation.md"
 
@@ -25,7 +25,7 @@ FAMILY_DOMAINS = {
     "design": "visual-design",
     "ui-patterns": "product-ux",
     "build-ops": "software",
-    "compression": "communication",
+    "interaction": "communication",
     "theory": "theory",
     "career": "career",
 }
@@ -51,7 +51,7 @@ SKILLS_AI_CHANGE_PATTERNS = (
     r"\bskills?\s+ai\b",
     r"\bskills ai\b",
     r"\blocal skill (file|registry|router|hub)\b",
-    r"\b(caveman|design with claude|theory reference) skill\b",
+    r"\b(interaction protocol|design with claude|theory reference) skill\b",
     r"\b(route skill|registry activation)\b",
 )
 
@@ -77,6 +77,40 @@ NON_VISUAL_DESIGN_TARGET_PATTERN = (
     r"(?:(?:a|an|the|this|my|our|new|better|for)\s+){0,3}"
     r"(?:api|algorithm|code|database|schema|equation|derivation|experiment|study|"
     r"protocol|router|skill|software architecture|data architecture)\b"
+)
+
+MATH_EXPLICIT_PATTERN = (
+    r"(?:^|\s)/interaction\s+math(?:\s|$)|"
+    r"\b(?:math|mathematics|equation|formula)\s+first\b|"
+    r"\buse\s+(?:the\s+)?(?:math|mathematical)\s+(?:interaction\s+)?(?:protocol|style)\b|"
+    r"\b(?:derive|show|explain)\s+(?:it\s+)?mathematically\b"
+)
+MATH_GENERAL_PATTERN = (
+    r"(?:^|\s)/interaction\s+general(?:\s|$)|"
+    r"\b(?:use\s+)?normal\s+prose\b|"
+    r"\bwithout\s+(?:the\s+)?(?:math|mathematical)\s+(?:interaction\s+)?(?:protocol|style)\b"
+)
+MATH_ACTION_PATTERN = (
+    r"\b(?:solve|derive|prove|calculate|compute|simplify|integrate|differentiate|"
+    r"optimize|evaluate|factor|expand)\b"
+)
+MATH_EXPLAIN_PATTERN = r"\b(?:explain|show|why|how|what)\b"
+MATH_OBJECT_PATTERN = (
+    r"\b(?:math|mathematical|equation|formula|derivation|proof|theorem|lemma|integral|"
+    r"derivative|gradient|matrix|eigenvalue|eigenvector|hamiltonian|lagrangian|ode|pde|"
+    r"differential equation|constraint|objective function|probability distribution|"
+    r"sequence|series|convergence|stationary point|optimality condition|pontryagin|pmp|"
+    r"kkt|jacobian|hessian|tensor|vector|operator)\b"
+)
+MATH_RESEARCH_PATTERN = (
+    r"\b(?:research|paper|article|model|method|result|control problem)\b.*"
+    r"\b(?:math|mathematical|analytic|analytical|equation|derivation|proof|hamiltonian|pmp|kkt)\b|"
+    r"\b(?:math|mathematical|analytic|analytical|equation|derivation|proof|hamiltonian|pmp|kkt)\b.*"
+    r"\b(?:research|paper|article|model|method|result|control problem)\b"
+)
+NON_MATH_ARTIFACT_PATTERN = (
+    r"\b(?:file|filename|path|repository|code|parser|renderer|rendering|field|setting|"
+    r"config|configuration|variable name|function name|class name|search|grep|rename)\b"
 )
 
 
@@ -133,6 +167,52 @@ def _design_routing_query(text: str) -> str:
     return normalize(prose)
 
 
+def _interaction_routing_prose(text: str) -> str:
+    """Remove quoted artifacts that must not establish mathematical intent."""
+    prose = re.sub(r"```[\s\S]*?```", " ", text)
+    prose = re.sub(r"`[^`\n]*`", " ", prose)
+    prose = re.sub(r"https?://\S+", " ", prose, flags=re.IGNORECASE)
+    prose = re.sub(r"\S*[/\\_]\S*", " ", prose)
+    prose = re.sub(r"\b[\w.-]+\.[a-z0-9]{1,10}\b", " ", prose, flags=re.IGNORECASE)
+    return prose.lower()
+
+
+def _has_math_reasoning_intent(text: str) -> bool:
+    prose = _interaction_routing_prose(text)
+    normalized = normalize(prose)
+    if re.search(MATH_RESEARCH_PATTERN, normalized):
+        return True
+    has_action = bool(re.search(MATH_ACTION_PATTERN, normalized))
+    has_explanation = bool(re.search(MATH_EXPLAIN_PATTERN, normalized))
+    has_object = bool(re.search(MATH_OBJECT_PATTERN, normalized))
+    has_notation = bool(
+        re.search(r"[a-z0-9)\]]\s*(?:=|<=|>=|<|>|\^|\+|-)\s*[-+a-z0-9([]", prose)
+    )
+    artifact_only = bool(re.search(NON_MATH_ARTIFACT_PATTERN, normalized)) and not has_action
+    if artifact_only:
+        return False
+    return (has_action and (has_object or has_notation)) or (has_explanation and has_object)
+
+
+def _interaction_mode(query: str, manifest: dict[str, Any]) -> tuple[str, str]:
+    normalized = normalize(query)
+    family_state = manifest.get("families", {}).get("interaction", {}).get("state", "off")
+    general_state = manifest.get("components", {}).get("interaction.general", {}).get("state", "off")
+    math_state = manifest.get("components", {}).get("interaction.math", {}).get("state", "off")
+    if family_state in INACTIVE_STATES:
+        return "normal", "family-disabled"
+    if re.search(MATH_GENERAL_PATTERN, query, flags=re.IGNORECASE):
+        return ("general", "explicit-general") if general_state in ACTIVE_STATES else ("normal", "general-disabled")
+    explicit_math = bool(re.search(MATH_EXPLICIT_PATTERN, query, flags=re.IGNORECASE))
+    if math_state == "active" and (explicit_math or _has_math_reasoning_intent(query)):
+        return "math", "explicit-math" if explicit_math else "automatic-math"
+    if math_state == "manual" and explicit_math:
+        return "math", "explicit-math"
+    if general_state in ACTIVE_STATES:
+        return "general", "default-general"
+    return "normal", "general-disabled"
+
+
 def _has_explicit_design_intent(query: str) -> bool:
     request = re.search(DESIGN_REQUEST_PATTERN, query)
     if request is None:
@@ -168,7 +248,7 @@ def parse_activation(path: Path = ACTIVATION_PATH) -> dict[str, dict[str, dict[s
     section_kinds = {
         "Family Gates": "families",
         "Skill Gates": "skills",
-        "Caveman Components": "components",
+        "Interaction Protocol Components": "components",
         "Quantum Job Collector Components": "components",
     }
     for section, cells in _read_sections(path):
@@ -371,12 +451,14 @@ def _phrase_score(query: str, phrase: str) -> int:
 
 
 def _operation(query: str) -> str:
+    if re.search(r"\b(?:write|draft|rewrite)\b.*\bcommit message\b", query):
+        return "write"
     rules = [
-        ("derive", r"\b(derive|derivation|prove|proof|calculate|equation|formula)\b"),
         ("review", r"\b(review|audit|critique|inspect|evaluate)\b"),
         ("investigate", r"\b(investigate|research|search|find|verify|diagnose)\b"),
-        ("implement", r"\b(implement|edit|modify|patch|fix|install|deploy|stage|commit)\b"),
+        ("implement", r"\b(implement|build|create|add|edit|modify|patch|fix|install|deploy|stage|commit)\b"),
         ("design", r"\b(design|layout|prototype|mockup|architecture)\b"),
+        ("derive", r"\b(derive|derivation|prove|proof|calculate|compute|solve|equation|formula)\b"),
         ("write", r"\b(write|draft|rewrite|reply|email|message)\b"),
         ("explain", r"\b(explain|what|why|how|teach|summarize)\b"),
     ]
@@ -387,7 +469,7 @@ def _operation(query: str) -> str:
 
 
 def _requested_access(query: str) -> str:
-    file_write = r"\b(edit|modify|patch|delete|remove|install|deploy|stage|commit)\b"
+    file_write = r"\b(edit|modify|patch|fix|delete|remove|install|deploy|stage|commit(?!\s+message))\b"
     build_write = r"\b(implement|create|add|build|generate)\b.*\b(file|code|project|app|site|script|test)\b"
     return "write-requested" if re.search(file_write, query) or re.search(build_write, query) else "read-only"
 
@@ -398,6 +480,17 @@ def _route_allowed_by_intent(route: dict[str, Any], query: str) -> bool:
         creating = re.search(r"\b(design|create|layout|export|print|poster|visual)\b", query)
         if consuming and not creating:
             return False
+    if route["family"] == "theory":
+        implementation_artifact = re.search(
+            r"\b(?:fix|debug|implement|code|parser|renderer|rendering|component|field|setting|config)\b",
+            query,
+        )
+        theory_request = re.search(
+            r"\b(?:theory|theorem|proof|derive|derivation|chapter|outline|notes|reference|refresher)\b",
+            query,
+        )
+        if implementation_artifact and not theory_request:
+            return False
     negative_boundary = re.split(r"→|->", route.get("not_for", ""), maxsplit=1)[0]
     for phrase in split_triggers(negative_boundary):
         normalized_phrase = normalize(phrase)
@@ -406,18 +499,37 @@ def _route_allowed_by_intent(route: dict[str, Any], query: str) -> bool:
     return True
 
 
-def _context_packet(manifest: dict[str, Any], operation: str, domain: str, access: str) -> dict[str, Any]:
+def _context_packet(
+    manifest: dict[str, Any],
+    operation: str,
+    domain: str,
+    access: str,
+    interaction_mode: str,
+    interaction_reason: str,
+) -> dict[str, Any]:
     profile = manifest["profile"]
+    contracts: list[str] = []
+    if interaction_mode in {"general", "math"}:
+        contracts.extend(profile["response_contract"])
+    if interaction_mode == "math":
+        contracts.extend(profile["math"]["response_contract"])
+        shape = profile["math"]["shape"]
+    else:
+        shape = OUTPUT_SHAPES[operation]
     return {
         "operation": operation,
         "domain": domain,
         "requested_access": access,
-        "output": {
-            "voice": profile["voice"],
-            "depth": profile["default_depth"],
-            "shape": OUTPUT_SHAPES[operation],
+        "interaction": {
+            "mode": interaction_mode,
+            "reason": interaction_reason,
         },
-        "response_contract": profile["response_contract"],
+        "output": {
+            "voice": profile["voice"] if interaction_mode != "normal" else "host-default",
+            "depth": profile["default_depth"],
+            "shape": shape,
+        },
+        "response_contract": contracts,
     }
 
 
@@ -485,8 +597,11 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     design_intent = _has_explicit_design_intent(design_query)
     operation = _operation(normalized_query)
     access = _requested_access(normalized_query)
+    interaction_mode, interaction_reason = _interaction_mode(query, manifest)
     if _is_registry_discovery(normalized_query):
-        context = _context_packet(manifest, "explain", "skills-registry", "read-only")
+        context = _context_packet(
+            manifest, "explain", "skills-registry", "read-only", interaction_mode, interaction_reason
+        )
         return {
             "result": "NORMAL",
             "reason_code": "REGISTRY_STATUS",
@@ -494,7 +609,9 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
             "context": context,
         }
     if re.search(r"\bskillhub\s+normal\b", normalized_query):
-        context = _context_packet(manifest, operation, "general", access)
+        context = _context_packet(
+            manifest, operation, "general", access, interaction_mode, interaction_reason
+        )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
@@ -537,7 +654,10 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
 
     if not active_matches:
         reason = "DISABLED_SKILL" if inactive_matches else "NO_SKILL_MATCH"
-        context = _context_packet(manifest, operation, "general", access)
+        fallback_domain = "mathematics" if interaction_mode == "math" else "general"
+        context = _context_packet(
+            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason
+        )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
@@ -549,7 +669,10 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     top_score, selected, matched = active_matches[0]
     tied = [item for item in active_matches if item[0] == top_score and item[1]["id"] != selected["id"]]
     if tied:
-        context = _context_packet(manifest, operation, "general", access)
+        fallback_domain = "mathematics" if interaction_mode == "math" else "general"
+        context = _context_packet(
+            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason
+        )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
@@ -557,10 +680,14 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
             "context": context,
         }
 
-    domain = "mathematics" if selected["id"] == "caveman-math" else FAMILY_DOMAINS.get(selected["family"], "general")
+    domain = FAMILY_DOMAINS.get(selected["family"], "general")
+    if interaction_mode == "math" and domain in {"general", "communication"}:
+        domain = "mathematics"
     skill_file = ROOT / selected["path"]
     estimated_tokens = _estimated_tokens(skill_file) if skill_file.exists() else 0
-    context = _context_packet(manifest, operation, domain, access)
+    context = _context_packet(
+        manifest, operation, domain, access, interaction_mode, interaction_reason
+    )
     _apply_change_boundary(context, normalized_query, access)
     return {
         "result": "MATCH",
@@ -585,6 +712,7 @@ def compact_context(decision: dict[str, Any]) -> str:
         f"operation={context['operation']}",
         f"domain={context['domain']}",
         f"access={context['requested_access']}",
+        f"interaction={context['interaction']['mode']}",
         f"voice={context['output']['voice']}",
         f"shape={context['output']['shape']}",
         "contract=answer first; polished complete sentences; no filler; preserve technical terms; state boundaries when relevant",

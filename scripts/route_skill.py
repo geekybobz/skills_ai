@@ -19,11 +19,12 @@ PROTOCOL_VERSION = "skills-ai/1"
 DEFAULT_STDIN_TIMEOUT_MS = 10_000
 DEFAULT_MAX_REQUEST_BYTES = 1024 * 1024
 FALLBACK_RESPONSE_CONTRACT = [
-    "Answer the request first.",
-    "Use polished, complete sentences without filler or canned praise.",
-    "Preserve technical terms, symbols, code, paths, URLs, and quoted errors.",
-    "State assumptions, evidence boundaries, and uncertainty only when relevant.",
+    "Give the result, answer, or main finding first.",
+    "Add enough context to understand and use the result.",
+    "Use polished, complete sentences without filler, canned praise, or repeated restatement.",
+    "Preserve necessary reasoning, evidence, technical terms, symbols, code, paths, URLs, and quoted errors.",
     "Use the smallest structure that keeps the result clear and verifiable.",
+    "State assumptions, uncertainty, risk, and claim boundaries only when relevant.",
 ]
 
 
@@ -44,6 +45,10 @@ def fallback_decision(reason_code: str, *, request_id: str | None = None) -> dic
             "operation": "discuss",
             "domain": "general",
             "requested_access": "read-only",
+            "interaction": {
+                "mode": "general",
+                "reason": "fail-open-general",
+            },
             "output": {
                 "voice": "compact-professional",
                 "depth": "standard",

@@ -260,6 +260,7 @@ class RouterLifecycleTests(unittest.TestCase):
                     "operation": "review",
                     "domain": "general",
                     "requested_access": "read-only",
+                    "interaction": {"mode": "general", "reason": "test"},
                     "output": {"voice": "compact", "shape": "answer"},
                     "response_contract": [],
                 },

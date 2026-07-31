@@ -1,17 +1,5 @@
 {
   "userIgnoreFilters": [
-    "caveman/plugins/",
-    "caveman/.agents/",
-    "caveman/.codex/",
-    "caveman/.claude-plugin/",
-    "caveman/.roo/",
-    "caveman/.kiro/",
-    "caveman/.junie/",
-    "caveman/dist/",
-    "caveman/tests/",
-    "caveman/evals/",
-    "caveman/benchmarks/",
-    "caveman/.github/",
     "node_modules/"
   ],
   "alwaysUpdateLinks": true,

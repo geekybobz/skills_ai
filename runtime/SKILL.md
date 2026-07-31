@@ -10,8 +10,9 @@ description: Route user-owned local skills through the fast Skills AI runtime. U
    JSON object: `{"protocol":"skills-ai/1","client":"codex","query":"..."}\n`.
    The router returns after one line without requiring EOF. Do not preload the
    Markdown hub or activation register.
-2. `REGISTRY_STATUS` → answer from live metadata without remembered names or
-   skill bodies. `MATCH` → load only its path. `NORMAL` or error → continue.
+2. Apply the returned interaction context. `REGISTRY_STATUS` → answer from live
+   metadata without remembered names or skill bodies. `MATCH` → load only its
+   task-skill path. `NORMAL` or error → continue.
 3. Never load an `off`, `hidden`, or `deprecated` route. A `manual` route needs
    an explicit matching request.
 4. Read `docs/00_SKILLS_HUB.md`, `registry/activation.md`, and the relevant

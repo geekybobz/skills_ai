@@ -12,8 +12,8 @@ Back: [safe changes](04_SAFE_CHANGES.md). Next: [graph and colors](06_GRAPH_AND_
 
 ```mermaid
 flowchart LR
-    E["Shared entry<br/>about 411 tokens"] --> R["Core routing decision"]
-    R --> P["Compact receipt<br/>median 87, max 97 tokens"]
+    E["Shared entry"] --> R["Core routing and interaction decision"]
+    R --> P["Compact general context<br/>plus small math overlay when needed"]
     P --> M{"MATCH?"}
     M -- "No" --> N["Normal response<br/>no local skill body"]
     M -- "Yes" --> S["One selected skill<br/>median 821, max 1,419 tokens"]
@@ -29,8 +29,10 @@ flowchart LR
     class WHOLE avoided
 ```
 
-The 2026-07-31 local benchmark measured 26/26 fixture accuracy, about `0.44 ms`
-core-routing p95, and about `37.5 ms` complete-process p95. Process time includes
+The 2026-07-31 post-migration local benchmark measured 25/25 fixture accuracy,
+about `0.39 ms` core-routing p95, and about `36.3 ms` complete-process p95.
+The compact receipt measured 82 tokens at the median and 102 at the maximum.
+Process time includes
 starting Python, reading the request, loading the manifest, routing, writing JSON,
 and exiting. Values vary by machine and load; refresh them with:
 
@@ -65,6 +67,7 @@ flowchart TD
 | Task waits | Confirm one newline-framed request and the configured input deadline |
 | `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
 | Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
+| Wrong math style | Check action + mathematical-object detection and artifact exclusions |
 | Design route on ordinary search | Confirm the explicit design-request gate and its negative corpus |
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
 | Router process remains | Terminate and reap only the exact recorded process/session |

@@ -181,7 +181,7 @@ def toggle(register: Path, row_id: str, state: str, *, write: bool = True) -> bo
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Toggle registry activation rows")
     parser.add_argument("state", nargs="?", help="active/manual/off/hidden/deprecated or enable/disable")
-    parser.add_argument("id", nargs="?", help="row id, for example caveman.no-ai-traces")
+    parser.add_argument("id", nargs="?", help="row id, for example interaction.math")
     parser.add_argument("--file", default=str(DEFAULT_REGISTER), help="activation register path")
     parser.add_argument("--check", action="store_true", help="validate without editing")
     parser.add_argument("--dry-run", action="store_true", help="validate and report without writing")

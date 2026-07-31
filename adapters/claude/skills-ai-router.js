@@ -54,6 +54,8 @@ function contextText(decision, root) {
     `operation=${context.operation}`,
     `domain=${context.domain}`,
     `requested_access=${context.requested_access}`,
+    `interaction=${context.interaction.mode}`,
+    `interaction_reason=${context.interaction.reason}`,
     `voice=${context.output.voice}`,
     `shape=${context.output.shape}`,
     `contract=${context.response_contract.join(' ')}`,

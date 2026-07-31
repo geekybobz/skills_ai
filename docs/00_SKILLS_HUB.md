@@ -14,7 +14,7 @@ pick the enabled family registry and load the active skill or component.
 | poster, A0, HTML page, layout, spacing, hierarchy, colour, dark mode, type, brand, motion, chart, table, print, PDF | [[registry/design]] |
 | form, nav, search, error state, onboarding, loading, drag, chat UI, a11y, mobile, i18n, saas, ecommerce, checkout, landing, auth UX, healthcare | [[registry/ui-patterns]] |
 | install, node, `.env`, secret, database, supabase, deploy, vercel, domain, build error, explain this code | [[registry/build-ops]] |
-| be brief, fewer tokens, caveman, formula first, less story, mathematical derivation, compress memory, commit message, review diff, delegate to subagent | [[registry/compression]] |
+| concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
 | LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
 | quantum jobs, career radar, update review queue, pending jobs, source coverage | `registry/career.md` (off in activation) |
 
@@ -38,5 +38,5 @@ L0 entry · L1 global · L2 registry and activation · L3 cards · L4 skills · 
 ## Do Not
 
 - Do not preload a family "to see what's there". The registry is the answer to that question.
-- Do not route through packaged duplicates in `caveman/plugins/`, `.agents/`, `.roo/`, `.kiro/`, `.junie/`. Canonical caveman skills are `caveman/skills/*` only.
+- Interaction protocols shape responses and do not consume the one task-skill slot.
 - Do not modify skill files unless the user explicitly asks.

@@ -15,13 +15,8 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | `database-setup` | creates database and client code | never echo keys; keep credentials in `.env`, never in committed files |
 | `deploy-to-vercel` | account actions, network installs, live deploys | explicit approval before any external write or deploy |
 | `environment-setup` | handles secrets by definition | never print real key values; never commit `.env` |
-| `caveman` | response style only | no file writes |
-| `caveman-math` | response structure only | no file writes; verification code runs only when requested |
-| **`caveman-compress`** | **overwrites the target file** after writing `FILE.original.md` | confirm the exact path; never point at secrets; never compress an existing `.original.md` |
-| `caveman-review` | review output only | does not edit code |
-| `caveman-commit` | drafts a message only | does not run `git commit` |
-| `caveman-stats` | numbers come from a hook | the model does not compute or estimate them |
-| `cavecrew` | spawns subagents that can edit files | `cavecrew-builder` edits 1-2 files — scope it explicitly |
+| `interaction.general` | response structure only | no file writes; adequate context is preserved rather than mechanically compressed |
+| `interaction.math` | equation-led response structure only | no file writes; analytic reasoning precedes optional requested code |
 | `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
 | registry runtime compile | atomically rewrites `runtime/router-manifest.json` | compile after registry changes, then run validator and router tests |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
@@ -39,5 +34,5 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 |---|---|
 | editing any skill file | not without an explicit request — the registry describes, it does not rewrite |
 | adding files under `theory-reference/` | it is a submodule; registry files belong in `registry/` instead |
-| committing under `caveman/` | edit canonical files under `skills/`, `src/`, or `agents/`; generated plugin mirrors must match their sources |
+| editing `interaction-protocol/` | update the shared contract, router tests, API docs, and mapped human guide together |
 | staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |

@@ -35,7 +35,7 @@ class ChangeGuardTests(unittest.TestCase):
         self.assertEqual("allowed", report["status"])
 
     def test_protected_collection_requires_approval(self) -> None:
-        report = assess_change("edit", ["caveman/skills/caveman/SKILL.md"])
+        report = assess_change("edit", ["interaction-protocol/protocol.json"])
         self.assertEqual("approval-required", report["status"])
         self.assertTrue(report["protected_paths"])
 

@@ -22,8 +22,10 @@ embedded query newlines are JSON escapes.
 
 ## Route response
 
-`MATCH` contains one canonical skill record and the shared response context.
-`NORMAL` contains no skill body or path unless required for a safe diagnostic.
+`MATCH` contains one canonical task-skill record and the shared response
+context. `NORMAL` contains no skill body or path unless required for a safe
+diagnostic. Both results contain the general, math, or host-default interaction
+mode. Interaction protocols never consume the task-skill slot.
 An explicit registry-discovery question returns `NORMAL / REGISTRY_STATUS` plus
 live metadata; it never loads a skill body.
 
@@ -34,20 +36,24 @@ live metadata; it never loads a skill body.
   "result": "MATCH",
   "reason_code": "ACTIVE_SKILL_MATCH",
   "skill": {
-    "id": "caveman-math",
-    "family": "compression",
-    "path": "caveman/skills/caveman-math/SKILL.md",
+    "id": "theory-reference",
+    "family": "theory",
+    "path": "theory-reference/SKILL.md",
     "state": "active",
     "estimated_tokens": 1200
   },
   "context": {
     "operation": "derive",
-    "domain": "mathematics",
+    "domain": "theory",
     "requested_access": "read-only",
+    "interaction": {
+      "mode": "math",
+      "reason": "automatic-math"
+    },
     "output": {
       "voice": "compact-professional",
       "depth": "standard",
-      "shape": "result -> setup -> equations -> derivation -> boundary"
+      "shape": "result -> definitions -> equations -> reasoning -> context -> boundary"
     },
     "response_contract": []
   },

@@ -10,7 +10,7 @@ Back: [[06_CHANGE_CONTROL]] · Runtime: [[runtime/PROTOCOL\|PROTOCOL]] · API:
 - Git for change-scope and staged-file checks.
 - No network, service, or credential is required for normal routing.
 
-`docs/`, `registry/`, `runtime/profile.json`, and canonical skill collections
+`docs/`, `registry/`, `interaction-protocol/protocol.json`, and canonical skill collections
 are sources. `runtime/router-manifest.json` is generated. Never edit generated
 skill mirrors as a substitute for their canonical source.
 
@@ -57,7 +57,8 @@ acceptance; Claude owns live Claude acceptance.
 3. A JSON request followed by newline exits without EOF.
 4. Timeout, invalid input, unavailable manifest, and adapter failure fail open.
 5. No test router process remains.
-6. Only one skill is returned and no family is preloaded.
+6. Only one task skill is returned, no family is preloaded, and interaction
+   protocols do not consume the task-skill slot.
 7. Registry discovery lists live active/manual/off metadata without a skill body.
 8. External request creation writes one new file only under `requests/pending/`.
 9. Staged files are within declared scope:

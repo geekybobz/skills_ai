@@ -54,11 +54,16 @@ shown only during explicit maintenance.
 Preview first, then apply only the requested state:
 
 ```bash
-python3 scripts/toggle_registry.py --dry-run --json active caveman.no-ai-traces
-python3 scripts/toggle_registry.py active caveman.no-ai-traces
+python3 scripts/toggle_registry.py --dry-run --json active interaction.general
+python3 scripts/toggle_registry.py manual interaction.math
 python3 scripts/toggle_registry.py --check
 ```
 
 The toggle script validates identifiers, link form, parent-child activation,
 target paths, and the compiled manifest. Activation changes routing availability;
 they do not authorize a skill to write files or access external systems.
+
+For `interaction.math`, `active` enables safe automatic mathematical-intent
+detection, `manual` requires `/interaction math`, and `off` disables the math
+overlay. `/interaction general` overrides automatic math selection for the
+current request.

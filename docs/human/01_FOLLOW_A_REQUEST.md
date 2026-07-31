@@ -13,7 +13,11 @@ Back: [start here](00_START_HERE.md). Next: [folder and platforms](02_FOLDER_AND
 ```mermaid
 flowchart LR
     U["User request"] --> E["Shared runtime entry"]
-    E --> R["Fast router"]
+    E --> P["Apply general interaction contract"]
+    P --> Y{"Genuine math reasoning?"}
+    Y -- "Yes" --> O["Add equation-led math overlay"]
+    Y -- "No" --> R["Fast task-skill router"]
+    O --> R
     R --> B{"Boundary failure?"}
     B -- "Invalid, timeout, unavailable" --> N["NORMAL"]
     B -- "No" --> D{"Registry-status question?"}
@@ -33,15 +37,22 @@ flowchart LR
     classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
     classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
     classDef normal fill:#546E7A,color:#fff,stroke:#29434E
-    class U,E,R,C route
-    class B,D,X decision
-    class S,L,A safe
+    class U,E,P,R,C route
+    class Y,B,D,X decision
+    class O,S,L,A safe
     class N,M normal
 ```
 
 The router returns a compact receipt. It never returns the original prompt or a
 whole family. After a `MATCH`, the caller validates the returned path and reads
 only that selected skill.
+
+The interaction protocol is independent of `MATCH`. General guidance keeps the
+answer direct and adequately explained. The math overlay activates only for
+mathematical actions and objects, explicit mathematical research reasoning, or
+an explicit `/interaction math` control. Code, filenames, search terms,
+settings, and rendering tasks cannot activate it merely by mentioning
+“equation” or “formula”.
 
 ## The strict design gate
 

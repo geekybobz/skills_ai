@@ -19,7 +19,8 @@ information to select one skill without reading every skill body.
 flowchart LR
     OLD["Load many possible skills"] --> COST["More tokens and mixed context"]
     NEW["Read compact manifest"] --> PICK["Select one skill or NORMAL"]
-    PICK --> FOCUS["Small, relevant context"]
+    PICK --> FOCUS["Small task context"]
+    PROTOCOL["General protocol<br/>plus math overlay when needed"] --> FOCUS
 
     classDef old fill:#C62828,color:#fff,stroke:#7F0000
     classDef new fill:#2E7D32,color:#fff,stroke:#1B5E20
@@ -30,6 +31,8 @@ flowchart LR
 ## The promises
 
 - At most one active or manual skill is selected.
+- The general protocol always stays separate from the selected task skill.
+- Mathematical reasoning can add a math overlay without replacing that skill.
 - No suitable skill means normal model reasoning, not a stopped task.
 - Ambiguous matches return normal behavior instead of guessing.
 - Off, hidden, and deprecated routes are not loaded.
@@ -49,7 +52,8 @@ host permissions remain the real enforcement boundary.
 |---|---|
 | Route | A compact record pointing to one skill |
 | Manifest | Generated JSON containing the routable registry |
-| Family | A group such as design, UI patterns, compression, or theory |
+| Family | A group such as design, UI patterns, interaction, or theory |
+| Interaction protocol | Small response guidance composed with task routing |
 | `MATCH` | One skill was clearly selected |
 | `NORMAL` | Continue the task without a local skill |
 | Fail-open | Router trouble does not block the original task |

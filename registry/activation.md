@@ -24,7 +24,7 @@ enabled routes are linked; disabled routes are visible but unlinked.
 | design | active | [[registry/design\|design]] | visual, layout, color, typography, print |
 | ui-patterns | active | [[registry/ui-patterns\|ui-patterns]] | forms, navigation, search, product UX |
 | build-ops | active | [[registry/build-ops\|build-ops]] | setup, deploy, auth code, debugging |
-| compression | active | [[registry/compression\|compression]] | terse output, Caveman, review, commit |
+| interaction | active | [[registry/interaction\|interaction]] | compact general responses and equation-led mathematical reasoning |
 | theory | active | [[registry/theory\|theory]] | LaTeX theory reference and math notes |
 | career | off | `registry/career.md` | career radar and job-search workflows |
 
@@ -32,29 +32,14 @@ enabled routes are linked; disabled routes are visible but unlinked.
 
 | id | state | route | trigger boundary |
 |---|---|---|---|
-| caveman | active | [[caveman/skills/caveman/SKILL\|caveman]] | terse response mode |
-| caveman-math | active | [[caveman/skills/caveman-math/SKILL\|caveman-math]] | formula-first mathematical pedagogy |
-| caveman-compress | manual | [[caveman/skills/caveman-compress/SKILL\|caveman-compress]] | explicit file compression only |
-| caveman-commit | manual | [[caveman/skills/caveman-commit/SKILL\|caveman-commit]] | commit message drafting |
-| caveman-review | manual | [[caveman/skills/caveman-review/SKILL\|caveman-review]] | review output only |
-| cavecrew | manual | [[caveman/skills/cavecrew/SKILL\|cavecrew]] | explicit delegation or subagent request |
-| caveman-help | manual | [[caveman/skills/caveman-help/SKILL\|caveman-help]] | help card |
-| caveman-stats | manual | [[caveman/skills/caveman-stats/SKILL\|caveman-stats]] | hook-provided token stats |
 | quantum-job-collector | off | `external-skills/quantum-job-collector/SKILL.md` | exhaustive Quantum Career Radar job collection |
 
-## Caveman Components
+## Interaction Protocol Components
 
 | id | state | route | effect |
 |---|---|---|---|
-| caveman.base-style | active | [[caveman/skills/caveman/SKILL\|caveman]] | terse output, preserve technical content |
-| caveman.no-ai-traces | active | [[caveman/skills/caveman/SKILL\|caveman]] | no em dashes, no assistant openers, no filler transitions |
-| caveman.answer-first | active | [[caveman/skills/caveman/SKILL\|caveman]] | start with answer, finding, equation, or action |
-| caveman.equation-rendering | active | [[caveman/skills/caveman-math/SKILL\|caveman-math]] | rendered LaTeX display math for central equations |
-| caveman.pedagogy | active | [[caveman/skills/caveman-math/SKILL\|caveman-math]] | setup, derivation, insight, boundary |
-| caveman.safety-clarity | active | [[caveman/skills/caveman/SKILL\|caveman]] | normal prose for security and irreversible actions |
-| caveman.code-preservation | active | [[caveman/skills/caveman/SKILL\|caveman]] | preserve code, commands, paths, URLs, errors |
-| caveman.wenyan | manual | [[caveman/skills/caveman/SKILL\|caveman]] | classical Chinese compression levels |
-| caveman.statusline-stats | manual | [[caveman/skills/caveman-stats/SKILL\|caveman-stats]] | statusline savings display |
+| interaction.general | active | [[registry/interaction\|interaction.general]] | direct result plus adequate polished context on every request |
+| interaction.math | active | [[registry/interaction\|interaction.math]] | automatic equation-led reasoning; `manual` requires an explicit math control |
 
 ## Quantum Job Collector Components
 
@@ -74,9 +59,9 @@ enabled routes are linked; disabled routes are visible but unlinked.
 Use the script instead of hand-editing route cells:
 
 ```bash
-python3 scripts/toggle_registry.py active caveman.no-ai-traces
-python3 scripts/toggle_registry.py off caveman.statusline-stats
-python3 scripts/toggle_registry.py manual cavecrew
+python3 scripts/toggle_registry.py active interaction.general
+python3 scripts/toggle_registry.py manual interaction.math
+python3 scripts/toggle_registry.py off interaction.math
 python3 scripts/toggle_registry.py --check
 ```
 

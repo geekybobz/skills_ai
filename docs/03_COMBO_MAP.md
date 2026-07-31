@@ -22,8 +22,8 @@ Back: [[00_SKILLS_HUB]] · Risk: [[04_RISK_MAP]] · Layers: [[05_COLOR_LAYERS]]
 | combo | use when | order |
 |---|---|---|
 | [[registry/theory]] + [[registry/design]] | theory content becomes an academic poster | theory gives structure, `poster-lead` gives layout |
-| [[registry/compression]] + any family | terse output wanted during a long session | activate `caveman` first, then route normally |
-| `caveman-math` + `theory-reference` | compact explanation while building rigorous notes | use `caveman-math` for answer shape; theory skill controls notation, phases, and files |
+| [[registry/interaction]] + any family | every request needs the shared compact-professional response contract | compose the protocol context with the independently selected task skill |
+| `interaction.math` + `theory-reference` | equation-led explanation while building rigorous notes | math controls answer shape; theory controls notation, phases, and files |
 | [[registry/ui-patterns]] + [[registry/build-ops]] | auth UX *and* auth code | `auth-security-ux-specialist` for the flow, `auth-implementation` for the code |
 | `cavecrew` + investigation work | delegating to save main context | `cavecrew` decides, then the subagent pattern it names |
 

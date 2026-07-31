@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import os
 import stat
 import subprocess
@@ -47,8 +48,8 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("REGISTRY_STATUS", decision["reason_code"])
         self.assertNotIn("skill", decision)
         self.assertEqual(self.manifest["source_hash"], decision["registry"]["source_hash"])
-        self.assertEqual(45, decision["registry"]["route_counts"]["active"])
-        self.assertEqual(6, decision["registry"]["route_counts"]["manual"])
+        self.assertEqual(43, decision["registry"]["route_counts"]["active"])
+        self.assertEqual(0, decision["registry"]["route_counts"]["manual"])
         self.assertEqual(["quantum-job-collector"], decision["registry"]["routes"]["off"])
         self.assertNotIn("hidden", decision["registry"]["routes"])
 
@@ -64,17 +65,20 @@ class RegistryRuntimeTests(unittest.TestCase):
         boundary = decision["context"]["skills_ai_change_boundary"]
         self.assertEqual("request-only-outside-maintenance-workspace", boundary["mode"])
 
-    def test_math_loads_only_math_skill(self) -> None:
-        decision = route_request("Derive the equation formula first with less story", self.manifest)
-        self.assertEqual("MATCH", decision["result"])
-        self.assertEqual("caveman-math", decision["skill"]["id"])
-        self.assertNotIn("caveman/skills/caveman/SKILL.md", compact_context(decision))
+    def test_math_is_a_response_overlay_not_a_task_skill(self) -> None:
+        decision = route_request("Derive the Euler-Lagrange equation", self.manifest)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertNotIn("skill", decision)
+        self.assertEqual("math", decision["context"]["interaction"]["mode"])
+        self.assertEqual("mathematics", decision["context"]["domain"])
+        self.assertIn("equations", decision["context"]["output"]["shape"])
 
-    def test_manual_commit_skill_requires_matching_request(self) -> None:
-        matched = route_request("Write a commit message for the staged change", self.manifest)
-        unrelated = route_request("Explain why commits are useful", self.manifest)
-        self.assertEqual("caveman-commit", matched["skill"]["id"])
-        self.assertNotEqual("caveman-commit", unrelated.get("skill", {}).get("id"))
+    def test_general_protocol_handles_commit_response_without_extra_skill(self) -> None:
+        decision = route_request("Write a commit message for the staged change", self.manifest)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertEqual("general", decision["context"]["interaction"]["mode"])
+        self.assertEqual("write", decision["context"]["operation"])
+        self.assertEqual("read-only", decision["context"]["requested_access"])
 
     def test_disabled_skill_falls_back(self) -> None:
         decision = route_request("Run the exhaustive quantum job collector", self.manifest)
@@ -155,13 +159,48 @@ class RegistryRuntimeTests(unittest.TestCase):
         cases = {
             "Explain this code without jargon": "code-explainer",
             "Diagnose this broken build and stack trace": "debug-helper",
-            "Derive this equation formula first": "caveman-math",
             "Plan a LaTeX theory chapter": "theory-reference",
         }
         for query, skill_id in cases.items():
             with self.subTest(query=query):
                 decision = route_request(query, self.manifest)
                 self.assertEqual(skill_id, decision["skill"]["id"])
+
+    def test_math_overlay_composes_with_task_skill(self) -> None:
+        decision = route_request(
+            "Plan a LaTeX theory chapter and derive the main Hamiltonian equation",
+            self.manifest,
+        )
+        self.assertEqual("theory-reference", decision["skill"]["id"])
+        self.assertEqual("math", decision["context"]["interaction"]["mode"])
+        self.assertEqual("theory", decision["context"]["domain"])
+
+    def test_math_intent_ignores_artifact_mentions(self) -> None:
+        prompts = (
+            "Review equation_parser.py for a bug",
+            "Search for the word formula in the repository",
+            "Fix the LaTeX equation rendering code",
+            "The formula field in settings.json is wrong",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("general", decision["context"]["interaction"]["mode"])
+
+    def test_manual_math_requires_explicit_control(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        manifest["components"]["interaction.math"]["state"] = "manual"
+        automatic = route_request("Solve x^2 - 5x + 6 = 0", manifest)
+        explicit = route_request("/interaction math solve x^2 - 5x + 6 = 0", manifest)
+        self.assertEqual("general", automatic["context"]["interaction"]["mode"])
+        self.assertEqual("math", explicit["context"]["interaction"]["mode"])
+
+    def test_explicit_general_overrides_automatic_math(self) -> None:
+        decision = route_request(
+            "/interaction general derive the Euler-Lagrange equation",
+            self.manifest,
+        )
+        self.assertEqual("general", decision["context"]["interaction"]["mode"])
 
     def test_context_has_polished_response_contract(self) -> None:
         decision = route_request("Explain this code", self.manifest)
@@ -176,7 +215,7 @@ class RegistryRuntimeTests(unittest.TestCase):
             register = Path(directory) / "activation.md"
             register.write_bytes(source.read_bytes())
             before = register.read_bytes()
-            changed = toggle(register, "caveman.no-ai-traces", "manual", write=False)
+            changed = toggle(register, "interaction.math", "manual", write=False)
             self.assertTrue(changed)
             self.assertEqual(before, register.read_bytes())
 
@@ -295,8 +334,8 @@ class RegistryRuntimeTests(unittest.TestCase):
         payload = json.loads(completed.stdout)
         context = payload["hookSpecificOutput"]["additionalContext"]
         self.assertIn("Live Skills AI registry source", context)
-        self.assertIn("active skills (45)", context)
-        self.assertIn("manual skills (6)", context)
+        self.assertIn("active skills (43)", context)
+        self.assertIn("manual skills (0)", context)
         self.assertIn("off skills (1): quantum-job-collector", context)
         self.assertNotIn("Selected local skill", context)
 
@@ -307,6 +346,15 @@ class RegistryRuntimeTests(unittest.TestCase):
                 decision = route_request(case["query"], self.manifest)
                 self.assertEqual(case["result"], decision["result"])
                 self.assertEqual(case.get("skill"), decision.get("skill", {}).get("id"))
+                if "interaction" in case:
+                    self.assertEqual(case["interaction"], decision["context"]["interaction"]["mode"])
+
+    def test_interaction_prompt_corpus(self) -> None:
+        cases = json.loads((ROOT / "tests" / "interaction_cases.json").read_text(encoding="utf-8"))
+        for case in cases:
+            with self.subTest(query=case["query"]):
+                decision = route_request(case["query"], self.manifest)
+                self.assertEqual(case["mode"], decision["context"]["interaction"]["mode"])
 
 
 if __name__ == "__main__":

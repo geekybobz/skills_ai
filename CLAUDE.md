@@ -27,10 +27,10 @@ family registries on the normal task path.
   then hand off to a dedicated maintenance task rooted here. Read
   `protocols/repository/EXTERNAL_CHANGE_REQUEST.md`.
 - Never load a whole family. `design-with-claude/` alone is ~30k tokens.
-- Never edit skill files under `design-with-claude/`, `caveman/`, or `theory-reference/`
+- Never edit skill files under `design-with-claude/`, `interaction-protocol/`, or `theory-reference/`
   unless explicitly asked. The registry describes; it does not rewrite.
-- Canonical caveman skills are `caveman/skills/*` only — ignore the packaged copies
-  under `plugins/`, `.agents/`, `.roo/`, `.kiro/`, `.junie/`.
+- Interaction protocols shape the response context and do not consume the one
+  selected task-skill slot.
 - `theory-reference/` is a git submodule. Never add registry files inside it.
 - Claude owns Claude hook, installation, managed-memory cleanup, and live Claude
   acceptance. Do not modify or certify Codex-specific lifecycle without an
