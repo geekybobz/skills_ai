@@ -52,6 +52,20 @@ def install_file(source: Path, target: Path, *, dry_run: bool = False) -> str:
     return "updated"
 
 
+def remove_managed_file(source: Path, target: Path, *, dry_run: bool = False) -> str:
+    """Remove only an installer-managed byte-for-byte copy."""
+    if not target.exists() and not target.is_symlink():
+        return "absent"
+    if target.is_symlink() or not target.is_file():
+        return "preserved-foreign"
+    if target.read_bytes() != source.read_bytes():
+        return "preserved-foreign"
+    if dry_run:
+        return "would-remove"
+    target.unlink()
+    return "removed"
+
+
 def claude_hook_command(hook_path: Path) -> str:
     return f"node {shlex.quote(str(hook_path))} --root {shlex.quote(str(ROOT))}"
 
@@ -69,7 +83,7 @@ def merged_claude_settings(settings: dict[str, Any], hook_path: Path) -> dict[st
                     {
                         "type": "command",
                         "command": command,
-                        "timeout": 5,
+                        "timeout": 3,
                         "statusMessage": "Selecting local skill...",
                     }
                 )
@@ -80,7 +94,7 @@ def merged_claude_settings(settings: dict[str, Any], hook_path: Path) -> dict[st
                 {
                     "type": "command",
                     "command": command,
-                    "timeout": 5,
+                    "timeout": 3,
                     "statusMessage": "Selecting local skill...",
                 }
             ]
@@ -117,7 +131,9 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
     settings_content = (json.dumps(updated_settings, indent=2, sort_keys=True) + "\n").encode()
     settings_result = "unchanged" if original_settings == settings_content else "would-update" if dry_run else "updated"
     results = {
-        "entry": install_file(SHARED_ENTRY, skill_target, dry_run=dry_run),
+        # The hook performs routing and context injection. Keeping the shared
+        # bootstrap in Claude's skill memory would duplicate that authority.
+        "entry": remove_managed_file(SHARED_ENTRY, skill_target, dry_run=dry_run),
         "hook": install_file(CLAUDE_HOOK, hook_target, dry_run=dry_run),
         "settings": settings_result,
     }
@@ -134,7 +150,7 @@ def check_adapter(adapter: str, config_dir: Path) -> bool:
         return target.is_file() and not target.is_symlink() and target.read_bytes() == SHARED_ENTRY.read_bytes()
     skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
     hook_target = config_dir / "hooks" / "skills-ai-router.js"
-    if not skill_target.is_file() or skill_target.read_bytes() != SHARED_ENTRY.read_bytes():
+    if skill_target.is_file() and not skill_target.is_symlink() and skill_target.read_bytes() == SHARED_ENTRY.read_bytes():
         return False
     if not hook_target.is_file() or hook_target.read_bytes() != CLAUDE_HOOK.read_bytes():
         return False

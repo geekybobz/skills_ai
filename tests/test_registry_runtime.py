@@ -85,7 +85,7 @@ class RegistryRuntimeTests(unittest.TestCase):
             settings = {"model": "custom", "hooks": {"SessionStart": [{"hooks": []}]}}
             (config_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
             results = install_adapter("claude", config_dir)
-            self.assertEqual("updated", results["entry"])
+            self.assertEqual("absent", results["entry"])
             self.assertEqual("updated", results["hook"])
             self.assertEqual("updated", results["settings"])
             installed = json.loads((config_dir / "settings.json").read_text(encoding="utf-8"))
@@ -93,6 +93,28 @@ class RegistryRuntimeTests(unittest.TestCase):
             self.assertTrue(installed["hooks"]["SessionStart"])
             self.assertTrue(check_adapter("claude", config_dir))
             self.assertTrue((config_dir / "settings.json.skills-ai.bak").exists())
+
+    def test_claude_adapter_removes_only_managed_bootstrap(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
+            skill_target.parent.mkdir(parents=True)
+            skill_target.write_bytes((ROOT / "runtime" / "SKILL.md").read_bytes())
+            self.assertEqual("would-remove", install_adapter("claude", config_dir, dry_run=True)["entry"])
+            self.assertTrue(skill_target.exists())
+            self.assertEqual("removed", install_adapter("claude", config_dir)["entry"])
+            self.assertFalse(skill_target.exists())
+            self.assertTrue(check_adapter("claude", config_dir))
+
+    def test_claude_adapter_preserves_foreign_bootstrap(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
+            skill_target.parent.mkdir(parents=True)
+            skill_target.write_text("user-authored\n", encoding="utf-8")
+            self.assertEqual("preserved-foreign", install_adapter("claude", config_dir)["entry"])
+            self.assertEqual("user-authored\n", skill_target.read_text(encoding="utf-8"))
+            self.assertTrue(check_adapter("claude", config_dir))
 
     def test_claude_hook_uses_shared_router(self) -> None:
         completed = subprocess.run(

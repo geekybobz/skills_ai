@@ -7,6 +7,8 @@ import argparse
 import json
 import math
 import statistics
+import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -26,6 +28,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cases", type=Path, default=DEFAULT_CASES)
     parser.add_argument("--repeat", type=int, default=200)
+    parser.add_argument("--process-repeat", type=int, default=5)
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     manifest = load_manifest()
@@ -34,6 +37,7 @@ def main() -> int:
     route_times: list[float] = []
     receipt_tokens: list[int] = []
     selected_skill_tokens: list[int] = []
+    process_times: list[float] = []
 
     for case in cases:
         decision = route_request(case["query"], manifest)
@@ -54,6 +58,21 @@ def main() -> int:
             route_request(case["query"], manifest)
             route_times.append((time.perf_counter_ns() - started) / 1_000_000)
 
+    process_query = cases[0]["query"]
+    for _ in range(args.process_repeat):
+        started = time.perf_counter_ns()
+        completed = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "route_skill.py")],
+            input=json.dumps({"protocol": "skills-ai/1", "client": "benchmark", "query": process_query}) + "\n",
+            text=True,
+            capture_output=True,
+            timeout=3,
+            check=False,
+        )
+        process_times.append((time.perf_counter_ns() - started) / 1_000_000)
+        if completed.returncode or not completed.stdout:
+            failures.append(f"process API failed: {completed.stderr.strip() or completed.returncode}")
+
     report = {
         "cases": len(cases),
         "failures": failures,
@@ -61,6 +80,10 @@ def main() -> int:
         "latency_ms": {
             "median": round(statistics.median(route_times), 4),
             "p95": round(percentile(route_times, 0.95), 4),
+        },
+        "process_latency_ms": {
+            "median": round(statistics.median(process_times), 4),
+            "p95": round(percentile(process_times, 0.95), 4),
         },
         "compact_receipt_tokens": {
             "median": round(statistics.median(receipt_tokens)),
@@ -72,6 +95,7 @@ def main() -> int:
             "maximum": max(selected_skill_tokens),
         },
         "repeat": args.repeat,
+        "process_repeat": args.process_repeat,
     }
     if args.json:
         print(json.dumps(report, indent=2, sort_keys=True))
@@ -80,6 +104,7 @@ def main() -> int:
             f"router: {len(cases) - len(failures)}/{len(cases)} cases; "
             f"median {report['latency_ms']['median']:.4f} ms; "
             f"p95 {report['latency_ms']['p95']:.4f} ms; "
+            f"process p95 {report['process_latency_ms']['p95']:.4f} ms; "
             f"receipt <= {report['compact_receipt_tokens']['maximum']} estimated tokens; "
             f"selected skill median {report['selected_skill_tokens']['median']} estimated tokens"
         )

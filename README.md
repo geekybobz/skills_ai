@@ -8,6 +8,10 @@ Skill files are never modified — the registry only points at them.
 - Agent entry: [[docs/SKILLS|SKILLS]] → [[docs/00_SKILLS_HUB|00_SKILLS_HUB]]
 - Fast runtime entry: `runtime/SKILL.md` → compiled manifest → one skill or `NORMAL`
 - Graph colours: [[docs/05_COLOR_LAYERS|05_COLOR_LAYERS]]
+- Change control: [[docs/06_CHANGE_CONTROL|06_CHANGE_CONTROL]]
+- Build and release: [[docs/07_BUILD_AND_RELEASE|07_BUILD_AND_RELEASE]]
+- Runtime protocol/API: [[runtime/PROTOCOL|PROTOCOL]] · [[runtime/API_CONTRACT|API_CONTRACT]]
+- Claude verification: [[docs/CLAUDE_VERIFICATION_PROMPT|CLAUDE_VERIFICATION_PROMPT]]
 - Legacy graph cards: [[cards/legacy/quantum-job-collector|quantum-job-collector]]
 - Proposed interaction protocol: [[docs/TODO_INTERACTION_PROTOCOL_PLAN|TODO_INTERACTION_PROTOCOL_PLAN]]
 
@@ -59,7 +63,8 @@ to load, what it is *not* for, and what write risk it carries. Never skill conte
 
 ## Repo layout
 
-- `docs/` — routing hub, combo map, risk map, graph layer notes, proposed interaction-protocol plan
+- `docs/` — routing, risk, change-control, build, graph, and interaction-protocol notes
+- `protocols/repository/` — one-card procedures for add/edit/update/delete and scope control
 - `registry/activation.md` — active/manual/off switchboard for families, skills, and components
 - `cards/` — graph-visible cards for parked or legacy skills, without routing authority
 - `scripts/toggle_registry.py` — validates and toggles activation rows
@@ -68,6 +73,7 @@ to load, what it is *not* for, and what write risk it carries. Never skill conte
 - `scripts/validate_registry.py` — checks source and manifest consistency
 - `scripts/benchmark_router.py` — measures route accuracy, latency, and context size
 - `scripts/install_runtime_adapter.py` — installs thin Codex or Claude adapters
+- `scripts/change_guard.py` — reports protected, external, generated, or out-of-scope changes
 - `adapters/` — platform-specific access over the shared runtime core
 - `runtime/` — shared entry, compact response profile, and generated router manifest
 - `tests/` — deterministic routing cases and standard-library unit tests
