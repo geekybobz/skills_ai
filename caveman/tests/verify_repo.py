@@ -104,13 +104,7 @@ def _frontmatter_description(path: Path) -> str:
 def verify_skill_frontmatter_upload_compatibility() -> None:
     section("Skill Frontmatter Upload Compatibility")
 
-    skill_paths = [
-        ROOT / "skills/caveman/SKILL.md",
-        ROOT / "skills/caveman-commit/SKILL.md",
-        ROOT / "skills/caveman-help/SKILL.md",
-        ROOT / "skills/caveman-review/SKILL.md",
-        ROOT / "skills/caveman-compress/SKILL.md",
-    ]
+    skill_paths = sorted((ROOT / "skills").glob("*/SKILL.md"))
     for path in skill_paths:
         description = _frontmatter_description(path)
         ensure(
@@ -123,17 +117,49 @@ def verify_skill_frontmatter_upload_compatibility() -> None:
 
 def verify_synced_files() -> None:
     section("Synced Files")
-    skill_source = ROOT / "skills/caveman/SKILL.md"
-
-    skill_copies = [
-        ROOT / "plugins/caveman/skills/caveman/SKILL.md",
+    mirrored_files = [
+        ("skills/caveman/SKILL.md", "plugins/caveman/skills/caveman/SKILL.md"),
+        (
+            "skills/caveman/references/examples.md",
+            "plugins/caveman/skills/caveman/references/examples.md",
+        ),
+        (
+            "skills/caveman-math/SKILL.md",
+            "plugins/caveman/skills/caveman-math/SKILL.md",
+        ),
+        (
+            "skills/caveman-math/references/examples.md",
+            "plugins/caveman/skills/caveman-math/references/examples.md",
+        ),
+        (
+            "skills/caveman-compress/SKILL.md",
+            "plugins/caveman/skills/caveman-compress/SKILL.md",
+        ),
+        (
+            "skills/caveman-compress/references/compression-policy.md",
+            "plugins/caveman/skills/caveman-compress/references/compression-policy.md",
+        ),
+        ("skills/cavecrew/SKILL.md", "plugins/caveman/skills/cavecrew/SKILL.md"),
+        (
+            "skills/cavecrew/references/patterns.md",
+            "plugins/caveman/skills/cavecrew/references/patterns.md",
+        ),
     ]
-    for copy in skill_copies:
+    for source_name, copy_name in mirrored_files:
+        source = ROOT / source_name
+        copy = ROOT / copy_name
         ensure(
-            copy.read_text(encoding="utf-8") == skill_source.read_text(encoding="utf-8"),
+            copy.read_bytes() == source.read_bytes(),
             f"Skill copy mismatch: {copy}",
         )
 
+    script_source = ROOT / "skills/caveman-compress/scripts"
+    script_copy = ROOT / "plugins/caveman/skills/caveman-compress/scripts"
+    for source in sorted(script_source.glob("*.py")):
+        copy = script_copy / source.name
+        ensure(copy.read_bytes() == source.read_bytes(), f"Script copy mismatch: {copy}")
+
+    skill_source = ROOT / "skills/caveman/SKILL.md"
     with zipfile.ZipFile(ROOT / "dist" / "caveman.skill") as archive:
         ensure("caveman/SKILL.md" in archive.namelist(), "caveman.skill missing caveman/SKILL.md")
         ensure(
@@ -305,6 +331,18 @@ def verify_hook_install_flow() -> None:
             (claude_dir / ".caveman-active").read_text(encoding="utf-8") == "ultra",
             "CAVEMAN_DEFAULT_MODE=ultra should set flag to ultra",
         )
+        ensure("Never trade accuracy or required reasoning" in activate_custom.stdout, "canonical skill body not loaded")
+
+        activate_math = run(
+            ["node", "src/hooks/caveman-activate.js"],
+            env={**hook_env, "CAVEMAN_DEFAULT_MODE": "math"},
+        )
+        ensure("CAVEMAN MATH ACTIVE" in activate_math.stdout, "math activation banner missing")
+        ensure("Compress exposition, not reasoning" in activate_math.stdout, "math skill body not loaded")
+        ensure(
+            (claude_dir / ".caveman-active").read_text(encoding="utf-8") == "math",
+            "CAVEMAN_DEFAULT_MODE=math should set flag to math",
+        )
         # Test "off" mode — activation skipped, flag removed
         activate_off = run(
             ["node", "src/hooks/caveman-activate.js"],
@@ -346,7 +384,7 @@ def verify_hook_install_flow() -> None:
             check=True,
         )
         ensure(
-            "CAVEMAN MODE ACTIVE (ultra)" in ultra_prompt.stdout,
+            "CAVEMAN (ultra): terse" in ultra_prompt.stdout,
             "mode tracker should emit active-mode reinforcement",
         )
         ensure((claude_dir / ".caveman-active").read_text(encoding="utf-8") == "ultra", "mode tracker did not record ultra")

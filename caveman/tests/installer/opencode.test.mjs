@@ -41,8 +41,13 @@ function shimOpencode() {
 }
 
 function runInstaller(args, env) {
+  const isolatedEnv = {
+    ...env,
+    CLAUDE_CONFIG_DIR: env.CLAUDE_CONFIG_DIR ||
+      path.join(env.XDG_CONFIG_HOME || freshTmpDir(), 'claude'),
+  };
   return spawnSync('node', [INSTALLER, ...args, '--non-interactive', '--no-mcp-shrink'], {
-    env, encoding: 'utf8',
+    env: isolatedEnv, encoding: 'utf8',
   });
 }
 
@@ -69,13 +74,13 @@ test('opencode fresh install drops plugin, commands, agents, skills, AGENTS.md, 
     assert.ok(fs.existsSync(path.join(ocDir, 'plugins', 'caveman', 'package.json')), 'plugin package.json missing');
     assert.ok(fs.existsSync(path.join(ocDir, 'plugins', 'caveman', 'caveman-config.cjs')), 'caveman-config.cjs sibling missing');
 
-    for (const f of ['caveman.md', 'caveman-commit.md', 'caveman-review.md', 'caveman-compress.md', 'caveman-stats.md', 'caveman-help.md']) {
+    for (const f of ['caveman.md', 'caveman-math.md', 'caveman-commit.md', 'caveman-review.md', 'caveman-compress.md', 'caveman-stats.md', 'caveman-help.md']) {
       assert.ok(fs.existsSync(path.join(ocDir, 'commands', f)), `command ${f} missing`);
     }
     for (const f of ['cavecrew-investigator.md', 'cavecrew-builder.md', 'cavecrew-reviewer.md']) {
       assert.ok(fs.existsSync(path.join(ocDir, 'agents', f)), `agent ${f} missing`);
     }
-    for (const name of ['caveman', 'caveman-commit', 'caveman-review', 'caveman-help', 'caveman-stats', 'caveman-compress', 'cavecrew']) {
+    for (const name of ['caveman', 'caveman-math', 'caveman-commit', 'caveman-review', 'caveman-help', 'caveman-stats', 'caveman-compress', 'cavecrew']) {
       assert.ok(fs.existsSync(path.join(ocDir, 'skills', name, 'SKILL.md')), `skill ${name}/SKILL.md missing`);
     }
     assert.ok(fs.existsSync(path.join(ocDir, 'AGENTS.md')), 'AGENTS.md missing');
@@ -92,6 +97,7 @@ test('opencode fresh install drops plugin, commands, agents, skills, AGENTS.md, 
     assert.ok(Array.isArray(cfg.plugin), 'opencode.json missing plugin array');
     assert.ok(cfg.plugin.includes('./plugins/caveman/plugin.js'), 'plugin entry missing');
   } finally {
+    delete process.env.XDG_CONFIG_HOME;
     fs.rmSync(xdg, { recursive: true, force: true });
     fs.rmSync(shimDir, { recursive: true, force: true });
   }
@@ -283,5 +289,27 @@ test('opencode plugin handles /caveman ultra and stop caveman via tui.prompt.app
   } finally {
     fs.rmSync(xdg, { recursive: true, force: true });
     fs.rmSync(shimDir, { recursive: true, force: true });
+  }
+});
+
+test('opencode plugin activates persistent formula-first math mode', async () => {
+  const xdg = freshTmpDir();
+  try {
+    process.env.XDG_CONFIG_HOME = xdg;
+    const pluginUrl = pathToFileURL(path.join(REPO_ROOT, 'src', 'plugins', 'opencode', 'plugin.js'));
+    pluginUrl.searchParams.set('test', `${Date.now()}-${Math.random()}`);
+    const { CavemanPlugin } = await import(pluginUrl.href);
+    const handlers = await CavemanPlugin({});
+    const flagPath = path.join(xdg, 'opencode', '.caveman-active');
+
+    const activated = await handlers['tui.prompt.append']({ prompt: 'activate caveman math' });
+    assert.equal(fs.readFileSync(flagPath, 'utf8'), 'math');
+    assert.match(activated.append, /formula first; define symbols; derive; LaTeX/);
+
+    const persisted = await handlers['tui.prompt.append']({ prompt: 'derive this ODE' });
+    assert.match(persisted.append, /CAVEMAN MATH/);
+  } finally {
+    delete process.env.XDG_CONFIG_HOME;
+    fs.rmSync(xdg, { recursive: true, force: true });
   }
 });

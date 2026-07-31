@@ -1,7 +1,19 @@
 .DS_Store
 .env
 .env.*
-.obsidian/
 node_modules/
 __pycache__/
 *.pyc
+
+# Obsidian — track the vault design (graph colours, plugins, ignore filters),
+# not machine-local window state.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Caveman's stale agent-specific mirrors are not part of any install path.
+# Keep product manifests, distributions, tests, evals, and CI tracked; Obsidian
+# hides those paths through .obsidian/app.json without breaking fresh clones.
+caveman/.agents/skills/
+caveman/.roo/
+caveman/.kiro/
+caveman/.junie/

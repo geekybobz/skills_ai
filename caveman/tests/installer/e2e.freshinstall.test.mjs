@@ -62,7 +62,7 @@ function pathWithout(binNames) {
 }
 
 function runInstaller(args, configDir, extraEnv = {}) {
-  return spawnSync('node', [INSTALLER, ...args, '--config-dir', configDir, '--non-interactive', '--no-mcp-shrink'], {
+  return spawnSync(process.execPath, [INSTALLER, ...args, '--config-dir', configDir, '--non-interactive', '--no-mcp-shrink'], {
     env: { ...process.env, CLAUDE_CONFIG_DIR: configDir, NO_COLOR: '1', ...extraEnv },
     encoding: 'utf8',
   });
@@ -246,7 +246,7 @@ test('openclaw install writes skill folder + SOUL.md bootstrap', () => {
   const ws = path.join(dir, 'ws');
   fs.mkdirSync(ws);
   try {
-    const r = spawnSync('node', [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
+    const r = spawnSync(process.execPath, [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
       env: { ...process.env, OPENCLAW_WORKSPACE: ws, NO_COLOR: '1' },
       encoding: 'utf8',
     });
@@ -286,8 +286,8 @@ test('openclaw install is idempotent: skill frontmatter not double-prepended, SO
   try {
     const env = { ...process.env, OPENCLAW_WORKSPACE: ws, NO_COLOR: '1' };
     const args = ['--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir];
-    spawnSync('node', [INSTALLER, ...args], { env, encoding: 'utf8' });
-    spawnSync('node', [INSTALLER, ...args], { env, encoding: 'utf8' });
+    spawnSync(process.execPath, [INSTALLER, ...args], { env, encoding: 'utf8' });
+    spawnSync(process.execPath, [INSTALLER, ...args], { env, encoding: 'utf8' });
 
     const skillRaw = fs.readFileSync(path.join(ws, 'skills', 'caveman', 'SKILL.md'), 'utf8');
     // version key should appear exactly once (idempotent merge).
@@ -311,7 +311,7 @@ test('openclaw install preserves user content in SOUL.md (append, not overwrite)
   const userContent = '# my workspace\n\nfoo bar baz\n';
   fs.writeFileSync(path.join(ws, 'SOUL.md'), userContent);
   try {
-    spawnSync('node', [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
+    spawnSync(process.execPath, [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
       env: { ...process.env, OPENCLAW_WORKSPACE: ws, NO_COLOR: '1' },
       encoding: 'utf8',
     });
@@ -332,11 +332,11 @@ test('openclaw uninstall removes skill folder + strips SOUL.md block, preserving
   fs.writeFileSync(path.join(ws, 'SOUL.md'), userContent);
   try {
     const env = { ...process.env, OPENCLAW_WORKSPACE: ws, NO_COLOR: '1' };
-    spawnSync('node', [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], { env, encoding: 'utf8' });
+    spawnSync(process.execPath, [INSTALLER, '--only', 'openclaw', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], { env, encoding: 'utf8' });
 
     // Strip claude/gemini from PATH so uninstall doesn't touch real plugins.
     const cleanPath = pathWithout(['claude', 'gemini']);
-    const r = spawnSync('node', [INSTALLER, '--uninstall', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
+    const r = spawnSync(process.execPath, [INSTALLER, '--uninstall', '--non-interactive', '--no-mcp-shrink', '--config-dir', dir], {
       env: { ...env, PATH: cleanPath },
       encoding: 'utf8',
     });
@@ -359,7 +359,7 @@ test('caveman-init.js --only openclaw routes through the same helper', () => {
   fs.mkdirSync(ws);
   try {
     const initScript = path.join(REPO_ROOT, 'src', 'tools', 'caveman-init.js');
-    const r = spawnSync('node', [initScript, dir, '--only', 'openclaw'], {
+    const r = spawnSync(process.execPath, [initScript, dir, '--only', 'openclaw'], {
       env: { ...process.env, OPENCLAW_WORKSPACE: ws, NO_COLOR: '1' },
       encoding: 'utf8',
     });

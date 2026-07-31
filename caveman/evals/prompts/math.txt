@@ -1,0 +1,7 @@
+Why does simple harmonic motion have sine and cosine solutions?
+Derive the Euler-Lagrange equation from the action principle.
+Explain why a Hermitian matrix has real eigenvalues.
+Solve y'' + 4y = 0 and state how initial conditions determine the constants.
+Show why the Fourier transform of a Gaussian is another Gaussian.
+Verify symbolically that x(t)=A cos(omega t)+B sin(omega t) solves x''+omega^2 x=0.
+Explain the difference between an exact solution, an approximation, and a numerical estimate.

@@ -29,6 +29,10 @@ Auto-clarity rule: caveman drops to normal prose for security warnings, irrevers
 stop caveman          # back to normal prose
 ```
 
+For formula-first mathematical explanations, use `/caveman math` or
+`/caveman-math`. This loads the separate `caveman-math` skill and leaves the
+six prose intensity levels unchanged.
+
 ## Example output
 
 Question: "Why does my React component re-render?"
@@ -45,4 +49,5 @@ Caveman (ultra):
 ## See also
 
 - [`SKILL.md`](./SKILL.md) — full LLM-facing instructions
+- [`../caveman-math/SKILL.md`](../caveman-math/SKILL.md) — formula-first mathematical mode
 - [Caveman README](../../README.md) — repo overview, install, benchmarks

@@ -386,7 +386,7 @@ async function installClaude(ctx) {
 
   // Plugin install (idempotent unless --force)
   let alreadyInstalled = false;
-  if (!opts.force) {
+  if (!opts.force && !opts.dryRun) {
     const r = captureSpawn('claude', ['plugin', 'list']);
     if (r.status === 0 && /caveman/i.test(r.stdout || '')) alreadyInstalled = true;
   }
@@ -424,7 +424,7 @@ function installGemini(ctx) {
   results.detected++;
   say('→ Gemini CLI detected');
 
-  if (!opts.force) {
+  if (!opts.force && !opts.dryRun) {
     const r = captureSpawn('gemini', ['extensions', 'list']);
     if (r.status === 0 && /caveman/i.test(r.stdout || '')) {
       note('  caveman extension already installed (use --force to reinstall)');
@@ -462,9 +462,9 @@ function installViaSkills(ctx, prov) {
 // opencode.json with a "plugin" array entry. Mirrors the Claude Code hook
 // architecture as closely as opencode allows — only the statusline is missing
 // (opencode's TUI exposes no plugin-writable badge).
-const OPENCODE_SKILL_DIRS  = ['caveman', 'caveman-commit', 'caveman-review', 'caveman-help', 'caveman-stats', 'caveman-compress', 'cavecrew'];
+const OPENCODE_SKILL_DIRS  = ['caveman', 'caveman-math', 'caveman-commit', 'caveman-review', 'caveman-help', 'caveman-stats', 'caveman-compress', 'cavecrew'];
 const OPENCODE_AGENT_FILES = ['cavecrew-investigator.md', 'cavecrew-builder.md', 'cavecrew-reviewer.md'];
-const OPENCODE_COMMAND_FILES = ['caveman.md', 'caveman-commit.md', 'caveman-review.md', 'caveman-compress.md', 'caveman-stats.md', 'caveman-help.md'];
+const OPENCODE_COMMAND_FILES = ['caveman.md', 'caveman-math.md', 'caveman-commit.md', 'caveman-review.md', 'caveman-compress.md', 'caveman-stats.md', 'caveman-help.md'];
 const OPENCODE_PLUGIN_REL = './plugins/caveman/plugin.js';
 const OPENCODE_AGENTS_MD_SENTINEL = 'Respond terse like smart caveman';
 // Marker fence for the opencode AGENTS.md ruleset block. Same convention as
@@ -787,6 +787,16 @@ async function installHooks(ctx) {
 // ── MCP shrink wiring ─────────────────────────────────────────────────────
 function installMcpShrink(ctx) {
   const { note, warn, opts } = ctx;
+  if (opts.dryRun) {
+    note(`    would verify npm package: ${MCP_SHRINK_PKG}`);
+    runSpawn(
+      'claude',
+      ['mcp', 'add', 'caveman-shrink', '--', 'npx', '-y', MCP_SHRINK_PKG],
+      null,
+      true,
+    );
+    return { kind: 'ok' };
+  }
   // Probe npm first — registry outage = clean skip with manual snippet.
   const probe = captureSpawn('npm', ['view', MCP_SHRINK_PKG, 'name']);
   if (probe.status !== 0) {

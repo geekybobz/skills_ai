@@ -43,6 +43,7 @@ caveman/
 │
 ├── skills/                      # ALL skills, single source of truth
 │   ├── caveman/{SKILL.md, README.md}
+│   ├── caveman-math/{SKILL.md, references/}
 │   ├── caveman-commit/{SKILL.md, README.md}
 │   ├── caveman-review/{SKILL.md, README.md}
 │   ├── caveman-help/{SKILL.md, README.md}
@@ -83,6 +84,7 @@ caveman/
 | File | What it controls |
 |------|-----------------|
 | `skills/caveman/SKILL.md` | Caveman behavior: intensity levels, rules, wenyan mode, auto-clarity, persistence. Only file to edit for behavior changes. |
+| `skills/caveman-math/SKILL.md` | Formula-first mathematical response contract. Optional persistent mode; inactive by default. |
 | `src/rules/caveman-activate.md` | Always-on auto-activation rule body. Consumed by `src/tools/caveman-init.js` when a user runs `npx caveman --with-init` (per-repo IDE rule files). Edit here, not in any per-agent rule copy. |
 | `src/rules/caveman-openclaw-bootstrap.md` | Marker-fenced bootstrap snippet appended to `~/.openclaw/workspace/SOUL.md` by `bin/lib/openclaw.js`. Drives always-on caveman through the OpenClaw gateway. Must include the SENTINEL `Respond terse like smart caveman` and stay well under OpenClaw's 12K-per-bootstrap-file cap. |
 | `bin/lib/openclaw.js` | OpenClaw install/uninstall helper. Frontmatter merge (`version`, `always: true`), SOUL.md marker append/strip, idempotent. Shared by `bin/install.js` and `src/tools/caveman-init.js`. |
@@ -95,23 +97,26 @@ caveman/
 | `agents/cavecrew-builder.md` | Surgical 1-2 file editor subagent. Refuses 3+ file scope. |
 | `agents/cavecrew-reviewer.md` | Diff/file reviewer subagent (haiku). One-line findings with severity emoji. |
 | `src/plugins/opencode/plugin.js` | opencode native plugin. ESM Bun module — `session.created` writes flag, `tui.prompt.append` parses slash/natural-language activation and appends per-prompt reinforcement. Reuses `caveman-config.js` via `createRequire`. |
-| `src/plugins/opencode/commands/*.md` | Six opencode slash-command prompt templates (`/caveman`, `/caveman-{commit,review,compress,stats,help}`). |
+| `src/plugins/opencode/commands/*.md` | Seven opencode slash-command prompt templates (`/caveman`, `/caveman-math`, and `/caveman-{commit,review,compress,stats,help}`). |
 
 ### Auto-generated / auto-synced — do not edit directly
 
 We removed the agent-specific dotdir mirrors at the repo root (`.cursor/`, `.windsurf/`, `.clinerules/`, `.github/copilot-instructions.md`, root `caveman/SKILL.md`). They were never read by the installer — only used to self-apply caveman to this repo when a maintainer opened it in Cursor/Windsurf/Cline. Devs who want caveman in their editor while editing this repo should run `npx caveman --with-init` once (writes per-repo rule files from `src/rules/caveman-activate.md` via `src/tools/caveman-init.js`). For per-user installs through the upstream skills CLI, `npx caveman --only <agent>` runs `npx skills add ... -a <profile>`.
 
-A handful of dotdir leftovers (`.junie/`, `.kiro/`, `.roo/`, `.agents/`) still hold a stale `cavecrew/SKILL.md` mirror from before the cleanup. They aren't read by anything in the current install path; remove on sight, no migration needed.
+The stale skill mirrors under `.junie/`, `.kiro/`, `.roo/`, and
+`.agents/skills/` are not read by the current install path and may be removed.
+Keep `.agents/plugins/marketplace.json`; it is a distribution manifest.
 
 What's left is the Claude Code plugin distribution (required by the plugin loader) and the release ZIP.
 
 | File | Synced from |
 |------|-------------|
-| `plugins/caveman/skills/caveman/SKILL.md` | `skills/caveman/SKILL.md` |
-| `plugins/caveman/skills/caveman-compress/SKILL.md` (+ `scripts/`) | `skills/caveman-compress/SKILL.md` (+ `scripts/`) |
-| `plugins/caveman/skills/cavecrew/SKILL.md` | `skills/cavecrew/SKILL.md` |
+| `plugins/caveman/skills/caveman/` | `skills/caveman/` |
+| `plugins/caveman/skills/caveman-math/` | `skills/caveman-math/` |
+| `plugins/caveman/skills/caveman-compress/` | `skills/caveman-compress/` |
+| `plugins/caveman/skills/cavecrew/` | `skills/cavecrew/` |
 | `plugins/caveman/agents/cavecrew-*.md` | `agents/cavecrew-*.md` |
-| `dist/caveman.skill` | ZIP of `skills/caveman/` directory (gitignored; rebuilt by CI on release) |
+| `dist/caveman.skill` | Tracked ZIP of `skills/caveman/`; rebuilt by CI |
 
 Skills not in this table (`caveman-commit`, `caveman-review`, `caveman-help`, `caveman-stats`) are not mirrored into the Claude Code plugin distribution by CI. They reach Claude Code through the standalone hook + skill install path, and reach other agents via `npx skills add`. A `plugins/caveman/skills/caveman-stats/` directory is currently checked in as a hand-committed copy; the sync workflow does not touch it, so don't rely on edits there to propagate.
 
@@ -122,8 +127,8 @@ Skills not in this table (`caveman-commit`, `caveman-review`, `caveman-help`, `c
 `.github/workflows/sync-skill.yml` triggers on main push when `skills/**/SKILL.md` or `agents/cavecrew-*.md` changes.
 
 What it does:
-1. Copies `skills/caveman/SKILL.md` and `skills/cavecrew/SKILL.md` into their `plugins/caveman/skills/<name>/` mirrors so the Claude Code plugin loader sees the latest behavior.
-2. Copies `skills/caveman-compress/SKILL.md` and its `scripts/` into `plugins/caveman/skills/caveman-compress/`.
+1. Copies canonical Caveman, Caveman Math, Cavecrew, and Compress skill files plus references into `plugins/caveman/skills/`.
+2. Copies the Compress scripts into `plugins/caveman/skills/caveman-compress/`.
 3. Copies `agents/cavecrew-*.md` into `plugins/caveman/agents/`.
 4. Rebuilds `dist/caveman.skill` (ZIP of `skills/caveman/`) for the release artifact.
 5. Commits and pushes with `[skip ci]` to avoid loops.
@@ -174,6 +179,7 @@ Reads JSON from stdin. Three responsibilities:
 - `/caveman` → configured default (see `caveman-config.js`, defaults to `full`)
 - `/caveman lite` → `lite`
 - `/caveman ultra` → `ultra`
+- `/caveman math` or `/caveman-math` → `math` (formula-first mathematical mode)
 - `/caveman wenyan` or `/caveman wenyan-full` → `wenyan` (alias) / `wenyan-full`
 - `/caveman wenyan-lite` → `wenyan-lite`
 - `/caveman wenyan-ultra` → `wenyan-ultra`
@@ -215,7 +221,10 @@ Each skill has a human-facing `README.md` alongside the LLM-facing `SKILL.md`. T
 
 ### Intensity levels
 
-Defined in `skills/caveman/SKILL.md`. Six levels: `lite`, `full` (default), `ultra`, `wenyan-lite`, `wenyan-full`, `wenyan-ultra`. Persists until changed or session ends.
+Defined in `skills/caveman/SKILL.md`. Six prose levels: `lite`, `full`
+(default), `ultra`, `wenyan-lite`, `wenyan-full`, `wenyan-ultra`. The separate
+`math` mode loads `skills/caveman-math/SKILL.md`. Modes persist until changed
+or the session ends.
 
 ### Auto-clarity rule
 

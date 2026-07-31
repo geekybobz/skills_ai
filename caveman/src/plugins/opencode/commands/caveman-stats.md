@@ -1,8 +1,8 @@
 ---
 description: Show caveman lifetime token-savings stats
 ---
-Show caveman stats — total tokens saved, sessions, average compression ratio.
+Show only measured Caveman statistics produced by an installed stats hook or
+history file. Never estimate token usage in the model.
 
-Read the lifetime history log at `~/.config/caveman/.caveman-history.jsonl`
-(or wherever the caveman-stats script writes it). Output: total saved,
-sessions counted, avg ratio. One short table.
+If no compatible measured history exists, say `Stats unavailable on this
+runtime.` Do not invent totals, savings, sessions, or compression ratios.

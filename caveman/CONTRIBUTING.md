@@ -32,6 +32,7 @@ copies live under `plugins/caveman/` and similar mirror dirs — those are
 | I want to change... | Edit this file |
 |---|---|
 | Caveman behavior (intensity levels, voice, rules) | `skills/caveman/SKILL.md` |
+| Formula-first mathematical response behavior | `skills/caveman-math/SKILL.md` |
 | Caveman commit-message format | `skills/caveman-commit/SKILL.md` |
 | Caveman code-review format | `skills/caveman-review/SKILL.md` |
 | Caveman compress logic | `skills/caveman-compress/SKILL.md` and `skills/caveman-compress/scripts/` |
@@ -57,13 +58,16 @@ on every push to `main`.
 
 | Path | Rebuilt from |
 |------|--------------|
-| `plugins/caveman/skills/caveman/SKILL.md` | `skills/caveman/SKILL.md` |
-| `plugins/caveman/skills/caveman-compress/{SKILL.md, scripts/}` | `skills/caveman-compress/{SKILL.md, scripts/}` |
-| `plugins/caveman/skills/cavecrew/SKILL.md` | `skills/cavecrew/SKILL.md` |
+| `plugins/caveman/skills/caveman/` | `skills/caveman/` |
+| `plugins/caveman/skills/caveman-math/` | `skills/caveman-math/` |
+| `plugins/caveman/skills/caveman-compress/{SKILL.md, references/, scripts/}` | `skills/caveman-compress/{SKILL.md, references/, scripts/}` |
+| `plugins/caveman/skills/cavecrew/` | `skills/cavecrew/` |
 | `plugins/caveman/agents/cavecrew-*.md` | `agents/cavecrew-*.md` |
-| `dist/caveman.skill` | ZIP of `skills/caveman/` (gitignored; rebuilt by CI on each push to `main`) |
+| `dist/caveman.skill` | Tracked ZIP of `skills/caveman/`; rebuilt by CI on each relevant push to `main` |
 
-`caveman-commit`, `caveman-review`, `caveman-help`, and `caveman-stats` are **not** mirrored under `plugins/caveman/skills/` by CI. Claude Code reaches them through the standalone hook + skill install path and `npx skills` carries them to other agents. If you see `plugins/caveman/skills/caveman-stats/` checked in, treat it as a legacy hand-committed copy — the workflow in `.github/workflows/sync-skill.yml` does not touch it.
+`caveman-commit`, `caveman-review`, `caveman-help`, and `caveman-stats` are
+**not** mirrored by CI. Claude Code reaches them through the standalone hook
+and skill install path; `npx skills` carries them to other agents.
 
 When in doubt: if the file lives under `plugins/`, `dist/`, or any agent
 dotdir mirror, it's a build artifact. Edit the top-level source instead.

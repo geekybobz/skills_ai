@@ -74,7 +74,9 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin (al
 └─────────────────────────────────────┘
 ```
 
-Pick your level of grunt — `lite` (drop filler), `full` (default caveman), `ultra` (telegraphic), or `wenyan` (classical Chinese, even shorter). One command switch. Cost go down forever.
+Pick `lite` (drop filler), `full` (default caveman), `ultra`
+(telegraphic), `wenyan` (classical Chinese), or `math` (formula-first
+derivation). One command switch. Cost go down forever.
 
 <table align="center">
 <tr><td>
@@ -116,6 +118,7 @@ Install break? Open agent, say *"Read CLAUDE.md and INSTALL.md, install caveman 
 | Skill | What |
 |---|---|
 | `/caveman [lite\|full\|ultra\|wenyan]` | Compress every reply. Levels stick until session end. |
+| `/caveman math` | Formula-first mathematics: local symbols, LaTeX equations, derivation, insight, optional verification. |
 | `/caveman-commit` | Conventional Commit messages, ≤50 char subject. Why over what. |
 | `/caveman-review` | One-line PR comments: `L42: 🔴 bug: user null. Add guard.` |
 | `/caveman-stats` | Real session token usage + lifetime savings + USD. Tweetable line via `--share`. |

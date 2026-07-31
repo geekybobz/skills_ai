@@ -62,9 +62,11 @@ function opencodeConfigDir() {
 const flagPath = path.join(opencodeConfigDir(), '.caveman-active');
 
 function reinforcementLine(mode) {
+  if (mode === 'math') {
+    return 'CAVEMAN MATH: formula first; define symbols; derive; LaTeX; verify on request.';
+  }
   return 'CAVEMAN MODE ACTIVE (' + mode + '). ' +
-    'Drop articles/filler/pleasantries/hedging. Fragments OK. ' +
-    'Code/commits/security: write normal.';
+    'Terse; preserve technical terms; normal code/security.';
 }
 
 // Parse a prompt for slash-command activation or natural-language toggles.
@@ -82,7 +84,14 @@ function parseModeChange(promptRaw) {
     return 'off';
   }
 
-  // Natural-language activation
+  // Specialized natural-language activation must precede the generic rule.
+  if (/\bformula[- ]first\b/i.test(prompt) ||
+      /\bless story\b/i.test(prompt) ||
+      /\b(use|activate|enable|start|turn on)\b.*\b(math mode|caveman math)\b/i.test(prompt)) {
+    return 'math';
+  }
+
+  // Generic natural-language activation
   if (/\b(activate|enable|turn on|start|talk like)\b.*\bcaveman\b/i.test(prompt) ||
       /\bcaveman\b.*\b(mode|activate|enable|turn on|start)\b/i.test(prompt)) {
     const mode = getDefaultMode();
@@ -99,6 +108,7 @@ function parseModeChange(promptRaw) {
     if (cmd === '/caveman-commit')   return 'commit';
     if (cmd === '/caveman-review')   return 'review';
     if (cmd === '/caveman-compress') return 'compress';
+    if (cmd === '/caveman-math')     return 'math';
 
     if (cmd === '/caveman') {
       if (!arg)                                     return getDefaultMode();
