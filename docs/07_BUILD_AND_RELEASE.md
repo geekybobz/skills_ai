@@ -22,6 +22,8 @@ python3 scripts/compile_registry.py --check
 python3 scripts/toggle_registry.py --check
 python3 scripts/validate_registry.py
 python3 scripts/list_registry.py
+python3 scripts/graph_layers.py --check
+python3 scripts/human_docs_guard.py --check
 ```
 
 ## Test and benchmark
@@ -62,12 +64,17 @@ acceptance; Claude owns live Claude acceptance.
 
 ```bash
 python3 scripts/change_guard.py check-staged --operation update --path <scoped-path>
+python3 scripts/human_docs_guard.py --check-staged
 git diff --cached --check
 ```
 
 10. Documentation states platform ownership and unverified acceptance boundaries.
-11. The commit body records motivation, root cause, scope, tests, rollback, and
-   deliberately unchanged areas.
+11. Every Markdown file resolves to a documented graph layer and the live
+    Obsidian `colorGroups` match the canonical layer palette.
+12. Every mapped human-facing page is updated in the same staged change and the
+    human guide remains excluded from runtime routing sources.
+13. The commit body records motivation, root cause, scope, tests, rollback, and
+    deliberately unchanged areas.
 
 ## Troubleshooting and rollback
 

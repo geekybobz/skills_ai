@@ -10,7 +10,9 @@ Canonical behavior normally follows `active/manual -> deprecated -> delete`.
 5. Remove external files only when they are installer-managed and match the
    expected managed content; preserve foreign files.
 6. Recompile and validate routing sources after removal.
-7. Confirm that no dangling links, routes, configuration entries, or processes
+7. Recheck graph-layer coverage and remove a colour query only when no remaining
+   file depends on it.
+8. Confirm that no dangling links, routes, configuration entries, or processes
    remain.
 
 Temporary test artifacts and byte-for-byte installer-managed copies need no

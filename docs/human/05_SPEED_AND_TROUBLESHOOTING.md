@@ -1,0 +1,71 @@
+---
+audience: human
+authority: explanatory-only
+agent_read_policy: explicit-human-guide-task-or-doc-sync-only
+---
+
+# Speed and Troubleshooting
+
+Back: [safe changes](04_SAFE_CHANGES.md). Next: [graph and colors](06_GRAPH_AND_COLORS.md).
+
+## What is loaded
+
+```mermaid
+flowchart LR
+    E["Shared entry<br/>about 411 tokens"] --> R["Core routing decision"]
+    R --> P["Compact receipt<br/>median 87, max 97 tokens"]
+    P --> M{"MATCH?"}
+    M -- "No" --> N["Normal response<br/>no local skill body"]
+    M -- "Yes" --> S["One selected skill<br/>median 821, max 1,419 tokens"]
+    N --> A["Answer"]
+    S --> A
+    WHOLE["Whole design collection<br/>about 30k tokens"] -. "Avoided" .-> S
+
+    classDef measure fill:#00897B,color:#fff,stroke:#005B52
+    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
+    classDef avoided fill:#C62828,color:#fff,stroke:#7F0000
+    class E,R,P,M measure
+    class N,S,A safe
+    class WHOLE avoided
+```
+
+The 2026-07-31 local benchmark measured 26/26 fixture accuracy, about `0.44 ms`
+core-routing p95, and about `37.5 ms` complete-process p95. Process time includes
+starting Python, reading the request, loading the manifest, routing, writing JSON,
+and exiting. Values vary by machine and load; refresh them with:
+
+```bash
+python3 scripts/benchmark_router.py --json
+```
+
+## Timeout and cleanup
+
+```mermaid
+flowchart TD
+    START["Host starts one router"] --> INPUT{"Input arrives before deadline?"}
+    INPUT -- "No" --> TIMEOUT["Return fail-open timeout or host fallback"]
+    INPUT -- "Yes" --> ROUTE["Write one receipt"]
+    ROUTE --> EXIT["Router exits"]
+    TIMEOUT --> REAP["Terminate and reap only the recorded process"]
+    EXIT --> CLOSED["No router remains"]
+    REAP --> CLOSED
+
+    classDef action fill:#5B5BD6,color:#fff,stroke:#32327A
+    classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
+    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
+    class START,ROUTE,REAP action
+    class INPUT decision
+    class TIMEOUT,EXIT,CLOSED safe
+```
+
+## Quick diagnosis
+
+| Symptom | Check |
+|---|---|
+| Task waits | Confirm one newline-framed request and the configured input deadline |
+| `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
+| Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
+| Design route on ordinary search | Confirm the explicit design-request gate and its negative corpus |
+| Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
+| Router process remains | Terminate and reap only the exact recorded process/session |
+| Installed adapter is stale | Dry-run, inspect, then reinstall with platform-owner approval |

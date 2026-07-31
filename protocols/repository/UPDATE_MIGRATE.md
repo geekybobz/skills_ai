@@ -10,7 +10,8 @@ generated representation, or persistent-state change.
 5. Do not remove old persistent state during the first migration phase unless
    the user explicitly authorizes its exact deletion.
 6. Test the shared contract first, then each affected platform separately.
-7. Update build, API, protocol, installation, and troubleshooting documents.
+7. Update build, API, protocol, installation, troubleshooting, and every mapped
+   human-facing page in the same staged change.
 8. Commit migration context and measured verification, not only file names.
 
 An unexpected consumer, external path, destructive cleanup, or wider refactor

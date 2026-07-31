@@ -9,12 +9,12 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 
 | layer | role | colour | graph query |
 |---|---|---|---|
-| L0 | Entry notes | `#5B5BD6` indigo | `path:README.md OR path:docs/SKILLS.md` |
-| L1 | Global maps | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md` |
+| L0 | Entry notes | `#5B5BD6` indigo | `path:README.md OR path:AGENTS.md OR path:CLAUDE.md OR path:docs/SKILLS.md` |
+| L1 | Global maps | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
 | L2 | Registry routes and activation | `#2E7D32` green | `path:registry/` |
 | L3 | Skill cards and parked legacy cards | `#EF6C00` orange | `path:cards/` |
-| L4 | Canonical skills, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:caveman/skills/ OR path:theory-reference/shared/phases/ OR path:external-skills/` |
-| L5 | Runtime, adapters, scripts, tests, templates | `#546E7A` slate | `path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:theory-reference/shared/templates/ OR path:theory-reference/scripts/ OR path:caveman/src/ OR path:caveman/docs/` |
+| L4 | Canonical skills, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:caveman/skills/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
+| L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:caveman/ OR path:theory-reference/` |
 
 ## Reading the graph
 
@@ -58,13 +58,35 @@ critical routing path.
 Assign new files to a layer by **path and role**, reusing the existing colour.
 Do not create a colour per skill, per family, or per topic.
 
+Colour groups are ordered from specific layers to L5 support fallbacks. The
+first matching group is the file's layer. `docs/06_CHANGE_CONTROL.md` is an L1
+global map; operation cards under `protocols/repository/` and build/release
+guidance are L5 support. The derivative human guide under `docs/human/` is also
+L5 support and is not part of the agent routing path.
+
+## Governance enforcement
+
+Every new or moved Markdown file must record its intended `graph_layer` in the
+change packet and be covered by one canonical query above. Run:
+
+```bash
+python3 scripts/graph_layers.py --check
+```
+
+When the policy is correct but the live Obsidian groups are stale, use
+`python3 scripts/graph_layers.py --sync`. Synchronization replaces only
+`colorGroups`; it preserves personal graph settings such as zoom, visibility,
+and collapsed panels. A new colour or layer requires an explicit protocol
+amendment.
+
 ## Adding a new family
 
 1. Add one file to `registry/` — it inherits **L2 green** automatically via `path:registry/`.
 2. Add rows to [[registry/activation]] and the route table in [[00_SKILLS_HUB]].
 3. Skill files and external skill pointers sit in **L4**; templates, scripts and tests in **L5**.
 4. Add risk rows to [[04_RISK_MAP]] if the family writes anything.
-5. Reuse the layer colour. A new colour is only justified if the *layer model itself* changes.
+5. Run `python3 scripts/graph_layers.py --check`.
+6. Reuse the layer colour. A new colour is only justified if the *layer model itself* changes.
 
 A family large enough to need internal sub-routing gets sections inside its single
 L2 file — not a second hop. The two-read budget is the point of the design.

@@ -81,7 +81,7 @@
   },
   {
     "name": "poster lead",
-    "query": "Create an A0 poster",
+    "query": "Design an A0 poster",
     "result": "MATCH",
     "skill": "poster-lead"
   },
@@ -126,7 +126,7 @@
   },
   {
     "name": "qualified function plot routes to data visualization",
-    "query": "Create a plot of a sine function",
+    "query": "Design a plot of a sine function",
     "result": "MATCH",
     "skill": "data-visualization-specialist"
   },

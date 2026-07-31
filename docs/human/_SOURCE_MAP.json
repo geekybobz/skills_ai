@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "human_entry": "README.md",
+  "required_marker": "audience: human",
+  "rules": [
+    {
+      "name": "routing",
+      "sources": [
+        "scripts/registry_runtime.py",
+        "scripts/route_skill.py",
+        "runtime/PROTOCOL.md",
+        "runtime/API_CONTRACT.md",
+        "tests/router_cases.json"
+      ],
+      "guides": [
+        "README.md",
+        "docs/human/00_START_HERE.md",
+        "docs/human/01_FOLLOW_A_REQUEST.md"
+      ]
+    },
+    {
+      "name": "platforms",
+      "sources": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "runtime/SKILL.md",
+        "adapters/**",
+        "scripts/install_runtime_adapter.py"
+      ],
+      "guides": [
+        "docs/human/02_FOLDER_AND_PLATFORMS.md",
+        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md"
+      ]
+    },
+    {
+      "name": "activation",
+      "sources": [
+        "docs/00_SKILLS_HUB.md",
+        "registry/**",
+        "scripts/compile_registry.py",
+        "scripts/list_registry.py",
+        "scripts/toggle_registry.py",
+        "scripts/validate_registry.py",
+        "runtime/router-manifest.json"
+      ],
+      "guides": [
+        "docs/human/03_SKILLS_AND_CONTROLS.md"
+      ]
+    },
+    {
+      "name": "safety-and-governance",
+      "sources": [
+        "docs/04_RISK_MAP.md",
+        "docs/06_CHANGE_CONTROL.md",
+        "docs/07_BUILD_AND_RELEASE.md",
+        "protocols/repository/**",
+        "scripts/change_guard.py",
+        "scripts/create_change_request.py",
+        "scripts/human_docs_guard.py",
+        "docs/human/_SOURCE_MAP.json"
+      ],
+      "guides": [
+        "docs/human/04_SAFE_CHANGES.md"
+      ]
+    },
+    {
+      "name": "performance-and-lifecycle",
+      "sources": [
+        "scripts/benchmark_router.py",
+        "tests/test_router_lifecycle.py"
+      ],
+      "guides": [
+        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md"
+      ]
+    },
+    {
+      "name": "graph",
+      "sources": [
+        ".obsidian/graph.json",
+        "docs/05_COLOR_LAYERS.md",
+        "scripts/graph_layers.py"
+      ],
+      "guides": [
+        "docs/human/06_GRAPH_AND_COLORS.md"
+      ]
+    }
+  ]
+}

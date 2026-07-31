@@ -53,8 +53,14 @@ def _covered(path: str, allowed: Iterable[str]) -> bool:
 
 
 def required_checks(paths: Iterable[str]) -> list[str]:
-    checks = {"git diff --check", "focused tests for changed behavior"}
+    checks = {
+        "git diff --check",
+        "focused tests for changed behavior",
+        "python3 scripts/human_docs_guard.py --check",
+    }
     for path in paths:
+        if path.endswith(".md") or path in {".obsidian/graph.json", "scripts/graph_layers.py"}:
+            checks.add("python3 scripts/graph_layers.py --check")
         if path == "registry/activation.md" or path.startswith("registry/") or path in {
             "docs/00_SKILLS_HUB.md",
             "runtime/profile.json",

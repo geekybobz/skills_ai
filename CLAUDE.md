@@ -1,5 +1,9 @@
 # Skills registry — agent entry
 
+`README.md` and `docs/human/` are human-facing explanations. Do not read them
+during normal routing or task work; use them only when the user explicitly asks
+about the human guide or when synchronizing it after a relevant approved change.
+
 For a request that might benefit from a local skill, use the fast runtime entry
 in `runtime/SKILL.md`. Do not preload the Markdown hub, activation register, or
 family registries on the normal task path.

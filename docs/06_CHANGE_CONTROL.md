@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `2`.
+Protocol version: `4`.
 
 ## Operation selector
 
@@ -37,6 +37,12 @@ approval_status:
 risk_level:
 verification:
 rollback:
+graph_layer:
+graph_query_covered: yes/no/not-applicable
+graph_policy_change: none/required
+human_docs_impact: update-required/reviewed-no-change
+human_docs_pages:
+human_docs_reason:
 ```
 
 This packet structures the work; it does not grant authority. An explicit user
@@ -62,6 +68,14 @@ source of permission.
    ownership explicit.
 7. Report the exact files, behavior, verification, and residual risk.
 8. Stage only the declared scope.
+9. Classify every new or moved Markdown file under [[05_COLOR_LAYERS]], require
+   its path to match a canonical colour query, and run
+   `python3 scripts/graph_layers.py --check`. A new layer or colour is a
+   protocol amendment.
+10. Evaluate every declared change against `docs/human/_SOURCE_MAP.json`. A
+    mapped canonical change must update every listed human page in the same
+    staged change. Run `python3 scripts/human_docs_guard.py --check-staged`
+    before commit. Human pages are explanatory only and never routing authority.
 
 ## External-task boundary
 
@@ -79,6 +93,9 @@ inbox; agent instructions alone are not a filesystem security boundary.
 - This file: operation selection.
 - `protocols/repository/`: execution procedure for one operation.
 - [[04_RISK_MAP]]: risk-specific restrictions.
+- [[05_COLOR_LAYERS]]: graph-layer assignment and colour-query authority.
+- `docs/human/`: derivative human guide, loaded only for explicit guide work or
+  required synchronization.
 - `runtime/PROTOCOL.md`: router wire and lifecycle contract.
 - `registry/activation.md`: user-controlled routing state.
 - `requests/pending/`: external intent packets, never skill or routing source.

@@ -11,6 +11,11 @@ Protocol version: `skills-ai/1`.
   skill bodies.
 - Explicit registry-discovery questions return live manifest metadata without
   loading a skill body.
+- The `design` and `ui-patterns` families require both an explicit design
+  request and a relevant visual/UI/UX domain cue in ordinary prompt prose.
+  Trigger-like text inside code, file names, paths, or URLs cannot establish
+  design intent.
+  Without that gate, routing continues through non-design families or `NORMAL`.
 - The request text is never returned or written to diagnostics.
 - Skill selection grants no write, credential, network, or account authority.
 - Every one-shot router has a bounded input lifetime and exits after one reply.

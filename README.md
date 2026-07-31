@@ -1,92 +1,62 @@
-# Skills AI
+---
+audience: human
+authority: explanatory-only
+agent_read_policy: explicit-human-guide-task-or-doc-sync-only
+---
 
-Obsidian vault and routing registry for 52 tracked skill entries across four collections.
-Skill files are never modified — the registry only points at them.
+# Skills AI: Human Guide
 
-## Start
+> This is the human-facing entry point. Codex and Claude should not read it
+> during normal routing or task work. Machine authority lives in `runtime/`,
+> `registry/`, and the maintenance protocols.
 
-- Agent entry: [[docs/SKILLS|SKILLS]] → [[docs/00_SKILLS_HUB|00_SKILLS_HUB]]
-- Fast runtime entry: `runtime/SKILL.md` → compiled manifest → one skill or `NORMAL`
-- Graph colours: [[docs/05_COLOR_LAYERS|05_COLOR_LAYERS]]
-- Change control: [[docs/06_CHANGE_CONTROL|06_CHANGE_CONTROL]]
-- Build and release: [[docs/07_BUILD_AND_RELEASE|07_BUILD_AND_RELEASE]]
-- Runtime protocol/API: [[runtime/PROTOCOL|PROTOCOL]] · [[runtime/API_CONTRACT|API_CONTRACT]]
-- Live registry listing: `python3 scripts/list_registry.py`
-- External change-request inbox: [[requests/README|requests]]
-- Claude verification: [[docs/CLAUDE_VERIFICATION_PROMPT|CLAUDE_VERIFICATION_PROMPT]]
-- Legacy graph cards: [[cards/legacy/quantum-job-collector|quantum-job-collector]]
-- Proposed interaction protocol: [[docs/TODO_INTERACTION_PROTOCOL_PLAN|TODO_INTERACTION_PROTOCOL_PLAN]]
+Skills AI is a local switchboard shared by Codex and Claude. It inspects a task,
+selects at most one relevant enabled skill, and otherwise lets the model continue
+normally. It does not need a network service and it does not give a selected
+skill permission to edit files, use credentials, or perform account actions.
 
-## How it routes
+```mermaid
+flowchart LR
+    U["You give a task"] --> R["Fast Skills AI router"]
+    R --> Q{"One clear enabled match?"}
+    Q -- "Yes" --> S["Load one skill"]
+    Q -- "No" --> N["Continue normally"]
+    S --> A["Focused answer"]
+    N --> A
 
-```text
-docs/00_SKILLS_HUB     global router, one table
-  -> registry/activation active/manual/off switchboard
-  -> registry/<family> one file per family: skills, triggers, "not for"
-    -> the skill file  design-with-claude/*.md | caveman/skills/*/SKILL.md | theory-reference/ | external-skills/
+    classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
+    classDef choice fill:#EF6C00,color:#fff,stroke:#A64700
+    classDef result fill:#2E7D32,color:#fff,stroke:#1B5E20
+    class U,R entry
+    class Q choice
+    class S,N,A result
 ```
 
-Activation keeps disabled skills as plain paths and active skills as wikilinks,
-so the Obsidian graph reflects what is routable.
-Conditional side-reads: [[docs/03_COMBO_MAP|03_COMBO_MAP]] when a task spans
-families, [[docs/04_RISK_MAP|04_RISK_MAP]] before anything that writes.
+## Learn it smoothly
 
-For fast runtime selection, `scripts/compile_registry.py` converts the human
-registry into `runtime/router-manifest.json`. The platform-neutral
-`scripts/route_skill.py` then returns one active skill or a fail-open `NORMAL`
-decision with a compact, structured response context. Thin adapters give Codex
-and Claude access to the same router, profile, manifest, and skill sources. No
-match, disabled routes, and ambiguous matches continue with normal behavior.
-Questions about available skills return live active/manual/off metadata rather
-than a remembered catalog. A task started outside this workspace can request a
-change only by creating one pending Markdown packet and handing it to a
-dedicated maintenance task.
+| Read | You will understand |
+|---|---|
+| [Start here](docs/human/00_START_HERE.md) | What Skills AI is, its promises, and the main vocabulary |
+| [Follow a request](docs/human/01_FOLLOW_A_REQUEST.md) | Routing, the strict design gate, fallback, and examples |
+| [Folder and platforms](docs/human/02_FOLDER_AND_PLATFORMS.md) | What each folder does and what Codex and Claude share |
+| [Skills and controls](docs/human/03_SKILLS_AND_CONTROLS.md) | Active, manual, off, hidden, and deprecated states |
+| [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, protocols, external requests, and documentation updates |
+| [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, timeouts, and cleanup |
+| [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | The Obsidian layer model and validation commands |
 
-## Families
+## Five things to remember
 
-| registry | skills | 2-read cost | source |
-|---|---|---|---|
-| [[registry/activation]] | gates | first pass | all families |
-| [[registry/design]] | 17 | ~1,150 tok | `design-with-claude/` |
-| [[registry/ui-patterns]] | 18 | ~1,100 tok | `design-with-claude/` |
-| [[registry/build-ops]] | 7 | ~780 tok | `design-with-claude/` |
-| [[registry/compression]] | 8 | ~850 tok | `caveman/skills/` |
-| [[registry/theory]] | 1 (3 phases) | ~785 tok | `theory-reference/` submodule |
-| `registry/career.md` | 1 parked | off | external Quantum Career Radar skill |
+1. A normal request loads no whole skill family.
+2. One clear match loads one skill; no match or ambiguity continues normally.
+3. Disabled skills are not routable.
+4. Codex and Claude share the Python router, manifest, profile, and skill sources.
+5. Skill selection is guidance, not authority to make changes.
 
-All 42 `design-with-claude` skills are routed — none orphaned. Every entry carries
-a **`not for`** column, which is what stops near-miss routing (`color-specialist`
-when the task was dark mode).
+To see the live registry without loading skill bodies, run:
 
-## Principle
+```bash
+python3 scripts/list_registry.py
+```
 
-The registry **describes**; it does not **inhabit**. No registry file lives inside
-a skill collection — that is what lets `theory-reference` stay a clean submodule
-and lets any collection be swapped without touching routing.
-
-Registry files carry routing metadata only: what the task looks like, which skill
-to load, what it is *not* for, and what write risk it carries. Never skill content.
-
-## Repo layout
-
-- `docs/` — routing, risk, change-control, build, graph, and interaction-protocol notes
-- `protocols/repository/` — one-card procedures for add/edit/update/delete and scope control
-- `registry/activation.md` — active/manual/off switchboard for families, skills, and components
-- `cards/` — graph-visible cards for parked or legacy skills, without routing authority
-- `scripts/toggle_registry.py` — validates and toggles activation rows
-- `scripts/compile_registry.py` — atomically compiles the runtime manifest
-- `scripts/route_skill.py` — returns one skill or normal fallback
-- `scripts/validate_registry.py` — checks source and manifest consistency
-- `scripts/benchmark_router.py` — measures route accuracy, latency, and context size
-- `scripts/install_runtime_adapter.py` — installs thin Codex or Claude adapters
-- `scripts/change_guard.py` — reports protected, external, generated, or out-of-scope changes
-- `scripts/list_registry.py` — reports live route and activation metadata without skill bodies
-- `scripts/create_change_request.py` — creates the narrow external-task request packet
-- `requests/` — pending review packets; never routing or skill source
-- `adapters/` — platform-specific access over the shared runtime core
-- `runtime/` — shared entry, compact response profile, and generated router manifest
-- `tests/` — deterministic routing cases and standard-library unit tests
-- `external-skills/` — controlled pointers to skills whose source lives outside this vault
-- `design-with-claude/` — 42 flat skill files, vendored, no upstream
-- `caveman/` — vendored product repo from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman); canonical behavior lives in `skills/`, while manifests, tests, and distributions remain tracked for reproducibility
-- `theory-reference/` — submodule, [geekybobz/theory-reference](https://github.com/geekybobz/theory-reference)
+This guide explains the system but never overrides the live registry, runtime
+protocol, risk map, or change-control rules.

@@ -77,6 +77,10 @@ class ChangeGuardTests(unittest.TestCase):
         self.assertEqual("allowed", allowed["status"])
         self.assertEqual("blocked-by-invariant", blocked["status"])
 
+    def test_markdown_changes_require_graph_layer_validation(self) -> None:
+        report = assess_change("add", ["docs/new-governance-note.md"])
+        self.assertIn("python3 scripts/graph_layers.py --check", report["required_checks"])
+
 
 if __name__ == "__main__":
     unittest.main()

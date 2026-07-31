@@ -55,6 +55,30 @@ SKILLS_AI_CHANGE_PATTERNS = (
     r"\b(route skill|registry activation)\b",
 )
 
+DESIGN_ROUTED_FAMILIES = {"design", "ui-patterns"}
+DESIGN_REQUEST_PATTERN = (
+    r"(?:^|\b(?:please|kindly)\s+)(?:design|redesign)\b|"
+    r"\b(?:can|could|would|will)\s+you\s+(?:please\s+)?(?:design|redesign)\b|"
+    r"\bhelp(?:\s+(?:me|us))?\s+(?:design|redesign)\b|"
+    r"\bi\s+(?:want|need)\s+you\s+to\s+(?:design|redesign)\b|"
+    r"\b(?:create|make|produce|prepare|build|develop|need|want)\s+"
+    r"(?:a|an|the|my|our|this)?\s*design\b|"
+    r"\b(?:i\s+am|we\s+are)\s+designing\b"
+)
+DESIGN_DOMAIN_PATTERN = (
+    r"\b(?:visual|layout|ui|ux|interface|user experience|design system|poster|dashboard|"
+    r"chart|graph|plot|figure|table|form|navigation|sidebar|menu|mobile|responsive|"
+    r"accessibility|a11y|wcag|color|colour|palette|dark mode|theme|typography|font|"
+    r"brand|animation|motion|ecommerce|checkout|landing page|healthcare|screen|component|"
+    r"wireframe|prototype|print|pdf|content hierarchy|spacing|visual hierarchy|auth ux|"
+    r"login flow)\b"
+)
+NON_VISUAL_DESIGN_TARGET_PATTERN = (
+    r"(?:(?:a|an|the|this|my|our|new|better|for)\s+){0,3}"
+    r"(?:api|algorithm|code|database|schema|equation|derivation|experiment|study|"
+    r"protocol|router|skill|software architecture|data architecture)\b"
+)
+
 
 class RegistryRuntimeError(RuntimeError):
     pass
@@ -96,6 +120,28 @@ def normalize(text: str) -> str:
     text = text.lower().replace("-", " ").replace("_", " ")
     text = re.sub(r"[`*_#]", "", text)
     return " ".join(re.findall(r"[a-z0-9.+/]+", text))
+
+
+def _design_routing_query(text: str) -> str:
+    """Return prose that may safely establish explicit design intent."""
+    prose = re.sub(r"```[\s\S]*?```", " ", text)
+    prose = re.sub(r"`[^`\n]*`", " ", prose)
+    prose = re.sub(r"https?://\S+", " ", prose, flags=re.IGNORECASE)
+    prose = re.sub(r"\bui\s*/\s*ux\b", " ui ux ", prose, flags=re.IGNORECASE)
+    prose = re.sub(r"\S*[/\\_]\S*", " ", prose)
+    prose = re.sub(r"\b[\w.-]+\.[a-z0-9]{1,10}\b", " ", prose, flags=re.IGNORECASE)
+    return normalize(prose)
+
+
+def _has_explicit_design_intent(query: str) -> bool:
+    request = re.search(DESIGN_REQUEST_PATTERN, query)
+    if request is None:
+        return False
+    following = query[request.end() :].lstrip()
+    if re.match(NON_VISUAL_DESIGN_TARGET_PATTERN, following):
+        return False
+    nearby = query[max(0, request.start() - 120) : request.end() + 180]
+    return bool(re.search(DESIGN_DOMAIN_PATTERN, nearby))
 
 
 def split_triggers(text: str) -> list[str]:
@@ -435,6 +481,8 @@ def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> 
 def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     """Return MATCH or fail-open NORMAL without exposing the original prompt."""
     normalized_query = normalize(query)
+    design_query = _design_routing_query(query)
+    design_intent = _has_explicit_design_intent(design_query)
     operation = _operation(normalized_query)
     access = _requested_access(normalized_query)
     if _is_registry_discovery(normalized_query):
@@ -457,23 +505,28 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     active_matches: list[tuple[int, dict[str, Any], list[str]]] = []
     inactive_matches: list[tuple[int, dict[str, Any]]] = []
     for route in manifest["routes"]:
-        if not _route_allowed_by_intent(route, normalized_query):
+        route_query = normalized_query
+        if route["family"] in DESIGN_ROUTED_FAMILIES:
+            if not design_intent:
+                continue
+            route_query = design_query
+        if not _route_allowed_by_intent(route, route_query):
             continue
         matched = []
         skill_score = 0
         normalized_id = normalize(route["id"])
-        if normalized_id and normalized_id in normalized_query:
+        if normalized_id and normalized_id in route_query:
             skill_score += 100
             matched.append(route["id"])
         for phrase in route["triggers"]:
-            score = _phrase_score(normalized_query, phrase)
+            score = _phrase_score(route_query, phrase)
             if score:
                 skill_score += score
                 matched.append(phrase)
         if not skill_score:
             continue
         family_score = max(
-            (_phrase_score(normalized_query, phrase) for phrase in route["family_triggers"]),
+            (_phrase_score(route_query, phrase) for phrase in route["family_triggers"]),
             default=0,
         )
         score = skill_score + min(family_score, 15)

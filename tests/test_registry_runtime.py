@@ -15,7 +15,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from registry_runtime import build_manifest, compact_context, load_manifest, registry_summary, route_request  # noqa: E402
+from registry_runtime import (  # noqa: E402
+    DESIGN_ROUTED_FAMILIES,
+    build_manifest,
+    compact_context,
+    load_manifest,
+    registry_summary,
+    route_request,
+)
 from install_runtime_adapter import check_adapter, install_adapter  # noqa: E402
 from compile_registry import atomic_write as atomic_write_manifest  # noqa: E402
 from toggle_registry import toggle  # noqa: E402
@@ -77,6 +84,84 @@ class RegistryRuntimeTests(unittest.TestCase):
     def test_pdf_reading_does_not_route_to_design(self) -> None:
         decision = route_request("Summarize this PDF document", self.manifest)
         self.assertEqual("NORMAL", decision["result"])
+
+    def test_design_families_require_explicit_design_intent(self) -> None:
+        ordinary_prompts = (
+            "Search recent papers about quantum control",
+            "What does search_index.py do?",
+            "Explain input_tensor_shape.py",
+            "Summarize structure_factor.py",
+            "Create a plot of a sine function",
+            "Create an A0 poster",
+            "Analyze design_matrix.py and its table coefficients",
+            "Design the quantum-control derivation",
+            "Search for design system examples",
+            "Explain the design system used by this app",
+            "Inspect the design tokens in this repository",
+            "What is UI design?",
+            "Fix why the design router mistakes color-code prompts",
+            "Design an API that returns a data table",
+            "Design the software architecture for a dashboard service",
+        )
+        for query in ordinary_prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertNotIn(
+                    decision.get("skill", {}).get("family"),
+                    DESIGN_ROUTED_FAMILIES,
+                )
+
+    def test_all_design_route_terms_are_inert_without_a_design_request(self) -> None:
+        design_routes = [
+            route for route in self.manifest["routes"]
+            if route["family"] in DESIGN_ROUTED_FAMILIES
+        ]
+        for route in design_routes:
+            terms = (route["id"], *route["triggers"])
+            for term in terms:
+                prompts = (
+                    f"Search source code for {term}",
+                    f"Explain `{term}` without editing anything",
+                    f"Inspect src/{route['id']}.py for this token: {term}",
+                )
+                for query in prompts:
+                    with self.subTest(route=route["id"], term=term, query=query):
+                        decision = route_request(query, self.manifest)
+                        self.assertNotIn(
+                            decision.get("skill", {}).get("family"),
+                            DESIGN_ROUTED_FAMILIES,
+                        )
+
+    def test_explicit_design_intent_routes_relevant_design_tasks(self) -> None:
+        cases = {
+            "Design a search interface with autocomplete": "search-specialist",
+            "Design a dark mode theme switch": "dark-mode-specialist",
+            "Design a scientific figure for these results": "data-visualization-specialist",
+            "Design an A0 research poster": "poster-lead",
+            "Design a data table with sorting": "table-designer",
+            "Design a login flow with passkey": "auth-security-ux-specialist",
+            "For this app, please design a dashboard with KPI cards": "dashboard-designer",
+            "Can you redesign the login flow with passkey?": "auth-security-ux-specialist",
+            "Help me design a sidebar with breadcrumbs": "navigation-specialist",
+            "Create a design for a dark mode theme": "dark-mode-specialist",
+        }
+        for query, skill_id in cases.items():
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("MATCH", decision["result"])
+                self.assertEqual(skill_id, decision["skill"]["id"])
+
+    def test_non_design_families_keep_their_existing_routes(self) -> None:
+        cases = {
+            "Explain this code without jargon": "code-explainer",
+            "Diagnose this broken build and stack trace": "debug-helper",
+            "Derive this equation formula first": "caveman-math",
+            "Plan a LaTeX theory chapter": "theory-reference",
+        }
+        for query, skill_id in cases.items():
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual(skill_id, decision["skill"]["id"])
 
     def test_context_has_polished_response_contract(self) -> None:
         decision = route_request("Explain this code", self.manifest)

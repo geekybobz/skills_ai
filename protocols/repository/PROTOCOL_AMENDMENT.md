@@ -13,6 +13,8 @@ Proposed replacement:
 Operations and platforms affected:
 Compatibility impact:
 New tests:
+Graph-layer and colour-query impact:
+Human-guide pages affected:
 Migration and rollback:
 Permission requested:
 ```
@@ -21,7 +23,10 @@ Do not silently rewrite a protocol while completing another task. Obtain
 approval, update backlinks and validators, and prefer a separate commit so Git
 history preserves the motivation. Recheck protocols after repeated exceptions,
 source-of-truth conflicts, new irreversible actions, host-specific divergence,
-or a validation gap.
+or a validation gap. Any new graph layer or colour must update
+`docs/05_COLOR_LAYERS.md`, the live Obsidian groups, and the graph validator in
+the same approved amendment. Any mapped canonical change must update the
+corresponding derivative human pages in the same staged change.
 
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
