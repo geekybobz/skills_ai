@@ -18,12 +18,15 @@ The installer:
 - preserves foreign settings while adding one managed `UserPromptSubmit` hook;
 - removes an obsolete Claude bootstrap only when it is a byte-for-byte
   installer-managed copy of `runtime/SKILL.md`;
-- backs up `settings.json` before changing it; and
+- preserves the first `settings.json.skills-ai.bak` snapshot and writes a
+  separate `.previous` snapshot before later changed installs;
+- refuses to replace symlinks or unrecognized foreign hook files; and
 - supports `CLAUDE_CONFIG_DIR` or `--config-dir`.
 
 The hook is the Claude bootstrap. It sends a newline-framed request to the
 shared router, gives the Python child a 1-second deadline inside the 3-second
-Claude hook deadline, and fails open with prompt-free diagnostics. Claude does
+Claude hook deadline, suppresses child stderr, resolves selected skill paths
+through real paths, and fails open with prompt-free diagnostics. Claude does
 not own or certify Codex-specific invocation and terminal cleanup.
 
 This repository tests the hook protocol and shared routing core. A live Claude

@@ -115,6 +115,21 @@ class RouterLifecycleTests(unittest.TestCase):
         self.assertEqual("INVALID_INPUT", decision["reason_code"])
         self.assertNotIn("bad json", completed.stderr)
 
+    def test_json_array_is_not_routed_as_raw_text(self) -> None:
+        completed = subprocess.run(
+            [sys.executable, str(ROUTER)],
+            input='["secret"]\n',
+            text=True,
+            capture_output=True,
+            timeout=2,
+            check=False,
+        )
+        decision = json.loads(completed.stdout)
+        self.assertEqual(0, completed.returncode)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertEqual("INVALID_INPUT", decision["reason_code"])
+        self.assertNotIn("secret", completed.stderr)
+
     def test_strict_mode_returns_nonzero_after_receipt(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(ROUTER), "--strict"],
@@ -209,6 +224,62 @@ class RouterLifecycleTests(unittest.TestCase):
         self.assertEqual(0, process.returncode)
         self.assertEqual("", stdout)
         self.assertIn("reason=ADAPTER_INPUT_TIMEOUT", stderr)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_claude_adapter_suppresses_python_child_stderr(self) -> None:
+        missing_root = "/tmp/skills-ai-intentionally-missing-root"
+        completed = subprocess.run(
+            ["node", str(CLAUDE_ADAPTER), "--root", missing_root],
+            input=json.dumps({"prompt": "private prompt must not appear"}),
+            text=True,
+            capture_output=True,
+            timeout=2,
+            check=False,
+        )
+        self.assertEqual(0, completed.returncode)
+        self.assertEqual("", completed.stdout)
+        self.assertIn("reason=ADAPTER_ERROR", completed.stderr)
+        self.assertNotIn("can't open file", completed.stderr)
+        self.assertNotIn(missing_root, completed.stderr)
+        self.assertNotIn("private prompt", completed.stderr)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    @unittest.skipIf(os.name == "nt", "symlink fixture requires POSIX semantics")
+    def test_claude_adapter_realpath_guard_blocks_symlink_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root = base / "root"
+            skill_dir = root / "skills"
+            outside = base / "outside.md"
+            skill_dir.mkdir(parents=True)
+            outside.write_text("SAFE_SENTINEL", encoding="utf-8")
+            (skill_dir / "linked.md").symlink_to(outside)
+            decision = {
+                "result": "MATCH",
+                "context": {
+                    "operation": "review",
+                    "domain": "general",
+                    "requested_access": "read-only",
+                    "output": {"voice": "compact", "shape": "answer"},
+                    "response_contract": [],
+                },
+                "skill": {"id": "probe", "path": "skills/linked.md"},
+            }
+            source = (
+                "const a=require(process.argv[1]);"
+                "const d=JSON.parse(process.argv[2]);"
+                "try{a.contextText(d,process.argv[3]);process.stdout.write('read-outside')}"
+                "catch(e){process.stdout.write('blocked')}"
+            )
+            completed = subprocess.run(
+                ["node", "-e", source, str(CLAUDE_ADAPTER), json.dumps(decision), str(root)],
+                text=True,
+                capture_output=True,
+                timeout=2,
+                check=False,
+            )
+            self.assertEqual(0, completed.returncode)
+            self.assertEqual("blocked", completed.stdout)
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required")
     @unittest.skipIf(os.name == "nt", "executable fixture and process probe are POSIX-specific")

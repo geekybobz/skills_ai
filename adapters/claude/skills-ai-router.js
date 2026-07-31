@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Claude UserPromptSubmit adapter for the shared Skills AI runtime.
+// skills-ai-managed: claude-router
 
 'use strict';
 
@@ -61,10 +62,14 @@ function contextText(decision, root) {
     lines.push('No local skill matched. Continue normally using the response context above.');
     return lines.join('\n');
   }
-  const rootPath = path.resolve(root);
-  const skillPath = path.resolve(rootPath, decision.skill.path);
-  if (skillPath !== rootPath && !skillPath.startsWith(rootPath + path.sep)) {
+  const rootPath = fs.realpathSync(root);
+  const requestedSkillPath = path.resolve(rootPath, decision.skill.path);
+  if (requestedSkillPath !== rootPath && !requestedSkillPath.startsWith(rootPath + path.sep)) {
     throw new Error('selected skill escaped the Skills AI root');
+  }
+  const skillPath = fs.realpathSync(requestedSkillPath);
+  if (skillPath !== rootPath && !skillPath.startsWith(rootPath + path.sep)) {
+    throw new Error('selected skill escaped the Skills AI root through a symlink');
   }
   const body = stripFrontmatter(fs.readFileSync(skillPath, 'utf8'));
   lines.push(`Selected local skill: ${decision.skill.id}`);
@@ -93,6 +98,7 @@ function runAdapter(input, started) {
     timeout: childTimeout,
     killSignal: 'SIGTERM',
     maxBuffer: MAX_ROUTER_OUTPUT_BYTES,
+    stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
   });
   const decision = JSON.parse(output);

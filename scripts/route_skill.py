@@ -105,7 +105,7 @@ def parse_request(payload: bytes) -> tuple[str, str | None]:
     if not text:
         raise RequestError("INVALID_INPUT", "query must be a non-empty string")
     request_id: str | None = None
-    if text.startswith("{"):
+    if text[0] in "{[":
         try:
             data = json.loads(text)
         except json.JSONDecodeError as exc:

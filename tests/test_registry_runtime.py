@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import stat
 import subprocess
 import sys
 import tempfile
@@ -15,6 +17,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from registry_runtime import build_manifest, compact_context, load_manifest, route_request  # noqa: E402
 from install_runtime_adapter import check_adapter, install_adapter  # noqa: E402
+from compile_registry import atomic_write as atomic_write_manifest  # noqa: E402
 from toggle_registry import toggle  # noqa: E402
 
 
@@ -93,6 +96,50 @@ class RegistryRuntimeTests(unittest.TestCase):
             self.assertTrue(installed["hooks"]["SessionStart"])
             self.assertTrue(check_adapter("claude", config_dir))
             self.assertTrue((config_dir / "settings.json.skills-ai.bak").exists())
+
+    def test_claude_adapter_preserves_foreign_hook_and_settings(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            hook = config_dir / "hooks" / "skills-ai-router.js"
+            hook.parent.mkdir(parents=True)
+            hook.write_text("// user-owned hook\n", encoding="utf-8")
+            settings = config_dir / "settings.json"
+            original_settings = b'{"model":"custom"}\n'
+            settings.write_bytes(original_settings)
+            results = install_adapter("claude", config_dir)
+            self.assertEqual("preserved-foreign", results["hook"])
+            self.assertEqual("not-attempted", results["entry"])
+            self.assertEqual("preserved", results["settings"])
+            self.assertEqual("// user-owned hook\n", hook.read_text(encoding="utf-8"))
+            self.assertEqual(original_settings, settings.read_bytes())
+            self.assertFalse((config_dir / "settings.json.skills-ai.bak").exists())
+
+    def test_claude_settings_backups_preserve_first_and_latest_states(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            settings = config_dir / "settings.json"
+            original = b'{"model":"first"}\n'
+            settings.write_bytes(original)
+            install_adapter("claude", config_dir)
+            first_backup = config_dir / "settings.json.skills-ai.bak"
+            self.assertEqual(original, first_backup.read_bytes())
+            changed = json.loads(settings.read_text(encoding="utf-8"))
+            changed["manual_after_install"] = True
+            changed_bytes = (json.dumps(changed) + "\n").encode()
+            settings.write_bytes(changed_bytes)
+            install_adapter("claude", config_dir)
+            self.assertEqual(original, first_backup.read_bytes())
+            self.assertEqual(
+                changed_bytes,
+                (config_dir / "settings.json.skills-ai.previous").read_bytes(),
+            )
+
+    @unittest.skipIf(os.name == "nt", "POSIX mode bits are not portable")
+    def test_compiled_manifest_write_is_world_readable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "manifest.json"
+            atomic_write_manifest(target, "{}\n")
+            self.assertEqual(0o644, stat.S_IMODE(target.stat().st_mode))
 
     def test_claude_adapter_removes_only_managed_bootstrap(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

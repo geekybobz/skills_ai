@@ -21,6 +21,7 @@ def atomic_write(path: Path, content: str) -> None:
     descriptor, temp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent, text=True)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            os.fchmod(handle.fileno(), 0o644)
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())

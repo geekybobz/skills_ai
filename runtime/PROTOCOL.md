@@ -19,7 +19,9 @@ The caller writes one UTF-8 JSON object followed by `\n`. The router reads one
 line and does not wait for EOF. The default input deadline is 10,000 ms because
 Codex may start and write to a PTY in separate host calls; direct adapters may
 set a shorter bound. The request limit is 1 MiB. A raw one-line query remains
-accepted for compatibility.
+accepted for compatibility. Input beginning with `{` or `[` is treated as
+JSON; a valid JSON value that is not an object fails open with `INVALID_INPUT`
+instead of being routed as literal text.
 
 ```json
 {"protocol":"skills-ai/1","request_id":"optional","client":"codex","query":"Explain this code"}
@@ -73,4 +75,4 @@ handle. If a caller abandons stdin, the internal input deadline ends the router.
 
 Safe diagnostics contain only adapter, reason code, elapsed milliseconds, and
 timeout/cancellation state. They do not contain the prompt, context body, skill
-body, credentials, or user files.
+body, credentials, user files, child-process stderr, or local child paths.

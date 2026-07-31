@@ -15,17 +15,26 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 SHARED_ENTRY = ROOT / "runtime" / "SKILL.md"
 CLAUDE_HOOK = ROOT / "adapters" / "claude" / "skills-ai-router.js"
+CLAUDE_MANAGED_MARKERS = (
+    b"// skills-ai-managed: claude-router",
+    b"// Claude UserPromptSubmit adapter for the shared Skills AI runtime.",
+)
+CODEX_MANAGED_MARKERS = (
+    b"name: skills-ai-registry",
+    b"# Skills AI Shared Runtime Entry",
+)
 
 
 class InstallError(RuntimeError):
     pass
 
 
-def atomic_write(path: Path, content: bytes) -> None:
+def atomic_write(path: Path, content: bytes, *, mode: int = 0o600) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     try:
         with os.fdopen(descriptor, "wb") as handle:
+            os.fchmod(handle.fileno(), mode)
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
@@ -38,18 +47,36 @@ def atomic_write(path: Path, content: bytes) -> None:
         raise
 
 
-def install_file(source: Path, target: Path, *, dry_run: bool = False) -> str:
+def install_file(
+    source: Path,
+    target: Path,
+    *,
+    managed_markers: tuple[bytes, ...],
+    dry_run: bool = False,
+) -> str:
     if not source.is_file():
         raise InstallError(f"source is missing: {source}")
     if target.is_symlink():
         raise InstallError(f"refusing to replace symlink target: {target}")
     content = source.read_bytes()
-    if target.exists() and target.read_bytes() == content:
+    target_content = target.read_bytes() if target.exists() else None
+    if target_content == content:
         return "unchanged"
+    if target_content is not None and not any(marker in target_content for marker in managed_markers):
+        return "preserved-foreign"
     if dry_run:
         return "would-update"
     atomic_write(target, content)
     return "updated"
+
+
+def backup_settings(config_dir: Path, original_settings: bytes) -> None:
+    """Keep the first pre-install state and the state before the latest update."""
+    first_backup = config_dir / "settings.json.skills-ai.bak"
+    if not first_backup.exists():
+        atomic_write(first_backup, original_settings)
+        return
+    atomic_write(config_dir / "settings.json.skills-ai.previous", original_settings)
 
 
 def remove_managed_file(source: Path, target: Path, *, dry_run: bool = False) -> str:
@@ -119,7 +146,14 @@ def _load_settings(path: Path) -> tuple[dict[str, Any], bytes | None]:
 def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) -> dict[str, str]:
     if adapter == "codex":
         target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
-        return {"entry": install_file(SHARED_ENTRY, target, dry_run=dry_run)}
+        return {
+            "entry": install_file(
+                SHARED_ENTRY,
+                target,
+                managed_markers=CODEX_MANAGED_MARKERS,
+                dry_run=dry_run,
+            )
+        }
     if adapter != "claude":
         raise InstallError(f"unsupported adapter: {adapter}")
 
@@ -127,6 +161,18 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
     settings, original_settings = _load_settings(settings_path)
     skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
     hook_target = config_dir / "hooks" / "skills-ai-router.js"
+    hook_result = install_file(
+        CLAUDE_HOOK,
+        hook_target,
+        managed_markers=CLAUDE_MANAGED_MARKERS,
+        dry_run=dry_run,
+    )
+    if hook_result == "preserved-foreign":
+        return {
+            "entry": "not-attempted",
+            "hook": hook_result,
+            "settings": "preserved",
+        }
     updated_settings = merged_claude_settings(settings, hook_target)
     settings_content = (json.dumps(updated_settings, indent=2, sort_keys=True) + "\n").encode()
     settings_result = "unchanged" if original_settings == settings_content else "would-update" if dry_run else "updated"
@@ -134,12 +180,12 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
         # The hook performs routing and context injection. Keeping the shared
         # bootstrap in Claude's skill memory would duplicate that authority.
         "entry": remove_managed_file(SHARED_ENTRY, skill_target, dry_run=dry_run),
-        "hook": install_file(CLAUDE_HOOK, hook_target, dry_run=dry_run),
+        "hook": hook_result,
         "settings": settings_result,
     }
     if not dry_run and settings_result == "updated":
         if original_settings is not None:
-            atomic_write(config_dir / "settings.json.skills-ai.bak", original_settings)
+            backup_settings(config_dir, original_settings)
         atomic_write(settings_path, settings_content)
     return results
 

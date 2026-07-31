@@ -74,8 +74,10 @@ git diff --cached --check
   recorded process.
 - `MANIFEST_UNAVAILABLE`: run compile and validation; normal tasks still proceed.
 - Claude timeout: keep the Python-child timeout below the outer hook timeout.
-- Broken Claude settings: restore `settings.json.skills-ai.bak`; preserve foreign
-  settings and files.
+- Broken Claude settings: restore the immutable first-install
+  `settings.json.skills-ai.bak`, or use `settings.json.skills-ai.previous` for
+  the state replaced by the latest changed install; preserve foreign settings
+  and files.
 - Stale installed adapter: dry-run, inspect, then reinstall with platform-owner
   approval.
 - Rollback a release with a new focused revert commit; do not discard unrelated
