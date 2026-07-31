@@ -277,6 +277,7 @@ test('opencode plugin handles /caveman ultra and stop caveman via tui.prompt.app
     assert.equal(fs.readFileSync(flagPath, 'utf8'), 'ultra');
     assert.ok(out1 && typeof out1.append === 'string', 'expected reinforcement append');
     assert.match(out1.append, /CAVEMAN MODE ACTIVE \(ultra\)/);
+    assert.match(out1.append, /no em dashes\/openers/);
 
     // Natural-language deactivation removes flag
     const out2 = await handlers['tui.prompt.append']({ prompt: 'stop caveman please' });
@@ -304,10 +305,11 @@ test('opencode plugin activates persistent formula-first math mode', async () =>
 
     const activated = await handlers['tui.prompt.append']({ prompt: 'activate caveman math' });
     assert.equal(fs.readFileSync(flagPath, 'utf8'), 'math');
-    assert.match(activated.append, /formula first; define symbols; derive; LaTeX/);
+    assert.match(activated.append, /rendered LaTeX; define symbols; derive; no em dashes\/openers/);
 
     const persisted = await handlers['tui.prompt.append']({ prompt: 'derive this ODE' });
     assert.match(persisted.append, /CAVEMAN MATH/);
+    assert.match(persisted.append, /no em dashes\/openers/);
   } finally {
     delete process.env.XDG_CONFIG_HOME;
     fs.rmSync(xdg, { recursive: true, force: true });

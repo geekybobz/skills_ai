@@ -332,6 +332,7 @@ def verify_hook_install_flow() -> None:
             "CAVEMAN_DEFAULT_MODE=ultra should set flag to ultra",
         )
         ensure("Never trade accuracy or required reasoning" in activate_custom.stdout, "canonical skill body not loaded")
+        ensure("No em dashes" in activate_custom.stdout, "no-AI-trace rule missing from activation output")
 
         activate_math = run(
             ["node", "src/hooks/caveman-activate.js"],
@@ -339,6 +340,7 @@ def verify_hook_install_flow() -> None:
         )
         ensure("CAVEMAN MATH ACTIVE" in activate_math.stdout, "math activation banner missing")
         ensure("Compress exposition, not reasoning" in activate_math.stdout, "math skill body not loaded")
+        ensure("No em dashes" in activate_math.stdout, "math no-AI-trace rule missing")
         ensure(
             (claude_dir / ".caveman-active").read_text(encoding="utf-8") == "math",
             "CAVEMAN_DEFAULT_MODE=math should set flag to math",
@@ -384,7 +386,8 @@ def verify_hook_install_flow() -> None:
             check=True,
         )
         ensure(
-            "CAVEMAN (ultra): terse" in ultra_prompt.stdout,
+            "CAVEMAN (ultra): terse" in ultra_prompt.stdout
+            and "no em dashes/openers" in ultra_prompt.stdout,
             "mode tracker should emit active-mode reinforcement",
         )
         ensure((claude_dir / ".caveman-active").read_text(encoding="utf-8") == "ultra", "mode tracker did not record ultra")

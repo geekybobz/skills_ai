@@ -63,10 +63,10 @@ const flagPath = path.join(opencodeConfigDir(), '.caveman-active');
 
 function reinforcementLine(mode) {
   if (mode === 'math') {
-    return 'CAVEMAN MATH: formula first; define symbols; derive; LaTeX; verify on request.';
+    return 'CAVEMAN MATH: answer/equation first; rendered LaTeX; define symbols; derive; no em dashes/openers.';
   }
   return 'CAVEMAN MODE ACTIVE (' + mode + '). ' +
-    'Terse; preserve technical terms; normal code/security.';
+    'Terse; answer first; no em dashes/openers; preserve technical terms; normal code/security.';
 }
 
 // Parse a prompt for slash-command activation or natural-language toggles.

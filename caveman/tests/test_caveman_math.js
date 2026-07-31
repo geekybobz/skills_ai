@@ -39,6 +39,8 @@ test('source activation loads canonical base skill and filters inactive levels',
     const result = run(ACTIVATE, dir, { env: { CAVEMAN_DEFAULT_MODE: 'full' } });
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /Never trade accuracy or required reasoning/);
+    assert.match(result.stdout, /No em dashes/);
+    assert.match(result.stdout, /assistant openers/);
     assert.match(result.stdout, /\*\*full\*\*/);
     assert.doesNotMatch(result.stdout, /\*\*lite\*\*/);
     assert.equal(fs.readFileSync(path.join(dir, '.caveman-active'), 'utf8'), 'full');
@@ -55,6 +57,7 @@ test('math default loads formula-first skill from canonical source', () => {
     assert.match(result.stdout, /CAVEMAN MATH ACTIVE/);
     assert.match(result.stdout, /Compress exposition, not reasoning/);
     assert.match(result.stdout, /Render mathematics with LaTeX/);
+    assert.match(result.stdout, /No em dashes/);
     assert.equal(fs.readFileSync(path.join(dir, '.caveman-active'), 'utf8'), 'math');
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -69,12 +72,13 @@ test('/caveman math persists and emits formula-first reinforcement', () => {
     });
     assert.equal(result.status, 0, result.stderr);
     assert.equal(fs.readFileSync(path.join(dir, '.caveman-active'), 'utf8'), 'math');
-    assert.match(result.stdout, /formula first; define symbols; derive; LaTeX/);
+    assert.match(result.stdout, /rendered LaTeX; define symbols; derive; no em dashes\/openers/);
 
     const next = run(TRACKER, dir, {
       input: JSON.stringify({ prompt: 'Why is simple harmonic motion sinusoidal?' }),
     });
     assert.match(next.stdout, /CAVEMAN MATH/);
+    assert.match(next.stdout, /no em dashes\/openers/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

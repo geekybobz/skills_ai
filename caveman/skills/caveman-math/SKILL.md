@@ -4,8 +4,9 @@ description: >
   Formula-first mathematical explanation mode with minimal narrative, locally
   defined symbols, rendered LaTeX equations, stepwise derivation, and compact
   insight. Use for /caveman math, /caveman-math, "formula first", "less story",
-  or pedagogical token-efficient mathematics. Verify analytically first and
-  use short code only when the user asks to verify or compute.
+  or pedagogical token-efficient mathematics. Suppresses assistant traces and
+  uses displayed equations when equations carry the answer. Verify analytically
+  first and use short code only when the user asks to verify or compute.
 ---
 
 # Caveman Math
@@ -31,6 +32,9 @@ Use only needed blocks:
 
 - Render mathematics with LaTeX. Use displayed equations for derivation.
 - Define every symbol before or beside first use.
+- No em dashes in prose unless quoting or preserving source text.
+- Avoid assistant openers and filler transitions. Start with the result or the
+  governing equation.
 - Prefer formulas to narrative, but never omit a necessary logical step.
 - Keep connective prose short: purpose, operation, consequence.
 - Start generic; substitute the user's concrete case last.

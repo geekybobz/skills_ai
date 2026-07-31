@@ -55,9 +55,9 @@ function parseMode(prompt) {
 
 function reinforcement(mode) {
   if (mode === 'math') {
-    return 'CAVEMAN MATH: formula first; define symbols; derive; LaTeX; verify on request.';
+    return 'CAVEMAN MATH: answer/equation first; rendered LaTeX; define symbols; derive; no em dashes/openers.';
   }
-  return `CAVEMAN (${mode}): terse; preserve technical terms; normal code/security.`;
+  return `CAVEMAN (${mode}): terse; answer first; no em dashes/openers; preserve technical terms; normal code/security.`;
 }
 
 let input = '';

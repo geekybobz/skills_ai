@@ -45,6 +45,8 @@ test('greenfield: creates all rule files with proper frontmatter', (tmp) => {
   const cursor = fs.readFileSync(path.join(tmp, '.cursor/rules/caveman.mdc'), 'utf8');
   assert.match(cursor, /alwaysApply: true/);
   assert.match(cursor, /Respond terse like smart caveman/);
+  assert.match(cursor, /No em dashes/);
+  assert.match(cursor, /No assistant openers/);
   const windsurf = fs.readFileSync(path.join(tmp, '.windsurf/rules/caveman.md'), 'utf8');
   assert.match(windsurf, /trigger: always_on/);
   const cline = fs.readFileSync(path.join(tmp, '.clinerules/caveman.md'), 'utf8');
@@ -53,6 +55,7 @@ test('greenfield: creates all rule files with proper frontmatter', (tmp) => {
   assert.match(copilot, /Respond terse/);
   const agents = fs.readFileSync(path.join(tmp, 'AGENTS.md'), 'utf8');
   assert.match(agents, /Respond terse/);
+  assert.match(agents, /Start with answer/);
 });
 
 test('idempotent: re-running on a clean install skips all', (tmp) => {

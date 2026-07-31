@@ -67,6 +67,8 @@ function fallbackBase(activeMode) {
   return [
     'Respond terse like smart caveman. Preserve all technical substance.',
     definitions[activeMode] || definitions.full,
+    'No em dashes in prose. No assistant openers like "Sure", "Happy to", "I can", or "Let us".',
+    'Start with answer, finding, equation, or action. Avoid filler transitions.',
     'Keep code, commands, paths, URLs, symbols, and quoted errors exact.',
     'Use normal prose for security, irreversible actions, or ambiguous step order.',
     'Persist until "stop caveman" or "normal mode".',
@@ -77,7 +79,8 @@ function fallbackMath() {
   return [
     'Formula-first mathematical mode.',
     'Answer directly; define symbols; state governing equation; derive step by step.',
-    'Use rendered LaTeX. Let equations carry argument; keep connective prose short.',
+    'Use rendered LaTeX display equations. Let equations carry argument; keep connective prose short.',
+    'No em dashes or assistant openers. Start with result or governing equation.',
     'Give insight after derivation. Verify analytically first; use code only when requested.',
     'State assumptions and whether result is exact, approximate, restricted, or heuristic.',
   ].join('\n');
