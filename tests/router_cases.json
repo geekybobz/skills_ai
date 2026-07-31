@@ -109,6 +109,28 @@
     "skill": "environment-setup"
   },
   {
+    "name": "personal secret does not route to environment setup",
+    "query": "Tell me why my secret is embarrassing",
+    "result": "NORMAL"
+  },
+  {
+    "name": "qualified secret key routes to environment setup",
+    "query": "Explain how to store a secret key safely",
+    "result": "MATCH",
+    "skill": "environment-setup"
+  },
+  {
+    "name": "story plot does not route to data visualization",
+    "query": "Summarize the plot of Hamlet",
+    "result": "NORMAL"
+  },
+  {
+    "name": "qualified function plot routes to data visualization",
+    "query": "Create a plot of a sine function",
+    "result": "MATCH",
+    "skill": "data-visualization-specialist"
+  },
+  {
     "name": "generic job browsing has normal fallback",
     "query": "Help me browse one job",
     "result": "NORMAL"

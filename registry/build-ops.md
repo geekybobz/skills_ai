@@ -14,7 +14,7 @@ concepts before giving steps. Skip them for experienced-developer tasks.
 | skill | does | trigger | not for |
 |---|---|---|---|
 | [[design-with-claude/setup-guide]] | install Node and Claude Code, create a first project | install, node, terminal, first project | an existing configured project |
-| [[design-with-claude/environment-setup]] | what `.env` files are, how to set them, what never to commit | `.env`, API key, secret, environment variable | production secret management |
+| [[design-with-claude/environment-setup]] | what `.env` files are, how to set them, what never to commit | `.env`, API key, secret key, environment variable | production secret management |
 | [[design-with-claude/database-setup]] | Supabase tables, queries, connecting to a frontend | database, supabase, table, query | schema design at scale |
 | [[design-with-claude/auth-implementation]] | working login/signup with Clerk or Supabase Auth — real code | auth code, implement login, signup, Clerk | login *UX* → `auth-security-ux-specialist` |
 | [[design-with-claude/deploy-to-vercel]] | deploy to Vercel, fix build errors, custom domains | deploy, vercel, domain, build failing | other hosts |

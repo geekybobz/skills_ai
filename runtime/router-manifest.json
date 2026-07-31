@@ -261,7 +261,7 @@
       "triggers": [
         ".env",
         "API key",
-        "secret",
+        "secret key",
         "environment variable"
       ]
     },
@@ -710,8 +710,9 @@
       "triggers": [
         "chart",
         "graph",
-        "plot",
-        "figure"
+        "data plot",
+        "plot a function",
+        "scientific figure"
       ]
     },
     {
@@ -1700,7 +1701,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "5dab351ee5380858dd83a45f46152d8315736778f06f837847e6fa9a19290da8",
+  "source_hash": "cdfc1df15420cb142464bd162381d7d0e1a000a4fb1dbdd41a44761d59c635e2",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -1712,7 +1713,7 @@
     },
     {
       "path": "registry/build-ops.md",
-      "sha256": "b8d1d1f9bf2d407595314416257c7b734768e4ba90284e1e2bb1c1887b93505c"
+      "sha256": "ffd80da5caa11f2ce66d84b8fce6224f5ddc72e10a2f7aaaca25c6ede58024fe"
     },
     {
       "path": "registry/career.md",
@@ -1724,7 +1725,7 @@
     },
     {
       "path": "registry/design.md",
-      "sha256": "e78225dd5a52ad213406a734ed1aab458c503203c2383688b9ea2b210995ae30"
+      "sha256": "f74d9bb54322acc4a6b5609f7b9b2268de0d1f602cdbb8ef5044f74f4196eff8"
     },
     {
       "path": "registry/theory.md",

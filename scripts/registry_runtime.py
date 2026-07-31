@@ -290,7 +290,8 @@ def _phrase_score(query: str, phrase: str) -> int:
         return 0
     words = normalized_phrase.split()
     if len(words) == 1:
-        return 7 if re.search(rf"\b{re.escape(words[0])}\b", query) else 0
+        token = re.escape(words[0])
+        return 7 if re.search(rf"(?<![a-z0-9]){token}(?![a-z0-9])", query) else 0
     if normalized_phrase in query:
         return 20 + 3 * len(words)
     query_words = query.split()

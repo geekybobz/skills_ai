@@ -44,7 +44,7 @@ with no structure yet → `design-brief`. Narrow question → go straight to the
 
 | skill | does | trigger | not for |
 |---|---|---|---|
-| [[design-with-claude/data-visualization-specialist]] | chart selection, axes, colour encoding, tooltips | chart, graph, plot, figure | the grid they sit in → `dashboard-designer` |
+| [[design-with-claude/data-visualization-specialist]] | chart selection, axes, colour encoding, tooltips | chart, graph, data plot, plot a function, scientific figure | the grid they sit in → `dashboard-designer` |
 | [[design-with-claude/table-designer]] | data tables, sorting, pagination, row selection, inline edit | table, comparison grid, data grid | static comparison layout → `dashboard-designer` |
 
 ### Print and export
