@@ -4,6 +4,8 @@ Human-readable routing authority and maintenance hub. Normal tasks use the
 compiled entry at `runtime/SKILL.md`: the runtime returns one active skill or a
 fail-open `NORMAL` result without loading this file into model context.
 
+Shared response behavior: [[interaction-protocol/README|Interaction Protocol]].
+
 When maintaining or auditing the registry, check [[registry/activation]], then
 pick the enabled family registry and load the active skill or component.
 

@@ -35,6 +35,10 @@ The registry describes where skills live. It does not copy skill bodies into
 routing files. The interaction protocol is shared response context rather than
 a task skill, while `theory-reference/` remains a separate Git submodule.
 
+Open the visible [Interaction Protocol hub](../../interaction-protocol/README.md)
+to follow its controls, runtime, API, migration record, tests, and general/math
+flows in the Obsidian graph.
+
 ## What Codex and Claude share
 
 ```mermaid

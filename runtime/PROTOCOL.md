@@ -1,5 +1,7 @@
 # Skills AI Runtime Protocol
 
+Interaction overview: [[interaction-protocol/README|Interaction Protocol]].
+
 Protocol version: `skills-ai/1`.
 
 ## Invariants

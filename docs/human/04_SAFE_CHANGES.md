@@ -38,6 +38,9 @@ The general and math interaction protocols only shape an answer. They do not
 grant permission or weaken any read-only, review, write, network, credential,
 or destructive-action boundary.
 
+Changes anywhere under `interaction-protocol/` are mapped canonical changes:
+the routing guide pages and visible protocol hub must remain synchronized.
+
 ## Keeping this human guide current
 
 Relevant canonical sources are mapped to the human pages that explain them.

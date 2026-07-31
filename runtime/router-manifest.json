@@ -1501,11 +1501,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "4244328ea51d800ee10517cb234ffe8c7fc35bed3bb14f12ff86197d354cfa6c",
+  "source_hash": "f1d983f1f60f316fc5b9647125c4bad42f6252cf43f45cdc8ac40154edc401cf",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "b71d3b2b7306d79e58c28f94be27d93f31527dac96f865bb50efe0bd046ac53a"
+      "sha256": "9b7ca381b4d9804582392fd6f92da4dd9b620839fb12a4ca70e68421f0909300"
     },
     {
       "path": "interaction-protocol/protocol.json",
@@ -1529,7 +1529,7 @@
     },
     {
       "path": "registry/interaction.md",
-      "sha256": "375f83b8a4ead58219818bb0df2193ff20470a60e1a42e69ad17626ff3f05887"
+      "sha256": "db4ad78c47a42cc3f7a0d7d1f749956e62609d6636f0902344cd0b9b5e8125c7"
     },
     {
       "path": "registry/theory.md",

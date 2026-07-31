@@ -54,6 +54,9 @@ an explicit `/interaction math` control. Code, filenames, search terms,
 settings, and rendering tasks cannot activate it merely by mentioning
 “equation” or “formula”.
 
+See the [Interaction Protocol hub](../../interaction-protocol/README.md) for the
+same general and math branches as a connected Obsidian graph route.
+
 ## The strict design gate
 
 Visual design and UI skills are intentionally harder to activate because words

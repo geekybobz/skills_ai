@@ -1,5 +1,7 @@
 # Shared Runtime
 
+Interaction overview: [[interaction-protocol/README|Interaction Protocol]].
+
 Platform-neutral hot path for Skills AI.
 
 ```text

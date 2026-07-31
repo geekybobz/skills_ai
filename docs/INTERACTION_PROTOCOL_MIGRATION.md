@@ -12,8 +12,9 @@ tags:
 
 # Interaction Protocol Migration
 
-Back to [[00_SKILLS_HUB]]. Registry: [[registry/interaction]]. Runtime:
-[[runtime/PROTOCOL]].
+Back to [[00_SKILLS_HUB]]. Protocol:
+[[interaction-protocol/README|Interaction Protocol]]. Registry:
+[[registry/interaction]]. Runtime: [[runtime/PROTOCOL]].
 
 ## Git checkpoint
 

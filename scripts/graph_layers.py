@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
 from typing import Any, Iterable
@@ -35,7 +36,8 @@ LAYERS = (
     {
         "id": "L4",
         "query": (
-            "path:design-with-claude/ OR path:theory-reference/SKILL.md OR "
+            "path:design-with-claude/ OR path:interaction-protocol/ OR "
+            "path:theory-reference/SKILL.md OR "
             "path:theory-reference/shared/SKILL.md OR "
             "path:theory-reference/shared/phases/ OR path:external-skills/"
         ),
@@ -51,6 +53,28 @@ LAYERS = (
         "color": "#546E7A",
     },
 )
+
+INTERACTION_GRAPH_EDGES = {
+    "docs/00_SKILLS_HUB.md": ("registry/interaction", "interaction-protocol/README"),
+    "registry/interaction.md": (
+        "docs/00_SKILLS_HUB",
+        "registry/activation",
+        "interaction-protocol/README",
+        "runtime/PROTOCOL",
+    ),
+    "interaction-protocol/README.md": (
+        "docs/00_SKILLS_HUB",
+        "registry/activation",
+        "registry/interaction",
+        "runtime/PROTOCOL",
+        "runtime/API_CONTRACT",
+        "docs/INTERACTION_PROTOCOL_MIGRATION",
+    ),
+    "docs/INTERACTION_PROTOCOL_MIGRATION.md": ("interaction-protocol/README",),
+    "runtime/README.md": ("interaction-protocol/README",),
+    "runtime/PROTOCOL.md": ("interaction-protocol/README",),
+    "runtime/API_CONTRACT.md": ("interaction-protocol/README",),
+}
 
 
 def expected_color_groups() -> list[dict[str, Any]]:
@@ -93,6 +117,26 @@ def _markdown_paths(root: Path) -> Iterable[str]:
         yield relative.as_posix()
 
 
+def interaction_link_errors(root: Path = ROOT) -> list[str]:
+    errors: list[str] = []
+    for source, targets in INTERACTION_GRAPH_EDGES.items():
+        source_path = root / source
+        if not source_path.is_file():
+            errors.append(f"missing interaction graph source: {source}")
+            continue
+        text = source_path.read_text(encoding="utf-8")
+        for target in targets:
+            target_path = root / target
+            if target_path.suffix == "":
+                target_path = target_path.with_suffix(".md")
+            if not target_path.is_file():
+                errors.append(f"missing interaction graph target: {source} -> {target}")
+                continue
+            if not re.search(rf"\[\[{re.escape(target)}(?:\\?\||#|\]\])", text):
+                errors.append(f"missing interaction graph link: {source} -> {target}")
+    return errors
+
+
 def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
     errors: list[str] = []
     graph_path = root / GRAPH_PATH
@@ -114,6 +158,8 @@ def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
     unclassified = [path for path in _markdown_paths(root) if classify_path(path) is None]
     if unclassified:
         errors.append("unclassified Markdown: " + ", ".join(unclassified))
+    if (root / "interaction-protocol" / "README.md").exists():
+        errors.extend(interaction_link_errors(root))
     return errors
 
 

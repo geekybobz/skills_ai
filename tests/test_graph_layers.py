@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from graph_layers import check_graph, classify_path, sync_graph  # noqa: E402
+from graph_layers import check_graph, classify_path, interaction_link_errors, sync_graph  # noqa: E402
 
 
 class GraphLayerTests(unittest.TestCase):
@@ -21,6 +21,7 @@ class GraphLayerTests(unittest.TestCase):
             "docs/06_CHANGE_CONTROL.md": "L1",
             "registry/design.md": "L2",
             "design-with-claude/poster-lead.md": "L4",
+            "interaction-protocol/README.md": "L4",
             "protocols/repository/ADD.md": "L5",
             "docs/07_BUILD_AND_RELEASE.md": "L5",
             "runtime/PROTOCOL.md": "L5",
@@ -31,6 +32,9 @@ class GraphLayerTests(unittest.TestCase):
 
     def test_live_graph_groups_and_markdown_coverage_are_current(self) -> None:
         self.assertEqual([], check_graph(ROOT))
+
+    def test_interaction_protocol_graph_is_connected(self) -> None:
+        self.assertEqual([], interaction_link_errors(ROOT))
 
     def test_sync_preserves_unrelated_graph_preferences(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

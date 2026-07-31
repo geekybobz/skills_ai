@@ -67,3 +67,6 @@ For `interaction.math`, `active` enables safe automatic mathematical-intent
 detection, `manual` requires `/interaction math`, and `off` disables the math
 overlay. `/interaction general` overrides automatic math selection for the
 current request.
+
+The [Interaction Protocol hub](../../interaction-protocol/README.md) links
+these controls to the registry, runtime behavior, API receipt, and prompt tests.

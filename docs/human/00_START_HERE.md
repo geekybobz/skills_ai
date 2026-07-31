@@ -61,3 +61,7 @@ host permissions remain the real enforcement boundary.
 
 The human guide is explanatory only. For current behavior, the live manifest
 and canonical maintenance documents remain authoritative.
+
+The [Interaction Protocol hub](../../interaction-protocol/README.md) is the
+visible Obsidian node connecting its general/math flows, controls, runtime,
+API, tests, and migration record.

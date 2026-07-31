@@ -1,5 +1,7 @@
 # Skills AI API Contract
 
+Interaction overview: [[interaction-protocol/README|Interaction Protocol]].
+
 Version 1 is a local JSON-line process API, not a persistent HTTP service. This
 keeps normal routing network-free and avoids daemon, port, authentication, and
 orphan-process complexity.
