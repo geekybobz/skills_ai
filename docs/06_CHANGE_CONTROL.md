@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `6`.
+Protocol version: `7`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
 amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. Human
@@ -125,6 +125,9 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
     platform-overlay sources. Regenerate root agent entries and live human
     indexes with `scripts/compile_repository_views.py`; never hand-edit a
     generated projection.
+14. Prompt-free runtime observations belong only under ignored `.runtime/`
+    state, use restrictive permissions and bounded size, and never become
+    routing authority or a generated-document input.
 
 ## External-task boundary
 

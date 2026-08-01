@@ -7,6 +7,9 @@ Protocol version: `skills-ai/1`.
 ## Invariants
 
 - One request selects at most one active/manual skill or returns `NORMAL`.
+- A `manual` task skill is eligible only when `/skill <exact-id>` or the exact
+  “use the `<id>` skill” form names it. Explicit naming bypasses domain gates
+  for that route but never activation, path, or permission checks.
 - The interaction protocol is response context, not a task skill. The general
   contract and optional math overlay do not consume the one-skill limit.
 - No match, invalid input, timeout, unavailable manifest, or expected adapter
@@ -21,6 +24,9 @@ Protocol version: `skills-ai/1`.
   design intent.
   Without that gate, routing continues through non-design families or `NORMAL`.
 - The request text is never returned or written to diagnostics.
+- Prompt-free ambiguity observations may be appended under ignored `.runtime/`
+  state with mode `0600`; they contain only time, client, candidate ids, Fit,
+  operation, and domain and stop at the 1 MiB file cap.
 - Skill selection grants no write, credential, network, or account authority.
 - Every one-shot router has a bounded input lifetime and exits after one reply.
 
@@ -43,15 +49,42 @@ The shared router returns the selected interaction mode and reason in every
 context packet. Adapters must render that context without duplicating the
 detection rules.
 
+## Request controls and receipt
+
+Current-request controls have the highest presentation priority:
+
+- `/skill auto|normal|<exact-id>` controls the local task-skill slot;
+- natural “do not use any local skill” forms map to `USER_NORMAL`;
+- `/interaction general|math` controls response style;
+- `/format mermaid+summary` selects one or more known output forms;
+- `/depth brief|standard|detailed` selects explanation depth; and
+- `/receipt auto|on|off` controls the compact visible task receipt.
+
+The precedence is current request, session preference, project default, global
+default, then automatic detection. Natural-language output instructions in the
+prompt remain authoritative. Bounded project context means already available
+project instructions plus user-named or directly relevant files; routing never
+scans a repository merely to fill the receipt.
+
+`routing.fit` is ordinal route suitability: `3` explicit exact skill, `2`
+unique contextual match, `1` unresolved equal top candidates, and `0` no skill,
+disabled skill, opt-out, maintenance, or fail-open. It is not a probability and
+says nothing about answer correctness.
+
+An equal top score returns `NORMAL / AMBIGUOUS_SKILL_MATCH` with candidate id,
+family, and purpose but no path or body. The host asks one short numbered choice
+only when the alternatives materially change the work. After the user chooses,
+it reroutes by exact id and continues the original task.
+
 ## Framing
 
 The caller writes one UTF-8 JSON object followed by `\n`. The router reads one
 line and does not wait for EOF. The default input deadline is 10,000 ms because
 Codex may start and write to a PTY in separate host calls; direct adapters may
 set a shorter bound. The request limit is 1 MiB. A raw one-line query remains
-accepted for compatibility. Input beginning with `{` or `[` is treated as
-JSON; a valid JSON value that is not an object fails open with `INVALID_INPUT`
-instead of being routed as literal text.
+accepted for compatibility. Any valid JSON value is parsed as JSON; a value
+that is not an object fails open with `INVALID_INPUT` instead of being routed as
+literal text. Non-JSON one-line text remains the raw-query compatibility path.
 
 ```json
 {"protocol":"skills-ai/1","request_id":"optional","client":"codex","query":"Explain this code"}
@@ -76,8 +109,8 @@ The default hot path returns zero after an operational fail-open receipt.
 ## Stable reasons
 
 Routing reasons include `ACTIVE_SKILL_MATCH`, `NO_SKILL_MATCH`,
-`DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`, and
-`SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
+`DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`,
+`UNKNOWN_SKILL_REQUEST`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
 requests on the normal path instead of allowing words such as `node` or a
 negated `install` to select an ordinary task skill. Boundary reasons
 include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
@@ -88,6 +121,12 @@ include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
 `REGISTRY_STATUS` is a non-skill metadata response. It keeps `result: NORMAL`
 and adds a `registry` object containing the source hash, active/manual/off route
 ids, gate summaries, hidden/deprecated counts, and the no-memory policy.
+
+Analyze prompt-free ambiguity frequencies without loading prompts or skills:
+
+```bash
+python3 scripts/analyze_ambiguities.py --limit 500
+```
 
 ## Repository-change boundary
 

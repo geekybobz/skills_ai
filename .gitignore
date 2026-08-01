@@ -5,6 +5,9 @@ node_modules/
 __pycache__/
 *.pyc
 
+# Local prompt-free runtime observations. Never version user activity.
+.runtime/
+
 # Obsidian — track the vault design (graph colours, plugins, ignore filters),
 # not machine-local window state.
 .obsidian/workspace.json

@@ -34,9 +34,12 @@ flowchart LR
 - The general protocol always stays separate from the selected task skill.
 - Mathematical reasoning can add a math overlay without replacing that skill.
 - No suitable skill means normal model reasoning, not a stopped task.
-- Ambiguous matches return normal behavior instead of guessing.
+- Material equal matches ask one short numbered choice instead of guessing;
+  harmless uncertainty continues normally.
 - Off, hidden, and deprecated routes are not loaded.
 - Prompt text and skill bodies are not written to diagnostics.
+- Prompt-free ambiguity logs contain only candidate ids and bounded route
+  metadata; they are ignored by Git and capped in size.
 - A selected skill grants no write, network, credential, or account authority.
 - Each router process reads one request, writes one result, and exits.
 - A request to maintain Skills AI itself stays on the normal path and uses the
@@ -60,6 +63,8 @@ host permissions remain the real enforcement boundary.
 | `NORMAL` | Continue the task without a local skill |
 | Fail-open | Router trouble does not block the original task |
 | Adapter | Thin Codex- or Claude-specific access to the shared router |
+| Fit 0–3 | Ordinal skill-route suitability, not confidence in the answer |
+| Task receipt | Optional compact task, project, skill/Fit, format, and access header |
 | Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
 
 The human guide is explanatory only. For current behavior, the live manifest

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import os
 import select
@@ -18,6 +19,8 @@ from registry_runtime import RegistryRuntimeError, compact_context, load_manifes
 PROTOCOL_VERSION = "skills-ai/1"
 DEFAULT_STDIN_TIMEOUT_MS = 10_000
 DEFAULT_MAX_REQUEST_BYTES = 1024 * 1024
+AMBIGUITY_LOG = Path(__file__).resolve().parents[1] / ".runtime" / "ambiguity-events.jsonl"
+MAX_AMBIGUITY_LOG_BYTES = 1024 * 1024
 FALLBACK_RESPONSE_CONTRACT = [
     "Give the result, answer, or main finding first.",
     "Add enough context to understand and use the result.",
@@ -53,9 +56,13 @@ def fallback_decision(reason_code: str, *, request_id: str | None = None) -> dic
                 "voice": "compact-professional",
                 "depth": "standard",
                 "shape": "answer -> reason -> implication",
+                "format": ["auto"],
             },
+            "receipt": "auto",
+            "project_context": "bounded-host-context",
             "response_contract": FALLBACK_RESPONSE_CONTRACT,
         },
+        "routing": {"fit": 0, "fit_reason": "fail-open"},
     }
     if request_id is not None:
         decision["request_id"] = request_id
@@ -102,7 +109,7 @@ def read_request_line(
     return bytes(payload).rstrip(b"\r")
 
 
-def parse_request(payload: bytes) -> tuple[str, str | None]:
+def parse_request(payload: bytes) -> tuple[str, str | None, str]:
     try:
         text = payload.decode("utf-8").strip()
     except UnicodeDecodeError as exc:
@@ -110,11 +117,15 @@ def parse_request(payload: bytes) -> tuple[str, str | None]:
     if not text:
         raise RequestError("INVALID_INPUT", "query must be a non-empty string")
     request_id: str | None = None
-    if text[0] in "{[":
-        try:
-            data = json.loads(text)
-        except json.JSONDecodeError as exc:
+    client = "other"
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        if text[0] in "{[":
             raise RequestError("INVALID_INPUT", f"invalid JSON request: {exc.msg}") from exc
+        # Backward-compatible raw one-line input. Structured callers should use JSON.
+        query = text
+    else:
         if not isinstance(data, dict):
             raise RequestError("INVALID_INPUT", "JSON request must be an object")
         protocol = data.get("protocol")
@@ -123,13 +134,13 @@ def parse_request(payload: bytes) -> tuple[str, str | None]:
         request_id = data.get("request_id")
         if request_id is not None and (not isinstance(request_id, str) or len(request_id) > 128):
             raise RequestError("INVALID_INPUT", "request_id must be a string of at most 128 characters")
+        supplied_client = data.get("client", "other")
+        if isinstance(supplied_client, str) and supplied_client in {"codex", "claude", "other"}:
+            client = supplied_client
         query = data.get("query", "")
-    else:
-        # Backward-compatible raw one-line input. Structured callers should use JSON.
-        query = text
     if not isinstance(query, str) or not query.strip():
         raise RequestError("INVALID_INPUT", "query must be a non-empty string")
-    return query, request_id
+    return query, request_id, client
 
 
 def read_query(
@@ -137,14 +148,14 @@ def read_query(
     *,
     timeout_ms: int,
     max_request_bytes: int,
-) -> tuple[str, str | None]:
+) -> tuple[str, str | None, str]:
     if argument is not None:
         encoded = argument.encode("utf-8")
         if len(encoded) > max_request_bytes:
             raise RequestError("REQUEST_TOO_LARGE", f"query exceeds {max_request_bytes} bytes")
         if not argument.strip():
             raise RequestError("INVALID_INPUT", "query must be a non-empty string")
-        return argument, None
+        return argument, None, "other"
     return parse_request(
         read_request_line(
             sys.stdin.buffer,
@@ -173,6 +184,42 @@ def selected_skill_is_available(decision: dict[str, Any]) -> bool:
     return skill_path.is_file()
 
 
+def record_ambiguity(decision: dict[str, Any], *, client: str) -> None:
+    """Append prompt-free ambiguity metadata; logging must never block routing."""
+    if decision.get("reason_code") != "AMBIGUOUS_SKILL_MATCH":
+        return
+    try:
+        AMBIGUITY_LOG.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if AMBIGUITY_LOG.exists() and AMBIGUITY_LOG.stat().st_size >= MAX_AMBIGUITY_LOG_BYTES:
+            return
+        event = {
+            "time": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
+            "client": client,
+            "reason": decision["reason_code"],
+            "fit": decision.get("routing", {}).get("fit", 1),
+            "candidates": [
+                candidate["id"] for candidate in decision.get("routing", {}).get("candidates", [])
+            ],
+            "operation": decision["context"]["operation"],
+            "domain": decision["context"]["domain"],
+        }
+        if AMBIGUITY_LOG.parent.is_symlink():
+            return
+        flags = os.O_WRONLY | os.O_CREAT | os.O_APPEND
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(AMBIGUITY_LOG, flags, 0o600)
+        try:
+            if hasattr(os, "fchmod"):
+                os.fchmod(descriptor, 0o600)
+            payload = (json.dumps(event, sort_keys=True, separators=(",", ":")) + "\n").encode()
+            os.write(descriptor, payload)
+        finally:
+            os.close(descriptor)
+    except (OSError, KeyError, TypeError, ValueError):
+        return
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--query", help="request text; one JSON line on stdin is used when omitted")
@@ -184,8 +231,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     started = time.perf_counter_ns()
     request_id: str | None = None
+    client = "other"
     try:
-        query, request_id = read_query(
+        query, request_id, client = read_query(
             args.query,
             timeout_ms=args.stdin_timeout_ms,
             max_request_bytes=args.max_request_bytes,
@@ -200,6 +248,7 @@ def main(argv: list[str] | None = None) -> int:
             decision["request_id"] = request_id
         if not selected_skill_is_available(decision):
             decision = fallback_decision("SELECTED_SKILL_UNAVAILABLE", request_id=request_id)
+        record_ambiguity(decision, client=client)
         decision["router_ms"] = round((time.perf_counter_ns() - started) / 1_000_000, 3)
         emit(decision, compact=args.compact)
         return 0
@@ -207,7 +256,10 @@ def main(argv: list[str] | None = None) -> int:
         decision = fallback_decision(exc.reason_code, request_id=request_id)
         decision["router_ms"] = round((time.perf_counter_ns() - started) / 1_000_000, 3)
         emit(decision, compact=args.compact)
-        print(f"skills-ai router fail-open: reason={exc.reason_code} detail={exc}", file=sys.stderr)
+        print(
+            f"skills-ai router fail-open: reason={exc.reason_code} error={type(exc).__name__}",
+            file=sys.stderr,
+        )
         return 2 if args.strict else 0
     except (OSError, RegistryRuntimeError, ValueError) as exc:
         decision = fallback_decision("ROUTER_INTERNAL_ERROR", request_id=request_id)

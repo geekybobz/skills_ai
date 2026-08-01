@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,6 +73,17 @@ class RepositoryViewTests(unittest.TestCase):
 
     def test_checked_in_views_are_fresh(self) -> None:
         self.assertEqual(stale_outputs(ROOT), [])
+
+    def test_untracked_scratch_files_do_not_enter_generated_views(self) -> None:
+        model = load_model(ROOT)
+        with patch(
+            "compile_repository_views._git_paths",
+            side_effect=[["README.md"], ["NOTES_SCRATCH.md", "scripts/analyze_ambiguities.py"]],
+        ):
+            paths = repository_paths(ROOT, model)
+        self.assertIn("README.md", paths)
+        self.assertIn("scripts/analyze_ambiguities.py", paths)
+        self.assertNotIn("NOTES_SCRATCH.md", paths)
 
 
 if __name__ == "__main__":

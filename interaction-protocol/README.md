@@ -45,9 +45,11 @@ flowchart LR
     M -- "Yes" --> X["Add interaction.math"]
     M -- "No" --> R["Route task skill"]
     X --> R
-    R --> S{"One clear enabled skill?"}
+    R --> S{"Routing Fit?"}
     S -- "Yes" --> L["Load one task skill"]
-    S -- "No or ambiguous" --> N["NORMAL"]
+    S -- "No match" --> N["NORMAL"]
+    S -- "Material ambiguity" --> C["Ask one short choice"]
+    C --> L
     L --> A["Focused response"]
     N --> A
 ```
@@ -70,11 +72,26 @@ flowchart LR
 
 - `interaction.general`: active or off.
 - `interaction.math`: active, manual, or off.
+- `/skill auto`: select at most one relevant active skill.
+- `/skill normal` or “do not use any local skill”: use no local task skill.
+- `/skill <exact-id>`: explicitly request one enabled route; required for a
+  `manual` task skill.
 - `/interaction math`: explicit math response for the current request.
 - `/interaction general`: explicit general response for the current request.
+- `/format mermaid+summary`: request known output forms.
+- `/depth brief|standard|detailed`: request explanation depth.
+- `/receipt auto|on|off`: show the task/skill/Fit/style/access receipt
+  automatically, always, or never.
 - Prompt fixtures: [interaction_cases.json](../tests/interaction_cases.json).
 - Runtime tests: [test_registry_runtime.py](../tests/test_registry_runtime.py).
 - Graph tests: [test_graph_layers.py](../tests/test_graph_layers.py).
 
 The interaction protocol changes response structure only. It grants no file,
 network, credential, account, or destructive-action authority.
+
+Fit is route suitability, not factual confidence: `3` is an exact explicit
+route, `2` is one clear contextual route, `1` is unresolved equal candidates,
+and `0` means no skill. At Fit 1 the host asks one numbered last-resort choice
+only when the alternatives materially change the task; otherwise it continues
+normally. The router may record prompt-free candidate metadata under ignored
+`.runtime/` state for later local analysis, never the prompt or answer.

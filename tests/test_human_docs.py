@@ -52,6 +52,17 @@ class HumanDocsTests(unittest.TestCase):
         ]
         self.assertEqual([], coverage_errors(changed, self.config))
 
+    def test_generated_guides_are_freshness_checked_not_hand_change_requirements(self) -> None:
+        changed = [
+            "adapters/claude/ENTRY.md",
+            "docs/human/02_FOLDER_AND_PLATFORMS.md",
+            "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
+            "README.md",
+            "docs/human/08_REPOSITORY_ATLAS.md",
+            "docs/human/09_SKILL_ANATOMY.md",
+        ]
+        self.assertEqual([], coverage_errors(changed, self.config))
+
     def test_every_guide_is_human_marked(self) -> None:
         for relative in guide_paths(self.config):
             with self.subTest(path=relative):

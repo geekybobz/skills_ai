@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 6,
+  "protocol_version": 7,
   "approval_operations": [
     "move",
     "deprecate",
@@ -78,6 +78,7 @@
     }
   },
   "ignored_worktree_patterns": [
+    ".runtime/**",
     "sample_resources/**"
   ],
   "user_owned_paths": [
@@ -154,6 +155,7 @@
       "id": "maintenance-runtime",
       "patterns": [
         "scripts/change_guard.py",
+        "scripts/analyze_ambiguities.py",
         "scripts/compile_repository_views.py",
         "scripts/create_change_request.py",
         "scripts/graph_layers.py",
@@ -200,6 +202,11 @@
     {
       "id": "ignored-sample",
       "patterns": ["sample_resources/**"],
+      "checks": []
+    },
+    {
+      "id": "ignored-runtime-state",
+      "patterns": [".runtime/**"],
       "checks": []
     }
   ],

@@ -60,10 +60,25 @@ SKILLS_AI_MAINTENANCE_ACTION_PATTERN = (
     r"validate|fix|protocol|consistency|graph)\b"
 )
 NEGATED_ACTION_CLAUSE_PATTERN = (
-    r"\b(?:do\s+not|don't|never|without)\b[^.;\n]{0,80}|"
+    r"\b(?:do\s+not|don't|should\s+not|shouldn't|must\s+not|mustn't|never|without|avoid)\b"
+    r"[^.;\n]{0,80}|"
+    r"\b(?:rather\s+than|instead\s+of)\b[^.;\n]{0,80}|"
     r"\bno\s+(?:external\s+|live\s+|automatic\s+)?"
     r"(?:install|installation|edit|change|delete|removal|commit|stage)\b[^.;\n]{0,50}"
 )
+
+SKILL_NORMAL_PATTERN = (
+    r"(?:^|\s)/skill\s+normal(?:\s|$)|"
+    r"\bskillhub\s+normal\b|"
+    r"\b(?:do\s+not|don't)\s+use\s+(?:any\s+)?(?:local\s+)?skills?\b|"
+    r"\banswer\s+normally\s+without\s+(?:skills?\s+ai|(?:a\s+)?local\s+skill)\b|"
+    r"\bno\s+(?:local\s+)?skill\s+for\s+this\s+(?:request|task)\b"
+)
+SKILL_CONTROL_PATTERN = r"(?:^|\s)/skill\s+([a-z0-9][a-z0-9_-]{0,79})(?:\s|$)"
+RECEIPT_CONTROL_PATTERN = r"(?:^|\s)/receipt\s+(auto|on|off)(?:\s|$)"
+DEPTH_CONTROL_PATTERN = r"(?:^|\s)/depth\s+(brief|standard|detailed)(?:\s|$)"
+FORMAT_CONTROL_PATTERN = r"(?:^|\s)/format\s+([a-z0-9+_-]{1,80})(?:\s|$)"
+KNOWN_FORMATS = {"auto", "brief", "code", "equations", "mermaid", "steps", "summary", "table"}
 
 DESIGN_ROUTED_FAMILIES = {"design", "ui-patterns"}
 DESIGN_REQUEST_PATTERN = (
@@ -171,6 +186,52 @@ def _strip_negated_action_clauses(text: str) -> str:
     return re.sub(NEGATED_ACTION_CLAUSE_PATTERN, " ", text, flags=re.IGNORECASE)
 
 
+def _control_routing_prose(text: str) -> str:
+    """Remove untrusted artifacts that cannot establish an explicit control."""
+    prose = re.sub(r"```[\s\S]*?```", " ", text)
+    prose = re.sub(r"`[^`\n]*`", " ", prose)
+    prose = re.sub(r"https?://\S+", " ", prose, flags=re.IGNORECASE)
+    return prose
+
+
+def _explicit_skill_id(query: str, manifest: dict[str, Any]) -> str | None:
+    """Return one explicitly named route id without guessing a family or alias."""
+    slash = re.search(SKILL_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    if slash and slash.group(1).lower() not in {"auto", "normal"}:
+        requested = normalize(slash.group(1))
+        for route in manifest["routes"]:
+            if normalize(route["id"]) == requested:
+                return route["id"]
+        return ""
+    for route in manifest["routes"]:
+        identifier = re.escape(route["id"]).replace(r"\-", r"[-_\s]")
+        if re.search(
+            rf"\buse\s+(?:the\s+)?{identifier}\s+skill\b",
+            query,
+            flags=re.IGNORECASE,
+        ):
+            return route["id"]
+    return None
+
+
+def _request_controls(query: str, profile: dict[str, Any]) -> dict[str, Any]:
+    """Parse small per-request presentation controls; the prompt remains authoritative."""
+    receipt_match = re.search(RECEIPT_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    depth_match = re.search(DEPTH_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    format_match = re.search(FORMAT_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    formats = ["auto"]
+    if format_match:
+        requested = [item for item in re.split(r"[+_-]", format_match.group(1).lower()) if item]
+        accepted = [item for item in requested if item in KNOWN_FORMATS and item != "auto"]
+        formats = accepted or ["auto"]
+    return {
+        "receipt": receipt_match.group(1).lower() if receipt_match else profile.get("receipt", "auto"),
+        "depth": depth_match.group(1).lower() if depth_match else profile["default_depth"],
+        "format": formats,
+        "project_context": "bounded-host-context",
+    }
+
+
 def _design_routing_query(text: str) -> str:
     """Return prose that may safely establish explicit design intent."""
     prose = re.sub(r"```[\s\S]*?```", " ", text)
@@ -211,14 +272,15 @@ def _has_math_reasoning_intent(text: str) -> bool:
 
 def _interaction_mode(query: str, manifest: dict[str, Any]) -> tuple[str, str]:
     normalized = normalize(query)
+    control_query = _control_routing_prose(query)
     family_state = manifest.get("families", {}).get("interaction", {}).get("state", "off")
     general_state = manifest.get("components", {}).get("interaction.general", {}).get("state", "off")
     math_state = manifest.get("components", {}).get("interaction.math", {}).get("state", "off")
     if family_state in INACTIVE_STATES:
         return "normal", "family-disabled"
-    if re.search(MATH_GENERAL_PATTERN, query, flags=re.IGNORECASE):
+    if re.search(MATH_GENERAL_PATTERN, control_query, flags=re.IGNORECASE):
         return ("general", "explicit-general") if general_state in ACTIVE_STATES else ("normal", "general-disabled")
-    explicit_math = bool(re.search(MATH_EXPLICIT_PATTERN, query, flags=re.IGNORECASE))
+    explicit_math = bool(re.search(MATH_EXPLICIT_PATTERN, control_query, flags=re.IGNORECASE))
     if math_state == "active" and (explicit_math or _has_math_reasoning_intent(query)):
         return "math", "explicit-math" if explicit_math else "automatic-math"
     if math_state == "manual" and explicit_math:
@@ -533,6 +595,7 @@ def _context_packet(
     access: str,
     interaction_mode: str,
     interaction_reason: str,
+    controls: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     profile = manifest["profile"]
     contracts: list[str] = []
@@ -553,11 +616,31 @@ def _context_packet(
         },
         "output": {
             "voice": profile["voice"] if interaction_mode != "normal" else "host-default",
-            "depth": profile["default_depth"],
+            "depth": (controls or {}).get("depth", profile["default_depth"]),
             "shape": shape,
+            "format": (controls or {}).get("format", ["auto"]),
         },
+        "receipt": (controls or {}).get("receipt", profile.get("receipt", "auto")),
+        "project_context": (controls or {}).get("project_context", "bounded-host-context"),
         "response_contract": contracts,
     }
+
+
+def _routing(fit: int, fit_reason: str, *, candidates: list[dict[str, str]] | None = None) -> dict[str, Any]:
+    packet: dict[str, Any] = {"fit": fit, "fit_reason": fit_reason}
+    if candidates:
+        packet["candidates"] = candidates
+        packet["clarification"] = {
+            "required": True,
+            "choices": [candidate["id"] for candidate in candidates] + ["normal"],
+            "message": "Two local skills fit materially differently. Ask the user to choose one option or normal, then continue the original task.",
+        }
+    return packet
+
+
+def _public_purpose(value: str) -> str:
+    """Return one bounded display label, never executable or multiline content."""
+    return re.sub(r"[\x00-\x1f\x7f`{}]", " ", value).strip()[:160]
 
 
 def registry_summary(manifest: dict[str, Any], *, include_hidden: bool = False) -> dict[str, Any]:
@@ -631,51 +714,72 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     operation = _operation(normalized_query)
     access = _requested_access(normalized_query)
     interaction_mode, interaction_reason = _interaction_mode(query, manifest)
-    if _is_registry_discovery(normalized_query) and not _is_skills_ai_maintenance(normalized_query):
+    control_query = _control_routing_prose(query)
+    controls = _request_controls(control_query, manifest["profile"])
+    explicit_skill_id = _explicit_skill_id(control_query, manifest)
+    maintenance = _is_skills_ai_maintenance(normalized_query)
+    if _is_registry_discovery(normalized_query) and not maintenance:
         context = _context_packet(
-            manifest, "explain", "skills-registry", "read-only", interaction_mode, interaction_reason
+            manifest, "explain", "skills-registry", "read-only", interaction_mode, interaction_reason, controls
         )
         return {
             "result": "NORMAL",
             "reason_code": "REGISTRY_STATUS",
             "registry": registry_summary(manifest),
+            "routing": _routing(0, "registry-discovery"),
             "context": context,
         }
-    if re.search(r"\bskillhub\s+normal\b", normalized_query):
+    if re.search(SKILL_NORMAL_PATTERN, control_query, flags=re.IGNORECASE) and not maintenance:
         context = _context_packet(
-            manifest, operation, "general", access, interaction_mode, interaction_reason
+            manifest, operation, "general", access, interaction_mode, interaction_reason, controls
         )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": "USER_NORMAL",
+            "routing": _routing(0, "user-opt-out"),
             "context": context,
         }
-    if _is_skills_ai_maintenance(normalized_query):
+    if maintenance:
         context = _context_packet(
-            manifest, operation, "skills-registry", access, interaction_mode, interaction_reason
+            manifest, operation, "skills-registry", access, interaction_mode, interaction_reason, controls
         )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": "SKILLS_AI_MAINTENANCE",
+            "routing": _routing(0, "maintenance-bypass"),
+            "context": context,
+        }
+    if explicit_skill_id == "":
+        context = _context_packet(
+            manifest, operation, "general", access, interaction_mode, interaction_reason, controls
+        )
+        return {
+            "result": "NORMAL",
+            "reason_code": "UNKNOWN_SKILL_REQUEST",
+            "routing": _routing(0, "unknown-explicit-skill"),
             "context": context,
         }
 
     active_matches: list[tuple[int, dict[str, Any], list[str]]] = []
     inactive_matches: list[tuple[int, dict[str, Any]]] = []
     for route in manifest["routes"]:
+        explicitly_selected = explicit_skill_id == route["id"]
+        if explicit_skill_id is not None and not explicitly_selected:
+            continue
+        if route["state"] == "manual" and not explicitly_selected:
+            continue
         route_query = normalized_query
         if route["family"] in DESIGN_ROUTED_FAMILIES:
-            if not design_intent:
+            if not design_intent and not explicitly_selected:
                 continue
             route_query = design_query
-        if not _route_allowed_by_intent(route, route_query):
+        if not explicitly_selected and not _route_allowed_by_intent(route, route_query):
             continue
         matched = []
         skill_score = 0
-        normalized_id = normalize(route["id"])
-        if normalized_id and normalized_id in route_query:
+        if explicitly_selected:
             skill_score += 100
             matched.append(route["id"])
         for phrase in route["triggers"]:
@@ -699,12 +803,13 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
         reason = "DISABLED_SKILL" if inactive_matches else "NO_SKILL_MATCH"
         fallback_domain = "mathematics" if interaction_mode == "math" else "general"
         context = _context_packet(
-            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason
+            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason, controls
         )
         _apply_change_boundary(context, normalized_query, access)
         return {
             "result": "NORMAL",
             "reason_code": reason,
+            "routing": _routing(0, "disabled-match" if inactive_matches else "no-match"),
             "context": context,
         }
 
@@ -714,12 +819,25 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     if tied:
         fallback_domain = "mathematics" if interaction_mode == "math" else "general"
         context = _context_packet(
-            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason
+            manifest, operation, fallback_domain, access, interaction_mode, interaction_reason, controls
         )
         _apply_change_boundary(context, normalized_query, access)
+        candidates = [selected, *(item[1] for item in tied)]
         return {
             "result": "NORMAL",
             "reason_code": "AMBIGUOUS_SKILL_MATCH",
+            "routing": _routing(
+                1,
+                "equal-top-score",
+                candidates=[
+                    {
+                        "id": candidate["id"],
+                        "family": candidate["family"],
+                        "purpose": _public_purpose(candidate["description"]),
+                    }
+                    for candidate in candidates
+                ],
+            ),
             "context": context,
         }
 
@@ -729,12 +847,16 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     skill_file = ROOT / selected["path"]
     estimated_tokens = _estimated_tokens(skill_file) if skill_file.exists() else 0
     context = _context_packet(
-        manifest, operation, domain, access, interaction_mode, interaction_reason
+        manifest, operation, domain, access, interaction_mode, interaction_reason, controls
     )
     _apply_change_boundary(context, normalized_query, access)
     return {
         "result": "MATCH",
         "reason_code": "ACTIVE_SKILL_MATCH",
+        "routing": _routing(
+            3 if explicit_skill_id else 2,
+            "explicit-skill" if explicit_skill_id else "unique-context-match",
+        ),
         "skill": {
             "id": selected["id"],
             "family": selected["family"],
@@ -752,12 +874,15 @@ def compact_context(decision: dict[str, Any]) -> str:
     parts = [
         f"route={decision['result'].lower()}",
         f"reason={decision['reason_code'].lower()}",
+        f"fit={decision.get('routing', {}).get('fit', 0)}/3",
         f"operation={context['operation']}",
         f"domain={context['domain']}",
         f"access={context['requested_access']}",
         f"interaction={context['interaction']['mode']}",
         f"voice={context['output']['voice']}",
         f"shape={context['output']['shape']}",
+        f"format={'+'.join(context['output'].get('format', ['auto']))}",
+        f"receipt={context.get('receipt', 'auto')}",
         "contract=answer first; polished complete sentences; no filler; preserve technical terms; state boundaries when relevant",
     ]
     if decision.get("skill"):

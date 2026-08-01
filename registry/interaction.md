@@ -27,7 +27,11 @@ Automatic selection requires mathematical intent, not a lone keyword:
 - an explanatory question about a strong mathematical object; or
 - research context explicitly asking for mathematical or analytical reasoning.
 
-Explicit controls are `/interaction math` and `/interaction general`.
+Explicit style controls are `/interaction math` and `/interaction general`.
+The shared request layer also supports `/skill auto|normal|<exact-id>`,
+`/format`, `/depth brief|standard|detailed`, and `/receipt auto|on|off`.
+Current-request controls win over session, project, global, and automatic
+defaults. Natural-language output instructions remain authoritative.
 
 ## Rules
 
@@ -35,3 +39,4 @@ Explicit controls are `/interaction math` and `/interaction general`.
 - `manual`: only an explicit math control selects the math protocol.
 - `off`: the protocol is not added to runtime context.
 - No interaction protocol grants file, network, credential, or account access.
+- Route Fit 0–3 describes skill suitability, not factual confidence.

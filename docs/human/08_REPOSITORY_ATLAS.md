@@ -48,6 +48,7 @@ flowchart TD
 | `docs/human/` | Progressive illustrated learning route | You are learning or reviewing the architecture |
 | `requests/` | Controlled external-task intake | A request started outside this repository |
 | `external-skills/` | Pointers to separately owned skills | You need ownership or activation information without traversing the target |
+| `.runtime/` | Ignored prompt-free ambiguity observations | You are locally analyzing repeated equal route pairs; never commit it |
 
 ## How to move deeper
 
@@ -67,7 +68,8 @@ flowchart TD
 For an exhaustive current list, open the
 [live repository index](_LIVE_REPOSITORY_INDEX.md). It is generated from Git,
 the repository roles, registry metadata, and file introductions. It shows every
-tracked file without making that large list the first thing you must learn.
+tracked file plus role-resolved untracked additions without letting arbitrary
+scratch files make the view stale. Ignored runtime state remains outside it.
 
 ## Canonical, generated, and explanatory files
 

@@ -39,8 +39,10 @@ flowchart TD
 ```mermaid
 flowchart TD
     C["Allowed routes"] --> X{"Routing result"}
-    X -- "No match, disabled, or ambiguous" --> N["NORMAL"]
+    X -- "No match or disabled" --> N["NORMAL"]
+    X -- "Material ambiguity" --> Q["Ask one short choice"]
     X -- "One clear match" --> S["Return one skill path"]
+    Q --> S
     S --> L["Load only that skill"]
     L --> A["Answer the task"]
     N --> A
@@ -56,9 +58,12 @@ flowchart TD
     class N,M normal
 ```
 
-The router returns a compact receipt. It never returns the original prompt or a
+The router returns a compact receipt with Fit 0–3, interaction style, output
+shape, depth, format, and access. It never returns the original prompt or a
 whole family. After a `MATCH`, the caller validates the returned path and reads
-only that selected skill.
+only that selected skill. At Fit 1 it returns candidate ids and purposes, not
+paths or bodies; the host asks one numbered last-resort choice only when the
+alternatives materially change the task.
 
 A request to add, edit, move, delete, scan, or repair Skills AI itself returns
 `NORMAL / SKILLS_AI_MAINTENANCE` before ordinary skill scoring. This prevents
@@ -70,7 +75,8 @@ answer direct and adequately explained. The math overlay activates only for
 mathematical actions and objects, explicit mathematical research reasoning, or
 an explicit `/interaction math` control. Code, filenames, search terms,
 settings, and rendering tasks cannot activate it merely by mentioning
-“equation” or “formula”.
+“equation” or “formula”. Current-request controls override session, project,
+global, and automatic defaults.
 
 See the [Interaction Protocol hub](../../interaction-protocol/README.md) for the
 same general and math branches as a connected Obsidian graph route.

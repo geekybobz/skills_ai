@@ -20,7 +20,16 @@ family registries, generated human indexes, or skill bodies on the normal path.
 
 - `MATCH` → load only the returned skill path.
 - `NORMAL` → continue normally without a local skill.
+- `AMBIGUOUS_SKILL_MATCH` → ask only the returned short numbered choice when
+  the alternatives materially differ; after the user selects, reroute by exact
+  id and continue the original task. Never load both candidates.
 - Never invent or substitute a skill. Disabled routes are not routable.
+- Current-request `/skill`, `/interaction`, `/format`, `/depth`, and `/receipt`
+  controls override session, project, global, and automatic defaults. Route
+  `fit` is 0–3 suitability evidence, never confidence in answer correctness.
+- Use only already available project instructions and user-named or directly
+  relevant files for the compact receipt. Never scan the repository merely to
+  fill a header.
 - Skill selection never grants write, credential, network, or account authority.
 - For registry maintenance or a stale/broken manifest, read
   `docs/00_SKILLS_HUB.md`, then `registry/activation.md`, then one family file.
@@ -44,3 +53,6 @@ family registries, generated human indexes, or skill bodies on the normal path.
   selected task-skill slot.
 - `theory-reference/` is a Git submodule. Never add registry files inside it.
 - Human indexes are generated projections, not routing or permission authority.
+- Prompt-free ambiguity observations may be written only to ignored `.runtime/`
+  state. They never contain prompts, file content, absolute paths, skill bodies,
+  or answers and never become routing authority.

@@ -63,8 +63,17 @@ def _excluded(path: str, model: dict[str, Any]) -> bool:
 
 
 def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
+    # Human views describe tracked files plus untracked additions that already
+    # resolve to a declared repository role. Arbitrary scratch files therefore
+    # cannot make generated documentation stale, while a legitimate new source
+    # can enter the maintenance transaction before it is staged.
     paths = set(_git_paths(root, "ls-files"))
-    paths.update(_git_paths(root, "ls-files", "--others", "--exclude-standard"))
+    contract = load_contract(root)
+    paths.update(
+        path
+        for path in _git_paths(root, "ls-files", "--others", "--exclude-standard")
+        if matching_roles(path, contract)
+    )
     paths.add(MODEL_PATH.as_posix())
     paths.add(Path(__file__).relative_to(root).as_posix())
     paths.add(model["agent_entries"]["common"])

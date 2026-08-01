@@ -36,6 +36,15 @@ The registry describes where skills live. It does not copy skill bodies into
 routing files. The interaction protocol is shared response context rather than
 a task skill, while `theory-reference/` remains a separate Git submodule.
 
+Python owns shared matching, Fit, controls, safe logging, validation, and
+maintenance. The single JavaScript adapter translates Claude's hook format,
+bounds and reaps its Python child, validates the selected path, and injects the
+shared receipt. It uses Node built-ins only and does not contain trigger rules.
+Codex calls the same Python router through its own lifecycle.
+
+Ignored `.runtime/` contains only local prompt-free observations. It is neither
+a skill source nor part of generated human or agent views.
+
 Open the visible [Interaction Protocol hub](../../interaction-protocol/README.md)
 to follow its controls, runtime, API, migration record, tests, and general/math
 flows in the Obsidian graph.

@@ -84,6 +84,38 @@
     }
   },
   "profile": {
+    "controls": {
+      "depth": [
+        "brief",
+        "standard",
+        "detailed"
+      ],
+      "format": [
+        "auto",
+        "brief",
+        "code",
+        "equations",
+        "mermaid",
+        "steps",
+        "summary",
+        "table"
+      ],
+      "interaction": [
+        "general",
+        "math"
+      ],
+      "precedence": "current request > session preference > project default > global default > automatic detection",
+      "receipt": [
+        "auto",
+        "on",
+        "off"
+      ],
+      "skill": [
+        "auto",
+        "normal",
+        "<exact-id>"
+      ]
+    },
     "default_depth": "standard",
     "fallback": "normal",
     "math": {
@@ -96,6 +128,11 @@
       ],
       "shape": "result -> definitions -> equations -> reasoning -> context -> boundary"
     },
+    "project_context": {
+      "mode": "bounded-host-context",
+      "rule": "Use already available project instructions and user-named or directly relevant files; never scan the whole repository merely to route a skill."
+    },
+    "receipt": "auto",
     "response_contract": [
       "Give the result, answer, or main finding first.",
       "Add enough context to understand and use the result, but omit background that does not change it.",
@@ -1501,7 +1538,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "f1d983f1f60f316fc5b9647125c4bad42f6252cf43f45cdc8ac40154edc401cf",
+  "source_hash": "79d4b7ae211b7b976d898ac3f68445a329cbe23b29a78503f661e22aa4df8f48",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -1509,7 +1546,7 @@
     },
     {
       "path": "interaction-protocol/protocol.json",
-      "sha256": "76aee21468ac3bd7932dc5446780402af8f369f6b08eeadc549fceccb22a674f"
+      "sha256": "9ad9063fbd9079cc37c222b692726060dd794fe7990b600425afbe11eee43ffe"
     },
     {
       "path": "registry/activation.md",
@@ -1529,7 +1566,7 @@
     },
     {
       "path": "registry/interaction.md",
-      "sha256": "db4ad78c47a42cc3f7a0d7d1f749956e62609d6636f0902344cd0b9b5e8125c7"
+      "sha256": "1dc5c6a0b3e921ab1e44f9147f47ae8d06add94edf6471e4fc93a9bcaa5f8540"
     },
     {
       "path": "registry/theory.md",

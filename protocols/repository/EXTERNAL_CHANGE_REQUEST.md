@@ -22,6 +22,9 @@ configuration, Git state, or existing request files.
    python3 /Users/billabobz/skills_ai/scripts/create_change_request.py --stdin-json
    ```
 
+   The complete JSON packet is limited to 64 KiB. Oversized input is rejected
+   before a request file is created.
+
 4. Show the resulting request path and handoff summary. Do not stage or commit it
    from the external task.
 5. Open or launch a dedicated maintenance task only when the user has explicitly

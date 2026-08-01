@@ -26,7 +26,9 @@ flowchart TD
     X --> R
     R --> Q{"One clear enabled skill match?"}
     Q -- "Yes" --> S["Load one skill"]
-    Q -- "No" --> N["Continue normally"]
+    Q -- "No match" --> N["Continue normally"]
+    Q -- "Ambiguous" --> C["Ask one short choice"]
+    C --> S
     S --> A["Focused answer"]
     N --> A
 
@@ -58,11 +60,19 @@ flowchart TD
 
 1. General response guidance is small and does not consume the task-skill slot.
 2. Math is an equation-led response overlay, not a competing task skill.
-3. One clear match loads one task skill; no match or ambiguity continues normally.
+3. One clear match loads one task skill; no match continues normally; only a
+   material equal match asks one short last-resort choice.
 4. Codex and Claude share the Python router, manifest, interaction protocol, and skill sources.
 5. Routing and response style are guidance, not authority to make changes.
 6. Skills AI maintenance requests bypass ordinary task-skill matching and use
    the Git-aware consistency protocol.
+
+Useful per-request controls are `/skill auto|normal|<exact-id>`,
+`/interaction general|math`, `/format mermaid+summary`,
+`/depth brief|standard|detailed`, and `/receipt auto|on|off`. Fit 0–3 measures
+only route suitability. Prompt-free ambiguity metadata may be kept locally
+under ignored `.runtime/` state so recurring route pairs can be improved without
+storing your prompt or answer.
 
 To see the live registry without loading skill bodies, run:
 

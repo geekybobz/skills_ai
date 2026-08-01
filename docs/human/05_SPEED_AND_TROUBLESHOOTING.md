@@ -29,15 +29,24 @@ flowchart LR
     class WHOLE avoided
 ```
 
-The 2026-08-01 documentation-model benchmark measured 27/27 fixture accuracy,
-about `0.40 ms` core-routing p95, and about `36.9 ms` complete-process p95.
-The compact receipt measured 82 tokens at the median and 102 at the maximum.
+The 2026-08-01 controls-and-ambiguity benchmark measured 30/30 fixture accuracy,
+about `0.39 ms` core-routing p95, and about `37.1 ms` complete-process p95.
+The compact receipt measured 88 tokens at the median and 111 at the maximum.
 Process time includes
 starting Python, reading the request, loading the manifest, routing, writing JSON,
 and exiting. Values vary by machine and load; refresh them with:
 
 ```bash
 python3 scripts/benchmark_router.py --json
+```
+
+The new Fit, receipt, depth, and format fields add only small structured
+metadata. Routing still performs no project-wide scan. Ambiguity logging runs
+only for an equal top match, appends no prompt text, and stops at a 1 MiB cap.
+Summarize at most the latest 500 records with:
+
+```bash
+python3 scripts/analyze_ambiguities.py --limit 500
 ```
 
 Maintenance scans are separate from the hot routing path. They use Git to load
@@ -90,6 +99,7 @@ the hook first.
 | Task waits | Confirm one newline-framed request and the configured input deadline |
 | `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
 | Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
+| Repeated ambiguity | Run `analyze_ambiguities.py`; improve the recurring candidate pair without opening prompt history |
 | Maintenance request selects a task skill | Confirm `SKILLS_AI_MAINTENANCE` is returned before route scoring |
 | Consistency scan says `REVIEW` | Read its bounded AI questions and inspect only the listed impacted files |
 | Consistency scan says `BLOCK` | Resolve the deterministic missing role, consumer, generated output, link, or failed check |

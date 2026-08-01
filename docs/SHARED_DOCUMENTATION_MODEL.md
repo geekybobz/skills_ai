@@ -81,6 +81,11 @@ required documentation synchronization.
 - The declared theory submodule may be listed read-only; its content and Git
   history remain separately owned.
 - Generated files are written atomically and never edited as canonical sources.
+- Generated human guides are freshness-checked by the compiler; they are not
+  falsely required to receive a hand edit when regeneration is byte-identical.
+- The repository index includes tracked files and untracked additions that
+  already resolve to a declared role. Unknown scratch files and ignored
+  `.runtime/` observations do not make projections stale.
 - Codex owns Codex invocation and session cleanup. Claude owns its hook,
   installation, child lifecycle, managed-memory cleanup, and live acceptance.
 - Skill selection and documentation generation grant no write, network,
@@ -99,6 +104,11 @@ Any changed source that makes a projection stale blocks release. Mechanical
 freshness does not prove pedagogical quality, so the bounded semantic review
 must still check clarity, trigger meaning, privacy, platform ownership, and the
 user's approved intent.
+
+Local ambiguity observations are operational evidence, not documentation
+source. They stay prompt-free, ignored by Git and repository views, bounded to
+1 MiB, and may be summarized read-only with
+`python3 scripts/analyze_ambiguities.py`.
 
 ## Update rule
 

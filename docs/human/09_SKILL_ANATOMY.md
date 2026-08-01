@@ -37,6 +37,10 @@ flowchart LR
 | Prompt fixtures and tests | Check positive, negative, ambiguous, negated, and injection-resistant routing |
 
 The registry describes the skill but does not copy its instruction body.
+A `manual` task skill is never automatically selected: the request must name
+its exact id through `/skill <id>` or the equivalent exact “use the `<id>`
+skill” form. Output format and receipt controls change presentation without
+consuming this one task-skill slot.
 
 ## Multi-file packaged skill
 

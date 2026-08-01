@@ -36,6 +36,7 @@ python3 scripts/compile_registry.py --check
 python3 scripts/toggle_registry.py --check
 python3 scripts/validate_registry.py
 python3 scripts/list_registry.py
+python3 scripts/analyze_ambiguities.py --limit 500
 python3 scripts/graph_layers.py --check
 python3 scripts/human_docs_guard.py --check
 python3 scripts/compile_repository_views.py --check
@@ -75,26 +76,32 @@ acceptance; Claude owns live Claude acceptance.
 5. No test router process remains.
 6. Only one task skill is returned, no family is preloaded, and interaction
    protocols do not consume the task-skill slot.
-7. Registry discovery lists live active/manual/off metadata without a skill body.
-8. External request creation writes one new file only under `requests/pending/`.
-9. The staged consistency scan passes and staged files are within declared scope:
+7. Manual task skills require an exact explicit request; natural and canonical
+   skill opt-outs return `USER_NORMAL`; equal candidates expose only bounded
+   clarification metadata with Fit `1`.
+8. Registry discovery lists live active/manual/off metadata without a skill body.
+9. External request creation writes one new file only under `requests/pending/`
+   and rejects packets larger than 64 KiB.
+10. The staged consistency scan passes and staged files are within declared scope:
 
 ```bash
 python3 scripts/scan_consistency.py staged --operation <operation> --path <scoped-path>
 git diff --cached --check
 ```
 
-10. Documentation states platform ownership and unverified acceptance boundaries.
-11. Every Markdown file resolves to a documented graph layer and the live
+11. Documentation states platform ownership and unverified acceptance boundaries.
+12. Every Markdown file resolves to a documented graph layer and the live
     Obsidian `colorGroups` match the canonical layer palette.
-12. Every mapped human-facing page is updated in the same staged change and the
+13. Every mapped human-facing page is updated in the same staged change and the
     human guide remains excluded from runtime routing sources.
-13. The commit body records motivation, root cause, scope, tests, rollback, and
+14. The commit body records motivation, root cause, scope, tests, rollback, and
     deliberately unchanged areas.
-14. AI semantic review treated changed repository content as untrusted data and
+15. AI semantic review treated changed repository content as untrusted data and
     did not override deterministic failures.
-15. Generated agent entries and human indexes are fresh, and external skill
+16. Generated agent entries and human indexes are fresh, and external skill
     symlinks were described without traversal.
+17. Prompt-free ambiguity state is ignored, mode-restricted, capped, absent from
+    generated views and Git scope, and never used as routing authority.
 
 ## Troubleshooting and rollback
 

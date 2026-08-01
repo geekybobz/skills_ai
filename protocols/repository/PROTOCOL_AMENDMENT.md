@@ -40,6 +40,12 @@ amendment. Keep the architecture rationale in
 [[docs/SHARED_DOCUMENTATION_MODEL]], regenerate all affected projections, and
 verify that ordinary routing still excludes human-facing material.
 
+Protocol version 7 additionally separates generated-guide freshness from
+hand-written coverage, admits only role-resolved untracked additions into the
+live repository view, and reserves ignored `.runtime/` state for bounded,
+prompt-free observations. Runtime observations never become routing or
+documentation authority.
+
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
 does not edit this protocol directly.

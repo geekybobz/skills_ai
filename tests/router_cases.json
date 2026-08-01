@@ -41,6 +41,11 @@
     "skill": "deploy-to-vercel"
   },
   {
+    "name": "prohibited vercel deployment",
+    "query": "Explain why we should not deploy this project to Vercel",
+    "result": "NORMAL"
+  },
+  {
     "name": "pdf consumption is not design",
     "query": "Summarize this PDF document",
     "result": "NORMAL"
@@ -54,6 +59,17 @@
     "name": "normal override",
     "query": "skillhub normal and answer this question",
     "result": "NORMAL"
+  },
+  {
+    "name": "natural skill opt out",
+    "query": "Don't use any skill. Explain this code without jargon",
+    "result": "NORMAL"
+  },
+  {
+    "name": "canonical exact skill request",
+    "query": "/skill code-explainer Explain this code",
+    "result": "MATCH",
+    "skill": "code-explainer"
   },
   {
     "name": "dark mode specialist",

@@ -9,6 +9,10 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 Back: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md). Next:
 [maintaining skills](07_MAINTAINING_SKILLS.md).
 
+Protocol version 7 adds no graph node or color: the task receipt and ignored
+`.runtime/` ambiguity observations are runtime metadata, not Obsidian concepts.
+Canonical Markdown additions still require the normal layer and link checks.
+
 Color describes architectural depth, not topic. New skills reuse an existing
 layer color rather than receiving a new color.
 

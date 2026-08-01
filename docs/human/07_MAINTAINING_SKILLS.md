@@ -115,6 +115,12 @@ The scanner also lists preserved and ignored changes. For example, personal
 Obsidian display preferences can remain visible without being absorbed into a
 skill-maintenance commit.
 
+Prompt-free ambiguity evidence is also ignored repository state. Use
+`python3 scripts/analyze_ambiguities.py --limit 500` to find recurring candidate
+pairs, then change canonical triggers and regression fixtures through the same
+plan/changed/staged transaction. Never turn the observation file into routing
+authority or commit it.
+
 ## Code scan and AI review
 
 ```mermaid
@@ -195,7 +201,8 @@ python3 scripts/compile_repository_views.py --check
 
 Edit the common agent-entry source or the matching platform overlay, never the
 generated root entry. Edit registry and documentation contracts, never the
-generated live indexes. The consistency scanner blocks stale projections.
+generated live indexes. Generated guides are compiler-freshness outputs rather
+than mandatory hand edits. The consistency scanner blocks stale projections.
 
 The [repository atlas](08_REPOSITORY_ATLAS.md) and
 [skill anatomy](09_SKILL_ANATOMY.md) teach the structure progressively before

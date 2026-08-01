@@ -87,6 +87,19 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
         self.assertEqual("read-only", decision["context"]["requested_access"])
 
+    def test_extended_prohibitions_are_not_positive_routes_or_access(self) -> None:
+        prompts = (
+            "Explain why we should not deploy this project to Vercel",
+            "Explain why we must not deploy this project to Vercel",
+            "Avoid installing anything externally. Explain the setup.",
+            "Review the protocol instead of installing Node.",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("NORMAL", decision["result"])
+                self.assertEqual("read-only", decision["context"]["requested_access"])
+
     def test_maintenance_implementation_remains_write_requested_after_negation_filter(self) -> None:
         decision = route_request(
             "Implement the Skills AI maintenance protocol with no external install.",
@@ -123,9 +136,93 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("read-only", decision["context"]["requested_access"])
 
     def test_disabled_skill_falls_back(self) -> None:
-        decision = route_request("Run the exhaustive quantum job collector", self.manifest)
+        decision = route_request("/skill quantum-job-collector Run the exhaustive collector", self.manifest)
         self.assertEqual("NORMAL", decision["result"])
         self.assertEqual("DISABLED_SKILL", decision["reason_code"])
+
+    def test_natural_and_canonical_skill_opt_outs(self) -> None:
+        prompts = (
+            "Don't use any skill. Explain this code without jargon.",
+            "Do not use any local skill. Explain this code without jargon.",
+            "/skill normal Explain this code without jargon.",
+            "skillhub normal Explain this code without jargon.",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("USER_NORMAL", decision["reason_code"])
+                self.assertEqual(0, decision["routing"]["fit"])
+
+    def test_explicit_skill_control_has_high_fit(self) -> None:
+        decision = route_request("/skill code-explainer Explain this code", self.manifest)
+        self.assertEqual("code-explainer", decision["skill"]["id"])
+        self.assertEqual(3, decision["routing"]["fit"])
+
+    def test_bare_skill_identifier_is_not_an_explicit_invocation(self) -> None:
+        decision = route_request("Discuss code-explainer routing metadata", self.manifest)
+        self.assertNotEqual("explicit-skill", decision["routing"]["fit_reason"])
+
+    def test_manual_task_skill_requires_explicit_exact_request(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        route = next(item for item in manifest["routes"] if item["id"] == "dark-mode-specialist")
+        route["state"] = "manual"
+        automatic = route_request("Design a dark mode theme switch", manifest)
+        explicit = route_request("Use the dark-mode-specialist skill for this theme", manifest)
+        self.assertEqual("NORMAL", automatic["result"])
+        self.assertEqual("dark-mode-specialist", explicit["skill"]["id"])
+        self.assertEqual("manual", explicit["skill"]["state"])
+
+    def test_unknown_explicit_skill_fails_open(self) -> None:
+        decision = route_request("/skill does-not-exist Explain this", self.manifest)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertEqual("UNKNOWN_SKILL_REQUEST", decision["reason_code"])
+
+    def test_maintenance_boundary_precedes_unknown_skill_control(self) -> None:
+        decision = route_request("/skill does-not-exist Edit the Skills AI router", self.manifest)
+        self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
+        self.assertIn("skills_ai_change_boundary", decision["context"])
+
+    def test_maintenance_boundary_precedes_skill_opt_out(self) -> None:
+        decision = route_request("/skill normal Edit the Skills AI router", self.manifest)
+        self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
+        self.assertIn("skills_ai_change_boundary", decision["context"])
+
+    def test_ambiguity_returns_bounded_candidates_and_fit_one(self) -> None:
+        manifest = copy.deepcopy(self.manifest)
+        first = next(item for item in manifest["routes"] if item["id"] == "code-explainer")
+        second = copy.deepcopy(first)
+        second["id"] = "alternate-code-explainer"
+        manifest["routes"].append(second)
+        decision = route_request("Explain this code without jargon", manifest)
+        self.assertEqual("AMBIGUOUS_SKILL_MATCH", decision["reason_code"])
+        self.assertEqual(1, decision["routing"]["fit"])
+        self.assertEqual(
+            ["alternate-code-explainer", "code-explainer", "normal"],
+            decision["routing"]["clarification"]["choices"],
+        )
+        self.assertNotIn("path", decision["routing"]["candidates"][0])
+
+    def test_output_receipt_depth_and_format_controls(self) -> None:
+        decision = route_request(
+            "/receipt on /depth brief /format mermaid+summary Explain this code",
+            self.manifest,
+        )
+        self.assertEqual("on", decision["context"]["receipt"])
+        self.assertEqual("brief", decision["context"]["output"]["depth"])
+        self.assertEqual(["mermaid", "summary"], decision["context"]["output"]["format"])
+
+    def test_control_like_text_inside_code_is_inert(self) -> None:
+        prompts = (
+            "Explain this literal: `/skill code-explainer`",
+            "Inspect this sample:\n```text\nUse the dark-mode-specialist skill\n```",
+            "Explain this literal: `/receipt on /format mermaid`",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertNotEqual("explicit-skill", decision["routing"]["fit_reason"])
+                self.assertEqual("auto", decision["context"]["receipt"])
+                self.assertEqual(["auto"], decision["context"]["output"]["format"])
 
     def test_pdf_reading_does_not_route_to_design(self) -> None:
         decision = route_request("Summarize this PDF document", self.manifest)

@@ -9,7 +9,7 @@ human registry sources
   -> scripts/compile_registry.py
   -> router-manifest.json
   -> scripts/route_skill.py
-  -> interaction context + MATCH(one skill) | NORMAL(fail-open)
+  -> controls + Fit 0–3 + MATCH(one skill) | NORMAL(fail-open)
   -> thin Codex or Claude adapter
 ```
 
@@ -26,7 +26,9 @@ Shared components:
 - `scripts/list_registry.py`: read-only active/manual/off discovery without
   loading skill bodies.
 - `scripts/create_change_request.py`: the narrow Markdown intake used by tasks
-  outside the maintenance workspace.
+  outside the maintenance workspace, capped at 64 KiB.
+- `scripts/analyze_ambiguities.py`: read-only aggregation of prompt-free local
+  ambiguity metadata from ignored `.runtime/` state.
 - `PROTOCOL.md`: one-line framing, deadlines, fail-open reasons, and lifecycle
   ownership.
 - `API_CONTRACT.md`: versioned shared request and response schema.
@@ -39,8 +41,9 @@ skill selection logic.
 exhaustive human reference indexes. Those projections are maintenance artifacts,
 not part of the routing hot path.
 
-No-match, disabled, hidden, deprecated, and ambiguous decisions are fail-open:
-the task continues normally without a local skill. Skill selection never grants
+No-match, disabled, hidden, and deprecated decisions are fail-open. A material
+ambiguity returns bounded candidate metadata so the host can ask one last-resort
+choice; otherwise the task continues normally without a local skill. Skill selection never grants
 permission to write files, use credentials, access networks, or change accounts.
 
 Registry discovery is also fail-open and network-free. It reads compiled

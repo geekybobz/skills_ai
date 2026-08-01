@@ -45,6 +45,11 @@ or destructive-action boundary.
 Changes anywhere under `interaction-protocol/` are mapped canonical changes:
 the routing guide pages and visible protocol hub must remain synchronized.
 
+External change-request packets are capped at 64 KiB before any Markdown is
+written. Local ambiguity observations are different: they contain no prompt,
+answer, path, or file content; stay under ignored `.runtime/` with restrictive
+permissions; stop growing at 1 MiB; and never grant authority or affect routing.
+
 ## Keeping this human guide current
 
 Relevant canonical sources are mapped to the human pages that explain them.
@@ -72,6 +77,10 @@ flowchart LR
 The guard proves that documentation was changed alongside mapped behavior. It
 cannot prove that prose is conceptually perfect, so human review remains the
 final quality gate.
+
+Generated `_LIVE_` pages are checked for exact compiler freshness rather than
+being falsely required to receive a manual edit when regeneration produces the
+same bytes.
 
 The guide also enforces small Mermaid diagrams. Oversized left-to-right flows
 must be changed to top-down form or split into focused diagrams before release.

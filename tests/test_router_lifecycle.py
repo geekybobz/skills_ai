@@ -12,11 +12,15 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
 ROUTER = ROOT / "scripts" / "route_skill.py"
 CLAUDE_ADAPTER = ROOT / "adapters" / "claude" / "skills-ai-router.js"
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from route_skill import record_ambiguity  # noqa: E402
 
 
 class RouterLifecycleTests(unittest.TestCase):
@@ -130,6 +134,20 @@ class RouterLifecycleTests(unittest.TestCase):
         self.assertEqual("INVALID_INPUT", decision["reason_code"])
         self.assertNotIn("secret", completed.stderr)
 
+    def test_json_scalars_are_not_routed_as_raw_text(self) -> None:
+        for payload in ('"Design a dark mode theme switch"', "42", "true", "null"):
+            with self.subTest(payload=payload):
+                completed = subprocess.run(
+                    [sys.executable, str(ROUTER)],
+                    input=payload + "\n",
+                    text=True,
+                    capture_output=True,
+                    timeout=2,
+                    check=False,
+                )
+                self.assertEqual("INVALID_INPUT", json.loads(completed.stdout)["reason_code"])
+                self.assertNotIn("dark mode", completed.stderr.lower())
+
     def test_strict_mode_returns_nonzero_after_receipt(self) -> None:
         completed = subprocess.run(
             [sys.executable, str(ROUTER), "--strict"],
@@ -165,6 +183,87 @@ class RouterLifecycleTests(unittest.TestCase):
         decision = json.loads(completed.stdout)
         self.assertEqual("MANIFEST_UNAVAILABLE", decision["reason_code"])
         self.assertEqual("test-1", decision["request_id"])
+        self.assertNotIn("skills-ai-missing-manifest", completed.stderr)
+
+    def test_ambiguity_log_contains_metadata_but_not_prompt_or_paths(self) -> None:
+        decision = {
+            "reason_code": "AMBIGUOUS_SKILL_MATCH",
+            "routing": {
+                "fit": 1,
+                "candidates": [
+                    {"id": "one", "family": "test", "purpose": "first"},
+                    {"id": "two", "family": "test", "purpose": "second"},
+                ],
+            },
+            "context": {"operation": "explain", "domain": "software"},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "ambiguity.jsonl"
+            with patch("route_skill.AMBIGUITY_LOG", log):
+                record_ambiguity(decision, client="codex")
+            text = log.read_text(encoding="utf-8")
+            event = json.loads(text)
+            self.assertEqual(["one", "two"], event["candidates"])
+            self.assertNotIn("prompt", text)
+            self.assertNotIn(str(ROOT), text)
+
+    @unittest.skipIf(os.name == "nt", "symlink and mode behavior is POSIX-specific")
+    def test_ambiguity_log_refuses_symlink_target(self) -> None:
+        decision = {
+            "reason_code": "AMBIGUOUS_SKILL_MATCH",
+            "routing": {"fit": 1, "candidates": [{"id": "one"}, {"id": "two"}]},
+            "context": {"operation": "explain", "domain": "software"},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            outside = root / "outside.jsonl"
+            outside.write_text("preserve\n", encoding="utf-8")
+            link = root / "ambiguity.jsonl"
+            link.symlink_to(outside)
+            with patch("route_skill.AMBIGUITY_LOG", link):
+                record_ambiguity(decision, client="codex")
+            self.assertEqual("preserve\n", outside.read_text(encoding="utf-8"))
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_claude_adapter_renders_last_resort_ambiguity_choice(self) -> None:
+        decision = {
+            "result": "NORMAL",
+            "reason_code": "AMBIGUOUS_SKILL_MATCH",
+            "routing": {
+                "fit": 1,
+                "fit_reason": "equal-top-score",
+                "candidates": [
+                    {"id": "one", "purpose": "first purpose"},
+                    {"id": "two", "purpose": "second purpose"},
+                ],
+                "clarification": {"required": True},
+            },
+            "context": {
+                "operation": "explain",
+                "domain": "software",
+                "requested_access": "read-only",
+                "interaction": {"mode": "general", "reason": "default-general"},
+                "output": {"voice": "compact-professional", "shape": "answer", "format": ["auto"]},
+                "receipt": "auto",
+                "project_context": "bounded-host-context",
+                "response_contract": [],
+            },
+        }
+        script = (
+            "const a=require(process.argv[1]);"
+            "const d=JSON.parse(process.argv[2]);"
+            "process.stdout.write(a.contextText(d,process.argv[3]));"
+        )
+        completed = subprocess.run(
+            ["node", "-e", script, str(CLAUDE_ADAPTER), json.dumps(decision), str(ROOT)],
+            text=True,
+            capture_output=True,
+            timeout=2,
+            check=True,
+        )
+        self.assertIn("Ambiguity option 1: one", completed.stdout)
+        self.assertIn("plus normal", completed.stdout)
+        self.assertNotIn("Selected local skill", completed.stdout)
 
     def test_selected_skill_cannot_escape_repository(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -274,7 +373,9 @@ class RouterLifecycleTests(unittest.TestCase):
         header, _, remainder = context.partition("\nSelected local skill: ")
         self.assertTrue(remainder, "a MATCH must inject exactly one selected skill")
         self.assertEqual([], [line for line in header.splitlines() if not line.strip()])
-        self.assertTrue(header.startswith("Skills AI shared response context:\noperation="))
+        self.assertTrue(header.startswith("Skills AI shared response context:\nroute=match\n"))
+        self.assertIn("\nfit=2/3\n", header)
+        self.assertIn("\nreceipt=auto\n", header)
         self.assertTrue(remainder.startswith("dark-mode-specialist\n\n"))
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required")

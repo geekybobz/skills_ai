@@ -78,8 +78,14 @@ def required_guides(changed_paths: Iterable[str], config: dict[str, Any]) -> dic
 
 def coverage_errors(changed_paths: Iterable[str], config: dict[str, Any]) -> list[str]:
     changed = {_normalized_relative(path) for path in changed_paths}
+    generated = {_normalized_relative(path) for path in config.get("generated_guides", [])}
     errors: list[str] = []
     for guide, rule_names in required_guides(changed, config).items():
+        # Generated guides are checked byte-for-byte by the repository-view
+        # compiler. Requiring a hand change here creates an impossible cycle
+        # when regeneration correctly produces identical output.
+        if guide in generated:
+            continue
         if guide not in changed:
             errors.append(
                 f"mapped human page not changed: {guide} "

@@ -28,6 +28,8 @@ embedded query newlines are JSON escapes.
 context. `NORMAL` contains no skill body or path unless required for a safe
 diagnostic. Both results contain the general, math, or host-default interaction
 mode. Interaction protocols never consume the task-skill slot.
+Every result also contains ordinal `routing.fit` from 0 to 3 and structured
+receipt/output controls. Fit describes route suitability, not answer accuracy.
 An explicit registry-discovery question returns `NORMAL / REGISTRY_STATUS` plus
 live metadata; it never loads a skill body.
 
@@ -44,6 +46,10 @@ live metadata; it never loads a skill body.
     "state": "active",
     "estimated_tokens": 1200
   },
+  "routing": {
+    "fit": 2,
+    "fit_reason": "unique-context-match"
+  },
   "context": {
     "operation": "derive",
     "domain": "theory",
@@ -55,8 +61,11 @@ live metadata; it never loads a skill body.
     "output": {
       "voice": "compact-professional",
       "depth": "standard",
-      "shape": "result -> definitions -> equations -> reasoning -> context -> boundary"
+      "shape": "result -> definitions -> equations -> reasoning -> context -> boundary",
+      "format": ["auto"]
     },
+    "receipt": "auto",
+    "project_context": "bounded-host-context",
     "response_contract": []
   },
   "router_ms": 0.6
@@ -65,6 +74,35 @@ live metadata; it never loads a skill body.
 
 The adapter validates a returned skill path against the Skills AI root before
 reading it. The original prompt is never present in the response.
+
+Per-request controls are `/skill auto|normal|<exact-id>`,
+`/interaction general|math`, `/format <known+forms>`,
+`/depth brief|standard|detailed`, and `/receipt auto|on|off`. Controls stay in
+`query`; the JSON request envelope does not duplicate them.
+
+`NORMAL / AMBIGUOUS_SKILL_MATCH` adds bounded public metadata:
+
+```json
+{
+  "result": "NORMAL",
+  "reason_code": "AMBIGUOUS_SKILL_MATCH",
+  "routing": {
+    "fit": 1,
+    "fit_reason": "equal-top-score",
+    "candidates": [
+      {"id": "code-explainer", "family": "build-ops", "purpose": "explain code"},
+      {"id": "debug-helper", "family": "build-ops", "purpose": "debug a failure"}
+    ],
+    "clarification": {
+      "required": true,
+      "choices": ["code-explainer", "debug-helper", "normal"]
+    }
+  }
+}
+```
+
+Candidate paths, bodies, and the original prompt are omitted. The host asks one
+short choice, reroutes with the chosen exact id, and resumes the original task.
 
 ## Registry status response
 
@@ -88,6 +126,10 @@ Hidden and deprecated identifiers are omitted from normal discovery. An
 explicit maintenance CLI request may include them. System and plugin skills are
 separate host-managed namespaces and are not represented here.
 
+Prompt-free ambiguity metadata is local ignored state rather than API history.
+`scripts/analyze_ambiguities.py` reads at most the requested tail of that JSONL
+file and performs no mutation or network access.
+
 `NORMAL / SKILLS_AI_MAINTENANCE` identifies an add, edit, update, move, delete,
 scan, validation, or governance request targeting Skills AI itself. It prevents
 maintenance vocabulary from activating an unrelated task skill. Negated action
@@ -95,7 +137,8 @@ phrases are excluded from positive access and skill-trigger evidence.
 
 ## External change-request process
 
-`scripts/create_change_request.py --stdin-json` accepts a local JSON object and
+`scripts/create_change_request.py --stdin-json` accepts a local JSON object of
+at most 64 KiB and
 creates one Markdown file under `requests/pending/`. It is not a network API and
 does not edit, stage, commit, or launch a maintenance task. Its response returns
 the request id, path, workspace, next action, and a platform-neutral handoff

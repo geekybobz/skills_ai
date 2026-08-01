@@ -16,6 +16,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 VALID_CLIENTS = {"codex", "claude", "other"}
+MAX_REQUEST_PACKET_BYTES = 64 * 1024
 
 
 class ChangeRequestError(RuntimeError):
@@ -92,6 +93,12 @@ def create_change_request(
     now: dt.datetime | None = None,
     token: str | None = None,
 ) -> dict[str, str]:
+    try:
+        packet_size = len(json.dumps(payload, ensure_ascii=False).encode("utf-8"))
+    except (TypeError, ValueError) as exc:
+        raise ChangeRequestError("request packet must be JSON serializable") from exc
+    if packet_size > MAX_REQUEST_PACKET_BYTES:
+        raise ChangeRequestError(f"request packet exceeds {MAX_REQUEST_PACKET_BYTES} bytes")
     root = root.resolve()
     title = required_text(payload, "title")
     if "\n" in title or "\r" in title or len(title) > 160:
@@ -222,7 +229,10 @@ def create_change_request(
 def cli_payload(args: argparse.Namespace) -> dict[str, Any]:
     if args.stdin_json:
         try:
-            value = json.load(sys.stdin)
+            raw = sys.stdin.buffer.read(MAX_REQUEST_PACKET_BYTES + 1)
+            if len(raw) > MAX_REQUEST_PACKET_BYTES:
+                raise ChangeRequestError(f"request packet exceeds {MAX_REQUEST_PACKET_BYTES} bytes")
+            value = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise ChangeRequestError(f"invalid JSON input: {exc.msg}") from exc
         if not isinstance(value, dict):

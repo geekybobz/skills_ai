@@ -56,11 +56,11 @@
         "scripts/validate_registry.py",
         "runtime/router-manifest.json"
       ],
-            "guides": [
-                "docs/human/03_SKILLS_AND_CONTROLS.md",
-                "docs/human/09_SKILL_ANATOMY.md",
-                "docs/human/_LIVE_SKILL_CATALOG.md"
-            ]
+      "guides": [
+        "docs/human/03_SKILLS_AND_CONTROLS.md",
+        "docs/human/09_SKILL_ANATOMY.md",
+        "docs/human/_LIVE_SKILL_CATALOG.md"
+      ]
     },
     {
       "name": "safety-and-governance",
@@ -80,29 +80,30 @@
         "docs/human/07_MAINTAINING_SKILLS.md"
       ]
     },
-        {
-            "name": "documentation-model",
-            "sources": [
-                "protocols/repository/DOCUMENTATION.json",
-                "protocols/repository/CONTRACT.json",
-                "runtime/AGENT_ENTRY_SHARED.md",
-                "adapters/codex/ENTRY.md",
-                "adapters/claude/ENTRY.md",
-                "scripts/compile_repository_views.py"
-            ],
-            "guides": [
-                "README.md",
-                "docs/human/02_FOLDER_AND_PLATFORMS.md",
-                "docs/human/08_REPOSITORY_ATLAS.md",
-                "docs/human/09_SKILL_ANATOMY.md",
-                "docs/human/_LIVE_REPOSITORY_INDEX.md",
-                "docs/human/_LIVE_SKILL_CATALOG.md"
-            ]
-        },
-        {
-            "name": "performance-and-lifecycle",
+    {
+      "name": "documentation-model",
+      "sources": [
+        "protocols/repository/DOCUMENTATION.json",
+        "protocols/repository/CONTRACT.json",
+        "runtime/AGENT_ENTRY_SHARED.md",
+        "adapters/codex/ENTRY.md",
+        "adapters/claude/ENTRY.md",
+        "scripts/compile_repository_views.py"
+      ],
+      "guides": [
+        "README.md",
+        "docs/human/02_FOLDER_AND_PLATFORMS.md",
+        "docs/human/08_REPOSITORY_ATLAS.md",
+        "docs/human/09_SKILL_ANATOMY.md",
+        "docs/human/_LIVE_REPOSITORY_INDEX.md",
+        "docs/human/_LIVE_SKILL_CATALOG.md"
+      ]
+    },
+    {
+      "name": "performance-and-lifecycle",
       "sources": [
         "scripts/benchmark_router.py",
+        "scripts/analyze_ambiguities.py",
         "tests/test_router_lifecycle.py"
       ],
       "guides": [

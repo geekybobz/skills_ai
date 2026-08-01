@@ -76,6 +76,13 @@ class ChangeRequestTests(unittest.TestCase):
             with self.assertRaises(ChangeRequestError):
                 create_change_request(payload, root=Path(directory), token="abcd1234")
 
+    def test_refuses_oversized_request_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            payload = self.payload()
+            payload["original_request"] = "x" * 70_000
+            with self.assertRaises(ChangeRequestError):
+                create_change_request(payload, root=Path(directory), token="abcd1234")
+
     def test_stdin_json_cli_writes_only_to_configured_repository(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             source = (
