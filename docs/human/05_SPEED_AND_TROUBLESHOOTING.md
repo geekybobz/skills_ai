@@ -69,6 +69,13 @@ flowchart TD
     class TIMEOUT,EXIT,CLOSED safe
 ```
 
+The Claude hook spends one budget across the whole run rather than one timer per
+phase. A timer bounds the wait for host input; after input ends the Python child
+and the single skill-body read are bounded by subtracting elapsed time from the
+same budget, because a blocking call cannot be interrupted by a timer. Slow host
+input therefore shortens the child instead of pushing the hook past the deadline
+Claude settings declare.
+
 ## Quick diagnosis
 
 | Symptom | Check |
@@ -83,6 +90,7 @@ flowchart TD
 | Design route on ordinary search | Confirm the explicit design-request gate and its negative corpus |
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
 | `ADAPTER_INVALID_INPUT` | The host sent the hook a payload that is not one JSON object; the shared router was never reached |
+| `ADAPTER_DEADLINE_EXCEEDED` | The whole-run budget ran out before a reply could be written; raise `SKILLS_AI_ADAPTER_TIMEOUT_MS` with the hook timeout in Claude settings |
 | `ROUTER_INVALID_OUTPUT` | The shared router replied with something other than one JSON decision; recompile and validate the manifest |
 | Router process remains | Terminate and reap only the exact recorded process/session |
 | Installed adapter is stale | Dry-run, inspect, then reinstall with platform-owner approval |

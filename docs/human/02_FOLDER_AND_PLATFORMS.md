@@ -68,6 +68,10 @@ the failing layer: `ADAPTER_INVALID_INPUT` for a malformed host payload,
 `ROUTER_INVALID_OUTPUT` for an unusable router reply. Neither ever contains the
 prompt, the skill body, or the child's own error text.
 
+That hook also holds a single budget for the whole run, so its Python child
+never outlives the deadline Claude settings declare, however slowly host input
+arrives.
+
 Repository maintenance is also shared: both platforms read the same
 `CONTRACT.json` and `scan_consistency.py` receipt. The scanner validates shared
 behavior; each platform still certifies only its own live adapter lifecycle.

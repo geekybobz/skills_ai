@@ -11,13 +11,22 @@ const { execFileSync } = require('child_process');
 
 const MAX_HOOK_INPUT_BYTES = 1024 * 1024;
 const MAX_ROUTER_OUTPUT_BYTES = 1024 * 1024;
+const MAX_SKILL_BODY_BYTES = 1024 * 1024;
 const DEFAULT_CHILD_TIMEOUT_MS = 1000;
 const DEFAULT_ADAPTER_TIMEOUT_MS = 2500;
+// Reserved inside the whole-run budget for resolving and reading one skill
+// body and writing the reply after the child returns.
+const DEADLINE_RESERVE_MS = 250;
 
 
 function argument(name) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
+}
+
+
+function elapsedMs(started) {
+  return Number(process.hrtime.bigint() - started) / 1e6;
 }
 
 
@@ -41,7 +50,7 @@ class AdapterError extends Error {
 
 
 function diagnostic(reason, started) {
-  const elapsed = Math.round(Number(process.hrtime.bigint() - started) / 1e6);
+  const elapsed = Math.round(elapsedMs(started));
   process.stderr.write(`[skills-ai-router] fail-open adapter=claude reason=${reason} elapsed_ms=${elapsed}\n`);
 }
 
@@ -110,6 +119,10 @@ function contextText(decision, root) {
   if (skillPath !== rootPath && !skillPath.startsWith(rootPath + path.sep)) {
     throw new Error('selected skill escaped the Skills AI root through a symlink');
   }
+  const { size } = fs.statSync(skillPath);
+  if (size > MAX_SKILL_BODY_BYTES) {
+    throw new AdapterError('ADAPTER_SKILL_TOO_LARGE', 'selected skill body exceeds the injection limit');
+  }
   const body = stripFrontmatter(fs.readFileSync(skillPath, 'utf8'));
   // The context header stays one key per line on every path; only the skill
   // body is separated by a blank line.
@@ -117,7 +130,9 @@ function contextText(decision, root) {
 }
 
 
-function runAdapter(input, started) {
+function runAdapter(input, started, budgetMs) {
+  const budget = positiveInteger(budgetMs, DEFAULT_ADAPTER_TIMEOUT_MS);
+  const remaining = () => budget - elapsedMs(started);
   const data = parseHookInput(input);
   const prompt = typeof data.prompt === 'string' ? data.prompt : '';
   if (!prompt.trim()) return;
@@ -125,7 +140,17 @@ function runAdapter(input, started) {
   if (!root) throw new Error('Skills AI root is required');
   const python = process.env.SKILLS_AI_PYTHON || 'python3';
   const router = path.join(root, 'scripts', 'route_skill.py');
-  const childTimeout = positiveInteger(process.env.SKILLS_AI_ROUTER_TIMEOUT_MS, DEFAULT_CHILD_TIMEOUT_MS);
+  // The child budget is whatever is left of the whole-run budget after the
+  // reserve, so slow host input shortens the child instead of overrunning the
+  // hook deadline. A blocking child cannot be interrupted by a JS timer.
+  const configuredChildTimeout = positiveInteger(
+    process.env.SKILLS_AI_ROUTER_TIMEOUT_MS,
+    DEFAULT_CHILD_TIMEOUT_MS,
+  );
+  const childBudget = Math.floor(remaining() - DEADLINE_RESERVE_MS);
+  if (childBudget < 1) {
+    throw new AdapterError('ADAPTER_DEADLINE_EXCEEDED', 'no run budget remained for the shared router');
+  }
   const request = JSON.stringify({
     protocol: 'skills-ai/1',
     client: 'claude',
@@ -134,17 +159,23 @@ function runAdapter(input, started) {
   const output = execFileSync(python, [router], {
     input: request,
     encoding: 'utf8',
-    timeout: childTimeout,
+    timeout: Math.min(configuredChildTimeout, childBudget),
     killSignal: 'SIGTERM',
     maxBuffer: MAX_ROUTER_OUTPUT_BYTES,
     stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
   });
   const decision = JSON.parse(output);
+  const additionalContext = contextText(decision, root);
+  // A stalled skill-body read cannot be pre-empted, so re-check the budget
+  // rather than injecting context the host has already stopped waiting for.
+  if (remaining() <= 0) {
+    throw new AdapterError('ADAPTER_DEADLINE_EXCEEDED', 'run budget expired before the reply was written');
+  }
   process.stdout.write(JSON.stringify({
     hookSpecificOutput: {
       hookEventName: 'UserPromptSubmit',
-      additionalContext: contextText(decision, root),
+      additionalContext,
     },
   }));
 }
@@ -165,6 +196,9 @@ if (require.main === module) {
     process.exit(0);
   };
 
+  // One budget covers the whole run. The timer can only fire while the event
+  // loop is free, so it bounds the input phase; runAdapter enforces the same
+  // deadline around its blocking child and skill-body read.
   const watchdog = setTimeout(() => failOpen('ADAPTER_INPUT_TIMEOUT'), adapterTimeout);
   watchdog.unref();
 
@@ -181,7 +215,7 @@ if (require.main === module) {
     if (finished) return;
     clearTimeout(watchdog);
     try {
-      runAdapter(input, started);
+      runAdapter(input, started, adapterTimeout);
       finished = true;
     } catch (error) {
       finished = true;

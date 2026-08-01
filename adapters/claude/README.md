@@ -30,10 +30,22 @@ The installer:
 - supports `CLAUDE_CONFIG_DIR` or `--config-dir`.
 
 The hook is the Claude bootstrap. It sends a newline-framed request to the
-shared router, gives the Python child a 1-second deadline inside the 3-second
-Claude hook deadline, suppresses child stderr, resolves selected skill paths
-through real paths, and fails open with prompt-free diagnostics. Claude does
-not own or certify Codex-specific invocation and terminal cleanup.
+shared router, suppresses child stderr, resolves selected skill paths through
+real paths, and fails open with prompt-free diagnostics. Claude does not own or
+certify Codex-specific invocation and terminal cleanup.
+
+One budget covers the whole hook run: `SKILLS_AI_ADAPTER_TIMEOUT_MS`, default
+2,500 ms, inside the `"timeout": 3` seconds the installer writes into Claude
+settings. While the adapter waits for host input, a timer enforces that budget
+and returns `ADAPTER_INPUT_TIMEOUT`. Once input ends, the blocking phases cannot
+be interrupted by a timer, so the adapter enforces the same deadline by
+arithmetic instead: the Python child receives whichever is smaller,
+`SKILLS_AI_ROUTER_TIMEOUT_MS` (default 1,000 ms) or the budget left after a
+250 ms reserve for reading one skill body and writing the reply. Slow host input
+therefore shortens the child rather than overrunning the hook deadline. A
+selected skill body over 1 MiB, or a run whose budget expires before the reply
+is written, fails open with `ADAPTER_SKILL_TOO_LARGE` or
+`ADAPTER_DEADLINE_EXCEEDED`.
 
 This repository tests the hook protocol and shared routing core. A live Claude
 session test remains a Claude-side acceptance step.
