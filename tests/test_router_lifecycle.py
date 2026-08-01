@@ -400,6 +400,83 @@ class RouterLifecycleTests(unittest.TestCase):
             with self.assertRaises(ProcessLookupError):
                 os.kill(child_pid, 0)
 
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    @unittest.skipIf(os.name == "nt", "process groups are POSIX-specific")
+    def test_claude_child_timeout_reaps_a_shim_grandchild(self) -> None:
+        """An interpreter shim must not leave its real process behind."""
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            shim = temp / "shim-python"
+            pid_path = temp / "grandchild.pid"
+            inner = temp / "inner.py"
+            inner.write_text(
+                "import os, sys, time\n"
+                "open(sys.argv[1], 'w').write(str(os.getpid()))\n"
+                "time.sleep(10)\n",
+                encoding="utf-8",
+            )
+            shim.write_text(
+                f'#!/bin/sh\nexec_target="{sys.executable}"\n'
+                f'"$exec_target" "{inner}" "{pid_path}" &\nwait\n',
+                encoding="utf-8",
+            )
+            shim.chmod(0o755)
+            env = {
+                **os.environ,
+                "SKILLS_AI_PYTHON": str(shim),
+                "SKILLS_AI_ROUTER_TIMEOUT_MS": "700",
+                "SKILLS_AI_ADAPTER_TIMEOUT_MS": "2500",
+            }
+            completed = subprocess.run(
+                ["node", str(CLAUDE_ADAPTER), "--root", str(ROOT)],
+                input=json.dumps({"prompt": "private prompt must not appear"}),
+                text=True,
+                capture_output=True,
+                env=env,
+                timeout=10,
+                check=False,
+            )
+            self.assertEqual(0, completed.returncode)
+            self.assertIn("reason=ADAPTER_TIMEOUT", completed.stderr)
+            self.assertNotIn("private prompt", completed.stderr)
+            grandchild = int(pid_path.read_text(encoding="utf-8"))
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                try:
+                    os.kill(grandchild, 0)
+                except ProcessLookupError:
+                    break
+                time.sleep(0.05)
+            with self.assertRaises(ProcessLookupError):
+                os.kill(grandchild, 0)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    @unittest.skipIf(os.name == "nt", "POSIX signal behavior")
+    def test_claude_adapter_reports_host_cancellation(self) -> None:
+        env = {**os.environ, "SKILLS_AI_ADAPTER_TIMEOUT_MS": "30000"}
+        process = subprocess.Popen(
+            ["node", str(CLAUDE_ADAPTER), "--root", str(ROOT)],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            env=env,
+        )
+        time.sleep(0.3)
+        started = time.monotonic()
+        process.send_signal(signal.SIGTERM)
+        process.wait(timeout=3)
+        elapsed = time.monotonic() - started
+        stdout = process.stdout.read() if process.stdout else ""
+        stderr = process.stderr.read() if process.stderr else ""
+        for handle in (process.stdin, process.stdout, process.stderr):
+            if handle:
+                handle.close()
+        self.assertEqual(0, process.returncode)
+        self.assertEqual("", stdout)
+        self.assertIn("reason=ADAPTER_CANCELLED", stderr)
+        self.assertLess(elapsed, 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

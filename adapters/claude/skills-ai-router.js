@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
+const { spawnSync } = require('child_process');
 
 
 const MAX_HOOK_INPUT_BYTES = 1024 * 1024;
@@ -73,6 +73,41 @@ function parseHookInput(input) {
   } catch (error) {
     throw new AdapterError('ADAPTER_INVALID_INPUT', 'hook payload is not one JSON object');
   }
+}
+
+
+function terminateGroup(pid) {
+  // The child leads its own process group, so this also reaps anything an
+  // interpreter shim left behind. ESRCH means the group is already gone.
+  if (!pid) return;
+  try {
+    process.kill(-pid, 'SIGKILL');
+  } catch (error) {
+    if (!error || error.code !== 'ESRCH') throw error;
+  }
+}
+
+
+function runRouter(python, args, request, timeout) {
+  const result = spawnSync(python, args, {
+    input: request,
+    encoding: 'utf8',
+    timeout,
+    killSignal: 'SIGTERM',
+    maxBuffer: MAX_ROUTER_OUTPUT_BYTES,
+    stdio: ['pipe', 'pipe', 'pipe'],
+    detached: true,
+    env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
+  });
+  if (result.error) {
+    terminateGroup(result.pid);
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    terminateGroup(result.pid);
+    throw new AdapterError('ADAPTER_ERROR', 'the shared router exited without a decision');
+  }
+  return result.stdout;
 }
 
 
@@ -151,20 +186,20 @@ function runAdapter(input, started, budgetMs) {
   if (childBudget < 1) {
     throw new AdapterError('ADAPTER_DEADLINE_EXCEEDED', 'no run budget remained for the shared router');
   }
+  const childTimeout = Math.min(configuredChildTimeout, childBudget);
   const request = JSON.stringify({
     protocol: 'skills-ai/1',
     client: 'claude',
     query: prompt,
   }) + '\n';
-  const output = execFileSync(python, [router], {
-    input: request,
-    encoding: 'utf8',
-    timeout: Math.min(configuredChildTimeout, childBudget),
-    killSignal: 'SIGTERM',
-    maxBuffer: MAX_ROUTER_OUTPUT_BYTES,
-    stdio: ['pipe', 'pipe', 'pipe'],
-    env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
-  });
+  // The child carries its own copy of the deadline so that it still exits on
+  // time if the host ends this hook before spawnSync can reap it.
+  const output = runRouter(
+    python,
+    [router, '--stdin-timeout-ms', String(childTimeout)],
+    request,
+    childTimeout,
+  );
   const decision = JSON.parse(output);
   const additionalContext = contextText(decision, root);
   // A stalled skill-body read cannot be pre-empted, so re-check the budget
@@ -202,6 +237,12 @@ if (require.main === module) {
   const watchdog = setTimeout(() => failOpen('ADAPTER_INPUT_TIMEOUT'), adapterTimeout);
   watchdog.unref();
 
+  // Host cancellation is only observable while the event loop is free, which is
+  // the input phase. Once the child is running it enforces its own deadline.
+  for (const signal of ['SIGTERM', 'SIGINT']) {
+    process.on(signal, () => failOpen('ADAPTER_CANCELLED'));
+  }
+
   process.stdin.on('data', chunk => {
     if (finished) return;
     inputBytes += Buffer.byteLength(chunk);
@@ -234,4 +275,5 @@ module.exports = {
   positiveInteger,
   runAdapter,
   stripFrontmatter,
+  terminateGroup,
 };

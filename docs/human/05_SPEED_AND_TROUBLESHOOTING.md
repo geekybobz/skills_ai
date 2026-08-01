@@ -76,6 +76,13 @@ same budget, because a blocking call cannot be interrupted by a timer. Slow host
 input therefore shortens the child instead of pushing the hook past the deadline
 Claude settings declare.
 
+Cleanup then has two layers, because a `python3` entry is often a small shell
+script in front of the real interpreter, and because the host decides when a
+hook run ends. The child starts as its own process-group leader, so a timeout
+clears the whole group instead of only the script in front; and the child also
+carries the same deadline itself, so it still exits on time when the host stops
+the hook first.
+
 ## Quick diagnosis
 
 | Symptom | Check |
@@ -91,6 +98,7 @@ Claude settings declare.
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
 | `ADAPTER_INVALID_INPUT` | The host sent the hook a payload that is not one JSON object; the shared router was never reached |
 | `ADAPTER_DEADLINE_EXCEEDED` | The whole-run budget ran out before a reply could be written; raise `SKILLS_AI_ADAPTER_TIMEOUT_MS` with the hook timeout in Claude settings |
+| `ADAPTER_CANCELLED` | The host stopped the Claude hook while it was waiting for input; the task continues normally |
 | `ROUTER_INVALID_OUTPUT` | The shared router replied with something other than one JSON decision; recompile and validate the manifest |
 | Router process remains | Terminate and reap only the exact recorded process/session |
 | Installed adapter is stale | Dry-run, inspect, then reinstall with platform-owner approval |

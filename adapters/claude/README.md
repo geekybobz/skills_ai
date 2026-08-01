@@ -47,6 +47,20 @@ selected skill body over 1 MiB, or a run whose budget expires before the reply
 is written, fails open with `ADAPTER_SKILL_TOO_LARGE` or
 `ADAPTER_DEADLINE_EXCEEDED`.
 
+Child cleanup has two independent layers, because `python3` is often a shell
+shim and because Claude, not the hook, decides when a hook run ends:
+
+- the child is started as its own process-group leader, so a child timeout
+  terminates the group rather than only the shim that fronts the interpreter;
+- the child is given the same deadline through `--stdin-timeout-ms`, so it still
+  exits on time when the host ends the hook before the adapter can reap it.
+
+Detaching the child means a host that signals only the hook's process group no
+longer reaches the router; the child's own deadline is the bound in that case.
+`SIGTERM` and `SIGINT` during the input phase fail open with
+`ADAPTER_CANCELLED`. Once the child is running the event loop is blocked, so the
+two layers above are what apply.
+
 This repository tests the hook protocol and shared routing core. A live Claude
 session test remains a Claude-side acceptance step.
 

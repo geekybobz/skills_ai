@@ -70,7 +70,9 @@ prompt, the skill body, or the child's own error text.
 
 That hook also holds a single budget for the whole run, so its Python child
 never outlives the deadline Claude settings declare, however slowly host input
-arrives.
+arrives. The child runs in its own process group and carries the same deadline,
+so neither an interpreter wrapper script nor a host that stops the hook early
+can leave a router process behind.
 
 Repository maintenance is also shared: both platforms read the same
 `CONTRACT.json` and `scan_consistency.py` receipt. The scanner validates shared
