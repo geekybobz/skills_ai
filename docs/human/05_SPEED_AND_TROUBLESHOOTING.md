@@ -82,6 +82,8 @@ flowchart TD
 | Wrong math style | Check action + mathematical-object detection and artifact exclusions |
 | Design route on ordinary search | Confirm the explicit design-request gate and its negative corpus |
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
+| `ADAPTER_INVALID_INPUT` | The host sent the hook a payload that is not one JSON object; the shared router was never reached |
+| `ROUTER_INVALID_OUTPUT` | The shared router replied with something other than one JSON decision; recompile and validate the manifest |
 | Router process remains | Terminate and reap only the exact recorded process/session |
 | Installed adapter is stale | Dry-run, inspect, then reinstall with platform-owner approval |
 | Root entry or live human index is stale | Edit its canonical source, run `compile_repository_views.py`, then re-run the changed or staged scan |

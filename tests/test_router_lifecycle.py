@@ -244,6 +244,40 @@ class RouterLifecycleTests(unittest.TestCase):
         self.assertNotIn("private prompt", completed.stderr)
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_claude_adapter_reports_invalid_hook_payload_distinctly(self) -> None:
+        completed = subprocess.run(
+            ["node", str(CLAUDE_ADAPTER), "--root", str(ROOT)],
+            input='{"prompt": "private prompt must not appear"',
+            text=True,
+            capture_output=True,
+            timeout=5,
+            check=False,
+        )
+        self.assertEqual(0, completed.returncode)
+        self.assertEqual("", completed.stdout)
+        self.assertIn("reason=ADAPTER_INVALID_INPUT", completed.stderr)
+        self.assertNotIn("ROUTER_INVALID_OUTPUT", completed.stderr)
+        self.assertNotIn("private prompt", completed.stderr)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_claude_adapter_context_header_uses_one_line_per_key(self) -> None:
+        completed = subprocess.run(
+            ["node", str(CLAUDE_ADAPTER), "--root", str(ROOT)],
+            input=json.dumps({"prompt": "Design a dark mode theme switch"}),
+            text=True,
+            capture_output=True,
+            timeout=5,
+            check=False,
+        )
+        self.assertEqual(0, completed.returncode)
+        context = json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"]
+        header, _, remainder = context.partition("\nSelected local skill: ")
+        self.assertTrue(remainder, "a MATCH must inject exactly one selected skill")
+        self.assertEqual([], [line for line in header.splitlines() if not line.strip()])
+        self.assertTrue(header.startswith("Skills AI shared response context:\noperation="))
+        self.assertTrue(remainder.startswith("dark-mode-specialist\n\n"))
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
     @unittest.skipIf(os.name == "nt", "symlink fixture requires POSIX semantics")
     def test_claude_adapter_realpath_guard_blocks_symlink_escape(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -32,6 +32,14 @@ function stripFrontmatter(content) {
 }
 
 
+class AdapterError extends Error {
+  constructor(reason, message) {
+    super(message || reason);
+    this.reason = reason;
+  }
+}
+
+
 function diagnostic(reason, started) {
   const elapsed = Math.round(Number(process.hrtime.bigint() - started) / 1e6);
   process.stderr.write(`[skills-ai-router] fail-open adapter=claude reason=${reason} elapsed_ms=${elapsed}\n`);
@@ -39,11 +47,23 @@ function diagnostic(reason, started) {
 
 
 function classifyError(error) {
+  // An explicitly tagged adapter failure keeps its own reason so that a broken
+  // hook payload is never reported as a shared-router output failure.
+  if (error && typeof error.reason === 'string') return error.reason;
   if (error && (error.code === 'ETIMEDOUT' || error.signal === 'SIGTERM' || error.killed)) {
     return 'ADAPTER_TIMEOUT';
   }
   if (error instanceof SyntaxError) return 'ROUTER_INVALID_OUTPUT';
   return 'ADAPTER_ERROR';
+}
+
+
+function parseHookInput(input) {
+  try {
+    return JSON.parse(input || '{}');
+  } catch (error) {
+    throw new AdapterError('ADAPTER_INVALID_INPUT', 'hook payload is not one JSON object');
+  }
 }
 
 
@@ -91,14 +111,14 @@ function contextText(decision, root) {
     throw new Error('selected skill escaped the Skills AI root through a symlink');
   }
   const body = stripFrontmatter(fs.readFileSync(skillPath, 'utf8'));
-  lines.push(`Selected local skill: ${decision.skill.id}`);
-  lines.push(body);
-  return lines.join('\n\n');
+  // The context header stays one key per line on every path; only the skill
+  // body is separated by a blank line.
+  return `${lines.join('\n')}\n\nSelected local skill: ${decision.skill.id}\n\n${body}`;
 }
 
 
 function runAdapter(input, started) {
-  const data = JSON.parse(input || '{}');
+  const data = parseHookInput(input);
   const prompt = typeof data.prompt === 'string' ? data.prompt : '';
   if (!prompt.trim()) return;
   const root = argument('--root') || process.env.SKILLS_AI_ROOT;
@@ -172,4 +192,12 @@ if (require.main === module) {
 }
 
 
-module.exports = { classifyError, contextText, positiveInteger, runAdapter, stripFrontmatter };
+module.exports = {
+  AdapterError,
+  classifyError,
+  contextText,
+  parseHookInput,
+  positiveInteger,
+  runAdapter,
+  stripFrontmatter,
+};
