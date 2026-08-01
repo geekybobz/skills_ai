@@ -1,7 +1,12 @@
 {
-  "version": 1,
+  "version": 2,
   "human_entry": "README.md",
   "required_marker": "audience: human",
+  "mermaid_limits": {
+    "max_nodes": 12,
+    "max_edges": 12,
+    "max_lr_nodes": 8
+  },
   "rules": [
     {
       "name": "routing",
@@ -58,10 +63,12 @@
         "scripts/change_guard.py",
         "scripts/create_change_request.py",
         "scripts/human_docs_guard.py",
+        "scripts/scan_consistency.py",
         "docs/human/_SOURCE_MAP.json"
       ],
       "guides": [
-        "docs/human/04_SAFE_CHANGES.md"
+        "docs/human/04_SAFE_CHANGES.md",
+        "docs/human/07_MAINTAINING_SKILLS.md"
       ]
     },
     {
@@ -79,10 +86,12 @@
       "sources": [
         ".obsidian/graph.json",
         "docs/05_COLOR_LAYERS.md",
-        "scripts/graph_layers.py"
+        "scripts/graph_layers.py",
+        "protocols/repository/CONTRACT.json"
       ],
       "guides": [
-        "docs/human/06_GRAPH_AND_COLORS.md"
+        "docs/human/06_GRAPH_AND_COLORS.md",
+        "docs/human/07_MAINTAINING_SKILLS.md"
       ]
     }
   ]

@@ -30,6 +30,9 @@ class ChangeGuardTests(unittest.TestCase):
         actual = {path.name for path in (ROOT / "protocols" / "repository").glob("*.md")}
         self.assertEqual(cards, actual)
 
+    def test_machine_contract_exists(self) -> None:
+        self.assertTrue((ROOT / "protocols" / "repository" / "CONTRACT.json").is_file())
+
     def test_scoped_repository_edit_is_allowed(self) -> None:
         report = assess_change("edit", ["docs/06_CHANGE_CONTROL.md"])
         self.assertEqual("allowed", report["status"])
@@ -80,6 +83,25 @@ class ChangeGuardTests(unittest.TestCase):
     def test_markdown_changes_require_graph_layer_validation(self) -> None:
         report = assess_change("add", ["docs/new-governance-note.md"])
         self.assertIn("python3 scripts/graph_layers.py --check", report["required_checks"])
+
+    def test_skill_change_derives_registry_and_unit_checks(self) -> None:
+        report = assess_change(
+            "add",
+            ["design-with-claude/new-skill.md"],
+            approval_ref="approved-skill-add",
+        )
+        self.assertIn("skill-source", report["roles"]["design-with-claude/new-skill.md"])
+        self.assertIn("registry", report["required_check_ids"])
+        self.assertIn("unit", report["required_check_ids"])
+
+    def test_registry_source_reports_affected_generated_manifest(self) -> None:
+        report = assess_change("edit", ["registry/build-ops.md"])
+        self.assertEqual(["runtime/router-manifest.json"], report["affected_generated_outputs"])
+
+    def test_unmapped_new_path_is_blocked(self) -> None:
+        report = assess_change("add", ["unknown-concept/source.bin"])
+        self.assertEqual("blocked-by-invariant", report["status"])
+        self.assertEqual(["unknown-concept/source.bin"], report["unmapped_paths"])
 
 
 if __name__ == "__main__":

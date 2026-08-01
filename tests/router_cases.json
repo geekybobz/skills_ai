@@ -103,6 +103,16 @@
     "skill": "environment-setup"
   },
   {
+    "name": "skills ai maintenance bypasses setup trigger",
+    "query": "Implement the Skills AI maintenance protocol with no external install",
+    "result": "NORMAL"
+  },
+  {
+    "name": "skills ai graph audit bypasses node setup trigger",
+    "query": "Audit the local skill registry node consistency",
+    "result": "NORMAL"
+  },
+  {
     "name": "personal secret does not route to environment setup",
     "query": "Tell me why my secret is embarrassing",
     "result": "NORMAL"

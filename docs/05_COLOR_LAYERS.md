@@ -73,6 +73,14 @@ change packet and be covered by one canonical query above. Run:
 python3 scripts/graph_layers.py --check
 ```
 
+Visible concept relationships are declared in
+`protocols/repository/CONTRACT.json`. The graph validator reads those generic
+contracts; it does not hardcode a separate topology function for every new
+protocol. A user-visible canonical concept backed only by JSON or code still
+needs one Markdown entry node and declared links to its authorities and
+consumers. The same check rejects dangling repository wikilinks after a move or
+deletion while respecting explicitly declared read-only external skill pointers.
+
 When the policy is correct but the live Obsidian groups are stale, use
 `python3 scripts/graph_layers.py --sync`. Synchronization replaces only
 `colorGroups`; it preserves personal graph settings such as zoom, visibility,

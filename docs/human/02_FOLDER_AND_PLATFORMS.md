@@ -22,13 +22,14 @@ flowchart TD
     ROOT --> TEST["tests/<br/>routing and lifecycle checks"]
     ROOT --> SKILLS["skill collections<br/>design, theory, external"]
     ROOT --> REQ["requests/<br/>review-only external change inbox"]
+    ROOT --> CONTRACT["repository contract<br/>change roles and consistency"]
 
     classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
     classDef source fill:#2E7D32,color:#fff,stroke:#1B5E20
     classDef support fill:#546E7A,color:#fff,stroke:#29434E
     class ROOT,ENTRY entry
     class REG,IP,RUN,SKILLS source
-    class DOCS,SCRIPT,ADAPT,TEST,REQ support
+    class DOCS,SCRIPT,ADAPT,TEST,REQ,CONTRACT support
 ```
 
 The registry describes where skills live. It does not copy skill bodies into
@@ -60,6 +61,10 @@ flowchart LR
 The Python router owns framing, validation, selection, privacy, and its own
 one-shot exit. Codex owns Codex session cleanup. Claude owns its live hook,
 child timeout, installation, and Claude-specific acceptance.
+
+Repository maintenance is also shared: both platforms read the same
+`CONTRACT.json` and `scan_consistency.py` receipt. The scanner validates shared
+behavior; each platform still certifies only its own live adapter lifecycle.
 
 ## Local process API
 

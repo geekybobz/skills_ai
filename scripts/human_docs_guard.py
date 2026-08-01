@@ -29,7 +29,7 @@ def load_source_map(root: Path = ROOT) -> dict[str, Any]:
         config = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise HumanDocsError(f"cannot read {SOURCE_MAP_PATH}: {type(exc).__name__}") from exc
-    if config.get("version") != 1:
+    if config.get("version") != 2:
         raise HumanDocsError("unsupported human-doc source-map version")
     if not isinstance(config.get("human_entry"), str):
         raise HumanDocsError("human_entry must be a path string")
@@ -37,11 +37,22 @@ def load_source_map(root: Path = ROOT) -> dict[str, Any]:
         raise HumanDocsError("required_marker must be a string")
     if not isinstance(config.get("rules"), list) or not config["rules"]:
         raise HumanDocsError("rules must be a non-empty list")
+    limits = config.get("mermaid_limits")
+    if not isinstance(limits, dict):
+        raise HumanDocsError("mermaid_limits must be an object")
+    for key in ("max_nodes", "max_edges", "max_lr_nodes"):
+        if not isinstance(limits.get(key), int) or limits[key] < 1:
+            raise HumanDocsError(f"mermaid_limits.{key} must be a positive integer")
     return config
 
 
 def _matches(path: str, pattern: str) -> bool:
     return fnmatch.fnmatchcase(path, pattern)
+
+
+def _normalized_relative(raw_path: str) -> str:
+    path = Path(raw_path).as_posix()
+    return path[2:] if path.startswith("./") else path
 
 
 def guide_paths(config: dict[str, Any]) -> list[str]:
@@ -54,7 +65,7 @@ def guide_paths(config: dict[str, Any]) -> list[str]:
 def required_guides(changed_paths: Iterable[str], config: dict[str, Any]) -> dict[str, list[str]]:
     required: dict[str, set[str]] = {}
     for raw_path in changed_paths:
-        path = Path(raw_path).as_posix().lstrip("./")
+        path = _normalized_relative(raw_path)
         for rule in config["rules"]:
             if any(_matches(path, pattern) for pattern in rule.get("sources", [])):
                 for guide in rule.get("guides", []):
@@ -63,7 +74,7 @@ def required_guides(changed_paths: Iterable[str], config: dict[str, Any]) -> dic
 
 
 def coverage_errors(changed_paths: Iterable[str], config: dict[str, Any]) -> list[str]:
-    changed = {Path(path).as_posix().lstrip("./") for path in changed_paths}
+    changed = {_normalized_relative(path) for path in changed_paths}
     errors: list[str] = []
     for guide, rule_names in required_guides(changed, config).items():
         if guide not in changed:
@@ -74,7 +85,38 @@ def coverage_errors(changed_paths: Iterable[str], config: dict[str, Any]) -> lis
     return errors
 
 
-def _validate_markdown(path: Path, root: Path, marker: str) -> list[str]:
+def _mermaid_errors(text: str, relative: str, limits: dict[str, int]) -> list[str]:
+    errors: list[str] = []
+    for match in re.finditer(r"```mermaid\s*\n(.*?)```", text, flags=re.DOTALL):
+        body = match.group(1)
+        line_number = text.count("\n", 0, match.start()) + 1
+        nodes = set(re.findall(r"\b([A-Za-z][A-Za-z0-9_]*)\s*(?=\[|\{|\()", body))
+        edge_count = sum(line.count("->") for line in body.splitlines())
+        direction = re.search(r"^\s*(?:flowchart|graph)\s+(LR|RL|TD|TB)\b", body, re.MULTILINE)
+        if len(nodes) > limits["max_nodes"]:
+            errors.append(
+                f"Mermaid diagram has {len(nodes)} nodes, limit {limits['max_nodes']}, "
+                f"in {relative}:{line_number}; split it into focused diagrams"
+            )
+        if edge_count > limits["max_edges"]:
+            errors.append(
+                f"Mermaid diagram has {edge_count} edges, limit {limits['max_edges']}, "
+                f"in {relative}:{line_number}; split it into focused diagrams"
+            )
+        if direction and direction.group(1) in {"LR", "RL"} and len(nodes) > limits["max_lr_nodes"]:
+            errors.append(
+                f"wide Mermaid diagram has {len(nodes)} nodes, limit {limits['max_lr_nodes']}, "
+                f"in {relative}:{line_number}; use TD/TB or split the flow"
+            )
+    return errors
+
+
+def _validate_markdown(
+    path: Path,
+    root: Path,
+    marker: str,
+    limits: dict[str, int],
+) -> list[str]:
     relative = path.relative_to(root).as_posix()
     errors: list[str] = []
     try:
@@ -94,6 +136,7 @@ def _validate_markdown(path: Path, root: Path, marker: str) -> list[str]:
             fence = None
     if fence is not None:
         errors.append(f"unclosed {fence[1] or 'code'} fence in {relative}:{fence[0]}")
+    errors.extend(_mermaid_errors(text, relative, limits))
 
     for target in re.findall(r"(?<!!)\[[^\]]+\]\(([^)]+)\)", text):
         destination = target.strip().strip("<>").split("#", 1)[0]
@@ -117,6 +160,7 @@ def validate_human_docs(root: Path = ROOT) -> list[str]:
         return [str(exc)]
     errors: list[str] = []
     marker = config["required_marker"]
+    limits = config["mermaid_limits"]
     names: set[str] = set()
     for index, rule in enumerate(config["rules"]):
         name = rule.get("name")
@@ -137,7 +181,7 @@ def validate_human_docs(root: Path = ROOT) -> list[str]:
         if not path.is_file():
             errors.append(f"human page does not exist: {relative}")
             continue
-        errors.extend(_validate_markdown(path, root, marker))
+        errors.extend(_validate_markdown(path, root, marker, limits))
 
     for entry_path in AGENT_ENTRY_PATHS:
         try:

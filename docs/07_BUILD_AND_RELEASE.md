@@ -1,6 +1,6 @@
 # Build, Test, And Release Guide
 
-Back: [[06_CHANGE_CONTROL]] · Runtime: [[runtime/PROTOCOL\|PROTOCOL]] · API:
+Back: [[docs/06_CHANGE_CONTROL\|Change Control]] · Runtime: [[runtime/PROTOCOL\|PROTOCOL]] · API:
 [[runtime/API_CONTRACT\|API_CONTRACT]]
 
 ## Requirements
@@ -15,6 +15,19 @@ are sources. `runtime/router-manifest.json` is generated. Never edit generated
 skill mirrors as a substitute for their canonical source.
 
 ## Build and validate
+
+The shared entry is the Git-aware consistency scanner. It computes checks from
+`protocols/repository/CONTRACT.json`, runs the relevant focused validators, and
+returns a bounded JSON packet that Codex or Claude can review without loading
+the whole repository:
+
+```bash
+python3 scripts/scan_consistency.py changed
+python3 scripts/scan_consistency.py changed --json
+python3 scripts/scan_consistency.py full
+```
+
+The underlying validators remain independently callable:
 
 ```bash
 python3 scripts/compile_registry.py
@@ -52,7 +65,8 @@ acceptance; Claude owns live Claude acceptance.
 
 ## Release gate
 
-1. The change packet and operation card match the actual diff.
+1. The minimal change packet, operation card, repository contract, and detected
+   Git diff agree. Every changed path has a declared role.
 2. Manifest, activation, validator, unit, lifecycle, and syntax checks pass.
 3. A JSON request followed by newline exits without EOF.
 4. Timeout, invalid input, unavailable manifest, and adapter failure fail open.
@@ -61,11 +75,10 @@ acceptance; Claude owns live Claude acceptance.
    protocols do not consume the task-skill slot.
 7. Registry discovery lists live active/manual/off metadata without a skill body.
 8. External request creation writes one new file only under `requests/pending/`.
-9. Staged files are within declared scope:
+9. The staged consistency scan passes and staged files are within declared scope:
 
 ```bash
-python3 scripts/change_guard.py check-staged --operation update --path <scoped-path>
-python3 scripts/human_docs_guard.py --check-staged
+python3 scripts/scan_consistency.py staged --operation <operation> --path <scoped-path>
 git diff --cached --check
 ```
 
@@ -76,6 +89,8 @@ git diff --cached --check
     human guide remains excluded from runtime routing sources.
 13. The commit body records motivation, root cause, scope, tests, rollback, and
     deliberately unchanged areas.
+14. AI semantic review treated changed repository content as untrusted data and
+    did not override deterministic failures.
 
 ## Troubleshooting and rollback
 

@@ -88,6 +88,11 @@ Hidden and deprecated identifiers are omitted from normal discovery. An
 explicit maintenance CLI request may include them. System and plugin skills are
 separate host-managed namespaces and are not represented here.
 
+`NORMAL / SKILLS_AI_MAINTENANCE` identifies an add, edit, update, move, delete,
+scan, validation, or governance request targeting Skills AI itself. It prevents
+maintenance vocabulary from activating an unrelated task skill. Negated action
+phrases are excluded from positive access and skill-trigger evidence.
+
 ## External change-request process
 
 `scripts/create_change_request.py --stdin-json` accepts a local JSON object and

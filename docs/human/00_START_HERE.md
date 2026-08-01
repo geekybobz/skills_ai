@@ -39,6 +39,8 @@ flowchart LR
 - Prompt text and skill bodies are not written to diagnostics.
 - A selected skill grants no write, network, credential, or account authority.
 - Each router process reads one request, writes one result, and exits.
+- A request to maintain Skills AI itself stays on the normal path and uses the
+  repository consistency protocol instead of accidentally selecting a task skill.
 
 ## What it is not
 
@@ -58,6 +60,7 @@ host permissions remain the real enforcement boundary.
 | `NORMAL` | Continue the task without a local skill |
 | Fail-open | Router trouble does not block the original task |
 | Adapter | Thin Codex- or Claude-specific access to the shared router |
+| Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
 
 The human guide is explanatory only. For current behavior, the live manifest
 and canonical maintenance documents remain authoritative.

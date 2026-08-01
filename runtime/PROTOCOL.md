@@ -76,7 +76,10 @@ The default hot path returns zero after an operational fail-open receipt.
 ## Stable reasons
 
 Routing reasons include `ACTIVE_SKILL_MATCH`, `NO_SKILL_MATCH`,
-`DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, and `USER_NORMAL`. Boundary reasons
+`DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`, and
+`SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
+requests on the normal path instead of allowing words such as `node` or a
+negated `install` to select an ordinary task skill. Boundary reasons
 include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
 `UNSUPPORTED_PROTOCOL`, `MANIFEST_UNAVAILABLE`,
 `SELECTED_SKILL_UNAVAILABLE`, `ROUTER_INTERNAL_ERROR`, `ADAPTER_TIMEOUT`, and
@@ -94,6 +97,10 @@ outside this workspace may create one pending request Markdown through
 `scripts/create_change_request.py`; canonical implementation belongs to a
 dedicated maintenance task rooted in this repository. Host permissions remain
 the hard enforcement layer.
+
+Maintenance intent is recognized before task-skill scoring. Negated action
+clauses such as “no external install” do not establish write access or positive
+installation intent.
 
 ## Lifecycle ownership
 

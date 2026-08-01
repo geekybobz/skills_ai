@@ -54,6 +54,16 @@ SKILLS_AI_CHANGE_PATTERNS = (
     r"\b(interaction protocol|design with claude|theory reference) skill\b",
     r"\b(route skill|registry activation)\b",
 )
+SKILLS_AI_MAINTENANCE_ACTION_PATTERN = (
+    r"\b(add|edit|update|change|modify|move|rename|delete|remove|deprecate|toggle|"
+    r"install|uninstall|implement|maintain|maintenance|audit|review|inspect|scan|"
+    r"validate|fix|protocol|consistency|graph)\b"
+)
+NEGATED_ACTION_CLAUSE_PATTERN = (
+    r"\b(?:do\s+not|don't|never|without)\b[^.;\n]{0,80}|"
+    r"\bno\s+(?:external\s+|live\s+|automatic\s+)?"
+    r"(?:install|installation|edit|change|delete|removal|commit|stage)\b[^.;\n]{0,50}"
+)
 
 DESIGN_ROUTED_FAMILIES = {"design", "ui-patterns"}
 DESIGN_REQUEST_PATTERN = (
@@ -154,6 +164,11 @@ def normalize(text: str) -> str:
     text = text.lower().replace("-", " ").replace("_", " ")
     text = re.sub(r"[`*_#]", "", text)
     return " ".join(re.findall(r"[a-z0-9.+/]+", text))
+
+
+def _strip_negated_action_clauses(text: str) -> str:
+    """Keep prohibited actions from becoming positive access or route signals."""
+    return re.sub(NEGATED_ACTION_CLAUSE_PATTERN, " ", text, flags=re.IGNORECASE)
 
 
 def _design_routing_query(text: str) -> str:
@@ -453,6 +468,11 @@ def _phrase_score(query: str, phrase: str) -> int:
 def _operation(query: str) -> str:
     if re.search(r"\b(?:write|draft|rewrite)\b.*\bcommit message\b", query):
         return "write"
+    if re.search(
+        r"^(?:please\s+)?(?:implement|build|create|add|edit|modify|patch|fix|install|deploy|stage|commit)\b",
+        query,
+    ):
+        return "implement"
     rules = [
         ("review", r"\b(review|audit|critique|inspect|evaluate)\b"),
         ("investigate", r"\b(investigate|research|search|find|verify|diagnose)\b"),
@@ -469,9 +489,16 @@ def _operation(query: str) -> str:
 
 
 def _requested_access(query: str) -> str:
+    query = normalize(_strip_negated_action_clauses(query))
     file_write = r"\b(edit|modify|patch|fix|delete|remove|install|deploy|stage|commit(?!\s+message))\b"
     build_write = r"\b(implement|create|add|build|generate)\b.*\b(file|code|project|app|site|script|test)\b"
-    return "write-requested" if re.search(file_write, query) or re.search(build_write, query) else "read-only"
+    maintenance_write = (
+        r"\b(implement|add|update|modify|move|rename|delete|remove|deprecate|toggle)\b.*"
+        r"\b(skills? ai|skill|registry|router|protocol|graph|scanner)\b"
+    )
+    return "write-requested" if any(
+        re.search(pattern, query) for pattern in (file_write, build_write, maintenance_write)
+    ) else "read-only"
 
 
 def _route_allowed_by_intent(route: dict[str, Any], query: str) -> bool:
@@ -579,6 +606,12 @@ def _targets_skills_ai_change(query: str, access: str) -> bool:
     )
 
 
+def _is_skills_ai_maintenance(query: str) -> bool:
+    return any(re.search(pattern, query) for pattern in SKILLS_AI_CHANGE_PATTERNS) and bool(
+        re.search(SKILLS_AI_MAINTENANCE_ACTION_PATTERN, query)
+    )
+
+
 def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> None:
     if not _targets_skills_ai_change(query, access):
         return
@@ -592,13 +625,13 @@ def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> 
 
 def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     """Return MATCH or fail-open NORMAL without exposing the original prompt."""
-    normalized_query = normalize(query)
+    normalized_query = normalize(_strip_negated_action_clauses(query))
     design_query = _design_routing_query(query)
     design_intent = _has_explicit_design_intent(design_query)
     operation = _operation(normalized_query)
     access = _requested_access(normalized_query)
     interaction_mode, interaction_reason = _interaction_mode(query, manifest)
-    if _is_registry_discovery(normalized_query):
+    if _is_registry_discovery(normalized_query) and not _is_skills_ai_maintenance(normalized_query):
         context = _context_packet(
             manifest, "explain", "skills-registry", "read-only", interaction_mode, interaction_reason
         )
@@ -616,6 +649,16 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
         return {
             "result": "NORMAL",
             "reason_code": "USER_NORMAL",
+            "context": context,
+        }
+    if _is_skills_ai_maintenance(normalized_query):
+        context = _context_packet(
+            manifest, operation, "skills-registry", access, interaction_mode, interaction_reason
+        )
+        _apply_change_boundary(context, normalized_query, access)
+        return {
+            "result": "NORMAL",
+            "reason_code": "SKILLS_AI_MAINTENANCE",
             "context": context,
         }
 

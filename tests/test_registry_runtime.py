@@ -61,9 +61,51 @@ class RegistryRuntimeTests(unittest.TestCase):
 
     def test_skills_ai_write_request_gets_external_change_boundary(self) -> None:
         decision = route_request("Edit the Skills AI router", self.manifest)
-        self.assertNotEqual("REGISTRY_STATUS", decision["reason_code"])
+        self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
         boundary = decision["context"]["skills_ai_change_boundary"]
         self.assertEqual("request-only-outside-maintenance-workspace", boundary["mode"])
+
+    def test_skills_ai_maintenance_bypasses_task_skill_scoring(self) -> None:
+        prompts = (
+            "Audit the local skill registry node consistency",
+            "Implement the Skills AI maintenance protocol with no external install.",
+            "Inspect the Skills AI graph and skill handling rules",
+            "Delete a route from the Skills AI registry",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("NORMAL", decision["result"])
+                self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
+                self.assertNotIn("skill", decision)
+
+    def test_negated_install_is_not_positive_write_or_setup_intent(self) -> None:
+        decision = route_request(
+            "No external install. Inspect the Skills AI change protocol.",
+            self.manifest,
+        )
+        self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
+        self.assertEqual("read-only", decision["context"]["requested_access"])
+
+    def test_maintenance_implementation_remains_write_requested_after_negation_filter(self) -> None:
+        decision = route_request(
+            "Implement the Skills AI maintenance protocol with no external install.",
+            self.manifest,
+        )
+        self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
+        self.assertEqual("write-requested", decision["context"]["requested_access"])
+
+    def test_positive_node_install_still_routes_to_setup_guide(self) -> None:
+        decision = route_request("Install Node for my first project", self.manifest)
+        self.assertEqual("MATCH", decision["result"])
+        self.assertEqual("setup-guide", decision["skill"]["id"])
+
+    def test_leading_implementation_intent_wins_over_later_inspection_words(self) -> None:
+        decision = route_request(
+            "Implement the Skills AI scanner, then inspect its report",
+            self.manifest,
+        )
+        self.assertEqual("implement", decision["context"]["operation"])
 
     def test_math_is_a_response_overlay_not_a_task_skill(self) -> None:
         decision = route_request("Derive the Euler-Lagrange equation", self.manifest)

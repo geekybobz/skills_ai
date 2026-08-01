@@ -11,6 +11,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Iterable
 
+from change_guard import GuardError, load_contract
+
 
 ROOT = Path(__file__).resolve().parents[1]
 GRAPH_PATH = Path(".obsidian/graph.json")
@@ -54,29 +56,6 @@ LAYERS = (
     },
 )
 
-INTERACTION_GRAPH_EDGES = {
-    "docs/00_SKILLS_HUB.md": ("registry/interaction", "interaction-protocol/README"),
-    "registry/interaction.md": (
-        "docs/00_SKILLS_HUB",
-        "registry/activation",
-        "interaction-protocol/README",
-        "runtime/PROTOCOL",
-    ),
-    "interaction-protocol/README.md": (
-        "docs/00_SKILLS_HUB",
-        "registry/activation",
-        "registry/interaction",
-        "runtime/PROTOCOL",
-        "runtime/API_CONTRACT",
-        "docs/INTERACTION_PROTOCOL_MIGRATION",
-    ),
-    "docs/INTERACTION_PROTOCOL_MIGRATION.md": ("interaction-protocol/README",),
-    "runtime/README.md": ("interaction-protocol/README",),
-    "runtime/PROTOCOL.md": ("interaction-protocol/README",),
-    "runtime/API_CONTRACT.md": ("interaction-protocol/README",),
-}
-
-
 def expected_color_groups() -> list[dict[str, Any]]:
     return [
         {
@@ -117,24 +96,112 @@ def _markdown_paths(root: Path) -> Iterable[str]:
         yield relative.as_posix()
 
 
-def interaction_link_errors(root: Path = ROOT) -> list[str]:
+def _target_path(root: Path, target: str) -> Path:
+    path = root / target
+    if path.suffix == "":
+        path = path.with_suffix(".md")
+    return path
+
+
+def _has_wikilink(text: str, target: str) -> bool:
+    return bool(re.search(rf"\[\[{re.escape(target)}(?:\\?\||#|\]\])", text))
+
+
+def graph_link_errors(
+    root: Path = ROOT,
+    *,
+    contract_id: str | None = None,
+) -> list[str]:
     errors: list[str] = []
-    for source, targets in INTERACTION_GRAPH_EDGES.items():
-        source_path = root / source
-        if not source_path.is_file():
-            errors.append(f"missing interaction graph source: {source}")
+    try:
+        contract = load_contract(root)
+    except GuardError as exc:
+        return [str(exc)]
+    graph_contracts = contract.get("graph_contracts", [])
+    for graph_contract in graph_contracts:
+        graph_id = graph_contract.get("id", "unnamed")
+        if contract_id is not None and graph_id != contract_id:
             continue
-        text = source_path.read_text(encoding="utf-8")
-        for target in targets:
-            target_path = root / target
-            if target_path.suffix == "":
-                target_path = target_path.with_suffix(".md")
-            if not target_path.is_file():
-                errors.append(f"missing interaction graph target: {source} -> {target}")
+
+        entry = graph_contract.get("entry")
+        if not isinstance(entry, str) or not (root / entry).is_file():
+            errors.append(f"missing {graph_id} graph entry: {entry}")
+        for canonical in graph_contract.get("canonical_sources", []):
+            if not (root / canonical).is_file():
+                errors.append(f"missing {graph_id} canonical source: {canonical}")
+
+        for source, targets in graph_contract.get("required_links", {}).items():
+            source_path = root / source
+            if not source_path.is_file():
+                errors.append(f"missing {graph_id} graph source: {source}")
                 continue
-            if not re.search(rf"\[\[{re.escape(target)}(?:\\?\||#|\]\])", text):
-                errors.append(f"missing interaction graph link: {source} -> {target}")
+            text = source_path.read_text(encoding="utf-8")
+            for target in targets:
+                if not _target_path(root, target).is_file():
+                    errors.append(f"missing {graph_id} graph target: {source} -> {target}")
+                    continue
+                if not _has_wikilink(text, target):
+                    errors.append(f"missing {graph_id} graph link: {source} -> {target}")
     return errors
+
+
+def wikilink_errors(root: Path = ROOT) -> list[str]:
+    """Reject dangling repository wikilinks without loading external submodule notes."""
+    markdown = list(_markdown_paths(root))
+    searchable = [
+        path
+        for path in markdown
+        if not path.startswith("theory-reference/")
+        or path in {
+            "theory-reference/SKILL.md",
+            "theory-reference/shared/SKILL.md",
+        }
+    ]
+    exact: dict[str, str] = {}
+    by_stem: dict[str, list[str]] = {}
+    for relative in searchable:
+        without_suffix = relative[:-3] if relative.endswith(".md") else relative
+        exact[without_suffix] = relative
+        exact[relative] = relative
+        by_stem.setdefault(Path(relative).stem, []).append(relative)
+
+    try:
+        contract = load_contract(root)
+    except GuardError:
+        contract = {}
+    allowed_external = tuple(contract.get("allowed_external_symlinks", []))
+    errors: list[str] = []
+    for source in searchable:
+        text = (root / source).read_text(encoding="utf-8")
+        for raw_target in re.findall(r"\[\[([^\]]+)\]\]", text):
+            target = raw_target.replace("\\|", "|").split("|", 1)[0].split("#", 1)[0].strip()
+            if not target or re.match(r"^[a-z]+://", target):
+                continue
+            normalized = target[:-3] if target.endswith(".md") else target
+            resolved = normalized in exact
+            candidate = root / normalized
+            if candidate.suffix == "":
+                candidate = candidate.with_suffix(".md")
+            if not resolved and candidate.is_file() and any(
+                normalized == prefix or normalized.startswith(prefix + "/")
+                for prefix in allowed_external
+            ):
+                resolved = True
+            if not resolved and "/" not in normalized:
+                resolved = len(by_stem.get(normalized, [])) >= 1
+            if not resolved:
+                relative_candidate = (
+                    Path(source).parent / normalized
+                ).as_posix()
+                resolved = relative_candidate in exact
+            if not resolved:
+                errors.append(f"broken wikilink: {source} -> {target}")
+    return errors
+
+
+def interaction_link_errors(root: Path = ROOT) -> list[str]:
+    """Compatibility wrapper for the interaction-specific test/API."""
+    return graph_link_errors(root, contract_id="interaction-protocol")
 
 
 def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
@@ -158,8 +225,9 @@ def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
     unclassified = [path for path in _markdown_paths(root) if classify_path(path) is None]
     if unclassified:
         errors.append("unclassified Markdown: " + ", ".join(unclassified))
-    if (root / "interaction-protocol" / "README.md").exists():
-        errors.extend(interaction_link_errors(root))
+    if check_policy:
+        errors.extend(graph_link_errors(root))
+        errors.extend(wikilink_errors(root))
     return errors
 
 

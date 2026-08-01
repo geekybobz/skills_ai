@@ -8,24 +8,28 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 Back: [skills and controls](03_SKILLS_AND_CONTROLS.md). Next: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md).
 
+For the complete add/edit/move/delete workflow, scan output, and examples, read
+[maintaining skills](07_MAINTAINING_SKILLS.md).
+
 ## Change-control flow
 
 ```mermaid
 flowchart TD
     U["User requests a repository change"] --> OP["Choose one operation protocol"]
-    OP --> RISK["Apply the risk map"]
-    RISK --> PACKET["Declare paths, authority, rollback, tests,<br/>graph layer, and human-doc impact"]
+    OP --> PLAN["Run the consistency plan"]
+    PLAN --> RISK["Apply the risk map"]
+    RISK --> PACKET["Derive roles, consumers, tests,<br/>graph and human pages"]
     PACKET --> SCOPE{"Unexpected or destructive expansion?"}
     SCOPE -- "Yes" --> ASK["Explain exact effect and request permission"]
     SCOPE -- "No" --> WORK["Edit only declared canonical sources"]
     ASK --> WORK
-    WORK --> CHECK["Run focused and repository checks"]
+    WORK --> CHECK["Run changed and staged scans"]
     CHECK --> REPORT["Report files, behavior, evidence, and boundaries"]
 
     classDef action fill:#5B5BD6,color:#fff,stroke:#32327A
     classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
     classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class U,OP,RISK,PACKET,WORK,CHECK action
+    class U,OP,PLAN,RISK,PACKET,WORK,CHECK action
     class SCOPE decision
     class ASK,REPORT safe
 ```
@@ -68,6 +72,9 @@ flowchart LR
 The guard proves that documentation was changed alongside mapped behavior. It
 cannot prove that prose is conceptually perfect, so human review remains the
 final quality gate.
+
+The guide also enforces small Mermaid diagrams. Oversized left-to-right flows
+must be changed to top-down form or split into focused diagrams before release.
 
 ## External tasks
 

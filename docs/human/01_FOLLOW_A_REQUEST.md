@@ -8,10 +8,10 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 Back: [start here](00_START_HERE.md). Next: [folder and platforms](02_FOLDER_AND_PLATFORMS.md).
 
-## Complete request flow
+## Request entry and boundaries
 
 ```mermaid
-flowchart LR
+flowchart TD
     U["User request"] --> E["Shared runtime entry"]
     E --> P["Apply general interaction contract"]
     P --> Y{"Genuine math reasoning?"}
@@ -23,29 +23,47 @@ flowchart LR
     B -- "No" --> D{"Registry-status question?"}
     D -- "Yes" --> M["Return live metadata"]
     D -- "No" --> C["Score allowed routes"]
-    C --> X{"Result"}
-    X -- "No match" --> N
-    X -- "Disabled" --> N
-    X -- "Ambiguous" --> N
-    X -- "One clear match" --> S["Return one skill path"]
-    S --> L["Load only that skill"]
-    L --> A["Answer the task"]
-    N --> A
-    M --> A
 
     classDef route fill:#5B5BD6,color:#fff,stroke:#32327A
     classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
     classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
     classDef normal fill:#546E7A,color:#fff,stroke:#29434E
     class U,E,P,R,C route
-    class Y,B,D,X decision
-    class O,S,L,A safe
+    class Y,B,D decision
+    class O safe
+    class N,M normal
+```
+
+## Skill decision and answer
+
+```mermaid
+flowchart TD
+    C["Allowed routes"] --> X{"Routing result"}
+    X -- "No match, disabled, or ambiguous" --> N["NORMAL"]
+    X -- "One clear match" --> S["Return one skill path"]
+    S --> L["Load only that skill"]
+    L --> A["Answer the task"]
+    N --> A
+    M["Live registry metadata"] --> A
+
+    classDef route fill:#5B5BD6,color:#fff,stroke:#32327A
+    classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
+    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
+    classDef normal fill:#546E7A,color:#fff,stroke:#29434E
+    class C route
+    class X decision
+    class S,L,A safe
     class N,M normal
 ```
 
 The router returns a compact receipt. It never returns the original prompt or a
 whole family. After a `MATCH`, the caller validates the returned path and reads
 only that selected skill.
+
+A request to add, edit, move, delete, scan, or repair Skills AI itself returns
+`NORMAL / SKILLS_AI_MAINTENANCE` before ordinary skill scoring. This prevents
+maintenance words such as “node” from selecting the setup guide. Negated phrases
+such as “no external install” are not treated as positive installation intent.
 
 The interaction protocol is independent of `MATCH`. General guidance keeps the
 answer direct and adequately explained. The math overlay activates only for

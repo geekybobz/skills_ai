@@ -29,7 +29,8 @@ configuration, Git state, or existing request files.
    the request.
 6. The maintenance task must use `/Users/billabobz/skills_ai` as its workspace,
    read the request and repository protocols, run `change_guard.py plan`, and
-   remain within the approved target paths.
+   then run `scan_consistency.py plan`. It remains within the approved target
+   paths and finishes with a staged consistency scan.
 
 ## Enforcement boundary
 

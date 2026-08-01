@@ -18,7 +18,7 @@ network service and it does not grant permission to edit files, use credentials,
 or perform account actions.
 
 ```mermaid
-flowchart LR
+flowchart TD
     U["You give a task"] --> P["General interaction protocol"]
     P --> M{"Mathematical reasoning?"}
     M -- "Yes" --> X["Add math interaction protocol"]
@@ -49,15 +49,18 @@ flowchart LR
 | [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, protocols, external requests, and documentation updates |
 | [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, timeouts, and cleanup |
 | [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | The Obsidian layer model and validation commands |
+| [Maintaining skills](docs/human/07_MAINTAINING_SKILLS.md) | How additions, edits, moves, deletions, scans, suggestions, and Git checks work |
 | [Interaction protocol graph](interaction-protocol/README.md) | General and math flows, controls, runtime, API, tests, and migration links |
 
-## Five things to remember
+## Six things to remember
 
 1. General response guidance is small and does not consume the task-skill slot.
 2. Math is an equation-led response overlay, not a competing task skill.
 3. One clear match loads one task skill; no match or ambiguity continues normally.
 4. Codex and Claude share the Python router, manifest, interaction protocol, and skill sources.
 5. Routing and response style are guidance, not authority to make changes.
+6. Skills AI maintenance requests bypass ordinary task-skill matching and use
+   the Git-aware consistency protocol.
 
 To see the live registry without loading skill bodies, run:
 

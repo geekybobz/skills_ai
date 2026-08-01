@@ -40,6 +40,10 @@ and exiting. Values vary by machine and load; refresh them with:
 python3 scripts/benchmark_router.py --json
 ```
 
+Maintenance scans are separate from the hot routing path. They use Git to load
+only changed paths and affected authorities; the full unit suite is currently a
+few seconds, while ordinary routing keeps its small one-shot process.
+
 ## Timeout and cleanup
 
 ```mermaid
@@ -67,6 +71,9 @@ flowchart TD
 | Task waits | Confirm one newline-framed request and the configured input deadline |
 | `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
 | Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
+| Maintenance request selects a task skill | Confirm `SKILLS_AI_MAINTENANCE` is returned before route scoring |
+| Consistency scan says `REVIEW` | Read its bounded AI questions and inspect only the listed impacted files |
+| Consistency scan says `BLOCK` | Resolve the deterministic missing role, consumer, generated output, link, or failed check |
 | Wrong math style | Check action + mathematical-object detection and artifact exclusions |
 | Design route on ordinary search | Confirm the explicit design-request gate and its negative corpus |
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |

@@ -6,7 +6,8 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 # Graph and Colors
 
-Back: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md). Return to the [human guide](../../README.md).
+Back: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md). Next:
+[maintaining skills](07_MAINTAINING_SKILLS.md).
 
 Color describes architectural depth, not topic. New skills reuse an existing
 layer color rather than receiving a new color.
@@ -48,6 +49,12 @@ flowchart LR
 and links the skills hub, activation, registry, canonical JSON contract,
 runtime, API, migration record, and tests. The JSON and test files remain
 attachments rather than extra Markdown graph nodes.
+
+Generic concept links now come from `protocols/repository/CONTRACT.json`.
+Therefore a future JSON- or code-backed protocol must declare a visible
+Markdown entry and its required links instead of adding a one-off validator.
+The graph check also catches ordinary dangling wikilinks after moves and
+deletions while allowing only explicitly declared external skill pointers.
 
 Validate both the documented policy and the live Obsidian graph:
 

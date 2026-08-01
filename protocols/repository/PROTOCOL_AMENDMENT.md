@@ -1,5 +1,7 @@
 # Protocol Amendment
 
+Back: [[docs/06_CHANGE_CONTROL|Change Control]].
+
 Use when evidence shows that a governance rule is missing, unsafe, ambiguous,
 or inconsistent with implementation.
 
@@ -27,6 +29,10 @@ or a validation gap. Any new graph layer or colour must update
 `docs/05_COLOR_LAYERS.md`, the live Obsidian groups, and the graph validator in
 the same approved amendment. Any mapped canonical change must update the
 corresponding derivative human pages in the same staged change.
+
+Changing `CONTRACT.json`, scanner severities, executable check mappings, or the
+human-guide rendering limits is itself a protocol amendment. Run the protocol
+plan before editing and both changed and staged scans after editing.
 
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
