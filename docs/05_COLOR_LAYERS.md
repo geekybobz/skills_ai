@@ -1,7 +1,8 @@
 # Color Layers
 
-One colour per **layer**, never per skill. Colour encodes depth in the routing
-graph, not topic. This is what keeps the graph readable as skills are added.
+One colour per **architectural role**, never per individual skill. Colour shows
+whether a node is an entry, hub, registry, parked card, skill, or support file.
+This keeps the graph readable as skills are added.
 
 Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 
@@ -10,10 +11,10 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 | layer | role | colour | graph query |
 |---|---|---|---|
 | L0 | Entry notes | `#5B5BD6` indigo | `path:README.md OR path:AGENTS.md OR path:CLAUDE.md OR path:docs/SKILLS.md` |
-| L1 | Global maps | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
-| L2 | Registry routes and activation | `#2E7D32` green | `path:registry/` |
+| L1 | Hubs, switchboards, and declared graph entries | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
+| L2 | Family registries | `#2E7D32` green | `path:registry/` |
 | L3 | Skill cards and parked legacy cards | `#EF6C00` orange | `path:cards/` |
-| L4 | Canonical skills, interaction protocols, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:interaction-protocol/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
+| L4 | Canonical skill bodies, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
 | L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:theory-reference/` |
 
 ## Reading the graph
@@ -27,7 +28,7 @@ flowchart LR
   classDef L4 fill:#6A1B9A,color:#fff,stroke:#3E0F5C
   classDef L5 fill:#546E7A,color:#fff,stroke:#29434E
 
-  A["L0 Entry"] --> B["L1 Global maps"] --> C["L2 Activation and Registry"] --> E["L4 Skill or phase"] --> F["L5 Support"]
+  A["L0 Entry"] --> B["L1 Hub or switchboard"] --> C["L2 Family registry"] --> E["L4 Skill or phase"] --> F["L5 Support"]
   C -.-> D["L3 Cards (reserved)"] -.-> E
 
   class A L0
@@ -38,8 +39,8 @@ flowchart LR
   class F L5
 ```
 
-**Solid arrows are the agent's read path**: L0 -> L1 -> L2 activation -> one L2
-family registry -> L4. L3 is dotted because it is a human/graph layer: it
+**Solid arrows are the agent's read path**: L0 -> an L1 hub -> the L1 activation
+switchboard -> one L2 family registry -> L4. L3 is dotted because it is a human/graph layer: it
 enriches the graph but is never on the agent's critical path.
 
 ## L3 Cards
@@ -56,13 +57,28 @@ critical routing path.
 ## Rule
 
 Assign new files to a layer by **path and role**, reusing the existing colour.
-Do not create a colour per skill, per family, or per topic.
+Do not create a colour per skill, per family, or per topic. A hub must never use
+the skill colour merely because its directory also contains a protocol.
 
 Colour groups are ordered from specific layers to L5 support fallbacks. The
-first matching group is the file's layer. `docs/06_CHANGE_CONTROL.md` is an L1
-global map; operation cards under `protocols/repository/` and build/release
-guidance are L5 support. The derivative human guide under `docs/human/` is also
-L5 support and is not part of the agent routing path.
+first matching group is the file's layer. Exact L1 hub and switchboard paths
+therefore appear before the `registry/` and support fallbacks. Activation and
+every declared graph-concept entry are L1 teal; family registry files are L2
+green; executable skill bodies and phases are L4 violet. Operation cards,
+build/release guidance, and the derivative human guide remain L5 support.
+
+## Default overview
+
+The global graph opens with low-level maintenance paths filtered out:
+
+```text
+-path:docs/human/ -path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/
+```
+
+This changes only the default view. Open a green registry's Local Graph to see
+its linked violet skills, or clear the filter when maintaining slate support.
+Zoom, orphan visibility, force settings, and other personal preferences remain
+user-owned.
 
 ## Governance enforcement
 
@@ -75,11 +91,11 @@ python3 scripts/graph_layers.py --check
 
 Visible concept relationships are declared in
 `protocols/repository/CONTRACT.json`. The graph validator reads those generic
-contracts; it does not hardcode a separate topology function for every new
-protocol. A user-visible canonical concept backed only by JSON or code still
-needs one Markdown entry node and declared links to its authorities and
-consumers. The same check rejects dangling repository wikilinks after a move or
-deletion while respecting explicitly declared read-only external skill pointers.
+contracts and their `graph_role_policy`. Every declared graph-concept entry must
+resolve to L1, and sentinel paths prove the switchboard, registry, card, skill,
+and support roles. A user-visible canonical concept backed only by JSON or code
+still needs one Markdown entry node and declared links. The same check rejects
+dangling repository wikilinks after a move or deletion.
 
 When the policy is correct but the live Obsidian groups are stale, use
 `python3 scripts/graph_layers.py --sync`. Synchronization replaces only

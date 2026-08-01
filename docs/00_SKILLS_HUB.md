@@ -35,7 +35,7 @@ pick the enabled family registry and load the active skill or component.
 ## Layers
 
 [[05_COLOR_LAYERS]] — graph colour model.
-L0 entry · L1 global · L2 registry and activation · L3 cards · L4 skills · L5 support.
+L0 entry · L1 hubs and switchboards · L2 family registries · L3 cards · L4 skills · L5 support.
 
 ## Do Not
 

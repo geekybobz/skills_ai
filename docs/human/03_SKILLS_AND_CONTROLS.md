@@ -37,6 +37,11 @@ stateDiagram-v2
 Active and manual routes use Obsidian wikilinks. Off, hidden, and deprecated
 routes remain plain paths, so the graph does not pretend they are enabled.
 
+The Activation Register is the teal global switchboard. The six family route
+tables are green registries. Their linked task instructions are violet skills,
+so activation, routing metadata, and executable instructions remain visually
+different.
+
 ## Live discovery
 
 Ask “What skills are available?” or run:

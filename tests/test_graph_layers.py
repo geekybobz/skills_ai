@@ -16,6 +16,7 @@ from graph_layers import (  # noqa: E402
     check_graph,
     classify_path,
     graph_link_errors,
+    graph_role_errors,
     interaction_link_errors,
     sync_graph,
     wikilink_errors,
@@ -26,9 +27,11 @@ class GraphLayerTests(unittest.TestCase):
     def test_governance_and_support_paths_have_expected_layers(self) -> None:
         cases = {
             "docs/06_CHANGE_CONTROL.md": "L1",
+            "registry/activation.md": "L1",
+            "interaction-protocol/README.md": "L1",
+            "docs/SHARED_DOCUMENTATION_MODEL.md": "L1",
             "registry/design.md": "L2",
             "design-with-claude/poster-lead.md": "L4",
-            "interaction-protocol/README.md": "L4",
             "protocols/repository/ADD.md": "L5",
             "docs/07_BUILD_AND_RELEASE.md": "L5",
             "runtime/PROTOCOL.md": "L5",
@@ -46,6 +49,31 @@ class GraphLayerTests(unittest.TestCase):
     def test_all_declared_graph_concepts_are_connected(self) -> None:
         self.assertEqual([], graph_link_errors(ROOT))
 
+    def test_declared_graph_roles_are_layered_by_node_type(self) -> None:
+        self.assertEqual([], graph_role_errors(ROOT))
+
+    def test_future_declared_hub_cannot_inherit_support_layer(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            contract_path = root / "protocols" / "repository" / "CONTRACT.json"
+            contract_path.parent.mkdir(parents=True)
+            contract_path.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "roles": [{"id": "fixture", "patterns": ["**"]}],
+                        "graph_role_policy": {
+                            "graph_contract_entry_layer": "L1",
+                            "required_paths": {},
+                        },
+                        "graph_contracts": [{"id": "future", "entry": "runtime/PROTOCOL.md"}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            errors = graph_role_errors(root)
+        self.assertTrue(any("graph hub has wrong layer" in error for error in errors))
+
     def test_broken_wikilink_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -61,6 +89,7 @@ class GraphLayerTests(unittest.TestCase):
                 json.dumps(
                     {
                         "showOrphans": False,
+                        "search": "-path:tests/",
                         "scale": 0.75,
                         "colorGroups": [],
                     }
@@ -71,6 +100,7 @@ class GraphLayerTests(unittest.TestCase):
             sync_graph(root)
             updated = json.loads(graph_path.read_text(encoding="utf-8"))
             self.assertFalse(updated["showOrphans"])
+            self.assertEqual("-path:tests/", updated["search"])
             self.assertEqual(0.75, updated["scale"])
             self.assertTrue(updated["colorGroups"])
             self.assertEqual([], check_graph(root, check_policy=False))

@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `7`.
+Protocol version: `8`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
 amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. Human
@@ -110,7 +110,11 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 9. Classify every new or moved Markdown file under [[05_COLOR_LAYERS]], require
    its path to match a canonical colour query, and run
    `python3 scripts/graph_layers.py --check`. A new layer or colour is a
-   protocol amendment.
+   protocol amendment. Every declared graph-concept entry is an L1 hub;
+   Activation is an L1 switchboard; family registries are L2; parked cards are
+   L3; executable skills and phases are L4; runtime and supporting material are
+   L5. Future additions must extend the matching query and role regression in
+   the same change rather than inheriting a misleading fallback colour.
 10. Evaluate every declared change against `docs/human/_SOURCE_MAP.json`. A
     mapped canonical change must update every listed human page in the same
     staged change. Run `python3 scripts/human_docs_guard.py --check-staged`

@@ -9,17 +9,17 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 Back: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md). Next:
 [maintaining skills](07_MAINTAINING_SKILLS.md).
 
-Protocol version 7 adds no graph node or color: the task receipt and ignored
-`.runtime/` ambiguity observations are runtime metadata, not Obsidian concepts.
-Canonical Markdown additions still require the normal layer and link checks.
+Protocol version 8 makes color describe the kind of node you are looking at.
+The palette is unchanged, but Activation and every declared concept entry are
+now teal hubs instead of being mixed with registries or skills.
 
-Color describes architectural depth, not topic. New skills reuse an existing
-layer color rather than receiving a new color.
+Color describes architectural role, not topic. Individual skills do not get
+individual colors.
 
 ```mermaid
 flowchart LR
-    L0["L0 Indigo<br/>Entry documents"] --> L1["L1 Teal<br/>Global maps"]
-    L1 --> L2["L2 Green<br/>Registry and activation"]
+    L0["L0 Indigo<br/>Entry documents"] --> L1["L1 Teal<br/>Hubs and switchboards"]
+    L1 --> L2["L2 Green<br/>Family registries"]
     L2 --> L4["L4 Violet<br/>Skills and phases"]
     L4 --> L5["L5 Slate<br/>Runtime and support"]
     L2 -. "Human graph context" .-> L3["L3 Orange<br/>Cards"]
@@ -42,21 +42,37 @@ flowchart LR
 | Layer | Examples |
 |---|---|
 | L0 | Human and agent entry notes |
-| L1 | Hub, risk, color, combination, and change-control maps |
-| L2 | Activation register and family route tables |
+| L1 | Skills Hub, Activation, protocol/documentation hubs, risk, color, combination, and change-control maps |
+| L2 | Family route tables such as design, UI, build, interaction, and theory |
 | L3 | Human-visible legacy or context cards |
 | L4 | Canonical skills, external pointers, and theory phases |
 | L5 | Human guide, protocols, runtime, adapters, scripts, tests, and requests |
 
-`registry/interaction.md` is an L2 routing/control node. The visible
-[Interaction Protocol hub](../../interaction-protocol/README.md) is L4 violet
-and links the skills hub, activation, registry, canonical JSON contract,
-runtime, API, migration record, and tests. The JSON and test files remain
-attachments rather than extra Markdown graph nodes.
+`registry/interaction.md` is an L2 green family registry. The visible
+[Interaction Protocol hub](../../interaction-protocol/README.md) is L1 teal and
+links the skills hub, activation, registry, canonical JSON contract, runtime,
+API, migration record, and tests. The Shared Documentation Model is also an L1
+hub. JSON and test files remain slate support rather than extra hubs.
+
+With the current repository this gives 4 indigo entries, 8 teal hubs, 6 green
+family registries, 1 orange parked card, 47 violet skill bodies or phases, and
+43 slate support notes.
+
+## Default overview
+
+The global graph starts with low-level maintenance paths hidden. This leaves the
+entry -> hub -> registry -> skill route visible. Open a green registry's Local
+Graph to inspect only its linked violet skills. Clear the search filter when you
+need runtime, tests, operation cards, or other slate support.
+
+The filter does not delete or unlink anything. Zoom, force settings, orphan
+visibility, and collapsed panels remain personal view state, and color-group
+synchronization preserves them.
 
 Generic concept links now come from `protocols/repository/CONTRACT.json`.
 Therefore a future JSON- or code-backed protocol must declare a visible
-Markdown entry and its required links instead of adding a one-off validator.
+Markdown entry and its required links. The same contract requires that entry to
+be L1 teal instead of adding a one-off validator.
 The graph check also catches ordinary dangling wikilinks after moves and
 deletions while allowing only explicitly declared external skill pointers.
 

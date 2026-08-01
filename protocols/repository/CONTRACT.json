@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 7,
+  "protocol_version": 8,
   "approval_operations": [
     "move",
     "deprecate",
@@ -210,6 +210,16 @@
       "checks": []
     }
   ],
+  "graph_role_policy": {
+    "graph_contract_entry_layer": "L1",
+    "required_paths": {
+      "registry/activation.md": "L1",
+      "registry/design.md": "L2",
+      "cards/legacy/quantum-job-collector.md": "L3",
+      "design-with-claude/poster-lead.md": "L4",
+      "runtime/PROTOCOL.md": "L5"
+    }
+  },
   "graph_contracts": [
     {
       "id": "interaction-protocol",

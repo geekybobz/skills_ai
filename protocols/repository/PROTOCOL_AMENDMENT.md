@@ -46,6 +46,13 @@ live repository view, and reserves ignored `.runtime/` state for bounded,
 prompt-free observations. Runtime observations never become routing or
 documentation authority.
 
+Protocol version 8 makes Obsidian colour an architectural node-type contract.
+All declared concept entries and the Activation switchboard are L1 hubs, family
+registries are L2, parked cards are L3, executable skills and phases are L4,
+and support remains L5. `CONTRACT.json` records role sentinels, the graph
+validator rejects a hub with a registry or skill colour, and the default global
+view hides low-level maintenance paths without changing the underlying graph.
+
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
 does not edit this protocol directly.

@@ -92,7 +92,9 @@ git diff --cached --check
 
 11. Documentation states platform ownership and unverified acceptance boundaries.
 12. Every Markdown file resolves to a documented graph layer and the live
-    Obsidian `colorGroups` match the canonical layer palette.
+    Obsidian `colorGroups` match the canonical layer palette. Declared concept
+    entries are L1 hubs, Activation is an L1 switchboard, family registries are
+    L2, and executable skills or phases are L4.
 13. Every mapped human-facing page is updated in the same staged change and the
     human guide remains excluded from runtime routing sources.
 14. The commit body records motivation, root cause, scope, tests, rollback, and

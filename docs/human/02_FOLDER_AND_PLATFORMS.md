@@ -87,6 +87,8 @@ can leave a router process behind.
 Repository maintenance is also shared: both platforms read the same
 `CONTRACT.json` and `scan_consistency.py` receipt. The scanner validates shared
 behavior; each platform still certifies only its own live adapter lifecycle.
+That contract also protects the Obsidian node types: a visible concept entry is
+a teal hub, not a green registry or violet skill.
 
 ## Local process API
 

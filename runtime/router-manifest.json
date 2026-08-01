@@ -1538,11 +1538,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "79d4b7ae211b7b976d898ac3f68445a329cbe23b29a78503f661e22aa4df8f48",
+  "source_hash": "985633d04f39a6a3b5e42bb37871398e2243893eabdb78fc1d985212e95f956a",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "9b7ca381b4d9804582392fd6f92da4dd9b620839fb12a4ca70e68421f0909300"
+      "sha256": "7672558ad5368ce5ce2cc8ef7f59e7fd873f5aabc8eacdad3711eb38cd3d34fc"
     },
     {
       "path": "interaction-protocol/protocol.json",

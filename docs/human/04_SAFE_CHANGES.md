@@ -97,6 +97,11 @@ documentation model, common agent-entry source, or platform overlay, then run
 stale projections, while semantic review still checks whether the illustrated
 teaching pages remain accurate and understandable.
 
+Protocol version 8 also guards graph meaning. A future declared hub must be L1
+teal, a family registry L2 green, and a skill or phase L4 violet. The graph
+validator blocks a change that silently lets one node type inherit another
+type's fallback colour.
+
 ## External tasks
 
 A task that starts outside this repository treats Skills AI as read-only. With

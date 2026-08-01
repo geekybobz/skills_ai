@@ -27,7 +27,10 @@ LAYERS = (
     {
         "id": "L1",
         "query": (
-            "path:docs/00_SKILLS_HUB.md OR path:docs/03_COMBO_MAP.md OR "
+            "path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR "
+            "path:interaction-protocol/README.md OR "
+            "path:docs/SHARED_DOCUMENTATION_MODEL.md OR "
+            "path:docs/03_COMBO_MAP.md OR "
             "path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR "
             "path:docs/06_CHANGE_CONTROL.md"
         ),
@@ -38,8 +41,7 @@ LAYERS = (
     {
         "id": "L4",
         "query": (
-            "path:design-with-claude/ OR path:interaction-protocol/ OR "
-            "path:theory-reference/SKILL.md OR "
+            "path:design-with-claude/ OR path:theory-reference/SKILL.md OR "
             "path:theory-reference/shared/SKILL.md OR "
             "path:theory-reference/shared/phases/ OR path:external-skills/"
         ),
@@ -145,6 +147,49 @@ def graph_link_errors(
     return errors
 
 
+def graph_role_errors(root: Path = ROOT) -> list[str]:
+    """Enforce architectural node roles independently of query ordering."""
+    try:
+        contract = load_contract(root)
+    except GuardError as exc:
+        return [str(exc)]
+    policy = contract.get("graph_role_policy")
+    if not isinstance(policy, dict):
+        return ["repository contract is missing graph_role_policy"]
+
+    errors: list[str] = []
+    entry_layer = policy.get("graph_contract_entry_layer")
+    if not isinstance(entry_layer, str):
+        errors.append("graph_role_policy.graph_contract_entry_layer must be a layer id")
+    else:
+        for graph_contract in contract.get("graph_contracts", []):
+            entry = graph_contract.get("entry")
+            if not isinstance(entry, str):
+                continue
+            actual = classify_path(entry)
+            if actual != entry_layer:
+                errors.append(
+                    f"graph hub has wrong layer: {entry} is {actual or 'unclassified'}, "
+                    f"expected {entry_layer}"
+                )
+
+    required = policy.get("required_paths")
+    if not isinstance(required, dict):
+        errors.append("graph_role_policy.required_paths must be an object")
+    else:
+        for path, expected in required.items():
+            if not isinstance(path, str) or not isinstance(expected, str):
+                errors.append("graph_role_policy.required_paths must map paths to layer ids")
+                continue
+            actual = classify_path(path)
+            if actual != expected:
+                errors.append(
+                    f"graph role has wrong layer: {path} is {actual or 'unclassified'}, "
+                    f"expected {expected}"
+                )
+    return errors
+
+
 def wikilink_errors(root: Path = ROOT) -> list[str]:
     """Reject dangling repository wikilinks without loading external submodule notes."""
     markdown = list(_markdown_paths(root))
@@ -227,6 +272,7 @@ def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
         errors.append("unclassified Markdown: " + ", ".join(unclassified))
     if check_policy:
         errors.extend(graph_link_errors(root))
+        errors.extend(graph_role_errors(root))
         errors.extend(wikilink_errors(root))
     return errors
 

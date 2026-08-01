@@ -50,7 +50,7 @@ flowchart TD
 | [Skills and controls](docs/human/03_SKILLS_AND_CONTROLS.md) | Active, manual, off, hidden, and deprecated states |
 | [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, protocols, external requests, and documentation updates |
 | [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, timeouts, and cleanup |
-| [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | The Obsidian layer model and validation commands |
+| [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | How colors distinguish entries, hubs, registries, skills, parked cards, and support |
 | [Maintaining skills](docs/human/07_MAINTAINING_SKILLS.md) | How additions, edits, moves, deletions, scans, suggestions, and Git checks work |
 | [Repository atlas](docs/human/08_REPOSITORY_ATLAS.md) | What every folder and file category means, from a simple map to the live file index |
 | [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | How single-file, packaged, submodule, protocol, and external skills are structured |
@@ -76,6 +76,10 @@ storing your prompt or answer.
 
 Depth is carried into both the Codex compact context and Claude's injected
 context; it is not merely parsed inside the router.
+
+In Obsidian, teal means hub or switchboard, green means family registry, and
+violet means an executable skill body or phase. The default overview hides
+low-level maintenance paths so this routing spine remains readable.
 
 To see the live registry without loading skill bodies, run:
 

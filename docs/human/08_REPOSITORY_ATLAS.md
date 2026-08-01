@@ -85,3 +85,8 @@ scratch files make the view stale. Ignored runtime state remains outside it.
 
 The deeper technical rationale is recorded in the
 [shared documentation model](../SHARED_DOCUMENTATION_MODEL.md).
+
+Obsidian color groups are the controlled part of `.obsidian/graph.json`: they
+encode node roles and are validated. Zoom, force settings, orphan visibility,
+and collapsed panels remain personal state. The approved default overview
+filter hides maintenance folders without removing their files or links.

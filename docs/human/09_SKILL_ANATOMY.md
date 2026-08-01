@@ -42,6 +42,10 @@ its exact id through `/skill <id>` or the equivalent exact “use the `<id>`
 skill” form. Output format and receipt controls change presentation without
 consuming this one task-skill slot.
 
+In the Obsidian graph, Activation is a teal switchboard, the family registry is
+green, and the actual skill Markdown is violet. This makes those three parts of
+the same route visually distinct.
+
 ## Multi-file packaged skill
 
 The `theory-reference/` submodule is a package with reusable layers.
@@ -82,6 +86,8 @@ belong to its own Git history and require an explicit boundary crossing.
 - `README.md` is the visible human and Obsidian entry.
 - Runtime code applies the selected general or mathematical response context.
 - It does not consume the one task-skill slot.
+
+Its `README.md` is therefore a teal protocol hub rather than a violet skill.
 
 ## External skill pointer
 

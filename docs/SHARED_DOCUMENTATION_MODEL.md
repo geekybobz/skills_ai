@@ -44,7 +44,7 @@ Canonical inputs are:
 - `protocols/repository/DOCUMENTATION.json`: repository areas, file-purpose
   overrides, package boundaries, projections, and exclusions.
 - `protocols/repository/CONTRACT.json`: path roles, checks, generated outputs,
-  graph contracts, and protected boundaries.
+  graph contracts, graph-node role policy, and protected boundaries.
 - Registry and activation sources: skill purpose, triggers, exclusions, state,
   and canonical path.
 - `runtime/AGENT_ENTRY_SHARED.md`: common Codex and Claude repository rules.
@@ -57,6 +57,10 @@ Generated outputs are:
 - `docs/human/_LIVE_REPOSITORY_INDEX.md`.
 - `docs/human/_LIVE_SKILL_CATALOG.md`.
 - The separately compiled `runtime/router-manifest.json`.
+
+Each declared documentation or protocol concept has one visible L1 graph hub.
+The graph role policy prevents that hub from being colored as a family registry
+or executable skill merely because of its directory.
 
 ## Human pedagogy
 

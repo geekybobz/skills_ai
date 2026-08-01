@@ -191,6 +191,12 @@ nodes and twelve edges; a left-to-right diagram may have at most eight nodes.
 Larger ideas must use top-down layout or several focused diagrams. This keeps
 the guide readable in Obsidian and narrow application panes.
 
+Graph colors are also checked by role. When a future change adds a declared
+concept hub, the same change must add its exact L1 query and a regression
+sentinel. New family registry files inherit L2 from `registry/`; new skill files
+inherit L4 from their canonical skill collection. A fallback support color is
+never accepted for a new hub merely because the Markdown file is valid.
+
 ## Codex and Claude
 
 Both platforms use the same contract, scanner, registry, manifest, graph rules,
