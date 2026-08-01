@@ -16,7 +16,7 @@ flowchart LR
     R --> P["Compact general context<br/>plus small math overlay when needed"]
     P --> M{"MATCH?"}
     M -- "No" --> N["Normal response<br/>no local skill body"]
-    M -- "Yes" --> S["One selected skill<br/>median 821, max 1,419 tokens"]
+    M -- "Yes" --> S["One selected skill<br/>median 962, max 1,419 tokens"]
     N --> A["Answer"]
     S --> A
     WHOLE["Whole design collection<br/>about 30k tokens"] -. "Avoided" .-> S
@@ -29,8 +29,8 @@ flowchart LR
     class WHOLE avoided
 ```
 
-The 2026-07-31 post-migration local benchmark measured 25/25 fixture accuracy,
-about `0.39 ms` core-routing p95, and about `36.3 ms` complete-process p95.
+The 2026-08-01 documentation-model benchmark measured 27/27 fixture accuracy,
+about `0.40 ms` core-routing p95, and about `36.9 ms` complete-process p95.
 The compact receipt measured 82 tokens at the median and 102 at the maximum.
 Process time includes
 starting Python, reading the request, loading the manifest, routing, writing JSON,
@@ -43,6 +43,11 @@ python3 scripts/benchmark_router.py --json
 Maintenance scans are separate from the hot routing path. They use Git to load
 only changed paths and affected authorities; the full unit suite is currently a
 few seconds, while ordinary routing keeps its small one-shot process.
+
+The shared documentation model adds no normal-task file read. `AGENTS.md` and
+`CLAUDE.md` are generated as complete standalone entries, and the live human
+indexes remain excluded from the router manifest. Repository-view generation
+runs only during maintenance and documentation checks.
 
 ## Timeout and cleanup
 
@@ -79,3 +84,4 @@ flowchart TD
 | Claude hook timeout | Keep the Python child timeout below the outer hook timeout |
 | Router process remains | Terminate and reap only the exact recorded process/session |
 | Installed adapter is stale | Dry-run, inspect, then reinstall with platform-owner approval |
+| Root entry or live human index is stale | Edit its canonical source, run `compile_repository_views.py`, then re-run the changed or staged scan |

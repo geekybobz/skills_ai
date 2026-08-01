@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "principle": "Maintain facts once and project them into bounded human, Codex, and Claude views.",
+  "areas": [
+    {
+      "path": ".obsidian",
+      "title": "Obsidian configuration",
+      "purpose": "Personal graph and vault display configuration; graph colors are validated while personal view state is preserved."
+    },
+    {
+      "path": "adapters",
+      "title": "Platform adapters",
+      "purpose": "Thin Codex and Claude access, installation, and lifecycle ownership around the shared router."
+    },
+    {
+      "path": "cards",
+      "title": "Graph cards",
+      "purpose": "Human and Obsidian context for parked or legacy items; never a runtime routing source."
+    },
+    {
+      "path": "design-with-claude",
+      "title": "Single-file skills",
+      "purpose": "Independent task skills whose canonical instructions live in one Markdown file each."
+    },
+    {
+      "path": "docs",
+      "title": "Documentation and governance",
+      "purpose": "Machine maintenance authorities, architecture records, build guidance, and the derivative human learning route."
+    },
+    {
+      "path": "external-skills",
+      "title": "External skill pointers",
+      "purpose": "Declared links to skills owned by another repository; external targets are never traversed by the documentation generator."
+    },
+    {
+      "path": "interaction-protocol",
+      "title": "Interaction protocol",
+      "purpose": "Shared general and equation-led response behavior composed with task routing without consuming the task-skill slot."
+    },
+    {
+      "path": "protocols",
+      "title": "Repository protocols",
+      "purpose": "Operation-specific rules and machine contracts for safe additions, edits, migrations, moves, deletion, installation, and amendments."
+    },
+    {
+      "path": "registry",
+      "title": "Skill registry",
+      "purpose": "Canonical family, trigger, exclusion, path, and activation metadata used to compile the runtime manifest."
+    },
+    {
+      "path": "requests",
+      "title": "Change-request inbox",
+      "purpose": "Narrow review packets created by tasks outside this repository; requests are never skill or routing authority."
+    },
+    {
+      "path": "runtime",
+      "title": "Shared runtime",
+      "purpose": "Platform-neutral routing protocol, API, compiled manifest, and compact agent-entry source."
+    },
+    {
+      "path": "scripts",
+      "title": "Deterministic tools",
+      "purpose": "Local, bounded commands that compile, route, validate, scan, benchmark, install, and generate repository views."
+    },
+    {
+      "path": "tests",
+      "title": "Verification",
+      "purpose": "Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior."
+    },
+    {
+      "path": "theory-reference",
+      "title": "Packaged theory skill",
+      "purpose": "A separately owned Git submodule with thin platform wrappers, shared phase instructions, rules, templates, and support scripts."
+    }
+  ],
+  "artifact_overrides": {
+    ".gitignore": "Declares repository-local paths Git should not track.",
+    ".gitmodules": "Pins the separately owned theory-reference Git submodule.",
+    "AGENTS.md": "Generated standalone Codex repository entry containing shared rules plus the Codex lifecycle overlay.",
+    "CLAUDE.md": "Generated standalone Claude repository entry containing shared rules plus the Claude hook overlay.",
+    "README.md": "Human-facing entry and progressive learning map; it is never runtime routing authority.",
+    "adapters/codex/ENTRY.md": "Canonical Codex-only invocation and session-ownership overlay used to generate AGENTS.md.",
+    "adapters/claude/ENTRY.md": "Canonical Claude-only hook, child-lifecycle, and acceptance overlay used to generate CLAUDE.md.",
+    "runtime/AGENT_ENTRY_SHARED.md": "Canonical agent rules shared by generated Codex and Claude repository entries.",
+    "runtime/router-manifest.json": "Generated compact routing and activation data consumed by the one-shot router.",
+    "docs/human/_LIVE_REPOSITORY_INDEX.md": "Generated exhaustive human reference for repository files, ownership, roles, and purposes.",
+    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated human reference for live skills, triggers, exclusions, states, and package contents."
+  },
+  "agent_entries": {
+    "common": "runtime/AGENT_ENTRY_SHARED.md",
+    "outputs": {
+      "AGENTS.md": "adapters/codex/ENTRY.md",
+      "CLAUDE.md": "adapters/claude/ENTRY.md"
+    }
+  },
+  "human_outputs": {
+    "repository_index": "docs/human/_LIVE_REPOSITORY_INDEX.md",
+    "skill_catalog": "docs/human/_LIVE_SKILL_CATALOG.md"
+  },
+  "packages": [
+    {
+      "id": "interaction-protocol",
+      "path": "interaction-protocol",
+      "kind": "shared-protocol",
+      "traversal": "repository",
+      "purpose": "Small shared response contract with a human graph entry and a canonical JSON source."
+    },
+    {
+      "id": "theory-reference",
+      "path": "theory-reference",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Multi-file theory skill with platform wrappers, shared phases, rules, templates, and scripts."
+    },
+    {
+      "id": "quantum-job-collector",
+      "path": "external-skills/quantum-job-collector",
+      "kind": "external-symlink",
+      "traversal": "none",
+      "purpose": "Externally owned career workflow pointer; Skills AI controls only its registry state."
+    }
+  ],
+  "exclusions": [
+    ".git/**",
+    ".DS_Store",
+    "sample_resources/**"
+  ]
+}

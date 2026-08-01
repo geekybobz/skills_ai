@@ -1,7 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "human_entry": "README.md",
   "required_marker": "audience: human",
+  "generated_guides": [
+    "docs/human/_LIVE_REPOSITORY_INDEX.md",
+    "docs/human/_LIVE_SKILL_CATALOG.md"
+  ],
   "mermaid_limits": {
     "max_nodes": 12,
     "max_edges": 12,
@@ -29,8 +33,11 @@
       "sources": [
         "AGENTS.md",
         "CLAUDE.md",
+        "runtime/AGENT_ENTRY_SHARED.md",
+        "runtime/README.md",
         "runtime/SKILL.md",
         "adapters/**",
+        "scripts/compile_repository_views.py",
         "scripts/install_runtime_adapter.py"
       ],
       "guides": [
@@ -49,9 +56,11 @@
         "scripts/validate_registry.py",
         "runtime/router-manifest.json"
       ],
-      "guides": [
-        "docs/human/03_SKILLS_AND_CONTROLS.md"
-      ]
+            "guides": [
+                "docs/human/03_SKILLS_AND_CONTROLS.md",
+                "docs/human/09_SKILL_ANATOMY.md",
+                "docs/human/_LIVE_SKILL_CATALOG.md"
+            ]
     },
     {
       "name": "safety-and-governance",
@@ -71,8 +80,27 @@
         "docs/human/07_MAINTAINING_SKILLS.md"
       ]
     },
-    {
-      "name": "performance-and-lifecycle",
+        {
+            "name": "documentation-model",
+            "sources": [
+                "protocols/repository/DOCUMENTATION.json",
+                "protocols/repository/CONTRACT.json",
+                "runtime/AGENT_ENTRY_SHARED.md",
+                "adapters/codex/ENTRY.md",
+                "adapters/claude/ENTRY.md",
+                "scripts/compile_repository_views.py"
+            ],
+            "guides": [
+                "README.md",
+                "docs/human/02_FOLDER_AND_PLATFORMS.md",
+                "docs/human/08_REPOSITORY_ATLAS.md",
+                "docs/human/09_SKILL_ANATOMY.md",
+                "docs/human/_LIVE_REPOSITORY_INDEX.md",
+                "docs/human/_LIVE_SKILL_CATALOG.md"
+            ]
+        },
+        {
+            "name": "performance-and-lifecycle",
       "sources": [
         "scripts/benchmark_router.py",
         "tests/test_router_lifecycle.py"

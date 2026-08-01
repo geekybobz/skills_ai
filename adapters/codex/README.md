@@ -4,6 +4,11 @@ Codex uses the shared `runtime/SKILL.md` as its compact entry skill. The entry
 calls the same Python router used by every adapter and loads only a returned
 skill path.
 
+The repository-level `AGENTS.md` is generated from
+`runtime/AGENT_ENTRY_SHARED.md` plus `adapters/codex/ENTRY.md`. Edit those
+canonical sources and run `scripts/compile_repository_views.py`; do not maintain
+a second copy of the shared rules here or in Codex memory.
+
 Install or verify:
 
 ```bash

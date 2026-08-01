@@ -32,6 +32,7 @@ class ChangeGuardTests(unittest.TestCase):
 
     def test_machine_contract_exists(self) -> None:
         self.assertTrue((ROOT / "protocols" / "repository" / "CONTRACT.json").is_file())
+        self.assertTrue((ROOT / "protocols" / "repository" / "DOCUMENTATION.json").is_file())
 
     def test_scoped_repository_edit_is_allowed(self) -> None:
         report = assess_change("edit", ["docs/06_CHANGE_CONTROL.md"])
@@ -96,7 +97,15 @@ class ChangeGuardTests(unittest.TestCase):
 
     def test_registry_source_reports_affected_generated_manifest(self) -> None:
         report = assess_change("edit", ["registry/build-ops.md"])
-        self.assertEqual(["runtime/router-manifest.json"], report["affected_generated_outputs"])
+        self.assertEqual(
+            [
+                "docs/human/_LIVE_REPOSITORY_INDEX.md",
+                "docs/human/_LIVE_SKILL_CATALOG.md",
+                "runtime/router-manifest.json",
+            ],
+            report["affected_generated_outputs"],
+        )
+        self.assertIn("views", report["required_check_ids"])
 
     def test_unmapped_new_path_is_blocked(self) -> None:
         report = assess_change("add", ["unknown-concept/source.bin"])

@@ -70,3 +70,9 @@ current request.
 
 The [Interaction Protocol hub](../../interaction-protocol/README.md) links
 these controls to the registry, runtime behavior, API receipt, and prompt tests.
+
+For a human-readable list containing current purpose, triggers, exclusions,
+state, source path, structure type, approximate size, and declared package
+contents, open the [live skill catalog](_LIVE_SKILL_CATALOG.md). It is generated
+from the same registry used by Codex and Claude; it is not a second catalog to
+maintain manually.

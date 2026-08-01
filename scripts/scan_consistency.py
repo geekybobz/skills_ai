@@ -29,6 +29,7 @@ from change_guard import (  # noqa: E402
     required_check_ids,
 )
 from compile_registry import atomic_write  # noqa: E402
+from compile_repository_views import render_outputs, stale_outputs  # noqa: E402
 from graph_layers import check_graph  # noqa: E402
 from human_docs_guard import (  # noqa: E402
     HumanDocsError,
@@ -436,6 +437,24 @@ def _human_findings(root: Path, changed_paths: list[str]) -> list[dict[str, Any]
     return findings
 
 
+def _view_findings(root: Path) -> list[dict[str, Any]]:
+    try:
+        stale = stale_outputs(root)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return [finding("block", "VIEW_BUILD_FAILED", str(exc))]
+    if not stale:
+        return []
+    return [
+        finding(
+            "block",
+            "STALE_GENERATED_VIEW",
+            "Generated Codex, Claude, or human repository views do not match their canonical sources.",
+            paths=stale,
+            suggestion="Run python3 scripts/compile_repository_views.py after reviewing canonical source changes.",
+        )
+    ]
+
+
 def _graph_findings(root: Path) -> list[dict[str, Any]]:
     return [
         finding("block", "GRAPH_INVALID", error)
@@ -549,6 +568,7 @@ def apply_generated_outputs(
     contract = load_contract(root)
     paths = list(changed_paths)
     actions: list[dict[str, str]] = []
+    view_outputs: dict[str, str] | None = None
     for output, rule in contract["generated_outputs"].items():
         if not any(
             _matches_pattern(path, pattern)
@@ -556,12 +576,17 @@ def apply_generated_outputs(
             for pattern in rule.get("source_patterns", [])
         ):
             continue
-        if output != "runtime/router-manifest.json":
-            raise ScanError(f"no allowlisted writer exists for generated output: {output}")
         target = root / output
         if target.is_symlink():
             raise ScanError(f"refusing generated write through symlink: {output}")
-        content = json.dumps(build_manifest(root), indent=2, sort_keys=True) + "\n"
+        if output == "runtime/router-manifest.json":
+            content = json.dumps(build_manifest(root), indent=2, sort_keys=True) + "\n"
+        else:
+            if view_outputs is None:
+                view_outputs = render_outputs(root)
+            if output not in view_outputs:
+                raise ScanError(f"no allowlisted writer exists for generated output: {output}")
+            content = view_outputs[output]
         if target.is_file() and target.read_text(encoding="utf-8") == content:
             actions.append({"path": output, "action": "unchanged"})
             continue
@@ -636,6 +661,8 @@ def execute_checks(
             )
     if "benchmark" in selected:
         commands.append(("benchmark", [sys.executable, "scripts/benchmark_router.py", "--json"]))
+    if "views" in selected:
+        commands.append(("views", [sys.executable, "scripts/compile_repository_views.py", "--check"]))
     return [_run_command(check_id, command, root=root) for check_id, command in commands]
 
 
@@ -756,6 +783,8 @@ def scan(
             findings.extend(_graph_findings(root))
         if "human-docs" in check_ids or mode == "full":
             findings.extend(_human_findings(root, scoped_paths))
+        if "views" in check_ids or mode == "full":
+            findings.extend(_view_findings(root))
 
         behavior_roles = {"registry-source", "shared-runtime", "skill-source"}
         if behavior_roles.intersection({role for values in roles.values() for role in values}):

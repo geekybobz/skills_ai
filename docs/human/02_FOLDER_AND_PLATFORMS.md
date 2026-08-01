@@ -78,3 +78,14 @@ not an HTTP server:
 The response is either `MATCH` with one canonical skill record or `NORMAL` with
 no skill body. Avoiding a permanent daemon removes port, authentication, and
 orphan-service complexity.
+
+## Continue from the map to the files
+
+This chapter gives the first folder-level picture. Continue to the
+[repository atlas](08_REPOSITORY_ATLAS.md) for a progressive explanation of
+canonical, generated, explanatory, platform, test, personal, submodule, and
+external files. The atlas then links to the exhaustive generated file index.
+
+Codex and Claude root entries are generated from one shared source plus one
+small platform overlay. They remain standalone at runtime, so sharing the source
+does not add another read or token hop.

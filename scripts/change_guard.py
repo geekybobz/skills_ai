@@ -44,6 +44,7 @@ CHECK_COMMANDS = {
         "python3 scripts/toggle_registry.py --check",
     ),
     "unit": ("python3 -m unittest discover -s tests",),
+    "views": ("python3 scripts/compile_repository_views.py --check",),
 }
 
 

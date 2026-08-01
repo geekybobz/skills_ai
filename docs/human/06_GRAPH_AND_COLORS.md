@@ -56,6 +56,11 @@ Markdown entry and its required links instead of adding a one-off validator.
 The graph check also catches ordinary dangling wikilinks after moves and
 deletions while allowing only explicitly declared external skill pointers.
 
+The shared documentation model is another declared graph concept. Its L5
+architecture record links the change-control authority, repository atlas, skill
+anatomy chapter, common agent-entry source, and platform overlays. Generated
+live indexes remain human L5 support and do not become routing nodes.
+
 Validate both the documented policy and the live Obsidian graph:
 
 ```bash

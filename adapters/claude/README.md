@@ -4,6 +4,12 @@ Thin `UserPromptSubmit` adapter over the shared Python router. It receives the
 Claude prompt, asks the shared runtime for `MATCH` or `NORMAL`, and injects the
 compact response context plus only the selected skill body.
 
+The repository-level `CLAUDE.md` is generated from
+`runtime/AGENT_ENTRY_SHARED.md` plus `adapters/claude/ENTRY.md`. The overlay owns
+only Claude hook and child-lifecycle differences. Edit the canonical sources and
+run `scripts/compile_repository_views.py`; do not keep a duplicate catalog or
+shared rule set in Claude memory.
+
 Install or verify:
 
 ```bash

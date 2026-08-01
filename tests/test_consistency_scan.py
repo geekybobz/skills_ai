@@ -118,5 +118,3 @@ class ConsistencyScanTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    ScanError,
-    apply_generated_outputs,

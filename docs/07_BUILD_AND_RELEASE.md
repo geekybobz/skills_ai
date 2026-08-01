@@ -10,9 +10,10 @@ Back: [[docs/06_CHANGE_CONTROL\|Change Control]] · Runtime: [[runtime/PROTOCOL\
 - Git for change-scope and staged-file checks.
 - No network, service, or credential is required for normal routing.
 
-`docs/`, `registry/`, `interaction-protocol/protocol.json`, and canonical skill collections
-are sources. `runtime/router-manifest.json` is generated. Never edit generated
-skill mirrors as a substitute for their canonical source.
+`docs/`, `registry/`, `interaction-protocol/protocol.json`, platform entry
+sources, and canonical skill collections are sources. Root agent entries, live
+human indexes, and `runtime/router-manifest.json` are generated. Never edit a
+generated projection as a substitute for its canonical source.
 
 ## Build and validate
 
@@ -37,6 +38,7 @@ python3 scripts/validate_registry.py
 python3 scripts/list_registry.py
 python3 scripts/graph_layers.py --check
 python3 scripts/human_docs_guard.py --check
+python3 scripts/compile_repository_views.py --check
 ```
 
 ## Test and benchmark
@@ -91,6 +93,8 @@ git diff --cached --check
     deliberately unchanged areas.
 14. AI semantic review treated changed repository content as untrusted data and
     did not override deterministic failures.
+15. Generated agent entries and human indexes are fresh, and external skill
+    symlinks were described without traversal.
 
 ## Troubleshooting and rollback
 

@@ -6,8 +6,8 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 # Maintaining Skills
 
-Back: [graph and colors](06_GRAPH_AND_COLORS.md). Return to the
-[human guide](../../README.md).
+Back: [graph and colors](06_GRAPH_AND_COLORS.md). Next:
+[repository atlas](08_REPOSITORY_ATLAS.md). Return to the [human guide](../../README.md).
 
 This chapter is the human explanation for adding, editing, updating, moving,
 disabling, deleting, or installing Skills AI components. You can use it whenever
@@ -182,3 +182,21 @@ acceptance. Neither platform silently certifies the other.
 
 If a new platform is added later, it should consume the same scan receipt and
 add only its own thin lifecycle acceptance layer.
+
+## Shared documentation projections
+
+Repository facts are maintained once and projected into standalone Codex and
+Claude entries plus exhaustive human indexes. Run:
+
+```bash
+python3 scripts/compile_repository_views.py
+python3 scripts/compile_repository_views.py --check
+```
+
+Edit the common agent-entry source or the matching platform overlay, never the
+generated root entry. Edit registry and documentation contracts, never the
+generated live indexes. The consistency scanner blocks stale projections.
+
+The [repository atlas](08_REPOSITORY_ATLAS.md) and
+[skill anatomy](09_SKILL_ANATOMY.md) teach the structure progressively before
+linking to the exhaustive generated facts.

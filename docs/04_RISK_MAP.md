@@ -19,6 +19,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | `interaction.math` | equation-led response structure only | no file writes; analytic reasoning precedes optional requested code |
 | `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
 | registry runtime compile | atomically rewrites `runtime/router-manifest.json` | compile after registry changes, then run validator and router tests |
+| repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, and two human indexes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
 | repository change control | add/edit/update/delete can cross source, generated, submodule, or external boundaries | read [[06_CHANGE_CONTROL]] and one operation card; expansion and protocol amendments need explicit approval |
 | external Skills AI change request | writes one Markdown intake packet | only `scripts/create_change_request.py`; target `requests/pending/`; no canonical edit, staging, commit, or launch from the external task |

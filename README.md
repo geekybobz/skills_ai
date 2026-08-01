@@ -50,6 +50,8 @@ flowchart TD
 | [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, timeouts, and cleanup |
 | [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | The Obsidian layer model and validation commands |
 | [Maintaining skills](docs/human/07_MAINTAINING_SKILLS.md) | How additions, edits, moves, deletions, scans, suggestions, and Git checks work |
+| [Repository atlas](docs/human/08_REPOSITORY_ATLAS.md) | What every folder and file category means, from a simple map to the live file index |
+| [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | How single-file, packaged, submodule, protocol, and external skills are structured |
 | [Interaction protocol graph](interaction-protocol/README.md) | General and math flows, controls, runtime, API, tests, and migration links |
 
 ## Six things to remember
@@ -67,6 +69,11 @@ To see the live registry without loading skill bodies, run:
 ```bash
 python3 scripts/list_registry.py
 ```
+
+For exhaustive human references generated from the same canonical sources, use
+the [live repository index](docs/human/_LIVE_REPOSITORY_INDEX.md) and
+[live skill catalog](docs/human/_LIVE_SKILL_CATALOG.md). Start with the atlas and
+skill-anatomy chapters first; the generated pages are the deeper factual layer.
 
 This guide explains the system but never overrides the live registry, runtime
 protocol, risk map, or change-control rules.

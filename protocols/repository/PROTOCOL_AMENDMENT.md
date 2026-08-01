@@ -34,6 +34,12 @@ Changing `CONTRACT.json`, scanner severities, executable check mappings, or the
 human-guide rendering limits is itself a protocol amendment. Run the protocol
 plan before editing and both changed and staged scans after editing.
 
+Changing `DOCUMENTATION.json`, shared agent-entry generation, platform overlays,
+generated human indexes, or the source-to-projection rules is also a protocol
+amendment. Keep the architecture rationale in
+[[docs/SHARED_DOCUMENTATION_MODEL]], regenerate all affected projections, and
+verify that ordinary routing still excludes human-facing material.
+
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
 does not edit this protocol directly.

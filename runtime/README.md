@@ -19,6 +19,8 @@ Shared components:
   equation-led mathematical overlay.
 - `router-manifest.json`: generated activation and routing data.
 - `SKILL.md`: compact entry contract usable by platform adapters.
+- `AGENT_ENTRY_SHARED.md`: canonical repository rules projected into standalone
+  Codex and Claude root entries with one small platform overlay each.
 - `scripts/registry_runtime.py`: compilation, deterministic selection, and
   structured context assembly, including live registry summaries.
 - `scripts/list_registry.py`: read-only active/manual/off discovery without
@@ -32,6 +34,10 @@ Shared components:
 Platform code stays in `adapters/`. Adapters may translate lifecycle events and
 install locations, but must not duplicate route rules, interaction rules, or
 skill selection logic.
+
+`scripts/compile_repository_views.py` also produces the root agent entries and
+exhaustive human reference indexes. Those projections are maintenance artifacts,
+not part of the routing hot path.
 
 No-match, disabled, hidden, deprecated, and ambiguous decisions are fail-open:
 the task continues normally without a local skill. Skill selection never grants

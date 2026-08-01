@@ -76,6 +76,13 @@ final quality gate.
 The guide also enforces small Mermaid diagrams. Oversized left-to-right flows
 must be changed to top-down form or split into focused diagrams before release.
 
+Shared factual views add one more safety boundary: edit the canonical registry,
+documentation model, common agent-entry source, or platform overlay, then run
+`python3 scripts/compile_repository_views.py`. Do not repair `AGENTS.md`,
+`CLAUDE.md`, or either `_LIVE_` human index by hand. The staged scanner rejects
+stale projections, while semantic review still checks whether the illustrated
+teaching pages remain accurate and understandable.
+
 ## External tasks
 
 A task that starts outside this repository treats Skills AI as read-only. With
