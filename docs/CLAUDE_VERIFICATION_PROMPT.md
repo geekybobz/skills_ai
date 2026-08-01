@@ -23,9 +23,16 @@ SCOPE_EXPANSION template and wait for permission before crossing that boundary.
 Audit and test:
 - adapters/claude/skills-ai-router.js;
 - temporary Claude adapter install, check, migration, and idempotency;
-- the 1-second Python-child and 3-second outer-hook timeout hierarchy;
-- fail-open behavior for no match, invalid output, missing router, timeout, and
-  cancellation;
+- the single whole-run hook budget: a timer bounds the input phase, and the
+  child plus the one skill-body read are bounded by subtracting elapsed time
+  from the same budget, keeping both inside the hook timeout in Claude
+  settings;
+- child cleanup through the child's own process group and through the deadline
+  the child is given, including an interpreter shim and a host that ends the
+  hook first;
+- fail-open behavior for no match, invalid host payload, invalid router output,
+  missing router, timeout, exhausted budget, and cancellation, with a reason
+  code that names the layer that actually failed;
 - JSON arrays are invalid envelopes and do not route trigger text;
 - no prompt, child stderr path, or skill-body leakage in diagnostics;
 - realpath containment blocks an in-root symlink to an outside file;
