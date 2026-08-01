@@ -71,8 +71,9 @@ The Python router owns framing, validation, selection, privacy, and its own
 one-shot exit. Codex owns Codex session cleanup. Claude owns its live hook,
 child timeout, installation, and Claude-specific acceptance.
 
-The Claude hook injects the shared context as one `key=value` line per field,
-then a blank line before a selected skill body. Its fail-open diagnostics name
+The Claude hook injects the shared context, including the requested depth, as
+one `key=value` line per field, then a blank line before a selected skill body.
+Codex's compact context carries the same depth field. Fail-open diagnostics name
 the failing layer: `ADAPTER_INVALID_INPUT` for a malformed host payload,
 `ROUTER_INVALID_OUTPUT` for an unusable router reply. Neither ever contains the
 prompt, the skill body, or the child's own error text.

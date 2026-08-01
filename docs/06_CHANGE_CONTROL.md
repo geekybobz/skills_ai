@@ -115,6 +115,9 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
     mapped canonical change must update every listed human page in the same
     staged change. Run `python3 scripts/human_docs_guard.py --check-staged`
     before commit. Human pages are explanatory only and never routing authority.
+    For a working-tree-only check, pass the declared scope with repeatable
+    `--path`; ignored and preserved paths use the same classifier as the
+    consistency scanner.
 11. Any new path must resolve to a repository role. Any new user-visible
     machine concept must declare one Markdown graph entry and required links in
     the repository contract. An exception needs an exact reason and approval.

@@ -243,7 +243,12 @@ class RouterLifecycleTests(unittest.TestCase):
                 "domain": "software",
                 "requested_access": "read-only",
                 "interaction": {"mode": "general", "reason": "default-general"},
-                "output": {"voice": "compact-professional", "shape": "answer", "format": ["auto"]},
+                "output": {
+                    "voice": "compact-professional",
+                    "shape": "answer",
+                    "depth": "brief",
+                    "format": ["auto"],
+                },
                 "receipt": "auto",
                 "project_context": "bounded-host-context",
                 "response_contract": [],
@@ -263,6 +268,7 @@ class RouterLifecycleTests(unittest.TestCase):
         )
         self.assertIn("Ambiguity option 1: one", completed.stdout)
         self.assertIn("plus normal", completed.stdout)
+        self.assertIn("depth=brief", completed.stdout)
         self.assertNotIn("Selected local skill", completed.stdout)
 
     def test_selected_skill_cannot_escape_repository(self) -> None:

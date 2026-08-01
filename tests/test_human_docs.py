@@ -10,8 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from change_guard import load_contract  # noqa: E402
 from human_docs_guard import (  # noqa: E402
     _mermaid_errors,
+    _scoped_worktree_paths,
     coverage_errors,
     guide_paths,
     load_source_map,
@@ -62,6 +64,27 @@ class HumanDocsTests(unittest.TestCase):
             "docs/human/09_SKILL_ANATOMY.md",
         ]
         self.assertEqual([], coverage_errors(changed, self.config))
+
+    def test_changed_scope_preserves_user_graph_and_ignores_samples(self) -> None:
+        changed = [
+            "scripts/human_docs_guard.py",
+            ".obsidian/graph.json",
+            "sample_resources/course.ipynb",
+        ]
+        scoped = _scoped_worktree_paths(
+            changed,
+            allowed_paths=["scripts/human_docs_guard.py"],
+            contract=load_contract(ROOT),
+        )
+        self.assertEqual(["scripts/human_docs_guard.py"], scoped)
+
+    def test_explicit_user_graph_scope_remains_covered(self) -> None:
+        scoped = _scoped_worktree_paths(
+            [".obsidian/graph.json"],
+            allowed_paths=[".obsidian/graph.json"],
+            contract=load_contract(ROOT),
+        )
+        self.assertEqual([".obsidian/graph.json"], scoped)
 
     def test_every_guide_is_human_marked(self) -> None:
         for relative in guide_paths(self.config):

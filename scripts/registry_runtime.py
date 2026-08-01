@@ -881,6 +881,7 @@ def compact_context(decision: dict[str, Any]) -> str:
         f"interaction={context['interaction']['mode']}",
         f"voice={context['output']['voice']}",
         f"shape={context['output']['shape']}",
+        f"depth={context['output'].get('depth', 'standard')}",
         f"format={'+'.join(context['output'].get('format', ['auto']))}",
         f"receipt={context.get('receipt', 'auto')}",
         "contract=answer first; polished complete sentences; no filler; preserve technical terms; state boundaries when relevant",

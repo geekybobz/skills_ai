@@ -127,6 +127,7 @@ function contextText(decision, root) {
     `interaction_reason=${context.interaction.reason}`,
     `voice=${context.output.voice}`,
     `shape=${context.output.shape}`,
+    `depth=${context.output.depth || 'standard'}`,
     `format=${(context.output.format || ['auto']).join('+')}`,
     `receipt=${context.receipt || 'auto'}`,
     `project_context=${context.project_context || 'bounded-host-context'}`,
@@ -138,7 +139,7 @@ function contextText(decision, root) {
   );
   if (context.receipt === 'on' || (context.receipt === 'auto' && (decision.result === 'MATCH' || routing.fit === 1))) {
     lines.push(
-      'Begin with one compact task receipt containing task, available project identity, selected skill or none, Fit 0-3, style/format, and access. Do not scan the repository merely to fill the receipt.',
+      'Begin with one compact task receipt containing task, available project identity, selected skill or none, Fit 0-3, style/format/depth, and access. Do not scan the repository merely to fill the receipt.',
     );
   }
   if (context.skills_ai_change_boundary) {

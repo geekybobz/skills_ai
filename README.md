@@ -74,6 +74,9 @@ only route suitability. Prompt-free ambiguity metadata may be kept locally
 under ignored `.runtime/` state so recurring route pairs can be improved without
 storing your prompt or answer.
 
+Depth is carried into both the Codex compact context and Claude's injected
+context; it is not merely parsed inside the router.
+
 To see the live registry without loading skill bodies, run:
 
 ```bash

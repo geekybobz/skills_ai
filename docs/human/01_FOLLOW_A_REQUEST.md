@@ -65,6 +65,10 @@ only that selected skill. At Fit 1 it returns candidate ids and purposes, not
 paths or bodies; the host asks one numbered last-resort choice only when the
 alternatives materially change the task.
 
+Depth is rendered explicitly as `depth=brief|standard|detailed` in the shared
+Codex context and the Claude hook context instead of remaining internal router
+metadata.
+
 A request to add, edit, move, delete, scan, or repair Skills AI itself returns
 `NORMAL / SKILLS_AI_MAINTENANCE` before ordinary skill scoring. This prevents
 maintenance words such as “node” from selecting the setup guide. Negated phrases

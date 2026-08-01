@@ -115,6 +115,18 @@ The scanner also lists preserved and ignored changes. For example, personal
 Obsidian display preferences can remain visible without being absorbed into a
 skill-maintenance commit.
 
+The focused human-document guard uses that same classification for working-tree
+checks. Give it the approved scope when unrelated work is present:
+
+```bash
+python3 scripts/human_docs_guard.py --check-changed \
+  --path scripts/human_docs_guard.py
+```
+
+Ignored paths are removed automatically. A user-owned path is preserved unless
+it is named in the approved scope; when named, its mapped human pages are still
+required. `--check-staged` remains strict over every staged path.
+
 Prompt-free ambiguity evidence is also ignored repository state. Use
 `python3 scripts/analyze_ambiguities.py --limit 500` to find recurring candidate
 pairs, then change canonical triggers and regression fixtures through the same

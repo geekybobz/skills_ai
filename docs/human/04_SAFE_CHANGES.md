@@ -82,6 +82,11 @@ Generated `_LIVE_` pages are checked for exact compiler freshness rather than
 being falsely required to receive a manual edit when regeneration produces the
 same bytes.
 
+Working-tree coverage uses the same scope classifier as the consistency
+scanner. Ignored paths are excluded, user-owned paths such as personal Obsidian
+display state are preserved unless explicitly declared, and an intentional
+user-owned edit remains subject to its mapped documentation checks.
+
 The guide also enforces small Mermaid diagrams. Oversized left-to-right flows
 must be changed to top-down form or split into focused diagrams before release.
 

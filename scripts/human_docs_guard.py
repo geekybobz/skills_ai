@@ -11,6 +11,8 @@ import subprocess
 from pathlib import Path
 from typing import Any, Iterable
 
+from change_guard import GuardError, load_contract, split_scope
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_MAP_PATH = Path("docs/human/_SOURCE_MAP.json")
@@ -224,7 +226,27 @@ def validate_human_docs(root: Path = ROOT) -> list[str]:
     return errors
 
 
-def git_changed_paths(root: Path = ROOT, *, staged: bool) -> list[str]:
+def _scoped_worktree_paths(
+    paths: Iterable[str],
+    *,
+    allowed_paths: Iterable[str],
+    contract: dict[str, Any],
+) -> list[str]:
+    changes = [
+        {"status": "?", "path": path, "source": "working-tree"}
+        for path in paths
+        if path
+    ]
+    scoped, _, _ = split_scope(changes, allowed_paths, contract)
+    return sorted(change["path"] for change in scoped)
+
+
+def git_changed_paths(
+    root: Path = ROOT,
+    *,
+    staged: bool,
+    allowed_paths: Iterable[str] = (),
+) -> list[str]:
     command = ["git", "diff"]
     if staged:
         command.append("--cached")
@@ -244,7 +266,18 @@ def git_changed_paths(root: Path = ROOT, *, staged: bool) -> list[str]:
         if untracked.returncode:
             raise HumanDocsError(untracked.stderr.strip() or "cannot inspect untracked files")
         paths.update(untracked.stdout.splitlines())
-    return sorted(path for path in paths if path)
+    changed = sorted(path for path in paths if path)
+    if staged:
+        return changed
+    try:
+        contract = load_contract(root)
+    except GuardError as exc:
+        raise HumanDocsError(str(exc)) from exc
+    return _scoped_worktree_paths(
+        changed,
+        allowed_paths=allowed_paths,
+        contract=contract,
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -253,6 +286,13 @@ def main(argv: list[str] | None = None) -> int:
     action.add_argument("--check", action="store_true", help="validate structure and boundaries")
     action.add_argument("--check-staged", action="store_true", help="also require staged source-to-guide coverage")
     action.add_argument("--check-changed", action="store_true", help="also require working-tree source-to-guide coverage")
+    parser.add_argument(
+        "--path",
+        action="append",
+        default=[],
+        dest="paths",
+        help="approved working-tree scope; repeat for multiple paths",
+    )
     args = parser.parse_args(argv)
 
     errors = validate_human_docs()
@@ -261,7 +301,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.check_staged:
             changed = git_changed_paths(staged=True)
         elif args.check_changed:
-            changed = git_changed_paths(staged=False)
+            changed = git_changed_paths(staged=False, allowed_paths=args.paths)
         if changed:
             errors.extend(coverage_errors(changed, load_source_map()))
     except HumanDocsError as exc:

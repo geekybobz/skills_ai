@@ -41,7 +41,8 @@ python3 scripts/benchmark_router.py --json
 ```
 
 The new Fit, receipt, depth, and format fields add only small structured
-metadata. Routing still performs no project-wide scan. Ambiguity logging runs
+metadata. Depth is emitted on both platform response surfaces rather than being
+kept only in the router decision. Routing still performs no project-wide scan. Ambiguity logging runs
 only for an equal top match, appends no prompt text, and stops at a 1 MiB cap.
 Summarize at most the latest 500 records with:
 
@@ -99,6 +100,7 @@ the hook first.
 | Task waits | Confirm one newline-framed request and the configured input deadline |
 | `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
 | Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
+| Depth control has no effect | Confirm `depth=...` appears in the Codex compact context or Claude injected context |
 | Repeated ambiguity | Run `analyze_ambiguities.py`; improve the recurring candidate pair without opening prompt history |
 | Maintenance request selects a task skill | Confirm `SKILLS_AI_MAINTENANCE` is returned before route scoring |
 | Consistency scan says `REVIEW` | Read its bounded AI questions and inspect only the listed impacted files |

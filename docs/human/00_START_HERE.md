@@ -64,11 +64,14 @@ host permissions remain the real enforcement boundary.
 | Fail-open | Router trouble does not block the original task |
 | Adapter | Thin Codex- or Claude-specific access to the shared router |
 | Fit 0–3 | Ordinal skill-route suitability, not confidence in the answer |
-| Task receipt | Optional compact task, project, skill/Fit, format, and access header |
+| Task receipt | Optional compact task, project, skill/Fit, depth, format, and access header |
 | Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
 
 The human guide is explanatory only. For current behavior, the live manifest
 and canonical maintenance documents remain authoritative.
+
+The selected depth is delivered to the Codex and Claude response surfaces, so
+`brief`, `standard`, and `detailed` can shape the actual answer.
 
 The [Interaction Protocol hub](../../interaction-protocol/README.md) is the
 visible Obsidian node connecting its general/math flows, controls, runtime,

@@ -114,6 +114,53 @@ def _covered(path: str, allowed: Iterable[str]) -> bool:
     return False
 
 
+def _ignored(path: str, contract: dict[str, Any]) -> bool:
+    return any(
+        _matches_pattern(path, pattern)
+        for pattern in contract.get("ignored_worktree_patterns", [])
+    )
+
+
+def _user_owned(path: str, contract: dict[str, Any]) -> bool:
+    return any(
+        _matches_pattern(path, pattern)
+        for pattern in contract.get("user_owned_paths", [])
+    )
+
+
+def split_scope(
+    changes: Iterable[dict[str, str]],
+    allowed_paths: Iterable[str],
+    contract: dict[str, Any],
+) -> tuple[list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]]:
+    """Classify Git changes as in-scope, preserved, or ignored.
+
+    This is the single preservation authority shared by the consistency scanner
+    and focused guards. An explicitly allowed user-owned path remains in scope;
+    otherwise user-owned paths are preserved and configured runtime/sample
+    paths are ignored.
+    """
+    allowed = list(allowed_paths)
+    scoped: list[dict[str, str]] = []
+    preserved: list[dict[str, str]] = []
+    ignored: list[dict[str, str]] = []
+    for change in changes:
+        relevant = [change["path"]]
+        if change.get("old_path"):
+            relevant.append(change["old_path"])
+        if all(_ignored(path, contract) for path in relevant):
+            ignored.append(change)
+        elif any(_user_owned(path, contract) for path in relevant) and not any(
+            _covered(path, allowed) for path in relevant
+        ):
+            preserved.append(change)
+        elif allowed and not any(_covered(path, allowed) for path in relevant):
+            preserved.append(change)
+        else:
+            scoped.append(change)
+    return scoped, preserved, ignored
+
+
 def required_checks(
     paths: Iterable[str],
     *,

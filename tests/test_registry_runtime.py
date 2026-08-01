@@ -210,6 +210,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("on", decision["context"]["receipt"])
         self.assertEqual("brief", decision["context"]["output"]["depth"])
         self.assertEqual(["mermaid", "summary"], decision["context"]["output"]["format"])
+        self.assertIn("depth=brief", compact_context(decision))
 
     def test_control_like_text_inside_code_is_inert(self) -> None:
         prompts = (
@@ -452,7 +453,7 @@ class RegistryRuntimeTests(unittest.TestCase):
     def test_claude_hook_uses_shared_router(self) -> None:
         completed = subprocess.run(
             ["node", str(ROOT / "adapters" / "claude" / "skills-ai-router.js"), "--root", str(ROOT)],
-            input=json.dumps({"prompt": "Explain this code without jargon"}),
+            input=json.dumps({"prompt": "/depth brief Explain this code without jargon"}),
             text=True,
             capture_output=True,
             check=True,
@@ -461,6 +462,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         context = payload["hookSpecificOutput"]["additionalContext"]
         self.assertIn("Selected local skill: code-explainer", context)
         self.assertIn("voice=compact-professional", context)
+        self.assertIn("depth=brief", context)
 
     def test_claude_hook_renders_registry_discovery_without_skill_body(self) -> None:
         completed = subprocess.run(

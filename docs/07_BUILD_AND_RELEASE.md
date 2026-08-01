@@ -39,6 +39,7 @@ python3 scripts/list_registry.py
 python3 scripts/analyze_ambiguities.py --limit 500
 python3 scripts/graph_layers.py --check
 python3 scripts/human_docs_guard.py --check
+python3 scripts/human_docs_guard.py --check-changed --path path/to/approved-scope
 python3 scripts/compile_repository_views.py --check
 ```
 

@@ -21,12 +21,12 @@ from change_guard import (  # noqa: E402
     CHECK_COMMANDS,
     OPERATIONS,
     GuardError,
-    _covered,
     _matches_pattern,
     assess_change,
     load_contract,
     matching_roles,
     required_check_ids,
+    split_scope,
 )
 from compile_registry import atomic_write  # noqa: E402
 from compile_repository_views import render_outputs, stale_outputs  # noqa: E402
@@ -168,46 +168,6 @@ def _change_paths(changes: Iterable[dict[str, str]]) -> list[str]:
         if change.get("old_path"):
             paths.add(change["old_path"])
     return sorted(paths)
-
-
-def _ignored(path: str, contract: dict[str, Any]) -> bool:
-    return any(
-        _matches_pattern(path, pattern)
-        for pattern in contract.get("ignored_worktree_patterns", [])
-    )
-
-
-def _user_owned(path: str, contract: dict[str, Any]) -> bool:
-    return any(
-        _matches_pattern(path, pattern)
-        for pattern in contract.get("user_owned_paths", [])
-    )
-
-
-def split_scope(
-    changes: Iterable[dict[str, str]],
-    allowed_paths: Iterable[str],
-    contract: dict[str, Any],
-) -> tuple[list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]]:
-    allowed = list(allowed_paths)
-    scoped: list[dict[str, str]] = []
-    preserved: list[dict[str, str]] = []
-    ignored: list[dict[str, str]] = []
-    for change in changes:
-        relevant = [change["path"]]
-        if change.get("old_path"):
-            relevant.append(change["old_path"])
-        if all(_ignored(path, contract) for path in relevant):
-            ignored.append(change)
-        elif any(_user_owned(path, contract) for path in relevant) and not any(
-            _covered(path, allowed) for path in relevant
-        ):
-            preserved.append(change)
-        elif allowed and not any(_covered(path, allowed) for path in relevant):
-            preserved.append(change)
-        else:
-            scoped.append(change)
-    return scoped, preserved, ignored
 
 
 def infer_operation(changes: Iterable[dict[str, str]]) -> str:
