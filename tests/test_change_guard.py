@@ -112,6 +112,17 @@ class ChangeGuardTests(unittest.TestCase):
         self.assertEqual("blocked-by-invariant", report["status"])
         self.assertEqual(["unknown-concept/source.bin"], report["unmapped_paths"])
 
+    def test_plan_only_idea_has_no_repository_checks(self) -> None:
+        report = assess_change("add", ["skill-plans/future-scout/plan.md"])
+        self.assertEqual("allowed", report["status"])
+        self.assertEqual(["skill-plan-draft"], report["roles"]["skill-plans/future-scout/plan.md"])
+        self.assertEqual([], report["required_check_ids"])
+
+    def test_extra_plan_files_do_not_inherit_the_fast_path(self) -> None:
+        report = assess_change("add", ["skill-plans/future-scout/SKILL.md"])
+        self.assertEqual("blocked-by-invariant", report["status"])
+        self.assertEqual(["skill-plans/future-scout/SKILL.md"], report["unmapped_paths"])
+
 
 if __name__ == "__main__":
     unittest.main()

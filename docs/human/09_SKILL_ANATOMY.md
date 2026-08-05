@@ -13,6 +13,11 @@ Back: [repository atlas](08_REPOSITORY_ATLAS.md). Return to the
 A skill may be one file or a package of several files. The router always returns
 one canonical entry path; it does not load every possible skill or package.
 
+Before either form exists, an idea may live as only
+`skill-plans/<name>/plan.md`. That directory is not a skill package. The
+presence of `SKILL.md` is the clear promotion boundary that activates the full
+registry, tests, graph, documentation, and validation protocol.
+
 ## Single-file skill
 
 Most files under `design-with-claude/` are independent single-file skills.
@@ -38,9 +43,9 @@ flowchart LR
 
 The registry describes the skill but does not copy its instruction body.
 A `manual` task skill is never automatically selected: the request must name
-its exact id through `/skill <id>` or the equivalent exact “use the `<id>`
-skill” form. Output format and receipt controls change presentation without
-consuming this one task-skill slot.
+its exact id through `/skill <id>`, the equivalent exact “use the `<id>` skill”
+form, or a registry-declared leading command alias. Output format and receipt
+controls change presentation without consuming this one task-skill slot.
 
 In the Obsidian graph, Activation is a teal switchboard, the family registry is
 green, and the actual skill Markdown is violet. This makes those three parts of
@@ -48,7 +53,8 @@ the same route visually distinct.
 
 ## Multi-file packaged skill
 
-The `theory-reference/` submodule is a package with reusable layers.
+The `theory-reference/` submodule and repository-owned Research Context Scout
+are packages with reusable layers.
 
 ```mermaid
 flowchart TD
@@ -77,6 +83,14 @@ flowchart TD
 
 The main repository records the submodule commit. Changes inside the submodule
 belong to its own Git history and require an explicit boundary crossing.
+
+Research Context Scout instead lives in the top-level
+`research-context-scout/` package. Its long `README.md` preserves the approved
+human plan, while its root entry loads one
+shared phase and one thin host wrapper. The manual route can be selected by
+`/skill research-context-scout` or its exact leading `/scout` and
+`/scout-again` commands. Those commands carry `initial` or `deepen` mode without
+creating duplicate skill routes.
 
 ## Shared protocol package
 

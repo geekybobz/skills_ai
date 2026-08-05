@@ -21,6 +21,15 @@ You identify the intended operation and primary path. The scanner discovers the
 rest from Git and the repository contract, so you do not need to inspect every
 registry, graph, manifest, test, and documentation file yourself.
 
+First run the one-step classifier. If it returns `PLAN_ONLY`, create or update
+only `skill-plans/<name>/plan.md`; no operation card or full scan applies. If it
+returns `GOVERNED_CHANGE`, open exactly the returned card. A folder becomes a
+skill only when `SKILL.md` is explicitly requested.
+
+```bash
+python3 scripts/scan_consistency.py classify --path path/to/target
+```
+
 ```mermaid
 flowchart TD
     U["You approve a change"] --> P["Plan from operation and primary path"]
@@ -65,6 +74,17 @@ Before editing:
 
 ```bash
 python3 scripts/scan_consistency.py plan --operation add --path path/to/skill.md
+```
+
+In a worktree with known unrelated failures, the plan may optionally save only
+prompt-free failure signatures under ignored runtime state. The changed scan
+then preserves identical old failures while still blocking anything new. The
+baseline cannot be reused across a different protocol version, operation, or
+path set:
+
+```bash
+python3 scripts/scan_consistency.py plan --operation update --path path/to/source --baseline-out .runtime/change-baseline.json
+python3 scripts/scan_consistency.py changed --operation update --path path/to/source --baseline .runtime/change-baseline.json
 ```
 
 After editing:
@@ -179,6 +199,12 @@ any of these are missing:
 
 The agent receives exact paths and suggestions instead of asking you to inspect
 the entire folder manually.
+
+Packaged skills still have one registered root entry. A shared or platform
+wrapper named `shared/SKILL.md`, `codex/SKILL.md`, or `claude/SKILL.md` beneath
+that root is package support, not another selectable route. This exception is
+deliberately narrow: other nested `SKILL.md` files must be registered or
+removed.
 
 ## Human-guide and Mermaid rule
 

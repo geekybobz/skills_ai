@@ -38,6 +38,7 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 | table-designer | design | active | data tables, sorting, pagination, row selection, inline edit | table, comparison grid, data grid | static comparison layout → `dashboard-designer` | single-file | [design-with-claude/table-designer.md](../../design-with-claude/table-designer.md) | 961 |
 | typography-specialist | design | active | type scales, font pairing, line height, vertical rhythm | font, readability, type scale | A0 poster sizing → `poster-lead` | single-file | [design-with-claude/typography-specialist.md](../../design-with-claude/typography-specialist.md) | 1613 |
 | visual-hierarchy-specialist | design | active | size, weight and contrast to direct the eye | emphasis, focal point, visual weight | the type scale itself → `typography-specialist` | single-file | [design-with-claude/visual-hierarchy-specialist.md](../../design-with-claude/visual-hierarchy-specialist.md) | 1551 |
+| research-context-scout | research | manual | reconstruct a new or evolving project, ask and record decisive user input, map current research and applications, test proposed directions and identify the strongest evidence-backed paper route | research context scout, initial research orientation, supervisor assessment, map related research and applications | exhaustive literature review, editing research artifacts, mature focused proof or implementation work without an orientation request | packaged skill | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 482 |
 | theory-reference | theory | active | entry route declared by theory.md | LaTeX, theory notes, math reference, chapter plan, outline, refresher |  | submodule package | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 69 |
 | accessibility-specialist | ui-patterns | active | WCAG, ARIA, keyboard nav, screen readers | a11y, WCAG, ARIA, screen reader, keyboard | colour contrast maths → `color-specialist` | single-file | [design-with-claude/accessibility-specialist.md](../../design-with-claude/accessibility-specialist.md) | 1875 |
 | auth-security-ux-specialist | ui-patterns | active | login flows, password UX, 2FA/passkey, sessions, trust signals | auth UX, login flow, password, 2FA, passkey | writing the auth *code* → `auth-implementation` | single-file | [design-with-claude/auth-security-ux-specialist.md](../../design-with-claude/auth-security-ux-specialist.md) | 1419 |
@@ -105,6 +106,26 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 | [theory-reference/shared/templates/preamble_base.tex](../../theory-reference/shared/templates/preamble_base.tex) | Reusable output template. |
 | [theory-reference/shared/templates/preamble_domain.tex](../../theory-reference/shared/templates/preamble_domain.tex) | Reusable output template. |
 | [theory-reference/shared/templates/preamble_math.tex](../../theory-reference/shared/templates/preamble_math.tex) | Reusable output template. |
+
+## research-context-scout
+
+**Type:** `repository-package`
+
+**Purpose:** Human-guided early research orientation with shared initial/deepening phases, evidence rules, a project record template, and thin platform wrappers.
+
+| Package file | Role |
+|---|---|
+| [research-context-scout/README.md](../../research-context-scout/README.md) | Human orientation for the package. |
+| [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/agents/openai.yaml](../../research-context-scout/agents/openai.yaml) | Package support file. |
+| [research-context-scout/claude/CLAUDE.md](../../research-context-scout/claude/CLAUDE.md) | Platform wrapper or platform metadata. |
+| [research-context-scout/codex/CODEX.md](../../research-context-scout/codex/CODEX.md) | Platform wrapper or platform metadata. |
+| [research-context-scout/codex/SKILL.md](../../research-context-scout/codex/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/shared/SKILL.md](../../research-context-scout/shared/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/shared/phases/deepen-scout.md](../../research-context-scout/shared/phases/deepen-scout.md) | Phase-specific instructions loaded only for that operation. |
+| [research-context-scout/shared/phases/initial-scout.md](../../research-context-scout/shared/phases/initial-scout.md) | Phase-specific instructions loaded only for that operation. |
+| [research-context-scout/shared/rules/evidence-gate.md](../../research-context-scout/shared/rules/evidence-gate.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/templates/research-orientation.md](../../research-context-scout/shared/templates/research-orientation.md) | Reusable output template. |
 
 ## quantum-job-collector
 

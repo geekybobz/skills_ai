@@ -23,6 +23,8 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | ambiguity observations | repeated misroutes could tempt prompt logging | write only prompt-free ids and route metadata under ignored `.runtime/`, mode `0600`, maximum 1 MiB; analysis is local and read-only |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
 | repository change control | add/edit/update/delete can cross source, generated, submodule, or external boundaries | read [[06_CHANGE_CONTROL]] and one operation card; expansion and protocol amendments need explicit approval |
+| initial skill plan | premature governance can turn a small idea into a large maintenance transaction | `skill-plans/<name>/plan.md` is plan-only and skips skill routing, graph, generated views, and full validation until explicit promotion |
+| `/sudo` local override | a protocol escape could be mistaken for unlimited authority | bypass only Skills AI's local routing and maintenance procedure for the current request; system, host, permission, credential, external-action, and destructive-safety boundaries still apply |
 | external Skills AI change request | writes one Markdown intake packet | only `scripts/create_change_request.py`; target `requests/pending/`; no canonical edit, staging, commit, or launch from the external task |
 | `career` | parked external workflow | keep off until the family is reworked |
 | `quantum-job-collector` | network search plus writes under Quantum Career Radar `app/data/` | append via helper only; no browser, paid fallback, or cron unless the matching component is enabled |

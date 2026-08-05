@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research Context Scout"
+  short_description: "Evidence-led early research orientation"
+  default_prompt: "Use $research-context-scout to assess this new project and identify its strongest evidence-backed research direction."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,4 +1,20 @@
 {
+  "command_aliases": [
+    {
+      "boundary": "first non-whitespace command only",
+      "command": "/scout",
+      "family": "research",
+      "mode": "initial",
+      "skill_id": "research-context-scout"
+    },
+    {
+      "boundary": "first non-whitespace command only",
+      "command": "/scout-again",
+      "family": "research",
+      "mode": "deepen",
+      "skill_id": "research-context-scout"
+    }
+  ],
   "components": {
     "interaction.general": {
       "boundary": "direct result plus adequate polished context on every request",
@@ -70,6 +86,11 @@
     "interaction": {
       "boundary": "compact general responses and equation-led mathematical reasoning",
       "path": "registry/interaction.md",
+      "state": "active"
+    },
+    "research": {
+      "boundary": "early project orientation, evidence, applications and paper direction",
+      "path": "registry/research.md",
       "state": "active"
     },
     "theory": {
@@ -898,6 +919,28 @@
       ]
     },
     {
+      "description": "reconstruct a new or evolving project, ask and record decisive user input, map current research and applications, test proposed directions and identify the strongest evidence-backed paper route",
+      "family": "research",
+      "family_state": "active",
+      "family_triggers": [
+        "/scout",
+        "/scout-again",
+        "new-project research orientation",
+        "supervisor assessment",
+        "applications and paper direction"
+      ],
+      "id": "research-context-scout",
+      "not_for": "exhaustive literature review, editing research artifacts, mature focused proof or implementation work without an orientation request",
+      "path": "research-context-scout/SKILL.md",
+      "state": "manual",
+      "triggers": [
+        "research context scout",
+        "initial research orientation",
+        "supervisor assessment",
+        "map related research and applications"
+      ]
+    },
+    {
       "description": "entry route declared by theory.md",
       "family": "theory",
       "family_state": "active",
@@ -1538,11 +1581,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "985633d04f39a6a3b5e42bb37871398e2243893eabdb78fc1d985212e95f956a",
+  "source_hash": "14de8ca667387158704393605bea5f641cb8af51d635c547d79661e076761208",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "7672558ad5368ce5ce2cc8ef7f59e7fd873f5aabc8eacdad3711eb38cd3d34fc"
+      "sha256": "89258f6794fa834b4cfe037199894a6a9e2d33897164026f13f50b7cd1204808"
     },
     {
       "path": "interaction-protocol/protocol.json",
@@ -1550,7 +1593,7 @@
     },
     {
       "path": "registry/activation.md",
-      "sha256": "cbce7c422e018c64e2549dc9e1332dab9d1023a2113d1d9d1986c9ad918fbc5b"
+      "sha256": "44f60a2cb89f62ed2646ba86f64bd6893d825171a16772d30eb7c26e6b3fc9ac"
     },
     {
       "path": "registry/build-ops.md",
@@ -1569,6 +1612,10 @@
       "sha256": "1dc5c6a0b3e921ab1e44f9147f47ae8d06add94edf6471e4fc93a9bcaa5f8540"
     },
     {
+      "path": "registry/research.md",
+      "sha256": "11609f073cc8ffb3899d8231b55b97b1925e8f4f6333323689cc5da22a0953ce"
+    },
+    {
       "path": "registry/theory.md",
       "sha256": "fe8d704cc5bbc687f0b062b547ba18fdb5256ec0d896fd58a2031efe2b091d47"
     },
@@ -1579,10 +1626,10 @@
   ],
   "stats": {
     "active_routes": 43,
-    "families": 6,
+    "families": 7,
     "inactive_routes": 1,
-    "manual_routes": 0,
-    "routes": 44
+    "manual_routes": 1,
+    "routes": 45
   },
   "warnings": []
 }

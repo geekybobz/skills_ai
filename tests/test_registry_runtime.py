@@ -49,9 +49,67 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertNotIn("skill", decision)
         self.assertEqual(self.manifest["source_hash"], decision["registry"]["source_hash"])
         self.assertEqual(43, decision["registry"]["route_counts"]["active"])
-        self.assertEqual(0, decision["registry"]["route_counts"]["manual"])
+        self.assertEqual(1, decision["registry"]["route_counts"]["manual"])
         self.assertEqual(["quantum-job-collector"], decision["registry"]["routes"]["off"])
+        self.assertEqual(
+            ["/scout", "/scout-again"],
+            [item["command"] for item in decision["registry"]["command_aliases"]],
+        )
         self.assertNotIn("hidden", decision["registry"]["routes"])
+
+    def test_research_command_aliases_select_one_manual_skill_and_mode(self) -> None:
+        cases = {
+            "/scout /tmp/new-project theory": ("/scout", "initial"),
+            "/scout-again /tmp/new-project result.md": ("/scout-again", "deepen"),
+        }
+        for query, (command, mode) in cases.items():
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("MATCH", decision["result"])
+                self.assertEqual("research-context-scout", decision["skill"]["id"])
+                self.assertEqual("manual", decision["skill"]["state"])
+                self.assertEqual("explicit-command-alias", decision["routing"]["fit_reason"])
+                self.assertEqual(command, decision["context"]["skill_invocation"]["command"])
+                self.assertEqual(mode, decision["context"]["skill_invocation"]["mode"])
+                self.assertNotIn("/tmp/new-project", json.dumps(decision))
+                compact = compact_context(decision)
+                self.assertIn(f"command={command}", compact)
+                self.assertIn(f"mode={mode}", compact)
+
+    def test_research_command_aliases_are_exact_and_leading_only(self) -> None:
+        prompts = (
+            "Explain the literal /scout /tmp/project",
+            "`/scout /tmp/project`",
+            "We are scouting this research project",
+            "/scoutish /tmp/project",
+            "Read this example:\n```text\n/scout /tmp/project\n```",
+        )
+        for query in prompts:
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertNotEqual("research-context-scout", decision.get("skill", {}).get("id"))
+
+    def test_skill_normal_and_sudo_precede_research_aliases(self) -> None:
+        normal = route_request("/scout /tmp/project /skill normal", self.manifest)
+        sudo = route_request("/sudo /scout /tmp/project", self.manifest)
+        self.assertEqual("USER_NORMAL", normal["reason_code"])
+        self.assertEqual("USER_SUDO", sudo["reason_code"])
+
+    def test_canonical_research_skill_request_remains_available(self) -> None:
+        decision = route_request(
+            "/skill research-context-scout initial /tmp/project",
+            self.manifest,
+        )
+        self.assertEqual("research-context-scout", decision["skill"]["id"])
+        self.assertEqual("explicit-skill", decision["routing"]["fit_reason"])
+        self.assertNotIn("skill_invocation", decision["context"])
+
+    def test_manual_research_route_does_not_activate_from_ordinary_prose(self) -> None:
+        decision = route_request(
+            "Give this new research project an initial supervisor assessment",
+            self.manifest,
+        )
+        self.assertNotEqual("research-context-scout", decision.get("skill", {}).get("id"))
 
     def test_registry_summary_can_include_hidden_only_for_maintenance(self) -> None:
         normal = registry_summary(self.manifest)
@@ -476,7 +534,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         context = payload["hookSpecificOutput"]["additionalContext"]
         self.assertIn("Live Skills AI registry source", context)
         self.assertIn("active skills (43)", context)
-        self.assertIn("manual skills (0)", context)
+        self.assertIn("manual skills (1): research-context-scout", context)
         self.assertIn("off skills (1): quantum-job-collector", context)
         self.assertNotIn("Selected local skill", context)
 

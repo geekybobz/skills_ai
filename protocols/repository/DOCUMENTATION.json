@@ -53,6 +53,11 @@
       "purpose": "Narrow review packets created by tasks outside this repository; requests are never skill or routing authority."
     },
     {
+      "path": "research-context-scout",
+      "title": "Packaged research skill",
+      "purpose": "Repository-owned human-guided research orientation with shared initial and deepening phases, evidence rules, and thin platform wrappers."
+    },
+    {
       "path": "runtime",
       "title": "Shared runtime",
       "purpose": "Platform-neutral routing protocol, API, compiled manifest, and compact agent-entry source."
@@ -61,6 +66,11 @@
       "path": "scripts",
       "title": "Deterministic tools",
       "purpose": "Local, bounded commands that compile, route, validate, scan, benchmark, install, and generate repository views."
+    },
+    {
+      "path": "skill-plans",
+      "title": "Initial skill plans",
+      "purpose": "Lightweight, unimplemented skill ideas containing only one plan.md; they are not skills or routing sources."
     },
     {
       "path": "tests",
@@ -113,6 +123,13 @@
       "purpose": "Multi-file theory skill with platform wrappers, shared phases, rules, templates, and scripts."
     },
     {
+      "id": "research-context-scout",
+      "path": "research-context-scout",
+      "kind": "repository-package",
+      "traversal": "repository",
+      "purpose": "Human-guided early research orientation with shared initial/deepening phases, evidence rules, a project record template, and thin platform wrappers."
+    },
+    {
       "id": "quantum-job-collector",
       "path": "external-skills/quantum-job-collector",
       "kind": "external-symlink",
@@ -124,6 +141,7 @@
     ".git/**",
     ".runtime/**",
     ".DS_Store",
-    "sample_resources/**"
+    "sample_resources/**",
+    "skill-plans/**"
   ]
 }

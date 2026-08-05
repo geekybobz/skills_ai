@@ -17,7 +17,11 @@ from change_guard import load_contract  # noqa: E402
 from scan_consistency import (  # noqa: E402
     ScanError,
     _ai_review_packet,
+    _is_registered_package_support,
+    apply_baseline,
     apply_generated_outputs,
+    classify_maintenance,
+    compact_baseline,
     collect_changes,
     infer_operation,
     scan,
@@ -42,6 +46,33 @@ class ConsistencyScanTests(unittest.TestCase):
         self.assertIn("skill-source", report["roles"]["design-with-claude/new-skill.md"])
         self.assertIn("registry", report["required_check_ids"])
         self.assertIn("unit", report["required_check_ids"])
+
+    def test_only_conventional_nested_package_wrappers_skip_route_registration(self) -> None:
+        routes = {"research-context-scout/SKILL.md"}
+        self.assertTrue(
+            _is_registered_package_support(
+                "research-context-scout/shared/SKILL.md",
+                routes,
+            )
+        )
+        self.assertTrue(
+            _is_registered_package_support(
+                "research-context-scout/codex/SKILL.md",
+                routes,
+            )
+        )
+        self.assertFalse(
+            _is_registered_package_support(
+                "research-context-scout/experimental/SKILL.md",
+                routes,
+            )
+        )
+        self.assertFalse(
+            _is_registered_package_support(
+                "external-skills/unregistered/shared/SKILL.md",
+                routes,
+            )
+        )
 
     def test_unknown_contract_check_is_blocking(self) -> None:
         contract = copy.deepcopy(self.contract)
@@ -114,6 +145,80 @@ class ConsistencyScanTests(unittest.TestCase):
     def test_generated_writes_require_explicit_approval_reference(self) -> None:
         with self.assertRaises(ScanError):
             apply_generated_outputs(["registry/design.md"], approval_ref=None)
+
+    def test_classifier_returns_plan_only_without_a_card(self) -> None:
+        report = classify_maintenance(["skill-plans/future-scout/plan.md"])
+        self.assertEqual("PLAN_ONLY", report["classification"])
+        self.assertIsNone(report["protocol_card"])
+        self.assertEqual([], report["required_check_ids"])
+
+    def test_classifier_selects_protocol_amendment_for_contract(self) -> None:
+        report = classify_maintenance(["protocols/repository/CONTRACT.json"])
+        self.assertEqual("GOVERNED_CHANGE", report["classification"])
+        self.assertEqual("protocol", report["operation"])
+        self.assertEqual(
+            "protocols/repository/PROTOCOL_AMENDMENT.md",
+            report["protocol_card"],
+        )
+
+    def test_baseline_preserves_only_an_identical_existing_failure(self) -> None:
+        old = {
+            "severity": "block",
+            "code": "GRAPH_INVALID",
+            "message": "old graph issue",
+            "paths": ["old.md"],
+        }
+        new = {
+            "severity": "block",
+            "code": "GRAPH_INVALID",
+            "message": "new graph issue",
+            "paths": ["new.md"],
+        }
+        classified = apply_baseline(
+            [old, new],
+            {"findings": [{key: old[key] for key in ("code", "message", "paths")}]},
+        )
+        self.assertEqual("info", classified[0]["severity"])
+        self.assertEqual("block", classified[1]["severity"])
+
+    def test_baseline_cannot_cross_operation_or_scope(self) -> None:
+        baseline = {
+            "version": 1,
+            "protocol_version": self.contract["protocol_version"],
+            "operation": "edit",
+            "scope": ["registry/design.md"],
+            "findings": [],
+            "failed_checks": [],
+        }
+        with self.assertRaises(ScanError):
+            scan(
+                "changed",
+                operation="update",
+                paths=["registry/design.md"],
+                baseline=baseline,
+                run=False,
+            )
+
+    def test_compact_baseline_keeps_check_failures_only_as_output_hashes(self) -> None:
+        report = {
+            "protocol_version": self.contract["protocol_version"],
+            "operation": "update",
+            "scope": ["registry/design.md"],
+            "findings": [
+                {
+                    "severity": "block",
+                    "code": "CHECK_FAILED",
+                    "message": "unit failed with exit code 1.",
+                    "paths": [],
+                }
+            ],
+            "check_results": [
+                {"id": "unit", "status": "fail", "exit_code": 1, "output": "failure A"}
+            ],
+        }
+        baseline = compact_baseline(report)
+        self.assertEqual([], baseline["findings"])
+        self.assertEqual("unit", baseline["failed_checks"][0]["id"])
 
 
 if __name__ == "__main__":

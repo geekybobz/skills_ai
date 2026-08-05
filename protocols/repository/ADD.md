@@ -3,6 +3,10 @@
 Use for a new canonical file, route, skill, component, adapter, script, test, or
 document.
 
+This card does not apply to the plan-only idea path
+`skill-plans/<skill-name>/plan.md`. Promotion begins only when the user
+explicitly requests implementation or creation of `SKILL.md`.
+
 1. Search for an existing equivalent and identify the canonical location.
 2. Classify the addition as registry metadata, skill source, governance,
    runtime, adapter, generated output, or external integration. For Markdown,

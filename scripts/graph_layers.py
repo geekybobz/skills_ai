@@ -43,7 +43,8 @@ LAYERS = (
         "query": (
             "path:design-with-claude/ OR path:theory-reference/SKILL.md OR "
             "path:theory-reference/shared/SKILL.md OR "
-            "path:theory-reference/shared/phases/ OR path:external-skills/"
+            "path:theory-reference/shared/phases/ OR path:external-skills/ OR "
+            "path:research-context-scout/"
         ),
         "color": "#6A1B9A",
     },
@@ -93,7 +94,7 @@ def _markdown_paths(root: Path) -> Iterable[str]:
         relative = path.relative_to(root)
         if any(part.startswith(".") for part in relative.parts):
             continue
-        if relative.parts and relative.parts[0] == "sample_resources":
+        if relative.parts and relative.parts[0] in {"sample_resources", "skill-plans"}:
             continue
         yield relative.as_posix()
 

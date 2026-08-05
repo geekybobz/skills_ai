@@ -26,12 +26,14 @@ enabled routes are linked; disabled routes are visible but unlinked.
 | build-ops | active | [[registry/build-ops\|build-ops]] | setup, deploy, auth code, debugging |
 | interaction | active | [[registry/interaction\|interaction]] | compact general responses and equation-led mathematical reasoning |
 | theory | active | [[registry/theory\|theory]] | LaTeX theory reference and math notes |
+| research | active | [[registry/research\|research]] | early project orientation, evidence, applications and paper direction |
 | career | off | `registry/career.md` | career radar and job-search workflows |
 
 ## Skill Gates
 
 | id | state | route | trigger boundary |
 |---|---|---|---|
+| research-context-scout | manual | [[research-context-scout/SKILL\|research-context-scout]] | exact skill request, `/scout`, or `/scout-again` only |
 | quantum-job-collector | off | `external-skills/quantum-job-collector/SKILL.md` | exhaustive Quantum Career Radar job collection |
 
 ## Interaction Protocol Components

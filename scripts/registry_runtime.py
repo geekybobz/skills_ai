@@ -27,6 +27,7 @@ FAMILY_DOMAINS = {
     "build-ops": "software",
     "interaction": "communication",
     "theory": "theory",
+    "research": "research",
     "career": "career",
 }
 
@@ -78,6 +79,8 @@ SKILL_CONTROL_PATTERN = r"(?:^|\s)/skill\s+([a-z0-9][a-z0-9_-]{0,79})(?:\s|$)"
 RECEIPT_CONTROL_PATTERN = r"(?:^|\s)/receipt\s+(auto|on|off)(?:\s|$)"
 DEPTH_CONTROL_PATTERN = r"(?:^|\s)/depth\s+(brief|standard|detailed)(?:\s|$)"
 FORMAT_CONTROL_PATTERN = r"(?:^|\s)/format\s+([a-z0-9+_-]{1,80})(?:\s|$)"
+SUDO_CONTROL_PATTERN = r"^\s*/sudo\s+(\S[\s\S]*)$"
+LEADING_COMMAND_PATTERN = r"^\s*(/[a-z0-9][a-z0-9-]{0,79})(?=\s|$)"
 KNOWN_FORMATS = {"auto", "brief", "code", "equations", "mermaid", "steps", "summary", "table"}
 
 DESIGN_ROUTED_FAMILIES = {"design", "ui-patterns"}
@@ -229,6 +232,48 @@ def _request_controls(query: str, profile: dict[str, Any]) -> dict[str, Any]:
         "depth": depth_match.group(1).lower() if depth_match else profile["default_depth"],
         "format": formats,
         "project_context": "bounded-host-context",
+    }
+
+
+def _sudo_override(query: str) -> bool:
+    """Recognize only a leading current-request command with an instruction."""
+    return re.match(SUDO_CONTROL_PATTERN, query, flags=re.IGNORECASE) is not None
+
+
+def _sudo_context(query: str) -> dict[str, Any]:
+    """Return a prompt-free local-protocol override receipt."""
+    match = re.match(SUDO_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    instruction = match.group(1) if match else ""
+    normalized_instruction = normalize(_strip_negated_action_clauses(instruction))
+    return {
+        "operation": _operation(normalized_instruction),
+        "domain": "general",
+        "requested_access": _requested_access(normalized_instruction),
+        "interaction": {"mode": "normal", "reason": "user-sudo"},
+        "output": {
+            "voice": "host-default",
+            "depth": "host-default",
+            "shape": "follow-explicit-instruction",
+            "format": ["auto"],
+        },
+        "receipt": "on",
+        "project_context": "explicit-targets-only",
+        "local_protocol_override": {
+            "active": True,
+            "scope": "current-request-only",
+            "bypasses": [
+                "local-skill-routing",
+                "local-interaction-formatting",
+                "local-repository-procedure",
+            ],
+            "preserves": [
+                "system-and-developer-instructions",
+                "host-permissions-and-sandbox",
+                "credential-and-external-action-boundaries",
+                "destructive-action-safety",
+            ],
+        },
+        "response_contract": ["Follow the explicit instruction within its exact targets and higher-level boundaries."],
     }
 
 
@@ -393,6 +438,33 @@ def parse_family_registry(path: Path) -> list[dict[str, Any]]:
     return routes
 
 
+def parse_command_aliases(path: Path) -> list[dict[str, str]]:
+    """Read exact leading command aliases declared by one family registry."""
+    aliases: list[dict[str, str]] = []
+    for section, cells in _read_sections(path):
+        if section != "Command aliases" or cells[0] == "command" or len(cells) < 4:
+            continue
+        command = cells[0].strip("`").lower()
+        skill_id = cells[1].strip("`")
+        mode = cells[2].strip("`").lower()
+        boundary = cells[3]
+        if not re.fullmatch(r"/[a-z0-9][a-z0-9-]{0,79}", command):
+            raise RegistryRuntimeError(f"invalid command alias {command} in {path.name}")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", skill_id):
+            raise RegistryRuntimeError(f"invalid command alias target {skill_id} in {path.name}")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,39}", mode):
+            raise RegistryRuntimeError(f"invalid command alias mode {mode} in {path.name}")
+        aliases.append(
+            {
+                "command": command,
+                "skill_id": skill_id,
+                "mode": mode,
+                "boundary": boundary,
+            }
+        )
+    return aliases
+
+
 def _source_fingerprint(paths: Iterable[Path]) -> tuple[str, list[dict[str, str]]]:
     records: list[dict[str, str]] = []
     for path in sorted(set(paths)):
@@ -421,6 +493,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
     routes: list[dict[str, Any]] = []
+    command_aliases: list[dict[str, str]] = []
     source_paths = [profile_path, hub_path, activation_path]
 
     for family_id, family in activation["families"].items():
@@ -456,6 +529,8 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
                     "family_triggers": family_triggers,
                 }
             )
+        for alias in parse_command_aliases(family_path):
+            command_aliases.append({**alias, "family": family_id})
 
     known_hub_paths = set(hub_routes)
     known_family_paths = {item["path"] for item in activation["families"].values()}
@@ -470,6 +545,19 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         if skill_id not in route_ids and gate["state"] in ACTIVE_STATES:
             errors.append(f"active/manual skill is absent from family registries: {skill_id}")
 
+    aliases_seen: set[str] = set()
+    route_by_id = {route["id"]: route for route in routes}
+    for alias in command_aliases:
+        command = alias["command"]
+        if command in aliases_seen:
+            errors.append(f"duplicate command alias: {command}")
+        aliases_seen.add(command)
+        target = route_by_id.get(alias["skill_id"])
+        if target is None:
+            errors.append(f"command alias target is absent: {command} -> {alias['skill_id']}")
+        elif target["state"] not in ACTIVE_STATES:
+            errors.append(f"command alias target is disabled: {command} -> {alias['skill_id']}")
+
     if errors:
         raise RegistryRuntimeError("\n".join(errors))
     fingerprint, source_records = _source_fingerprint(source_paths)
@@ -479,6 +567,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         "profile": profile,
         "families": activation["families"],
         "routes": sorted(routes, key=lambda route: (route["family"], route["id"])),
+        "command_aliases": sorted(command_aliases, key=lambda alias: alias["command"]),
         "components": activation["components"],
         "sources": source_records,
         "stats": {
@@ -525,6 +614,18 @@ def _phrase_score(query: str, phrase: str) -> int:
     if positions[-1] - positions[0] <= len(words) + 2:
         return 12 + 2 * len(words)
     return 0
+
+
+def _leading_command_alias(query: str, manifest: dict[str, Any]) -> dict[str, str] | None:
+    """Resolve only a registry-declared first command; never infer an alias."""
+    match = re.match(LEADING_COMMAND_PATTERN, query, flags=re.IGNORECASE)
+    if match is None:
+        return None
+    command = match.group(1).lower()
+    for alias in manifest.get("command_aliases", []):
+        if alias["command"] == command:
+            return alias
+    return None
 
 
 def _operation(query: str) -> str:
@@ -673,6 +774,14 @@ def registry_summary(manifest: dict[str, Any], *, include_hidden: bool = False) 
         "routes": routes,
         "family_gates": families,
         "component_gates": components,
+        "command_aliases": [
+            {
+                "command": alias["command"],
+                "skill_id": alias["skill_id"],
+                "mode": alias["mode"],
+            }
+            for alias in manifest.get("command_aliases", [])
+        ],
         "hidden_policy": "hidden and deprecated identifiers are omitted unless maintenance explicitly requests them",
     }
 
@@ -708,6 +817,13 @@ def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> 
 
 def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     """Return MATCH or fail-open NORMAL without exposing the original prompt."""
+    if _sudo_override(query):
+        return {
+            "result": "NORMAL",
+            "reason_code": "USER_SUDO",
+            "routing": _routing(0, "user-local-protocol-override"),
+            "context": _sudo_context(query),
+        }
     normalized_query = normalize(_strip_negated_action_clauses(query))
     design_query = _design_routing_query(query)
     design_intent = _has_explicit_design_intent(design_query)
@@ -717,6 +833,11 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     control_query = _control_routing_prose(query)
     controls = _request_controls(control_query, manifest["profile"])
     explicit_skill_id = _explicit_skill_id(control_query, manifest)
+    command_alias = None
+    if explicit_skill_id is None:
+        command_alias = _leading_command_alias(query, manifest)
+        if command_alias is not None:
+            explicit_skill_id = command_alias["skill_id"]
     maintenance = _is_skills_ai_maintenance(normalized_query)
     if _is_registry_discovery(normalized_query) and not maintenance:
         context = _context_packet(
@@ -781,7 +902,7 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
         skill_score = 0
         if explicitly_selected:
             skill_score += 100
-            matched.append(route["id"])
+            matched.append(command_alias["command"] if command_alias else route["id"])
         for phrase in route["triggers"]:
             score = _phrase_score(route_query, phrase)
             if score:
@@ -850,12 +971,22 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
         manifest, operation, domain, access, interaction_mode, interaction_reason, controls
     )
     _apply_change_boundary(context, normalized_query, access)
+    if command_alias is not None:
+        context["skill_invocation"] = {
+            "command": command_alias["command"],
+            "mode": command_alias["mode"],
+            "scope": "current-request-only",
+        }
     return {
         "result": "MATCH",
         "reason_code": "ACTIVE_SKILL_MATCH",
         "routing": _routing(
             3 if explicit_skill_id else 2,
-            "explicit-skill" if explicit_skill_id else "unique-context-match",
+            "explicit-command-alias"
+            if command_alias
+            else "explicit-skill"
+            if explicit_skill_id
+            else "unique-context-match",
         ),
         "skill": {
             "id": selected["id"],
@@ -889,6 +1020,10 @@ def compact_context(decision: dict[str, Any]) -> str:
     if decision.get("skill"):
         parts.insert(2, f"skill={decision['skill']['id']}")
         parts.insert(3, f"path={decision['skill']['path']}")
+    invocation = context.get("skill_invocation")
+    if invocation:
+        parts.insert(4, f"command={invocation['command']}")
+        parts.insert(5, f"mode={invocation['mode']}")
     if decision.get("registry"):
         counts = decision["registry"]["route_counts"]
         parts.insert(2, f"registry_source={decision['registry']['source_hash'][:12]}")

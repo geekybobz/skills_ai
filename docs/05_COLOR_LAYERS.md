@@ -1,5 +1,8 @@
 # Color Layers
 
+Draft ideas at `skill-plans/*/plan.md` are intentionally outside the graph.
+They acquire a graph layer only if promoted into a canonical skill or document.
+
 One colour per **architectural role**, never per individual skill. Colour shows
 whether a node is an entry, hub, registry, parked card, skill, or support file.
 This keeps the graph readable as skills are added.
@@ -14,7 +17,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 | L1 | Hubs, switchboards, and declared graph entries | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
 | L2 | Family registries | `#2E7D32` green | `path:registry/` |
 | L3 | Skill cards and parked legacy cards | `#EF6C00` orange | `path:cards/` |
-| L4 | Canonical skill bodies, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/` |
+| L4 | Canonical skill bodies, external skill pointers, and phases | `#6A1B9A` violet | `path:design-with-claude/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/` |
 | L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:theory-reference/` |
 
 ## Reading the graph

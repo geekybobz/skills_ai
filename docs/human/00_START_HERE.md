@@ -41,6 +41,8 @@ flowchart LR
 - Prompt-free ambiguity logs contain only candidate ids and bounded route
   metadata; they are ignored by Git and capped in size.
 - A selected skill grants no write, network, credential, or account authority.
+- A registry-declared command alias selects one exact manual skill only when it
+  is the first command; it never activates from a quotation or later mention.
 - Each router process reads one request, writes one result, and exits.
 - A request to maintain Skills AI itself stays on the normal path and uses the
   repository consistency protocol instead of accidentally selecting a task skill.
@@ -66,6 +68,9 @@ host permissions remain the real enforcement boundary.
 | Fit 0–3 | Ordinal skill-route suitability, not confidence in the answer |
 | Task receipt | Optional compact task, project, skill/Fit, depth, format, and access header |
 | Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
+| Plan-only idea | Exactly `skill-plans/<name>/plan.md`; not yet a skill, route, or graph node |
+| Command alias | Exact leading command such as `/scout`; selects one declared skill and mode without copying its arguments into the receipt |
+| `/sudo` | Current-request override of local Skills AI procedure; higher-level safety and permission rules remain |
 
 The human guide is explanatory only. For current behavior, the live manifest
 and canonical maintenance documents remain authoritative.

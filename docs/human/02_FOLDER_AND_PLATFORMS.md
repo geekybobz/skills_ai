@@ -34,7 +34,10 @@ flowchart TD
 
 The registry describes where skills live. It does not copy skill bodies into
 routing files. The interaction protocol is shared response context rather than
-a task skill, while `theory-reference/` remains a separate Git submodule.
+a task skill, while `theory-reference/` remains a separate Git submodule and
+`external-skills/` contains declared external pointers. The repository-owned
+Research Context Scout is a normal top-level package beside these shared
+systems rather than an external target.
 
 Python owns shared matching, Fit, controls, safe logging, validation, and
 maintenance. The single JavaScript adapter translates Claude's hook format,
@@ -90,6 +93,11 @@ behavior; each platform still certifies only its own live adapter lifecycle.
 That contract also protects the Obsidian node types: a visible concept entry is
 a teal hub, not a green registry or violet skill.
 
+Both platforms also share the plan-only boundary and the local `/sudo`
+receipt. A `plan.md`-only idea stays outside skill governance; `/sudo` bypasses
+only local procedure for one request and leaves each host's hard boundaries in
+force.
+
 ## Local process API
 
 Version 1 is a newline-terminated JSON request to a short-lived local process,
@@ -102,6 +110,11 @@ not an HTTP server:
 The response is either `MATCH` with one canonical skill record or `NORMAL` with
 no skill body. Avoiding a permanent daemon removes port, authentication, and
 orphan-service complexity.
+
+For a registry-declared leading command, the same response adds a bounded
+`skill_invocation` containing only command, mode and current-request scope.
+Codex and Claude receive the same shared mode without either adapter owning the
+alias rules.
 
 ## Continue from the map to the files
 

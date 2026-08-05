@@ -7,9 +7,10 @@ Protocol version: `skills-ai/1`.
 ## Invariants
 
 - One request selects at most one active/manual skill or returns `NORMAL`.
-- A `manual` task skill is eligible only when `/skill <exact-id>` or the exact
-  “use the `<id>` skill” form names it. Explicit naming bypasses domain gates
-  for that route but never activation, path, or permission checks.
+- A `manual` task skill is eligible only when `/skill <exact-id>`, the exact
+  “use the `<id>` skill” form, or a registry-declared leading command alias
+  names it. Explicit selection bypasses domain gates for that route but never
+  activation, path, or permission checks.
 - The interaction protocol is response context, not a task skill. The general
   contract and optional math overlay do not consume the one-skill limit.
 - No match, invalid input, timeout, unavailable manifest, or expected adapter
@@ -53,7 +54,11 @@ detection rules.
 
 Current-request controls have the highest presentation priority:
 
+- leading `/sudo <exact instruction>` bypasses local Skills AI routing,
+  interaction formatting, and repository procedure for the current request;
 - `/skill auto|normal|<exact-id>` controls the local task-skill slot;
+- registry-declared commands such as `/scout` and `/scout-again` select one
+  exact manual skill and attach a bounded invocation mode;
 - natural “do not use any local skill” forms map to `USER_NORMAL`;
 - `/interaction general|math` controls response style;
 - `/format mermaid+summary` selects one or more known output forms;
@@ -65,6 +70,21 @@ default, then automatic detection. Natural-language output instructions in the
 prompt remain authoritative. Bounded project context means already available
 project instructions plus user-named or directly relevant files; routing never
 scans a repository merely to fill the receipt.
+
+Command aliases are data in one family registry, not hard-coded keyword
+substitutions. They activate only as the first non-whitespace command, never
+from quotations, code, URLs, later mentions or near-matching words. The router
+returns only `command`, `mode` and current-request scope; it does not echo alias
+arguments. `/skill normal` still opts out, and leading `/sudo` retains its
+earlier override boundary.
+
+`/sudo` is deliberately not a presentation option and is not stored in the
+interaction protocol. It is recognized only as the first non-whitespace token
+and only when an instruction follows. It never activates from quoted text,
+code, a URL, a later mention, or the bare shell word `sudo`. The override is
+local: system and developer instructions, host permissions, sandbox limits,
+credentials, external actions, destructive-action safety, and exact user scope
+remain authoritative.
 
 `routing.fit` is ordinal route suitability: `3` explicit exact skill, `2`
 unique contextual match, `1` unresolved equal top candidates, and `0` no skill,
@@ -110,7 +130,7 @@ The default hot path returns zero after an operational fail-open receipt.
 
 Routing reasons include `ACTIVE_SKILL_MATCH`, `NO_SKILL_MATCH`,
 `DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`,
-`UNKNOWN_SKILL_REQUEST`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
+`USER_SUDO`, `UNKNOWN_SKILL_REQUEST`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
 requests on the normal path instead of allowing words such as `node` or a
 negated `install` to select an ordinary task skill. Boundary reasons
 include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
@@ -129,6 +149,17 @@ python3 scripts/analyze_ambiguities.py --limit 500
 ```
 
 ## Repository-change boundary
+
+An initial idea stored only at `skill-plans/<name>/plan.md` is not a skill and
+does not enter routing, graph, generated views, or full consistency validation.
+Creating `SKILL.md` is the explicit promotion boundary.
+
+For governed work, `scan_consistency.py classify --path ...` selects the one
+operation card and check set. Optional `plan --baseline-out
+.runtime/<name>.json` records prompt-free failure signatures; a later
+`changed --baseline .runtime/<name>.json` preserves only identical old
+failures while new or changed failures continue to block. A baseline is valid
+only for the same protocol version, operation, and declared path set.
 
 When a write-requested prompt explicitly targets Skills AI itself, the shared
 context identifies the external-task request-only boundary. A task started

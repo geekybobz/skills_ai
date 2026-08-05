@@ -74,6 +74,17 @@ A request to add, edit, move, delete, scan, or repair Skills AI itself returns
 maintenance words such as “node” from selecting the setup guide. Negated phrases
 such as “no external install” are not treated as positive installation intent.
 
+A leading `/sudo <instruction>` returns `NORMAL / USER_SUDO` before skill
+scoring. It means “follow this exact request without local Skills AI ceremony,”
+not “ignore the host, sandbox, permissions, credentials, or safety rules.” A
+later, quoted, code-block, bare, or shell `sudo` mention has no special meaning.
+
+A family registry may declare an exact leading command for one manual skill.
+`/scout` selects the initial Research Context Scout phase and `/scout-again`
+selects its delta-based deepening phase. The receipt carries only the command
+and mode; paths and other arguments stay in the host request. `/skill normal`
+still opts out, while quoted, embedded, later and near-matching text is ignored.
+
 The interaction protocol is independent of `MATCH`. General guidance keeps the
 answer direct and adequately explained. The math overlay activates only for
 mathematical actions and objects, explicit mathematical research reasoning, or

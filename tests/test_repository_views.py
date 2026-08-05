@@ -57,7 +57,11 @@ class RepositoryViewTests(unittest.TestCase):
             self.assertIn(GENERATED_NOTICE, text[:500])
         self.assertNotIn("classDef", repository_index)
         for path in repository_paths(ROOT, model):
-            marker = f"`{path}`" if path.startswith("external-skills/") else f"[{path}]"
+            marker = (
+                f"`{path}`"
+                if path.startswith("external-skills/quantum-job-collector")
+                else f"[{path}]"
+            )
             self.assertIn(marker, repository_index)
 
     def test_external_skill_is_not_traversed_for_tokens_or_contents(self) -> None:
@@ -70,6 +74,29 @@ class RepositoryViewTests(unittest.TestCase):
         external_section = catalog.split("## quantum-job-collector", 1)[1]
         self.assertIn("does not traverse or copy its files", external_section)
         self.assertNotIn("| [external-skills/quantum-job-collector/SKILL.md]", external_section)
+
+    def test_repository_owned_external_skill_package_is_linked_and_traversed(self) -> None:
+        internal_file = ROOT / "research-context-scout" / "SKILL.md"
+        self.assertNotEqual(
+            "—",
+            _token_estimate(internal_file, "research-context-scout/SKILL.md"),
+        )
+        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        internal_section = catalog.split("## research-context-scout", 1)[1]
+        self.assertIn(
+            "| [research-context-scout/shared/SKILL.md]",
+            internal_section,
+        )
+        repository_index = render_outputs(ROOT)["docs/human/_LIVE_REPOSITORY_INDEX.md"]
+        self.assertIn(
+            "[research-context-scout/README.md]"
+            "(../../research-context-scout/README.md)",
+            repository_index,
+        )
+        self.assertIn("codex/SKILL.md]", repository_index)
+        self.assertIn("| Codex |", repository_index)
+        self.assertIn("claude/CLAUDE.md]", repository_index)
+        self.assertIn("| Claude |", repository_index)
 
     def test_checked_in_views_are_fresh(self) -> None:
         self.assertEqual(stale_outputs(ROOT), [])
@@ -84,6 +111,19 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("README.md", paths)
         self.assertIn("scripts/analyze_ambiguities.py", paths)
         self.assertNotIn("NOTES_SCRATCH.md", paths)
+
+    def test_plan_only_ideas_are_excluded_from_generated_views(self) -> None:
+        model = load_model(ROOT)
+        with patch(
+            "compile_repository_views._git_paths",
+            side_effect=[
+                ["README.md", "skill-plans/future-scout/plan.md"],
+                [],
+            ],
+        ):
+            paths = repository_paths(ROOT, model)
+        self.assertIn("README.md", paths)
+        self.assertNotIn("skill-plans/future-scout/plan.md", paths)
 
 
 if __name__ == "__main__":

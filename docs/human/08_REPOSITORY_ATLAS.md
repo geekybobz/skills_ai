@@ -47,6 +47,7 @@ flowchart TD
 | `adapters/` | Codex- and Claude-specific access | You are checking platform lifecycle or installation |
 | `docs/human/` | Progressive illustrated learning route | You are learning or reviewing the architecture |
 | `requests/` | Controlled external-task intake | A request started outside this repository |
+| `research-context-scout/` | Repository-owned multi-file research-orientation skill | A new project needs user-guided context, evidence, applications, or iterative deepening |
 | `external-skills/` | Pointers to separately owned skills | You need ownership or activation information without traversing the target |
 | `.runtime/` | Ignored prompt-free ambiguity observations | You are locally analyzing repeated equal route pairs; never commit it |
 
@@ -82,6 +83,7 @@ scratch files make the view stale. Ignored runtime state remains outside it.
 | Test | Proves a deterministic promise | Update when public behavior changes |
 | Personal state | Local display preference such as Obsidian graph layout | Preserve unless explicitly requested |
 | External or submodule | Separately owned content | Do not cross the ownership boundary implicitly |
+| Plan-only idea | One `skill-plans/<name>/plan.md` draft | Keep outside routing, generated views, and graph until explicit promotion |
 
 The deeper technical rationale is recorded in the
 [shared documentation model](../SHARED_DOCUMENTATION_MODEL.md).

@@ -48,15 +48,25 @@ flowchart LR
 | L4 | Canonical skills, external pointers, and theory phases |
 | L5 | Human guide, protocols, runtime, adapters, scripts, tests, and requests |
 
+`skill-plans/*/plan.md` is the one deliberate Markdown exception: it is an
+unimplemented idea, so it is excluded from graph nodes and colour counts until
+promotion.
+
+The promoted `research-context-scout/` package is a normal repository-owned L4
+skill collection. Its human README, root entry, shared phases and platform
+wrappers stay linked as one package; it is no longer represented as an
+external pointer.
+
 `registry/interaction.md` is an L2 green family registry. The visible
 [Interaction Protocol hub](../../interaction-protocol/README.md) is L1 teal and
 links the skills hub, activation, registry, canonical JSON contract, runtime,
 API, migration record, and tests. The Shared Documentation Model is also an L1
 hub. JSON and test files remain slate support rather than extra hubs.
 
-With the current repository this gives 4 indigo entries, 8 teal hubs, 6 green
-family registries, 1 orange parked card, 47 violet skill bodies or phases, and
-43 slate support notes.
+With the current repository this gives 4 indigo entries, 8 teal hubs, 7 green
+family registries, 1 orange parked card, 57 violet skill bodies or phases, and
+44 slate support notes. Two unrelated unclassified draft notes remain outside
+these counts and are reported by validation until their owner classifies them.
 
 ## Default overview
 

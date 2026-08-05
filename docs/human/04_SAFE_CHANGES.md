@@ -97,10 +97,23 @@ documentation model, common agent-entry source, or platform overlay, then run
 stale projections, while semantic review still checks whether the illustrated
 teaching pages remain accurate and understandable.
 
+For a multi-file package, only its root `SKILL.md` is a routable registry
+entry. Conventional nested `shared/SKILL.md`, `codex/SKILL.md`, or
+`claude/SKILL.md` files are support wrappers beneath that registered root. The
+scanner allows only those positions; an arbitrary nested `SKILL.md` remains an
+unregistered-source block.
+
 Protocol version 8 also guards graph meaning. A future declared hub must be L1
 teal, a family registry L2 green, and a skill or phase L4 violet. The graph
 validator blocks a change that silently lets one node type inherit another
 type's fallback colour.
+
+Protocol version 9 adds two narrow escape valves. A draft under
+`skill-plans/<name>/plan.md` needs no skill machinery until explicit promotion.
+A leading `/sudo <instruction>` can bypass local procedure for one request, but
+cannot widen the user's targets or override host permissions and safety. For a
+dirty worktree, an optional prompt-free baseline may preserve an identical old
+failure; any new or changed failure still blocks.
 
 ## External tasks
 

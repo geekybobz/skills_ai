@@ -56,7 +56,7 @@ flowchart TD
 | [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | How single-file, packaged, submodule, protocol, and external skills are structured |
 | [Interaction protocol graph](interaction-protocol/README.md) | General and math flows, controls, runtime, API, tests, and migration links |
 
-## Six things to remember
+## Seven things to remember
 
 1. General response guidance is small and does not consume the task-skill slot.
 2. Math is an equation-led response overlay, not a competing task skill.
@@ -66,6 +66,8 @@ flowchart TD
 5. Routing and response style are guidance, not authority to make changes.
 6. Skills AI maintenance requests bypass ordinary task-skill matching and use
    the Git-aware consistency protocol.
+7. A folder containing only `skill-plans/<name>/plan.md` is an idea; it becomes
+   a governed skill only when `SKILL.md` is explicitly created.
 
 Useful per-request controls are `/skill auto|normal|<exact-id>`,
 `/interaction general|math`, `/format mermaid+summary`,
@@ -73,6 +75,16 @@ Useful per-request controls are `/skill auto|normal|<exact-id>`,
 only route suitability. Prompt-free ambiguity metadata may be kept locally
 under ignored `.runtime/` state so recurring route pairs can be improved without
 storing your prompt or answer.
+
+Registry-declared leading commands may explicitly select one manual skill. The
+first commands are `/scout <project-path>` for initial research orientation and
+`/scout-again <paths>` for evidence-led deepening. See the
+[[research-context-scout/README|Research Context Scout guide]].
+
+Leading `/sudo <exact instruction>` is the owner's current-request escape from
+local Skills AI procedure. It does not override system rules, permissions,
+sandboxing, credential boundaries, external-action approval, or destructive
+action safety.
 
 Depth is carried into both the Codex compact context and Claude's injected
 context; it is not merely parsed inside the router.

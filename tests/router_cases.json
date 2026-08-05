@@ -72,6 +72,23 @@
     "skill": "code-explainer"
   },
   {
+    "name": "research scout initial command",
+    "query": "/scout /tmp/new-project theory",
+    "result": "MATCH",
+    "skill": "research-context-scout"
+  },
+  {
+    "name": "research scout deepen command",
+    "query": "/scout-again /tmp/new-project new-result.md",
+    "result": "MATCH",
+    "skill": "research-context-scout"
+  },
+  {
+    "name": "research scout later mention is inert",
+    "query": "Explain this literal /scout /tmp/new-project",
+    "result": "NORMAL"
+  },
+  {
     "name": "dark mode specialist",
     "query": "Design a dark mode theme switch",
     "result": "MATCH",

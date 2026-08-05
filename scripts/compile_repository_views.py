@@ -185,22 +185,43 @@ def _purpose(
     raise ViewError(f"no human explanation can be derived for repository path: {relative}")
 
 
-def _audience(path: str) -> str:
+def _audience(path: str, model: dict[str, Any]) -> str:
     if path == "AGENTS.md" or path.startswith("adapters/codex/"):
         return "Codex"
     if path == "CLAUDE.md" or path.startswith("adapters/claude/"):
         return "Claude"
     if path == "README.md" or path.startswith("docs/human/"):
         return "Human"
+    package = _package_for_path(path, model)
+    if package and package.get("traversal") == "repository" and Path(path).name == "README.md":
+        return "Human"
+    if package and "/codex/" in path:
+        return "Codex"
+    if package and "/claude/" in path:
+        return "Claude"
     return "Shared"
 
 
-def _kind(path: str, generated: set[str], roles: list[str]) -> str:
+def _package_for_path(path: str, model: dict[str, Any]) -> dict[str, Any] | None:
+    matches = [
+        package
+        for package in model["packages"]
+        if path == package["path"] or path.startswith(package["path"].rstrip("/") + "/")
+    ]
+    return max(matches, key=lambda package: len(package["path"])) if matches else None
+
+
+def _is_external_pointer(path: str, model: dict[str, Any]) -> bool:
+    package = _package_for_path(path, model)
+    return bool(package and package.get("traversal") == "none")
+
+
+def _kind(path: str, generated: set[str], roles: list[str], model: dict[str, Any]) -> str:
     if path in generated:
         return "generated"
     if path == "theory-reference":
         return "submodule"
-    if path.startswith("external-skills/"):
+    if _is_external_pointer(path, model):
         return "external pointer"
     if "skill-source" in roles:
         return "skill source"
@@ -221,8 +242,8 @@ def _link_from_human(path: str) -> str:
     return f"../../{path}"
 
 
-def _file_cell(path: str) -> str:
-    if path.startswith("external-skills/"):
+def _file_cell(path: str, model: dict[str, Any]) -> str:
+    if _is_external_pointer(path, model):
         return f"`{_escape(path)}`"
     return f"[{_escape(path)}]({_link_from_human(path)})"
 
@@ -260,9 +281,9 @@ def render_repository_index(
         role_text = ", ".join(roles) if roles else "repository-contained"
         rows.append(
             "| "
-            + f"{_file_cell(relative)} | "
-            + f"{_escape(purpose)} | {_kind(relative, generated, roles)} | "
-            + f"{_audience(relative)} | {_escape(role_text)} |"
+            + f"{_file_cell(relative, model)} | "
+            + f"{_escape(purpose)} | {_kind(relative, generated, roles, model)} | "
+            + f"{_audience(relative, model)} | {_escape(role_text)} |"
         )
     return (
         "---\n"
@@ -284,18 +305,19 @@ def render_repository_index(
     )
 
 
-def _route_kind(path: str) -> str:
+def _route_kind(path: str, model: dict[str, Any]) -> str:
     if path.startswith("design-with-claude/"):
         return "single-file"
     if path.startswith("theory-reference/"):
         return "submodule package"
-    if path.startswith("external-skills/"):
+    if _is_external_pointer(path, model):
         return "external pointer"
     return "packaged skill"
 
 
-def _token_estimate(path: Path, relative: str) -> str:
-    if relative.startswith("external-skills/") or path.is_symlink() or not path.is_file():
+def _token_estimate(path: Path, relative: str, model: dict[str, Any] | None = None) -> str:
+    active_model = model or load_model(ROOT)
+    if _is_external_pointer(relative, active_model) or path.is_symlink() or not path.is_file():
         return "—"
     return str(math.ceil(path.stat().st_size / 4))
 
@@ -348,8 +370,8 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
             "| "
             + f"{_escape(route['id'])} | {_escape(route['family'])} | {_escape(route['state'])} | "
             + f"{_escape(route['description'])} | {_escape(triggers)} | "
-            + f"{_escape(route.get('not_for', ''))} | {_route_kind(source)} | "
-            + f"{_file_cell(source)} | {_token_estimate(root / source, source)} |"
+            + f"{_escape(route.get('not_for', ''))} | {_route_kind(source, model)} | "
+            + f"{_file_cell(source, model)} | {_token_estimate(root / source, source, model)} |"
         )
 
     main_paths = repository_paths(root, model)

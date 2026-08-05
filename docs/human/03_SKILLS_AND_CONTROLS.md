@@ -37,7 +37,7 @@ stateDiagram-v2
 Active and manual routes use Obsidian wikilinks. Off, hidden, and deprecated
 routes remain plain paths, so the graph does not pretend they are enabled.
 
-The Activation Register is the teal global switchboard. The six family route
+The Activation Register is the teal global switchboard. The seven family route
 tables are green registries. Their linked task instructions are violet skills,
 so activation, routing metadata, and executable instructions remain visually
 different.
@@ -80,6 +80,8 @@ current request.
 | `/skill auto` | Select at most one clearly relevant active skill |
 | `/skill normal` | Use no local task skill for this request |
 | `/skill <exact-id>` | Explicitly request one enabled route; required when that route is `manual` |
+| `/scout <project-path> [focus]` | Select Research Context Scout in initial mode |
+| `/scout-again <paths> [focus]` | Select the same skill in delta-based deepening mode |
 | `/interaction general|math` | Select prose or equation-led response style |
 | `/format mermaid+summary` | Request one or more known output forms |
 | `/depth brief|standard|detailed` | Select explanation depth |
@@ -90,6 +92,10 @@ current-request controls win over session, project, global, and automatic
 defaults. Fit `3` means exact explicit route, `2` one clear contextual route,
 `1` equal candidates needing a possible choice, and `0` no skill. It is not a
 score for whether the final answer is true.
+
+Command aliases are declared beside their family route and must be the first
+non-whitespace command. They are exact selectors, not natural-language trigger
+synonyms, and grant no additional file or network authority.
 
 The [Interaction Protocol hub](../../interaction-protocol/README.md) links
 these controls to the registry, runtime behavior, API receipt, and prompt tests.

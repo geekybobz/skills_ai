@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from graph_layers import (  # noqa: E402
+    _markdown_paths,
     check_graph,
     classify_path,
     graph_link_errors,
@@ -32,6 +33,7 @@ class GraphLayerTests(unittest.TestCase):
             "docs/SHARED_DOCUMENTATION_MODEL.md": "L1",
             "registry/design.md": "L2",
             "design-with-claude/poster-lead.md": "L4",
+            "research-context-scout/SKILL.md": "L4",
             "protocols/repository/ADD.md": "L5",
             "docs/07_BUILD_AND_RELEASE.md": "L5",
             "runtime/PROTOCOL.md": "L5",
@@ -115,6 +117,14 @@ class GraphLayerTests(unittest.TestCase):
             sync_graph(root)
             errors = check_graph(root, check_policy=False)
             self.assertTrue(any("unclassified Markdown" in error for error in errors))
+
+    def test_plan_only_ideas_are_not_graph_nodes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            plan = root / "skill-plans" / "future-scout" / "plan.md"
+            plan.parent.mkdir(parents=True)
+            plan.write_text("# Future scout\n", encoding="utf-8")
+            self.assertEqual([], list(_markdown_paths(root)))
 
 
 if __name__ == "__main__":
