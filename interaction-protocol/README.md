@@ -72,15 +72,15 @@ flowchart LR
 
 - `interaction.general`: active or off.
 - `interaction.math`: active, manual, or off.
-- `/skill auto`: select at most one relevant active skill.
-- `/skill normal` or “do not use any local skill”: use no local task skill.
-- `/skill <exact-id>`: explicitly request one enabled route; required for a
+- `#> skill auto`: select at most one relevant active skill.
+- `#> skill normal` or “do not use any local skill”: use no local task skill.
+- `#> skill <exact-id>`: explicitly request one enabled route; required for a
   `manual` task skill.
-- `/interaction math`: explicit math response for the current request.
-- `/interaction general`: explicit general response for the current request.
-- `/format mermaid+summary`: request known output forms.
-- `/depth brief|standard|detailed`: request explanation depth.
-- `/receipt auto|on|off`: show the task/skill/Fit/style/access receipt
+- `#> interaction math`: explicit math response for the current request.
+- `#> interaction general`: explicit general response for the current request.
+- `#> format mermaid+summary`: request known output forms.
+- `#> depth brief|standard|detailed`: request explanation depth.
+- `#> receipt auto|on|off`: show the task/skill/Fit/style/access receipt
   automatically, always, or never.
 - Prompt fixtures: [interaction_cases.json](../tests/interaction_cases.json).
 - Runtime tests: [test_registry_runtime.py](../tests/test_registry_runtime.py).

@@ -74,21 +74,28 @@ A request to add, edit, move, delete, scan, or repair Skills AI itself returns
 maintenance words such as “node” from selecting the setup guide. Negated phrases
 such as “no external install” are not treated as positive installation intent.
 
-A leading `/sudo <instruction>` returns `NORMAL / USER_SUDO` before skill
+A leading `#> override <instruction>` returns `NORMAL / USER_OVERRIDE` before skill
 scoring. It means “follow this exact request without local Skills AI ceremony,”
 not “ignore the host, sandbox, permissions, credentials, or safety rules.” A
 later, quoted, code-block, bare, or shell `sudo` mention has no special meaning.
 
-A family registry may declare an exact leading command for one manual skill.
-`/scout` selects the initial Research Context Scout phase and `/scout-again`
+A family registry may declare an exact task directive for one manual skill.
+`#> scout` selects the initial Research Context Scout phase and `#> scout-again`
 selects its delta-based deepening phase. The receipt carries only the command
-and mode; paths and other arguments stay in the host request. `/skill normal`
-still opts out, while quoted, embedded, later and near-matching text is ignored.
+and mode; paths and other arguments stay in the host request. Scout narrows the
+receipt to `write-scoped:research-orientation.md` and a supervisor-brief shape;
+everything else stays read-only. Invocation mode does not skip incomplete
+state: answered intake with an empty research map completes initial Cycle B
+before delta deepening. Canonical `#> skill research-context-scout <mode> ...`
+requires `initial` or `deepen` and injects the same mode. Receipt, depth, format
+or interaction controls may precede the Scout task directive. `#> skill normal`
+still opts out, while malformed, quoted, embedded, later and near-matching text
+fails safely.
 
 The interaction protocol is independent of `MATCH`. General guidance keeps the
 answer direct and adequately explained. The math overlay activates only for
 mathematical actions and objects, explicit mathematical research reasoning, or
-an explicit `/interaction math` control. Code, filenames, search terms,
+an explicit `#> interaction math` control. Code, filenames, search terms,
 settings, and rendering tasks cannot activate it merely by mentioning
 “equation” or “formula”. Current-request controls override session, project,
 global, and automatic defaults.

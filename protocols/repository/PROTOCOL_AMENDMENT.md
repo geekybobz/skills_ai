@@ -54,10 +54,17 @@ validator rejects a hub with a registry or skill colour, and the default global
 view hides low-level maintenance paths without changing the underlying graph.
 
 Protocol version 9 separates an unimplemented `plan.md` idea from a routable
-skill, adds a current-request `/sudo` escape from local Skills AI procedure,
+skill, adds a current-request local-procedure escape,
 supports proportional and baseline-aware validation, and provides a one-step
 maintenance classifier. Higher-level authority and safety boundaries remain
 unchanged.
+
+Protocol version 10 replaces custom leading slash controls with the
+platform-neutral `#>` directive namespace. `#> override` is the local-protocol
+escape; `#> scout`, `#> skill`, `#> interaction`, `#> format`, `#> depth`, and
+`#> receipt` are explicit routing or presentation directives. This avoids host
+interfaces consuming unregistered slash commands before the shared router can
+inspect them. Higher-level authority and safety boundaries remain unchanged.
 
 An amendment requested from outside the Skills AI maintenance workspace first
 uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but

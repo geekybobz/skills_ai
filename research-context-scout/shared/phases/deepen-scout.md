@@ -3,6 +3,11 @@
 Use after an initial orientation when the user supplies a new idea, answer,
 derivation, result, constraint, source or corrected assumption.
 
+Before loading by delta, verify that the Research and application map is
+populated. If it is empty, run initial Cycle B first; then apply the supplied
+delta through this phase. An invocation mode of `deepen` does not skip that
+unfinished initial work.
+
 ## Load by delta
 
 Read:
@@ -11,6 +16,9 @@ Read:
    `research-orientation.md`;
 2. the newly named information; and
 3. only prior sources needed to test affected claims.
+
+Apply any supplied focus to lane selection and to the mathematical, numerical
+or physical checks demanded by the delta.
 
 Do not rerun the complete initial scan by default. Let
 
@@ -49,6 +57,10 @@ Preserve user responses verbatim. Update only affected active-state entries,
 claim evidence, application mappings, paper direction and next validation.
 Keep superseded conclusions visible with a short reason instead of silently
 rewriting history.
+
+Append `## Interaction cycle N`, where `N` is one more than the highest
+existing cycle number. Repeat the cycle subsections and add a fresh user-response
+marker pair whenever new questions require another user answer.
 
 Stop when the brief states which idea survived, failed or remains speculative;
 what evidence changed; how applications or importance changed; whether the

@@ -63,9 +63,9 @@ mentions cannot activate math merely by containing a trigger word.
 Controls:
 
 - `interaction.math = active`: automatic and explicit selection;
-- `interaction.math = manual`: explicit `/interaction math` only;
+- `interaction.math = manual`: explicit `#> interaction math` only;
 - `interaction.math = off`: disabled; and
-- `/interaction general`: current-request general override.
+- `#> interaction general`: current-request general override.
 
 ## Deliberate removals
 

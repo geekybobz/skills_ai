@@ -112,6 +112,16 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("scripts/analyze_ambiguities.py", paths)
         self.assertNotIn("NOTES_SCRATCH.md", paths)
 
+    def test_deleted_tracked_files_do_not_enter_generated_views(self) -> None:
+        model = load_model(ROOT)
+        with patch(
+            "compile_repository_views._git_paths",
+            side_effect=[["README.md", "tests/deleted-file.py"], []],
+        ):
+            paths = repository_paths(ROOT, model)
+        self.assertIn("README.md", paths)
+        self.assertNotIn("tests/deleted-file.py", paths)
+
     def test_plan_only_ideas_are_excluded_from_generated_views(self) -> None:
         model = load_model(ROOT)
         with patch(

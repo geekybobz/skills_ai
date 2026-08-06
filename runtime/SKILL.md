@@ -17,8 +17,9 @@ description: Route user-owned local skills through the fast Skills AI runtime. U
    `routing.clarification`; load neither candidate until the user chooses.
 3. Never load an `off`, `hidden`, or `deprecated` route. A `manual` route needs
    an explicit matching request.
-4. Respect current-request `/skill`, `/interaction`, `/format`, `/depth`, and
-   `/receipt` controls before any session or automatic default. `routing.fit`
+4. Respect current-request `#> skill`, `#> interaction`, `#> format`,
+   `#> depth`, and `#> receipt` controls before any session or automatic
+   default. `routing.fit`
    measures route fit from 0 to 3, not answer correctness. When receipt mode is
    `auto`, show a compact receipt only for a match, ambiguity, explicit
    override, project inspection, or requested access boundary.

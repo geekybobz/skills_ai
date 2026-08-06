@@ -1,7 +1,9 @@
 # Initial Scout
 
-Use for a newly supplied project or an orientation record whose intake
-questions have not yet been answered.
+Use for a newly supplied project, an orientation record whose intake questions
+have not yet been answered, or an answered record whose Research and
+application map is still empty. For the answered case, skip Cycle A and run
+Cycle B.
 
 ## Cycle A — reconstruct and ask
 

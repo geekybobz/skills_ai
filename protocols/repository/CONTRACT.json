@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 9,
+  "protocol_version": 10,
   "approval_operations": [
     "move",
     "deprecate",

@@ -25,8 +25,8 @@
   {"query": "Show how the KKT condition follows", "mode": "math"},
   {"query": "Explain the mathematical reasoning in this paper", "mode": "math"},
   {"query": "Derive the control equation used in this research result", "mode": "math"},
-  {"query": "/interaction math explain the convergence result", "mode": "math"},
+  {"query": "#> interaction math explain the convergence result", "mode": "math"},
   {"query": "Math first: explain this optimization problem", "mode": "math"},
-  {"query": "/interaction general derive the Hamiltonian equation", "mode": "general"},
+  {"query": "#> interaction general derive the Hamiltonian equation", "mode": "general"},
   {"query": "Use normal prose to explain this formula", "mode": "general"}
 ]

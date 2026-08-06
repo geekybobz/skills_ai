@@ -51,6 +51,10 @@ flowchart TD
 | `external-skills/` | Pointers to separately owned skills | You need ownership or activation information without traversing the target |
 | `.runtime/` | Ignored prompt-free ambiguity observations | You are locally analyzing repeated equal route pairs; never commit it |
 
+Cross-platform prompt controls use the shared `#>` directive namespace. This
+keeps routing, presentation, Scout, and local-override instructions in ordinary
+prompt text so a host command menu cannot consume them before the router runs.
+
 ## How to move deeper
 
 ```mermaid

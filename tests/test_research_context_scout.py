@@ -25,14 +25,14 @@ class ResearchContextScoutTests(unittest.TestCase):
         self.assertEqual("research-context-scout/SKILL.md", route["path"])
         self.assertEqual(
             [
-                ("/scout", "initial"),
-                ("/scout-again", "deepen"),
+                ("#> scout", "initial"),
+                ("#> scout-again", "deepen"),
             ],
             [(item["command"], item["mode"]) for item in manifest["command_aliases"]],
         )
 
     def test_runtime_entry_excludes_the_long_human_guide(self) -> None:
-        entry = self.read("SKILL.md")
+        entry = " ".join(self.read("SKILL.md").split())
         self.assertIn("Do not read `README.md` during task", entry)
         self.assertIn("shared/SKILL.md", entry)
         self.assertIn("codex/SKILL.md", entry)
@@ -48,10 +48,53 @@ class ResearchContextScoutTests(unittest.TestCase):
 
     def test_record_template_protects_user_answers(self) -> None:
         template = self.read("shared/templates/research-orientation.md")
-        self.assertEqual(1, template.count("USER RESPONSES START"))
-        self.assertEqual(1, template.count("USER RESPONSES END"))
+        self.assertGreaterEqual(template.count("USER RESPONSES START"), 1)
+        self.assertEqual(
+            template.count("USER RESPONSES START"),
+            template.count("USER RESPONSES END"),
+        )
         self.assertIn("### Agent interpretation", template)
+        self.assertIn("## Superseded conclusions", template)
+        self.assertIn(
+            "one more than the highest existing cycle number",
+            " ".join(template.split()),
+        )
         self.assertIn("never overwrite", self.read("codex/CODEX.md").lower())
+
+    def test_claude_wrapper_preserves_record_and_directive_boundaries(self) -> None:
+        wrapper = self.read("claude/CLAUDE.md")
+        self.assertIn("USER RESPONSES", wrapper)
+        self.assertIn("research-orientation.md", wrapper)
+        self.assertIn("only writable", wrapper)
+        self.assertIn("#> scout", wrapper)
+        self.assertIn("#> scout-again", wrapper)
+        self.assertIn("late state-recovery", wrapper)
+        self.assertIn("Never read `../README.md`", wrapper)
+        self.assertIn("injected `mode=` line", wrapper)
+        self.assertIn("validated mode", wrapper)
+
+    def test_answered_intake_without_a_map_completes_initial_cycle_b(self) -> None:
+        entry = " ".join(self.read("shared/SKILL.md").split())
+        initial = " ".join(self.read("shared/phases/initial-scout.md").split())
+        deepen = self.read("shared/phases/deepen-scout.md")
+        self.assertIn("answered intake with an empty Research and application map", entry)
+        self.assertIn("skip Cycle A and run Cycle B", entry)
+        self.assertIn("skip Cycle A and run Cycle B", initial)
+        self.assertIn("run initial Cycle B first", deepen)
+
+    def test_deepen_phase_preserves_focus_and_cycle_structure(self) -> None:
+        phase = self.read("shared/phases/deepen-scout.md")
+        self.assertIn("Apply any supplied focus", phase)
+        self.assertIn("## Interaction cycle N", phase)
+        self.assertIn("fresh user-response", phase)
+
+    def test_record_path_and_repository_guard_are_shared(self) -> None:
+        entry = " ".join(self.read("SKILL.md").split())
+        shared = self.read("shared/SKILL.md")
+        claude = self.read("claude/CLAUDE.md")
+        self.assertIn("resolve its parent as the project root", entry)
+        self.assertIn("inside the Skills AI repository", shared)
+        self.assertNotIn("inside the Skills AI repository", claude)
 
     def test_recommendations_have_formal_evidence_and_application_contracts(self) -> None:
         rule = self.read("shared/rules/evidence-gate.md")
@@ -79,7 +122,7 @@ class ResearchContextScoutTests(unittest.TestCase):
             "shared/rules/evidence-gate.md": 8000,
             "codex/SKILL.md": 4000,
             "codex/CODEX.md": 4000,
-            "claude/CLAUDE.md": 4000,
+            "claude/CLAUDE.md": 5000,
         }
         for relative, limit in limits.items():
             with self.subTest(relative=relative):

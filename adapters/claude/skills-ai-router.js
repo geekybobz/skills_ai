@@ -118,11 +118,28 @@ function contextText(decision, root) {
     'Skills AI shared response context:',
     `route=${decision.result.toLowerCase()}`,
     `reason=${decision.reason_code.toLowerCase()}`,
+  ];
+  if (decision.skill) {
+    lines.push(`skill=${decision.skill.id}`);
+    lines.push(`path=${decision.skill.path}`);
+  }
+  if (context.skill_invocation) {
+    lines.push(`command=${context.skill_invocation.command}`);
+    lines.push(`mode=${context.skill_invocation.mode}`);
+  }
+  if (decision.registry) {
+    const counts = decision.registry.route_counts;
+    lines.push(`registry_source=${decision.registry.source_hash.slice(0, 12)}`);
+    lines.push(
+      `registry_routes=active:${counts.active},manual:${counts.manual},off:${counts.off}`,
+    );
+  }
+  lines.push(
     `fit=${routing.fit}/3`,
     `fit_reason=${routing.fit_reason}`,
     `operation=${context.operation}`,
     `domain=${context.domain}`,
-    `requested_access=${context.requested_access}`,
+    `access=${context.requested_access}`,
     `interaction=${context.interaction.mode}`,
     `interaction_reason=${context.interaction.reason}`,
     `voice=${context.output.voice}`,
@@ -131,8 +148,8 @@ function contextText(decision, root) {
     `format=${(context.output.format || ['auto']).join('+')}`,
     `receipt=${context.receipt || 'auto'}`,
     `project_context=${context.project_context || 'bounded-host-context'}`,
-    `contract=${context.response_contract.join(' ')}`,
-  ];
+    `contract=${(context.response_contract || []).join(' ')}`,
+  );
   lines.push(
     'Explicit current-request controls override session, project, global, and automatic defaults. ' +
     'Natural-language output instructions in the user prompt remain authoritative.',

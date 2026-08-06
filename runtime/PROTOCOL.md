@@ -7,7 +7,7 @@ Protocol version: `skills-ai/1`.
 ## Invariants
 
 - One request selects at most one active/manual skill or returns `NORMAL`.
-- A `manual` task skill is eligible only when `/skill <exact-id>`, the exact
+- A `manual` task skill is eligible only when `#> skill <exact-id>`, the exact
   “use the `<id>` skill” form, or a registry-declared leading command alias
   names it. Explicit selection bypasses domain gates for that route but never
   activation, path, or permission checks.
@@ -42,28 +42,37 @@ paths, filenames, URLs, settings, search, parser, and rendering mentions.
 Activation behavior is exact:
 
 - `active`: automatic and explicit math selection;
-- `manual`: explicit `/interaction math` selection only;
+- `manual`: explicit `#> interaction math` selection only;
 - `off`: no math overlay; and
-- `/interaction general`: per-request general override.
+- `#> interaction general`: per-request general override.
 
 The shared router returns the selected interaction mode and reason in every
 context packet. Adapters must render that context without duplicating the
 detection rules.
 
+An explicitly invoked workflow may narrow the generic access and output fields
+when its user-facing command contract grants that scope. Skill selection alone
+still grants nothing. Research Context Scout returns
+`write-scoped:research-orientation.md` and a supervisor-brief output shape;
+all other project artifacts remain read-only. This does not force the global
+math interaction mode: mathematical formulation is applied inside the skill
+only when a claim requires it.
+
 ## Request controls and receipt
 
 Current-request controls have the highest presentation priority:
 
-- leading `/sudo <exact instruction>` bypasses local Skills AI routing,
+- leading `#> override <exact instruction>` bypasses local Skills AI routing,
   interaction formatting, and repository procedure for the current request;
-- `/skill auto|normal|<exact-id>` controls the local task-skill slot;
-- registry-declared commands such as `/scout` and `/scout-again` select one
-  exact manual skill and attach a bounded invocation mode;
+- `#> skill auto|normal|<exact-id>` controls the local task-skill slot;
+- registry-declared directives such as `#> scout` and `#> scout-again` select one
+  exact manual skill and attach a bounded invocation mode; presentation
+  controls may precede the first task directive;
 - natural “do not use any local skill” forms map to `USER_NORMAL`;
-- `/interaction general|math` controls response style;
-- `/format mermaid+summary` selects one or more known output forms;
-- `/depth brief|standard|detailed` selects explanation depth; and
-- `/receipt auto|on|off` controls the compact visible task receipt.
+- `#> interaction general|math` controls response style;
+- `#> format mermaid+summary` selects one or more known output forms;
+- `#> depth brief|standard|detailed` selects explanation depth; and
+- `#> receipt auto|on|off` controls the compact visible task receipt.
 
 The precedence is current request, session preference, project default, global
 default, then automatic detection. Natural-language output instructions in the
@@ -72,16 +81,23 @@ project instructions plus user-named or directly relevant files; routing never
 scans a repository merely to fill the receipt.
 
 Command aliases are data in one family registry, not hard-coded keyword
-substitutions. They activate only as the first non-whitespace command, never
-from quotations, code, URLs, later mentions or near-matching words. The router
-returns only `command`, `mode` and current-request scope; it does not echo alias
-arguments. `/skill normal` still opts out, and leading `/sudo` retains its
-earlier override boundary.
+substitutions. They activate as the first task directive, optionally after
+leading receipt, depth, format or interaction controls; they never activate
+from quotations, code, URLs, later prose mentions or near-matching words. The
+router returns only `command`, `mode` and current-request scope; it does not
+echo alias arguments. An option-like first alias argument is malformed rather
+than silently changing modes. `#> skill normal` still opts out, and leading
+`#> override` retains its earlier override boundary.
 
-`/sudo` is deliberately not a presentation option and is not stored in the
+Invocation mode expresses intent, not workflow completeness. A skill may
+finish a required earlier phase before acting on the requested mode. Canonical
+Research Context Scout selection requires `initial` or `deepen` and injects the
+validated mode just like an alias.
+
+`#> override` is deliberately not a presentation option and is not stored in the
 interaction protocol. It is recognized only as the first non-whitespace token
 and only when an instruction follows. It never activates from quoted text,
-code, a URL, a later mention, or the bare shell word `sudo`. The override is
+code, a URL, a later mention, or a bare `override` word. The override is
 local: system and developer instructions, host permissions, sandbox limits,
 credentials, external actions, destructive-action safety, and exact user scope
 remain authoritative.
@@ -130,7 +146,8 @@ The default hot path returns zero after an operational fail-open receipt.
 
 Routing reasons include `ACTIVE_SKILL_MATCH`, `NO_SKILL_MATCH`,
 `DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`,
-`USER_SUDO`, `UNKNOWN_SKILL_REQUEST`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
+`USER_OVERRIDE`, `UNKNOWN_SKILL_REQUEST`, `MALFORMED_COMMAND_ALIAS`,
+`INVALID_SKILL_MODE`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
 requests on the normal path instead of allowing words such as `node` or a
 negated `install` to select an ordinary task skill. Boundary reasons
 include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,

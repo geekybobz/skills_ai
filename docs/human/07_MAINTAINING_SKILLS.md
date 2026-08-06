@@ -68,6 +68,11 @@ Deletion, protocol amendments, external writes, and unexpected scope expansion
 still require explicit permission. The scanner discovers impact; it does not
 grant authority.
 
+Protocol version 10 uses the platform-neutral `#>` directive namespace instead
+of unregistered leading slash commands. `#> override` bypasses only local
+Skills AI procedure for one request; named directives such as `#> skill`,
+`#> depth`, and `#> scout` retain their narrower routing or presentation roles.
+
 ## Commands you will see
 
 Before editing:

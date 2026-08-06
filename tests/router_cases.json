@@ -67,25 +67,41 @@
   },
   {
     "name": "canonical exact skill request",
-    "query": "/skill code-explainer Explain this code",
+    "query": "#> skill code-explainer Explain this code",
     "result": "MATCH",
     "skill": "code-explainer"
   },
   {
     "name": "research scout initial command",
-    "query": "/scout /tmp/new-project theory",
+    "query": "#> scout /tmp/new-project theory",
     "result": "MATCH",
     "skill": "research-context-scout"
   },
   {
     "name": "research scout deepen command",
-    "query": "/scout-again /tmp/new-project new-result.md",
+    "query": "#> scout-again /tmp/new-project new-result.md",
     "result": "MATCH",
     "skill": "research-context-scout"
   },
   {
+    "name": "presentation control before research scout",
+    "query": "#> depth detailed #> scout /tmp/new-project",
+    "result": "MATCH",
+    "skill": "research-context-scout"
+  },
+  {
+    "name": "malformed research scout alias fails safe",
+    "query": "#> scout -again /tmp/new-project",
+    "result": "NORMAL"
+  },
+  {
+    "name": "invalid canonical research scout mode fails safe",
+    "query": "#> skill research-context-scout bogus /tmp/new-project",
+    "result": "NORMAL"
+  },
+  {
     "name": "research scout later mention is inert",
-    "query": "Explain this literal /scout /tmp/new-project",
+    "query": "Explain this literal #> scout /tmp/new-project",
     "result": "NORMAL"
   },
   {

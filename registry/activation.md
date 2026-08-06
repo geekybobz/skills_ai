@@ -33,7 +33,7 @@ enabled routes are linked; disabled routes are visible but unlinked.
 
 | id | state | route | trigger boundary |
 |---|---|---|---|
-| research-context-scout | manual | [[research-context-scout/SKILL\|research-context-scout]] | exact skill request, `/scout`, or `/scout-again` only |
+| research-context-scout | manual | [[research-context-scout/SKILL\|research-context-scout]] | exact skill request, `#> scout`, or `#> scout-again` only |
 | quantum-job-collector | off | `external-skills/quantum-job-collector/SKILL.md` | exhaustive Quantum Career Radar job collection |
 
 ## Interaction Protocol Components

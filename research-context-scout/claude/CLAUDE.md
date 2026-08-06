@@ -6,8 +6,9 @@ research logic lives in `../shared/`; do not restate or fork it here.
 ## Load
 
 1. `../shared/SKILL.md`, reached from `../SKILL.md`.
-2. Exactly one phase — `../shared/phases/initial-scout.md` for `initial`,
-   `../shared/phases/deepen-scout.md` for `deepen`.
+2. One phase from record state — `../shared/phases/initial-scout.md` for
+   `initial`, `../shared/phases/deepen-scout.md` for `deepen`. Load the other
+   only for a late state-recovery declared by the selected phase.
 3. `../shared/rules/evidence-gate.md` only when grading or recommending a
    direction; `../shared/templates/research-orientation.md` only when creating
    or repairing the record.
@@ -18,10 +19,17 @@ a subagent loses the record state and this bounded load.
 
 ## Invoke
 
-Use `context.skill_invocation.mode` from the managed `UserPromptSubmit` hook.
-Without it, resolve the mode from the exact leading token: `/scout` → initial,
-`/scout-again` → deepen, with `/skill research-context-scout <mode> <paths>`
-as the fallback. Quoted, embedded, or later mentions do not invoke.
+Read the hook's injected `mode=` line
+(`context.skill_invocation.mode` at the API layer). Alias and canonical
+directive forms inject a validated mode. Without hook context, resolve
+`#> scout` as initial and `#> scout-again` as deepen, or read the canonical
+form's explicit mode. For an exact natural-language skill request without a
+mode, use `../SKILL.md`'s record-presence rule. Quoted or later mentions do not
+invoke.
+
+Mode is intent, not permission to skip unfinished work. When intake answers
+exist but the Research and application map is empty, run initial Cycle B before
+delta-based deepening.
 
 Take the project path from the command arguments only. If it is missing,
 ambiguous, or spans projects, ask once and stop; do not glob for a guess.
@@ -48,13 +56,11 @@ user separately authorizes an edit.
 - New record: Write from the shared template.
 - Existing record: Read it, then Edit. Never Write over an existing record; it
   would erase the user's answers.
-- Never alter text between `<!-- USER RESPONSES START -->` and
-  `<!-- USER RESPONSES END -->`. Interpretation goes in its own section, new
-  work in a new numbered cycle appended below.
+- Never alter text inside any `<!-- USER RESPONSES START -->` /
+  `<!-- USER RESPONSES END -->` pair. Interpretation goes in its own section,
+  new work in a new numbered cycle appended below.
 - On the first initial cycle, report the record path and stop where the phase
   requires instead of continuing into the deep pass.
-- If the resolved project root lies inside the Skills AI repository, the record
-  is a governed repository change: stop and follow repository change control.
 
 ## Respond
 

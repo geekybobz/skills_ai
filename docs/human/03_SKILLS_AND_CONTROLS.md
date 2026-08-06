@@ -69,33 +69,36 @@ target paths, and the compiled manifest. Activation changes routing availability
 they do not authorize a skill to write files or access external systems.
 
 For `interaction.math`, `active` enables safe automatic mathematical-intent
-detection, `manual` requires `/interaction math`, and `off` disables the math
-overlay. `/interaction general` overrides automatic math selection for the
+detection, `manual` requires `#> interaction math`, and `off` disables the math
+overlay. `#> interaction general` overrides automatic math selection for the
 current request.
 
 ## Per-request controls
 
 | Control | Effect |
 |---|---|
-| `/skill auto` | Select at most one clearly relevant active skill |
-| `/skill normal` | Use no local task skill for this request |
-| `/skill <exact-id>` | Explicitly request one enabled route; required when that route is `manual` |
-| `/scout <project-path> [focus]` | Select Research Context Scout in initial mode |
-| `/scout-again <paths> [focus]` | Select the same skill in delta-based deepening mode |
-| `/interaction general|math` | Select prose or equation-led response style |
-| `/format mermaid+summary` | Request one or more known output forms |
-| `/depth brief|standard|detailed` | Select explanation depth |
-| `/receipt auto|on|off` | Show the compact task receipt when useful, always, or never |
+| `#> skill auto` | Select at most one clearly relevant active skill |
+| `#> skill normal` | Use no local task skill for this request |
+| `#> skill <exact-id>` | Explicitly request one enabled route; required when that route is `manual` |
+| `#> skill research-context-scout initial|deepen <paths>` | Canonical Scout form with a required validated mode |
+| `#> scout <project-path> [focus]` | Select Research Context Scout in initial mode |
+| `#> scout-again <paths> [focus]` | Select the same skill in delta-based deepening mode |
+| `#> interaction general|math` | Select prose or equation-led response style |
+| `#> format mermaid+summary` | Request one or more known output forms |
+| `#> depth brief|standard|detailed` | Select explanation depth |
+| `#> receipt auto|on|off` | Show the compact task receipt when useful, always, or never |
 
-“Do not use any local skill” is a natural alias for `/skill normal`. Exact
+“Do not use any local skill” is a natural alias for `#> skill normal`. Exact
 current-request controls win over session, project, global, and automatic
 defaults. Fit `3` means exact explicit route, `2` one clear contextual route,
 `1` equal candidates needing a possible choice, and `0` no skill. It is not a
 score for whether the final answer is true.
 
-Command aliases are declared beside their family route and must be the first
-non-whitespace command. They are exact selectors, not natural-language trigger
-synonyms, and grant no additional file or network authority.
+Directive aliases are declared beside their family route and must be the first
+task directive; receipt, depth, format or interaction controls may precede
+them. They are case-insensitive exact selectors with whitespace required after
+`#>`, not natural-language trigger synonyms, and grant no additional file or
+network authority.
 
 The [Interaction Protocol hub](../../interaction-protocol/README.md) links
 these controls to the registry, runtime behavior, API receipt, and prompt tests.

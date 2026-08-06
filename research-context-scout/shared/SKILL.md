@@ -6,10 +6,17 @@ matter, and distinguish attractive wording from supportable research.
 
 ## Select one phase
 
-- Initial project or unanswered intake questions: read
-  `phases/initial-scout.md`.
-- Existing orientation plus new information: read
-  `phases/deepen-scout.md`.
+- Initial project, unanswered intake questions, or answered intake with an
+  empty Research and application map: read `phases/initial-scout.md`. For an
+  answered record, skip Cycle A and run Cycle B, even when the invocation mode
+  is `deepen`.
+- Existing orientation with a populated Research and application map plus new
+  information: read `phases/deepen-scout.md`.
+
+Treat intake as answered only when the latest user-response marker pair
+contains substantive non-comment text. Treat the map as populated when it has
+a substantive transferable capability plus at least one research lane or
+application; placeholders do not count.
 
 Read `rules/evidence-gate.md` only when assessing or recommending research
 directions. Read `templates/research-orientation.md` only when creating a new
@@ -38,6 +45,8 @@ record or repairing its headings.
    it as a clean supervisor brief for the user.
 10. Stop when the next decision is clear. Do not turn orientation into an
     exhaustive review, proof campaign, simulation project or research database.
+11. If the resolved project root lies inside the Skills AI repository, stop and
+    follow repository change control before writing the record.
 
 ## Structured result packet
 

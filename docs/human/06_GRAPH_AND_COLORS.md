@@ -13,6 +13,9 @@ Protocol version 8 makes color describe the kind of node you are looking at.
 The palette is unchanged, but Activation and every declared concept entry are
 now teal hubs instead of being mixed with registries or skills.
 
+Protocol version 10 changes prompt directive syntax only. It adds no graph
+layer or node type, so the existing L0–L5 colour contract remains unchanged.
+
 Color describes architectural role, not topic. Individual skills do not get
 individual colors.
 

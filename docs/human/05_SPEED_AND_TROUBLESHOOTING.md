@@ -67,7 +67,7 @@ runs only during maintenance and documentation checks.
 Packaged skills keep the same progressive-loading rule. Research Context Scout
 loads its small entry, one host wrapper, one shared phase, and the evidence rule
 only when recommendations are evaluated; its long human README is excluded.
-`/scout-again` reuses the compact orientation record and new delta instead of
+`#> scout-again` reuses the compact orientation record and new delta instead of
 rereading the complete project by default.
 
 ## Timeout and cleanup
@@ -111,7 +111,9 @@ the hook first.
 | Task waits | Confirm one newline-framed request and the configured input deadline |
 | `MANIFEST_UNAVAILABLE` | Run compile and registry validation; the task should still continue normally |
 | Wrong skill | Add a regression prompt and inspect trigger or ambiguity scoring |
-| `/scout` does not select the skill | Confirm it is the exact first command and the research family plus manual skill gate are enabled |
+| `#> scout` does not select the skill | Confirm it is the first task directive after optional presentation controls, has whitespace after `#>`, and the research family plus manual skill gate are enabled |
+| Canonical Scout returns `INVALID_SKILL_MODE` | Supply exactly `initial` or `deepen` after `#> skill research-context-scout` |
+| Scout returns `MALFORMED_COMMAND_ALIAS` | Replace option-like alias arguments such as `#> scout -again` with `#> scout-again <path>` |
 | Depth control has no effect | Confirm `depth=...` appears in the Codex compact context or Claude injected context |
 | Repeated ambiguity | Run `analyze_ambiguities.py`; improve the recurring candidate pair without opening prompt history |
 | Maintenance request selects a task skill | Confirm `SKILLS_AI_MAINTENANCE` is returned before route scoring |

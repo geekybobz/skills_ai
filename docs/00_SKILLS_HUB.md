@@ -18,7 +18,7 @@ pick the enabled family registry and load the active skill or component.
 | install, node, `.env`, secret, database, supabase, deploy, vercel, domain, build error, explain this code | [[registry/build-ops]] |
 | concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
 | LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
-| `/scout`, `/scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[registry/research]] |
+| `#> scout`, `#> scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[registry/research]] |
 | quantum jobs, career radar, update review queue, pending jobs, source coverage | `registry/career.md` (off in activation) |
 
 ## Rules

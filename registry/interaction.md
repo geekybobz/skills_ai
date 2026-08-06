@@ -27,9 +27,10 @@ Automatic selection requires mathematical intent, not a lone keyword:
 - an explanatory question about a strong mathematical object; or
 - research context explicitly asking for mathematical or analytical reasoning.
 
-Explicit style controls are `/interaction math` and `/interaction general`.
-The shared request layer also supports `/skill auto|normal|<exact-id>`,
-`/format`, `/depth brief|standard|detailed`, and `/receipt auto|on|off`.
+Explicit style controls are `#> interaction math` and
+`#> interaction general`. The shared request layer also supports
+`#> skill auto|normal|<exact-id>`, `#> format`,
+`#> depth brief|standard|detailed`, and `#> receipt auto|on|off`.
 Current-request controls win over session, project, global, and automatic
 defaults. Natural-language output instructions remain authoritative.
 

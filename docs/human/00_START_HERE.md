@@ -40,7 +40,11 @@ flowchart LR
 - Prompt text and skill bodies are not written to diagnostics.
 - Prompt-free ambiguity logs contain only candidate ids and bounded route
   metadata; they are ignored by Git and capped in size.
-- A selected skill grants no write, network, credential, or account authority.
+- Skill selection alone grants no write, network, credential, or account
+  authority.
+- An explicitly invoked workflow may carry a narrow user-granted write such as
+  Scout's project-root `research-orientation.md`; the receipt names that scope
+  and leaves all other artifacts read-only.
 - A registry-declared command alias selects one exact manual skill only when it
   is the first command; it never activates from a quotation or later mention.
 - Each router process reads one request, writes one result, and exits.
@@ -69,8 +73,8 @@ host permissions remain the real enforcement boundary.
 | Task receipt | Optional compact task, project, skill/Fit, depth, format, and access header |
 | Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
 | Plan-only idea | Exactly `skill-plans/<name>/plan.md`; not yet a skill, route, or graph node |
-| Command alias | Exact leading command such as `/scout`; selects one declared skill and mode without copying its arguments into the receipt |
-| `/sudo` | Current-request override of local Skills AI procedure; higher-level safety and permission rules remain |
+| Directive alias | Exact task directive such as `#> scout`; selects one declared skill and mode after optional presentation controls without copying its arguments into the receipt |
+| `#> override` | Current-request override of local Skills AI procedure; higher-level safety and permission rules remain |
 
 The human guide is explanatory only. For current behavior, the live manifest
 and canonical maintenance documents remain authoritative.

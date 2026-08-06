@@ -75,31 +75,57 @@ live metadata; it never loads a skill body.
 The adapter validates a returned skill path against the Skills AI root before
 reading it. The original prompt is never present in the response.
 
-Per-request controls are leading `/sudo <exact instruction>`, `/skill auto|normal|<exact-id>`,
-`/interaction general|math`, `/format <known+forms>`,
-`/depth brief|standard|detailed`, and `/receipt auto|on|off`. Controls stay in
+Per-request controls are leading `#> override <exact instruction>`,
+`#> skill auto|normal|<exact-id>`, `#> interaction general|math`,
+`#> format <known+forms>`, `#> depth brief|standard|detailed`, and
+`#> receipt auto|on|off`. Controls stay in
 `query`; the JSON request envelope does not duplicate them.
 
-A family registry may declare an exact leading command alias for one enabled
-skill and a small invocation mode. For example, `/scout <path>` selects
-`research-context-scout` with mode `initial`, while `/scout-again <paths>` uses
+A family registry may declare an exact task-directive alias for one enabled
+skill and a small invocation mode. Leading presentation controls may precede
+it. For example, `#> scout <path>` selects
+`research-context-scout` with mode `initial`, while `#> scout-again <paths>` uses
 mode `deepen`. Alias arguments remain only in the original host request and are
 never copied into the response. Quoted, embedded, code-block, later or partial
-matches do not activate aliases.
+matches do not activate aliases. An option-like first alias argument returns
+`NORMAL / MALFORMED_COMMAND_ALIAS`.
 
 An alias-selected `MATCH` adds only this bounded context:
 
 ```json
 {
   "skill_invocation": {
-    "command": "/scout",
+    "command": "#> scout",
     "mode": "initial",
     "scope": "current-request-only"
   }
 }
 ```
 
-`NORMAL / USER_SUDO` contains no echoed query or skill. Its context declares a
+For `research-context-scout`, the normal context fields are narrowed to the
+skill's public contract:
+
+```json
+{
+  "requested_access": "write-scoped:research-orientation.md",
+  "output": {
+    "shape": "supervisor result -> evidence or formulation -> decision boundary -> questions or next investigation -> record path"
+  }
+}
+```
+
+This value authorizes only the project-root record; other supplied artifacts
+remain read-only. Alias and canonical
+`#> skill research-context-scout <mode> ...` forms add
+`skill_invocation.mode`. The canonical form accepts only `initial` or `deepen`;
+a missing or unknown mode returns `NORMAL / INVALID_SKILL_MODE`.
+
+Codex and Claude render the same ordered header keys: `route`, `reason`,
+optional `skill`/`path` and `command`/`mode`, then `fit`, `fit_reason`,
+`operation`, `domain`, `access`, `interaction`, `interaction_reason`, `voice`,
+`shape`, `depth`, `format`, `receipt`, `project_context` and `contract`.
+
+`NORMAL / USER_OVERRIDE` contains no echoed query or skill. Its context declares a
 current-request-only `local_protocol_override`, the local layers bypassed, and
 the higher-level safety and authority boundaries preserved. Bare, embedded,
 quoted, or code-block occurrences do not activate the override.
@@ -142,7 +168,7 @@ short choice, reroutes with the chosen exact id, and resumes the original task.
     "family_gates": {},
     "component_gates": {},
     "command_aliases": [
-      {"command": "/scout", "skill_id": "research-context-scout", "mode": "initial"}
+      {"command": "#> scout", "skill_id": "research-context-scout", "mode": "initial"}
     ]
   },
   "context": {}

@@ -52,15 +52,15 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual(1, decision["registry"]["route_counts"]["manual"])
         self.assertEqual(["quantum-job-collector"], decision["registry"]["routes"]["off"])
         self.assertEqual(
-            ["/scout", "/scout-again"],
+            ["#> scout", "#> scout-again"],
             [item["command"] for item in decision["registry"]["command_aliases"]],
         )
         self.assertNotIn("hidden", decision["registry"]["routes"])
 
     def test_research_command_aliases_select_one_manual_skill_and_mode(self) -> None:
         cases = {
-            "/scout /tmp/new-project theory": ("/scout", "initial"),
-            "/scout-again /tmp/new-project result.md": ("/scout-again", "deepen"),
+            "#> scout /tmp/new-project theory": ("#> scout", "initial"),
+            "#> scout-again /tmp/new-project result.md": ("#> scout-again", "deepen"),
         }
         for query, (command, mode) in cases.items():
             with self.subTest(query=query):
@@ -71,38 +71,122 @@ class RegistryRuntimeTests(unittest.TestCase):
                 self.assertEqual("explicit-command-alias", decision["routing"]["fit_reason"])
                 self.assertEqual(command, decision["context"]["skill_invocation"]["command"])
                 self.assertEqual(mode, decision["context"]["skill_invocation"]["mode"])
+                self.assertEqual(
+                    "write-scoped:research-orientation.md",
+                    decision["context"]["requested_access"],
+                )
+                self.assertEqual(
+                    "supervisor result -> evidence or formulation -> decision boundary -> "
+                    "questions or next investigation -> record path",
+                    decision["context"]["output"]["shape"],
+                )
                 self.assertNotIn("/tmp/new-project", json.dumps(decision))
                 compact = compact_context(decision)
                 self.assertIn(f"command={command}", compact)
                 self.assertIn(f"mode={mode}", compact)
+                self.assertIn("access=write-scoped:research-orientation.md", compact)
 
     def test_research_command_aliases_are_exact_and_leading_only(self) -> None:
         prompts = (
-            "Explain the literal /scout /tmp/project",
-            "`/scout /tmp/project`",
+            "Explain the literal #> scout /tmp/project",
+            "`#> scout /tmp/project`",
             "We are scouting this research project",
-            "/scoutish /tmp/project",
-            "Read this example:\n```text\n/scout /tmp/project\n```",
+            "#> scoutish /tmp/project",
+            "#> scoutagain /tmp/project",
+            "#> scout_again /tmp/project",
+            "#> scout--again /tmp/project",
+            "/scout /tmp/project",
+            "Read this example:\n```text\n#> scout /tmp/project\n```",
         )
         for query in prompts:
             with self.subTest(query=query):
                 decision = route_request(query, self.manifest)
                 self.assertNotEqual("research-context-scout", decision.get("skill", {}).get("id"))
 
-    def test_skill_normal_and_sudo_precede_research_aliases(self) -> None:
-        normal = route_request("/scout /tmp/project /skill normal", self.manifest)
-        sudo = route_request("/sudo /scout /tmp/project", self.manifest)
+    def test_presentation_controls_may_precede_research_alias(self) -> None:
+        detailed = route_request("#> depth detailed #> scout /tmp/project", self.manifest)
+        mathematical = route_request("#> interaction math #> scout-again /tmp/project", self.manifest)
+        combined = route_request(
+            "#> receipt on #> format mermaid+summary #> depth brief #> scout /tmp/project",
+            self.manifest,
+        )
+        self.assertEqual("research-context-scout", detailed["skill"]["id"])
+        self.assertEqual("initial", detailed["context"]["skill_invocation"]["mode"])
+        self.assertEqual("detailed", detailed["context"]["output"]["depth"])
+        self.assertEqual("research-context-scout", mathematical["skill"]["id"])
+        self.assertEqual("deepen", mathematical["context"]["skill_invocation"]["mode"])
+        self.assertEqual("math", mathematical["context"]["interaction"]["mode"])
+        self.assertEqual("research-context-scout", combined["skill"]["id"])
+        self.assertEqual("on", combined["context"]["receipt"])
+        self.assertEqual(["mermaid", "summary"], combined["context"]["output"]["format"])
+        self.assertEqual("brief", combined["context"]["output"]["depth"])
+
+    def test_option_like_alias_argument_fails_safe(self) -> None:
+        decision = route_request("#> scout -again /tmp/project", self.manifest)
+        self.assertEqual("NORMAL", decision["result"])
+        self.assertEqual("MALFORMED_COMMAND_ALIAS", decision["reason_code"])
+        self.assertNotIn("skill", decision)
+        self.assertIn("#> scout-again <path>", " ".join(decision["context"]["response_contract"]))
+
+    def test_skill_normal_and_override_precede_research_aliases(self) -> None:
+        normal = route_request("#> scout /tmp/project #> skill normal", self.manifest)
+        override = route_request("#> override #> scout /tmp/project", self.manifest)
         self.assertEqual("USER_NORMAL", normal["reason_code"])
-        self.assertEqual("USER_SUDO", sudo["reason_code"])
+        self.assertEqual("USER_OVERRIDE", override["reason_code"])
 
     def test_canonical_research_skill_request_remains_available(self) -> None:
         decision = route_request(
-            "/skill research-context-scout initial /tmp/project",
+            "#> skill research-context-scout initial /tmp/project",
             self.manifest,
         )
         self.assertEqual("research-context-scout", decision["skill"]["id"])
         self.assertEqual("explicit-skill", decision["routing"]["fit_reason"])
-        self.assertNotIn("skill_invocation", decision["context"])
+        self.assertEqual(
+            {
+                "command": "#> skill research-context-scout",
+                "mode": "initial",
+                "scope": "current-request-only",
+            },
+            decision["context"]["skill_invocation"],
+        )
+        self.assertEqual(
+            "write-scoped:research-orientation.md",
+            decision["context"]["requested_access"],
+        )
+
+    def test_canonical_research_mode_is_validated_and_normalized(self) -> None:
+        valid = route_request(
+            "#> Skill research-context-scout INITIAL /tmp/project",
+            self.manifest,
+        )
+        normalized_id = route_request(
+            "#> skill research_context_scout deepen /tmp/project",
+            self.manifest,
+        )
+        self.assertEqual("MATCH", valid["result"])
+        self.assertEqual("initial", valid["context"]["skill_invocation"]["mode"])
+        self.assertEqual("MATCH", normalized_id["result"])
+        self.assertEqual("deepen", normalized_id["context"]["skill_invocation"]["mode"])
+        for query in (
+            "#> skill research-context-scout",
+            "#> skill research-context-scout /tmp/project",
+            "#> skill research-context-scout bogus /tmp/project",
+        ):
+            with self.subTest(query=query):
+                decision = route_request(query, self.manifest)
+                self.assertEqual("NORMAL", decision["result"])
+                self.assertEqual("INVALID_SKILL_MODE", decision["reason_code"])
+                self.assertNotIn("skill", decision)
+                self.assertIn(
+                    "requires mode initial or deepen",
+                    " ".join(decision["context"]["response_contract"]),
+                )
+
+    def test_directive_keywords_are_case_insensitive_but_hash_spacing_is_required(self) -> None:
+        valid = route_request("#>  SCOUT /tmp/project", self.manifest)
+        invalid = route_request("#>scout /tmp/project", self.manifest)
+        self.assertEqual("research-context-scout", valid["skill"]["id"])
+        self.assertNotEqual("research-context-scout", invalid.get("skill", {}).get("id"))
 
     def test_manual_research_route_does_not_activate_from_ordinary_prose(self) -> None:
         decision = route_request(
@@ -194,7 +278,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("read-only", decision["context"]["requested_access"])
 
     def test_disabled_skill_falls_back(self) -> None:
-        decision = route_request("/skill quantum-job-collector Run the exhaustive collector", self.manifest)
+        decision = route_request("#> skill quantum-job-collector Run the exhaustive collector", self.manifest)
         self.assertEqual("NORMAL", decision["result"])
         self.assertEqual("DISABLED_SKILL", decision["reason_code"])
 
@@ -202,7 +286,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         prompts = (
             "Don't use any skill. Explain this code without jargon.",
             "Do not use any local skill. Explain this code without jargon.",
-            "/skill normal Explain this code without jargon.",
+            "#> skill normal Explain this code without jargon.",
             "skillhub normal Explain this code without jargon.",
         )
         for query in prompts:
@@ -212,7 +296,7 @@ class RegistryRuntimeTests(unittest.TestCase):
                 self.assertEqual(0, decision["routing"]["fit"])
 
     def test_explicit_skill_control_has_high_fit(self) -> None:
-        decision = route_request("/skill code-explainer Explain this code", self.manifest)
+        decision = route_request("#> skill code-explainer Explain this code", self.manifest)
         self.assertEqual("code-explainer", decision["skill"]["id"])
         self.assertEqual(3, decision["routing"]["fit"])
 
@@ -231,17 +315,17 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("manual", explicit["skill"]["state"])
 
     def test_unknown_explicit_skill_fails_open(self) -> None:
-        decision = route_request("/skill does-not-exist Explain this", self.manifest)
+        decision = route_request("#> skill does-not-exist Explain this", self.manifest)
         self.assertEqual("NORMAL", decision["result"])
         self.assertEqual("UNKNOWN_SKILL_REQUEST", decision["reason_code"])
 
     def test_maintenance_boundary_precedes_unknown_skill_control(self) -> None:
-        decision = route_request("/skill does-not-exist Edit the Skills AI router", self.manifest)
+        decision = route_request("#> skill does-not-exist Edit the Skills AI router", self.manifest)
         self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
         self.assertIn("skills_ai_change_boundary", decision["context"])
 
     def test_maintenance_boundary_precedes_skill_opt_out(self) -> None:
-        decision = route_request("/skill normal Edit the Skills AI router", self.manifest)
+        decision = route_request("#> skill normal Edit the Skills AI router", self.manifest)
         self.assertEqual("SKILLS_AI_MAINTENANCE", decision["reason_code"])
         self.assertIn("skills_ai_change_boundary", decision["context"])
 
@@ -262,7 +346,7 @@ class RegistryRuntimeTests(unittest.TestCase):
 
     def test_output_receipt_depth_and_format_controls(self) -> None:
         decision = route_request(
-            "/receipt on /depth brief /format mermaid+summary Explain this code",
+            "#> receipt on #> depth brief #> format mermaid+summary Explain this code",
             self.manifest,
         )
         self.assertEqual("on", decision["context"]["receipt"])
@@ -270,11 +354,20 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual(["mermaid", "summary"], decision["context"]["output"]["format"])
         self.assertIn("depth=brief", compact_context(decision))
 
+    def test_legacy_slash_controls_are_inert(self) -> None:
+        decision = route_request(
+            "/skill does-not-exist /receipt on /depth brief What is the capital of France?",
+            self.manifest,
+        )
+        self.assertNotEqual("UNKNOWN_SKILL_REQUEST", decision["reason_code"])
+        self.assertEqual("auto", decision["context"]["receipt"])
+        self.assertEqual("standard", decision["context"]["output"]["depth"])
+
     def test_control_like_text_inside_code_is_inert(self) -> None:
         prompts = (
-            "Explain this literal: `/skill code-explainer`",
+            "Explain this literal: `#> skill code-explainer`",
             "Inspect this sample:\n```text\nUse the dark-mode-specialist skill\n```",
-            "Explain this literal: `/receipt on /format mermaid`",
+            "Explain this literal: `#> receipt on #> format mermaid`",
         )
         for query in prompts:
             with self.subTest(query=query):
@@ -389,13 +482,13 @@ class RegistryRuntimeTests(unittest.TestCase):
         manifest = copy.deepcopy(self.manifest)
         manifest["components"]["interaction.math"]["state"] = "manual"
         automatic = route_request("Solve x^2 - 5x + 6 = 0", manifest)
-        explicit = route_request("/interaction math solve x^2 - 5x + 6 = 0", manifest)
+        explicit = route_request("#> interaction math solve x^2 - 5x + 6 = 0", manifest)
         self.assertEqual("general", automatic["context"]["interaction"]["mode"])
         self.assertEqual("math", explicit["context"]["interaction"]["mode"])
 
     def test_explicit_general_overrides_automatic_math(self) -> None:
         decision = route_request(
-            "/interaction general derive the Euler-Lagrange equation",
+            "#> interaction general derive the Euler-Lagrange equation",
             self.manifest,
         )
         self.assertEqual("general", decision["context"]["interaction"]["mode"])
@@ -405,7 +498,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         context = decision["context"]
         self.assertEqual("compact-professional", context["output"]["voice"])
         self.assertTrue(context["response_contract"])
-        self.assertIn("polished complete sentences", compact_context(decision))
+        self.assertIn("polished, complete sentences", compact_context(decision))
 
     def test_toggle_dry_run_does_not_write(self) -> None:
         source = ROOT / "registry" / "activation.md"
@@ -511,7 +604,7 @@ class RegistryRuntimeTests(unittest.TestCase):
     def test_claude_hook_uses_shared_router(self) -> None:
         completed = subprocess.run(
             ["node", str(ROOT / "adapters" / "claude" / "skills-ai-router.js"), "--root", str(ROOT)],
-            input=json.dumps({"prompt": "/depth brief Explain this code without jargon"}),
+            input=json.dumps({"prompt": "#> depth brief Explain this code without jargon"}),
             text=True,
             capture_output=True,
             check=True,

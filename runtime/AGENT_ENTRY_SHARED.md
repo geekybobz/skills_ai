@@ -24,12 +24,12 @@ family registries, generated human indexes, or skill bodies on the normal path.
   the alternatives materially differ; after the user selects, reroute by exact
   id and continue the original task. Never load both candidates.
 - Never invent or substitute a skill. Disabled routes are not routable.
-- `USER_SUDO` means the leading `/sudo <instruction>` command bypasses local
+- `USER_OVERRIDE` means the leading `#> override <instruction>` directive bypasses local
   Skills AI routing, response formatting, and repository procedure for this
   request only. Follow the explicit targets, but never treat it as overriding
   system/developer instructions, host permissions, credential or external-action
   boundaries, destructive-action safety, or the sandbox.
-- Current-request `/skill`, `/interaction`, `/format`, `/depth`, and `/receipt`
+- Current-request `#> skill`, `#> interaction`, `#> format`, `#> depth`, and `#> receipt`
   controls override session, project, global, and automatic defaults. Route
   `fit` is 0–3 suitability evidence, never confidence in answer correctness.
 - Use only already available project instructions and user-named or directly

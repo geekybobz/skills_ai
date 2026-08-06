@@ -1,15 +1,15 @@
 {
   "command_aliases": [
     {
-      "boundary": "first non-whitespace command only",
-      "command": "/scout",
+      "boundary": "first task directive; presentation controls may precede",
+      "command": "#> scout",
       "family": "research",
       "mode": "initial",
       "skill_id": "research-context-scout"
     },
     {
-      "boundary": "first non-whitespace command only",
-      "command": "/scout-again",
+      "boundary": "first task directive; presentation controls may precede",
+      "command": "#> scout-again",
       "family": "research",
       "mode": "deepen",
       "skill_id": "research-context-scout"
@@ -923,8 +923,8 @@
       "family": "research",
       "family_state": "active",
       "family_triggers": [
-        "/scout",
-        "/scout-again",
+        "#> scout",
+        "#> scout-again",
         "new-project research orientation",
         "supervisor assessment",
         "applications and paper direction"
@@ -1581,11 +1581,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "14de8ca667387158704393605bea5f641cb8af51d635c547d79661e076761208",
+  "source_hash": "26dc3aeb8a7f347dcd60c8ca071bc84ff04de17d2e95245ed2f3a65de1acb280",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "89258f6794fa834b4cfe037199894a6a9e2d33897164026f13f50b7cd1204808"
+      "sha256": "d8f3ad6305b210f1644fe7f107d435d13920ab27166ff14be7aced042806a4d0"
     },
     {
       "path": "interaction-protocol/protocol.json",
@@ -1593,7 +1593,7 @@
     },
     {
       "path": "registry/activation.md",
-      "sha256": "44f60a2cb89f62ed2646ba86f64bd6893d825171a16772d30eb7c26e6b3fc9ac"
+      "sha256": "87638c83f3c87ca11b534a838227cea6ff1a5c1eb2eb40a748778d36d796dff4"
     },
     {
       "path": "registry/build-ops.md",
@@ -1609,11 +1609,11 @@
     },
     {
       "path": "registry/interaction.md",
-      "sha256": "1dc5c6a0b3e921ab1e44f9147f47ae8d06add94edf6471e4fc93a9bcaa5f8540"
+      "sha256": "5d384ae161ee4201d166e0f6fc6f14795f1cafca917442c9dcee14df7ff229eb"
     },
     {
       "path": "registry/research.md",
-      "sha256": "11609f073cc8ffb3899d8231b55b97b1925e8f4f6333323689cc5da22a0953ce"
+      "sha256": "f64487f2eb507348ae119bc1c454dbc23c7911627f50aa9c0deacd5b5d9bedd2"
     },
     {
       "path": "registry/theory.md",

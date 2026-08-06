@@ -35,6 +35,11 @@ Use the states `established`, `supported`, `claimed`, `proposed`,
 
 ### Credible alternatives
 
+## Superseded conclusions
+
+| Previous conclusion | Replaced because | Cycle |
+|---|---|---|
+
 ## Interaction cycle 1
 
 ### Agent questions
@@ -54,3 +59,8 @@ Use the states `established`, `supported`, `claimed`, `proposed`,
 ### Evidence and uncertainties
 
 ### Next questions or decision
+
+For each later cycle, append `## Interaction cycle N`, where `N` is one more
+than the highest existing cycle number, and repeat the cycle subsections. Add a
+fresh `USER RESPONSES START` / `USER RESPONSES END` marker pair when the cycle
+asks the user another question; never alter text inside any completed pair.

@@ -67,7 +67,11 @@ def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
     # resolve to a declared repository role. Arbitrary scratch files therefore
     # cannot make generated documentation stale, while a legitimate new source
     # can enter the maintenance transaction before it is staged.
-    paths = set(_git_paths(root, "ls-files"))
+    paths = {
+        path
+        for path in _git_paths(root, "ls-files")
+        if (root / path).exists() or (root / path).is_symlink()
+    }
     contract = load_contract(root)
     paths.update(
         path

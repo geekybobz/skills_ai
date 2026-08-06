@@ -20,9 +20,9 @@ skill request or one of the declared leading commands below.
 
 | command | skill | mode | boundary |
 |---|---|---|---|
-| `/scout` | `research-context-scout` | `initial` | first non-whitespace command only |
-| `/scout-again` | `research-context-scout` | `deepen` | first non-whitespace command only |
+| `#> scout` | `research-context-scout` | `initial` | first task directive; presentation controls may precede |
+| `#> scout-again` | `research-context-scout` | `deepen` | first task directive; presentation controls may precede |
 
 Aliases select the same manual skill; they do not create separate routes or
-grant extra write authority. Canonical `/skill research-context-scout ...`
-remains available.
+grant extra write authority. Canonical `#> skill research-context-scout ...`
+requires an `initial` or `deepen` mode.

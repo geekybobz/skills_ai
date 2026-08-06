@@ -69,19 +69,37 @@ NEGATED_ACTION_CLAUSE_PATTERN = (
 )
 
 SKILL_NORMAL_PATTERN = (
-    r"(?:^|\s)/skill\s+normal(?:\s|$)|"
+    r"(?:^|\s)#>\s+skill\s+normal(?:\s|$)|"
     r"\bskillhub\s+normal\b|"
     r"\b(?:do\s+not|don't)\s+use\s+(?:any\s+)?(?:local\s+)?skills?\b|"
     r"\banswer\s+normally\s+without\s+(?:skills?\s+ai|(?:a\s+)?local\s+skill)\b|"
     r"\bno\s+(?:local\s+)?skill\s+for\s+this\s+(?:request|task)\b"
 )
-SKILL_CONTROL_PATTERN = r"(?:^|\s)/skill\s+([a-z0-9][a-z0-9_-]{0,79})(?:\s|$)"
-RECEIPT_CONTROL_PATTERN = r"(?:^|\s)/receipt\s+(auto|on|off)(?:\s|$)"
-DEPTH_CONTROL_PATTERN = r"(?:^|\s)/depth\s+(brief|standard|detailed)(?:\s|$)"
-FORMAT_CONTROL_PATTERN = r"(?:^|\s)/format\s+([a-z0-9+_-]{1,80})(?:\s|$)"
-SUDO_CONTROL_PATTERN = r"^\s*/sudo\s+(\S[\s\S]*)$"
-LEADING_COMMAND_PATTERN = r"^\s*(/[a-z0-9][a-z0-9-]{0,79})(?=\s|$)"
+SKILL_CONTROL_PATTERN = r"(?:^|\s)#>\s+skill\s+([a-z0-9][a-z0-9_-]{0,79})(?:\s|$)"
+RECEIPT_CONTROL_PATTERN = r"(?:^|\s)#>\s+receipt\s+(auto|on|off)(?:\s|$)"
+DEPTH_CONTROL_PATTERN = r"(?:^|\s)#>\s+depth\s+(brief|standard|detailed)(?:\s|$)"
+FORMAT_CONTROL_PATTERN = r"(?:^|\s)#>\s+format\s+([a-z0-9+_-]{1,80})(?:\s|$)"
+LOCAL_OVERRIDE_PATTERN = r"^\s*#>\s+override\s+(\S[\s\S]*)$"
+LEADING_COMMAND_PATTERN = r"^\s*#>\s+([a-z0-9][a-z0-9-]{0,79})(?=\s|$)"
+LEADING_PRESENTATION_CONTROL_PATTERN = (
+    r"^\s*#>\s+(?:"
+    r"receipt\s+(?:auto|on|off)|"
+    r"depth\s+(?:brief|standard|detailed)|"
+    r"format\s+[a-z0-9+_-]{1,80}|"
+    r"interaction\s+(?:general|math)"
+    r")(?=\s|$)"
+)
+RESEARCH_SCOUT_CANONICAL_PATTERN = (
+    r"(?:^|\s)#>\s+skill\s+research[-_]context[-_]scout(?=\s|$)"
+)
 KNOWN_FORMATS = {"auto", "brief", "code", "equations", "mermaid", "steps", "summary", "table"}
+
+RESEARCH_SCOUT_SKILL_ID = "research-context-scout"
+RESEARCH_SCOUT_ACCESS = "write-scoped:research-orientation.md"
+RESEARCH_SCOUT_SHAPE = (
+    "supervisor result -> evidence or formulation -> decision boundary -> "
+    "questions or next investigation -> record path"
+)
 
 DESIGN_ROUTED_FAMILIES = {"design", "ui-patterns"}
 DESIGN_REQUEST_PATTERN = (
@@ -108,13 +126,13 @@ NON_VISUAL_DESIGN_TARGET_PATTERN = (
 )
 
 MATH_EXPLICIT_PATTERN = (
-    r"(?:^|\s)/interaction\s+math(?:\s|$)|"
+    r"(?:^|\s)#>\s+interaction\s+math(?:\s|$)|"
     r"\b(?:math|mathematics|equation|formula)\s+first\b|"
     r"\buse\s+(?:the\s+)?(?:math|mathematical)\s+(?:interaction\s+)?(?:protocol|style)\b|"
     r"\b(?:derive|show|explain)\s+(?:it\s+)?mathematically\b"
 )
 MATH_GENERAL_PATTERN = (
-    r"(?:^|\s)/interaction\s+general(?:\s|$)|"
+    r"(?:^|\s)#>\s+interaction\s+general(?:\s|$)|"
     r"\b(?:use\s+)?normal\s+prose\b|"
     r"\bwithout\s+(?:the\s+)?(?:math|mathematical)\s+(?:interaction\s+)?(?:protocol|style)\b"
 )
@@ -235,21 +253,21 @@ def _request_controls(query: str, profile: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _sudo_override(query: str) -> bool:
+def _local_override(query: str) -> bool:
     """Recognize only a leading current-request command with an instruction."""
-    return re.match(SUDO_CONTROL_PATTERN, query, flags=re.IGNORECASE) is not None
+    return re.match(LOCAL_OVERRIDE_PATTERN, query, flags=re.IGNORECASE) is not None
 
 
-def _sudo_context(query: str) -> dict[str, Any]:
+def _local_override_context(query: str) -> dict[str, Any]:
     """Return a prompt-free local-protocol override receipt."""
-    match = re.match(SUDO_CONTROL_PATTERN, query, flags=re.IGNORECASE)
+    match = re.match(LOCAL_OVERRIDE_PATTERN, query, flags=re.IGNORECASE)
     instruction = match.group(1) if match else ""
     normalized_instruction = normalize(_strip_negated_action_clauses(instruction))
     return {
         "operation": _operation(normalized_instruction),
         "domain": "general",
         "requested_access": _requested_access(normalized_instruction),
-        "interaction": {"mode": "normal", "reason": "user-sudo"},
+        "interaction": {"mode": "normal", "reason": "user-override"},
         "output": {
             "voice": "host-default",
             "depth": "host-default",
@@ -448,7 +466,7 @@ def parse_command_aliases(path: Path) -> list[dict[str, str]]:
         skill_id = cells[1].strip("`")
         mode = cells[2].strip("`").lower()
         boundary = cells[3]
-        if not re.fullmatch(r"/[a-z0-9][a-z0-9-]{0,79}", command):
+        if not re.fullmatch(r"#>\s+[a-z0-9][a-z0-9-]{0,79}", command):
             raise RegistryRuntimeError(f"invalid command alias {command} in {path.name}")
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", skill_id):
             raise RegistryRuntimeError(f"invalid command alias target {skill_id} in {path.name}")
@@ -616,16 +634,46 @@ def _phrase_score(query: str, phrase: str) -> int:
     return 0
 
 
-def _leading_command_alias(query: str, manifest: dict[str, Any]) -> dict[str, str] | None:
-    """Resolve only a registry-declared first command; never infer an alias."""
-    match = re.match(LEADING_COMMAND_PATTERN, query, flags=re.IGNORECASE)
+def _strip_leading_presentation_controls(query: str) -> str:
+    """Allow presentation controls before the first task directive."""
+    remainder = query
+    while True:
+        match = re.match(LEADING_PRESENTATION_CONTROL_PATTERN, remainder, flags=re.IGNORECASE)
+        if match is None:
+            return remainder
+        remainder = remainder[match.end():]
+
+
+def _leading_command_alias(query: str, manifest: dict[str, Any]) -> dict[str, Any] | None:
+    """Resolve one registry alias after optional leading presentation controls."""
+    candidate = _strip_leading_presentation_controls(query)
+    match = re.match(LEADING_COMMAND_PATTERN, candidate, flags=re.IGNORECASE)
     if match is None:
         return None
-    command = match.group(1).lower()
+    command = f"#> {match.group(1).lower()}"
     for alias in manifest.get("command_aliases", []):
         if alias["command"] == command:
-            return alias
+            resolved = dict(alias)
+            first_argument = candidate[match.end():].lstrip()
+            if first_argument.startswith("-"):
+                resolved["malformed"] = "option-like-first-argument"
+            return resolved
     return None
+
+
+def _canonical_research_mode(query: str, explicit_skill_id: str | None) -> tuple[str | None, bool]:
+    """Return a validated canonical Scout mode and whether its directive is malformed."""
+    if explicit_skill_id != RESEARCH_SCOUT_SKILL_ID:
+        return None, False
+    match = re.search(RESEARCH_SCOUT_CANONICAL_PATTERN, query, flags=re.IGNORECASE)
+    if match is None:
+        return None, False
+    remainder = query[match.end():].lstrip()
+    token = re.match(r"([^\s]+)", remainder)
+    if token is None:
+        return None, True
+    mode = token.group(1).lower()
+    return (mode, False) if mode in {"initial", "deepen"} else (None, True)
 
 
 def _operation(query: str) -> str:
@@ -815,14 +863,22 @@ def _apply_change_boundary(context: dict[str, Any], query: str, access: str) -> 
     }
 
 
+def _apply_selected_skill_context(context: dict[str, Any], skill_id: str) -> None:
+    """Apply a skill's narrow public context without changing global defaults."""
+    if skill_id != RESEARCH_SCOUT_SKILL_ID:
+        return
+    context["requested_access"] = RESEARCH_SCOUT_ACCESS
+    context["output"]["shape"] = RESEARCH_SCOUT_SHAPE
+
+
 def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     """Return MATCH or fail-open NORMAL without exposing the original prompt."""
-    if _sudo_override(query):
+    if _local_override(query):
         return {
             "result": "NORMAL",
-            "reason_code": "USER_SUDO",
+            "reason_code": "USER_OVERRIDE",
             "routing": _routing(0, "user-local-protocol-override"),
-            "context": _sudo_context(query),
+            "context": _local_override_context(query),
         }
     normalized_query = normalize(_strip_negated_action_clauses(query))
     design_query = _design_routing_query(query)
@@ -838,6 +894,10 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
         command_alias = _leading_command_alias(query, manifest)
         if command_alias is not None:
             explicit_skill_id = command_alias["skill_id"]
+    canonical_research_mode, invalid_research_mode = _canonical_research_mode(
+        control_query,
+        explicit_skill_id,
+    )
     maintenance = _is_skills_ai_maintenance(normalized_query)
     if _is_registry_discovery(normalized_query) and not maintenance:
         context = _context_packet(
@@ -880,6 +940,34 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
             "result": "NORMAL",
             "reason_code": "UNKNOWN_SKILL_REQUEST",
             "routing": _routing(0, "unknown-explicit-skill"),
+            "context": context,
+        }
+
+    if command_alias is not None and command_alias.get("malformed"):
+        context = _context_packet(
+            manifest, operation, "general", access, interaction_mode, interaction_reason, controls
+        )
+        context["response_contract"].append(
+            "Tell the user the Scout directive was rejected; use #> scout-again <path> for deepening."
+        )
+        return {
+            "result": "NORMAL",
+            "reason_code": "MALFORMED_COMMAND_ALIAS",
+            "routing": _routing(0, "malformed-command-alias"),
+            "context": context,
+        }
+
+    if invalid_research_mode:
+        context = _context_packet(
+            manifest, operation, "research", access, interaction_mode, interaction_reason, controls
+        )
+        context["response_contract"].append(
+            "Tell the user that canonical Research Context Scout requires mode initial or deepen."
+        )
+        return {
+            "result": "NORMAL",
+            "reason_code": "INVALID_SKILL_MODE",
+            "routing": _routing(0, "invalid-skill-mode"),
             "context": context,
         }
 
@@ -970,11 +1058,18 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
     context = _context_packet(
         manifest, operation, domain, access, interaction_mode, interaction_reason, controls
     )
+    _apply_selected_skill_context(context, selected["id"])
     _apply_change_boundary(context, normalized_query, access)
     if command_alias is not None:
         context["skill_invocation"] = {
             "command": command_alias["command"],
             "mode": command_alias["mode"],
+            "scope": "current-request-only",
+        }
+    elif canonical_research_mode is not None:
+        context["skill_invocation"] = {
+            "command": "#> skill research-context-scout",
+            "mode": canonical_research_mode,
             "scope": "current-request-only",
         }
     return {
@@ -1002,28 +1097,44 @@ def route_request(query: str, manifest: dict[str, Any]) -> dict[str, Any]:
 
 def compact_context(decision: dict[str, Any]) -> str:
     context = decision["context"]
+    routing = decision.get("routing", {})
     parts = [
         f"route={decision['result'].lower()}",
         f"reason={decision['reason_code'].lower()}",
-        f"fit={decision.get('routing', {}).get('fit', 0)}/3",
-        f"operation={context['operation']}",
-        f"domain={context['domain']}",
-        f"access={context['requested_access']}",
-        f"interaction={context['interaction']['mode']}",
-        f"voice={context['output']['voice']}",
-        f"shape={context['output']['shape']}",
-        f"depth={context['output'].get('depth', 'standard')}",
-        f"format={'+'.join(context['output'].get('format', ['auto']))}",
-        f"receipt={context.get('receipt', 'auto')}",
-        "contract=answer first; polished complete sentences; no filler; preserve technical terms; state boundaries when relevant",
     ]
     if decision.get("skill"):
-        parts.insert(2, f"skill={decision['skill']['id']}")
-        parts.insert(3, f"path={decision['skill']['path']}")
+        parts.extend(
+            (
+                f"skill={decision['skill']['id']}",
+                f"path={decision['skill']['path']}",
+            )
+        )
     invocation = context.get("skill_invocation")
     if invocation:
-        parts.insert(4, f"command={invocation['command']}")
-        parts.insert(5, f"mode={invocation['mode']}")
+        parts.extend(
+            (
+                f"command={invocation['command']}",
+                f"mode={invocation['mode']}",
+            )
+        )
+    parts.extend(
+        (
+            f"fit={routing.get('fit', 0)}/3",
+            f"fit_reason={routing.get('fit_reason', 'legacy-or-fail-open')}",
+            f"operation={context['operation']}",
+            f"domain={context['domain']}",
+            f"access={context['requested_access']}",
+            f"interaction={context['interaction']['mode']}",
+            f"interaction_reason={context['interaction']['reason']}",
+            f"voice={context['output']['voice']}",
+            f"shape={context['output']['shape']}",
+            f"depth={context['output'].get('depth', 'standard')}",
+            f"format={'+'.join(context['output'].get('format', ['auto']))}",
+            f"receipt={context.get('receipt', 'auto')}",
+            f"project_context={context.get('project_context', 'bounded-host-context')}",
+            f"contract={' '.join(context.get('response_contract', []))}",
+        )
+    )
     if decision.get("registry"):
         counts = decision["registry"]["route_counts"]
         parts.insert(2, f"registry_source={decision['registry']['source_hash'][:12]}")

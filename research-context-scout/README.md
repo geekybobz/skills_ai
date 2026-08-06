@@ -61,16 +61,16 @@ There is no required paper count, suggestion count or fixed search depth.
 ### Start a new project
 
 ```text
-/scout <project-path> [focus]
+#> scout <project-path> [focus]
 ```
 
 Examples:
 
 ```text
-/scout /path/to/project
-/scout /path/to/project theory
-/scout /path/to/project applications
-/scout /path/to/project "focus on controllability and paper value"
+#> scout /path/to/project
+#> scout /path/to/project theory
+#> scout /path/to/project applications
+#> scout /path/to/project "focus on controllability and paper value"
 ```
 
 The optional focus may be `theory`, `numerics`, `physical`, `applications`,
@@ -79,33 +79,53 @@ The optional focus may be `theory`, `numerics`, `physical`, `applications`,
 ### Continue after new information
 
 ```text
-/scout-again <project-or-record-path> [new-information-paths...] [focus]
+#> scout-again <project-or-record-path> [new-information-paths...] [focus]
 ```
 
 Examples:
 
 ```text
-/scout-again /path/to/project
-/scout-again /path/to/project new_derivation.tex
-/scout-again /path/to/project results.md figure2.pdf
-/scout-again /path/to/project "investigate the new entropy-transfer idea"
+#> scout-again /path/to/project
+#> scout-again /path/to/project new_derivation.tex
+#> scout-again /path/to/project results.md figure2.pdf
+#> scout-again /path/to/project "investigate the new entropy-transfer idea"
 ```
+
+In deepening mode, the supplied focus narrows lane selection and the checks
+applied to the new information. When the first path is
+`research-orientation.md`, its parent directory is the project root.
 
 Both commands operate on the same project-owned interaction record. The
 commands may create or update only that declared record as part of the named
 workflow. Research drafts, code, calculations, results and figures remain
 read-only unless the user separately authorizes changes.
 
-The Skills AI runtime recognizes both commands only as exact leading aliases.
-Quoted examples, code blocks, later mentions and words such as “scouting” do
-not activate the skill. The canonical fallback remains:
+The routed receipt states this as
+`access=write-scoped:research-orientation.md` and uses a supervisor-brief output
+shape. It does not make all Scout work use the global math interaction mode;
+the evidence gate requests equations or other formal checks only when the
+claim needs them.
+
+The Skills AI runtime recognizes these aliases as the first task directive;
+presentation controls such as `#> depth detailed` or `#> interaction math` may
+precede them. Directive keywords are case-insensitive and require at least one
+space after `#>`. A first alias argument beginning with `-` is rejected as
+malformed, so `#> scout -again ...` cannot silently become an initial run.
+Quoted examples, code blocks, later prose mentions and words such as “scouting”
+do not activate the skill. The canonical form is:
 
 ```text
-/skill research-context-scout initial <project-path>
-/skill research-context-scout deepen <project-path> <new-paths>
+#> skill research-context-scout initial <project-path>
+#> skill research-context-scout deepen <project-path> <new-paths>
 ```
 
-`/skill normal` remains an explicit opt-out. `/sudo <instruction>` retains its
+Alias and canonical forms inject `mode=initial|deepen`; the canonical form
+requires one of those two modes and rejects a missing or unknown value. In
+either form, record completeness wins over invocation intent: when the user
+answers exist but the Research and application map is empty, the workflow runs
+initial Cycle B before delta-based deepening.
+
+`#> skill normal` remains an explicit opt-out. `#> override <instruction>` retains its
 higher-priority local-protocol override and does not activate this skill.
 
 ## Overall Workflow
@@ -116,8 +136,11 @@ flowchart TD
     B --> C["Create or update one interaction record"]
     C --> D["Ask one to three consequential questions"]
     D --> E["User responds in the record"]
-    E --> F["Update project state"]
-    F --> G["Extract result or transferable capability"]
+    E --> X{"Research and application map populated?"}
+    X -- "No" --> F["Run initial Cycle B"]
+    X -- "Yes" --> Q["Apply supplied delta"]
+    F --> G["Extract or revise transferable capability"]
+    Q --> G
     G --> H["Build research and application map"]
     H --> I["Formulate candidate paper directions"]
     I --> J["Apply proof-of-plausibility gate"]
@@ -174,6 +197,8 @@ The record should contain:
 ## Strongest paper direction
 ## Current blocking question
 
+## Superseded conclusions
+
 ## Interaction cycle N
 
 ### Agent questions
@@ -187,6 +212,8 @@ The record should contain:
 Rules:
 
 - preserve user-written answers exactly;
+- append cycle `N` as one more than the highest existing cycle number and add a
+  fresh protected response-marker pair when another answer is required;
 - ask only one to three questions per cycle;
 - ask only when different answers would materially change the investigation;
 - do not ask the user to supply applications or literature the skill can find;
@@ -422,7 +449,7 @@ For each direction, state its formal claim, assumptions, current evidence
 level, proof-of-plausibility, falsification condition, application and paper
 value.
 
-## 9. Use `/scout-again` for Iterative Deepening
+## 9. Use `#> scout-again` for Iterative Deepening
 
 The continuation command must revise the existing state rather than repeat the
 initial scan:
@@ -446,7 +473,7 @@ Classify each delta before searching:
 | corrected assumption | reopen every dependent conclusion |
 | negative result | determine whether it rejects or redirects the claim |
 
-`/scout-again` should then:
+`#> scout-again` should then:
 
 - read the active state and new information;
 - reopen only affected claims and applications;
@@ -548,9 +575,9 @@ own integration unless the user explicitly requests otherwise.
 flowchart TD
     C["Codex wrapper"] --> R["Shared mode router"]
     L["Claude-owned wrapper"] --> R
-    R --> S{"/scout or /scout-again?"}
-    S -- "/scout" --> I["Initial-scout phase"]
-    S -- "/scout-again" --> D["Deepen-scout phase"]
+    R --> S{"#> scout or #> scout-again?"}
+    S -- "#> scout" --> I["Initial-scout phase"]
+    S -- "#> scout-again" --> D["Deepen-scout phase"]
     I --> P["research-orientation.md"]
     D --> P
     P --> E["Shared evidence gate"]
@@ -568,7 +595,7 @@ forward testing proves that a deterministic operation is necessary.
 flowchart LR
     P["Approved human plan"] --> S["Built skill package"]
     S --> G["Registry and alias validation"]
-    G --> V["Forward-test /scout and /scout-again"]
+    G --> V["Forward-test #> scout and #> scout-again"]
 ```
 
 The implementation must continue to verify:

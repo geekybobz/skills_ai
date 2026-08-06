@@ -93,8 +93,8 @@ behavior; each platform still certifies only its own live adapter lifecycle.
 That contract also protects the Obsidian node types: a visible concept entry is
 a teal hub, not a green registry or violet skill.
 
-Both platforms also share the plan-only boundary and the local `/sudo`
-receipt. A `plan.md`-only idea stays outside skill governance; `/sudo` bypasses
+Both platforms also share the plan-only boundary and the local `#> override`
+receipt. A `plan.md`-only idea stays outside skill governance; `#> override` bypasses
 only local procedure for one request and leaves each host's hard boundaries in
 force.
 
@@ -111,10 +111,11 @@ The response is either `MATCH` with one canonical skill record or `NORMAL` with
 no skill body. Avoiding a permanent daemon removes port, authentication, and
 orphan-service complexity.
 
-For a registry-declared leading command, the same response adds a bounded
+For a registry-declared task directive, the same response adds a bounded
 `skill_invocation` containing only command, mode and current-request scope.
 Codex and Claude receive the same shared mode without either adapter owning the
-alias rules.
+alias rules. Both adapters render the same ordered header keys, including
+`skill`, `path`, `command`, `mode` and the canonical `access` key.
 
 ## Continue from the map to the files
 

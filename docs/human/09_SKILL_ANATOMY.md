@@ -43,8 +43,8 @@ flowchart LR
 
 The registry describes the skill but does not copy its instruction body.
 A `manual` task skill is never automatically selected: the request must name
-its exact id through `/skill <id>`, the equivalent exact “use the `<id>` skill”
-form, or a registry-declared leading command alias. Output format and receipt
+its exact id through `#> skill <id>`, the equivalent exact “use the `<id>` skill”
+form, or a registry-declared leading directive alias. Output format and receipt
 controls change presentation without consuming this one task-skill slot.
 
 In the Obsidian graph, Activation is a teal switchboard, the family registry is
@@ -87,9 +87,10 @@ belong to its own Git history and require an explicit boundary crossing.
 Research Context Scout instead lives in the top-level
 `research-context-scout/` package. Its long `README.md` preserves the approved
 human plan, while its root entry loads one
-shared phase and one thin host wrapper. The manual route can be selected by
-`/skill research-context-scout` or its exact leading `/scout` and
-`/scout-again` commands. Those commands carry `initial` or `deepen` mode without
+shared phase and one thin host wrapper. The manual route can be selected by the
+validated `#> skill research-context-scout initial|deepen ...` form or its
+exact `#> scout` and `#> scout-again` task directives. Optional presentation
+controls may precede them. All forms carry `initial` or `deepen` without
 creating duplicate skill routes.
 
 ## Shared protocol package

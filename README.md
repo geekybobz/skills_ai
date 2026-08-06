@@ -69,19 +69,21 @@ flowchart TD
 7. A folder containing only `skill-plans/<name>/plan.md` is an idea; it becomes
    a governed skill only when `SKILL.md` is explicitly created.
 
-Useful per-request controls are `/skill auto|normal|<exact-id>`,
-`/interaction general|math`, `/format mermaid+summary`,
-`/depth brief|standard|detailed`, and `/receipt auto|on|off`. Fit 0–3 measures
+Useful per-request controls are `#> skill auto|normal|<exact-id>`,
+`#> interaction general|math`, `#> format mermaid+summary`,
+`#> depth brief|standard|detailed`, and `#> receipt auto|on|off`. Fit 0–3 measures
 only route suitability. Prompt-free ambiguity metadata may be kept locally
 under ignored `.runtime/` state so recurring route pairs can be improved without
 storing your prompt or answer.
 
 Registry-declared leading commands may explicitly select one manual skill. The
-first commands are `/scout <project-path>` for initial research orientation and
-`/scout-again <paths>` for evidence-led deepening. See the
+first task directives are `#> scout <project-path>` for initial research orientation and
+`#> scout-again <paths>` for evidence-led deepening. See the
 [[research-context-scout/README|Research Context Scout guide]].
+Presentation controls may precede Scout; the alias remains the first task
+directive.
 
-Leading `/sudo <exact instruction>` is the owner's current-request escape from
+Leading `#> override <exact instruction>` is the owner's current-request escape from
 local Skills AI procedure. It does not override system rules, permissions,
 sandboxing, credential boundaries, external-action approval, or destructive
 action safety.

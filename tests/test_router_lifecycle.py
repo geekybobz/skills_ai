@@ -21,6 +21,7 @@ CLAUDE_ADAPTER = ROOT / "adapters" / "claude" / "skills-ai-router.js"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from route_skill import record_ambiguity  # noqa: E402
+from registry_runtime import build_manifest, compact_context, route_request  # noqa: E402
 
 
 class RouterLifecycleTests(unittest.TestCase):
@@ -383,6 +384,99 @@ class RouterLifecycleTests(unittest.TestCase):
         self.assertIn("\nfit=2/3\n", header)
         self.assertIn("\nreceipt=auto\n", header)
         self.assertTrue(remainder.startswith("dark-mode-specialist\n\n"))
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_codex_and_claude_match_header_keys_for_scout(self) -> None:
+        manifest = build_manifest(ROOT)
+        decision = route_request("#> scout /tmp/new-project", manifest)
+        codex_keys = [
+            line.split("=", 1)[0]
+            for line in compact_context(decision).splitlines()
+            if "=" in line
+        ]
+        script = (
+            "const a=require(process.argv[1]);"
+            "const d=JSON.parse(process.argv[2]);"
+            "process.stdout.write(a.contextText(d,process.argv[3]));"
+        )
+        completed = subprocess.run(
+            ["node", "-e", script, str(CLAUDE_ADAPTER), json.dumps(decision), str(ROOT)],
+            text=True,
+            capture_output=True,
+            timeout=2,
+            check=True,
+        )
+        header = completed.stdout.partition("\n\nSelected local skill: ")[0]
+        claude_keys = [
+            line.split("=", 1)[0]
+            for line in header.splitlines()
+            if "=" in line
+        ]
+        self.assertEqual(codex_keys, claude_keys)
+        self.assertIn("command=#> scout", header)
+        self.assertIn("mode=initial", header)
+        self.assertIn("access=write-scoped:research-orientation.md", header)
+        self.assertNotIn("requested_access=", header)
+
+        registry_decision = route_request("What skills are saved in memory?", manifest)
+        registry_codex_keys = [
+            line.split("=", 1)[0]
+            for line in compact_context(registry_decision).splitlines()
+            if "=" in line
+        ]
+        completed = subprocess.run(
+            [
+                "node",
+                "-e",
+                script,
+                str(CLAUDE_ADAPTER),
+                json.dumps(registry_decision),
+                str(ROOT),
+            ],
+            text=True,
+            capture_output=True,
+            timeout=2,
+            check=True,
+        )
+        registry_claude_keys = [
+            line.split("=", 1)[0]
+            for line in completed.stdout.splitlines()
+            if "=" in line
+        ]
+        self.assertEqual(registry_codex_keys, registry_claude_keys)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required")
+    def test_claude_adapter_accepts_hash_directives_as_prompt_text(self) -> None:
+        cases = (
+            (
+                "#> scout /tmp/new-project",
+                "reason=active_skill_match",
+                "Selected local skill: research-context-scout",
+                ("command=#> scout", "mode=initial", "access=write-scoped:research-orientation.md"),
+            ),
+            (
+                "#> override inspect only /tmp/new-project",
+                "reason=user_override",
+                "No local skill matched",
+                (),
+            ),
+        )
+        for prompt, reason, expected, context_lines in cases:
+            with self.subTest(prompt=prompt):
+                completed = subprocess.run(
+                    ["node", str(CLAUDE_ADAPTER), "--root", str(ROOT)],
+                    input=json.dumps({"prompt": prompt}),
+                    text=True,
+                    capture_output=True,
+                    timeout=5,
+                    check=False,
+                )
+                self.assertEqual(0, completed.returncode)
+                context = json.loads(completed.stdout)["hookSpecificOutput"]["additionalContext"]
+                self.assertIn(reason, context)
+                self.assertIn(expected, context)
+                for line in context_lines:
+                    self.assertIn(line, context)
 
     @unittest.skipUnless(shutil.which("node"), "Node.js is required")
     def test_claude_adapter_child_budget_shrinks_with_the_run_budget(self) -> None:
