@@ -36,10 +36,23 @@ ambiguous, or spans projects, ask once and stop; do not glob for a guess.
 - Literature: prefer connected scholarly MCP tools (arXiv, OpenAlex, Crossref,
   Zotero) loaded through ToolSearch; otherwise WebSearch to shortlist and
   WebFetch to read the source itself.
-- Two-pass mapping: `smart_extract_paper` or `extract_key_findings` for pass 1;
-  `download_and_read_paper`, `zotero_get_item_fulltext` or a PDF read for pass 2.
-  Availability comes from `list_library_papers` or `zotero_search_items`; a
-  library that does not answer is unreachable, not absent.
+## Host tool names
+
+`../shared/rules/literature-corpus.md` owns the backend-health probe, the
+absent/unreachable/unknown states, and the pass-shape and authority guards. This
+section only names the Claude tools that satisfy them.
+
+| Shared requirement | Claude tool |
+|---|---|
+| availability lookup | `list_library_papers` (arXiv library), `zotero_search_items` (Zotero) |
+| health control probe | the same tool, on an item already known present |
+| pass 1 extraction | `extract_key_findings`, or `smart_extract_paper` for a bounded preview |
+| pass 2 full text | `download_and_read_paper`, `zotero_get_item_fulltext`, or a PDF `Read` |
+
+The arXiv library and Zotero are different backends: a probe of one says nothing
+about the other. These MCP tools load through ToolSearch; without them, use
+WebSearch to shortlist and WebFetch for pass 2, and treat the absence of a
+library as `unknown`, never as `absent`.
 - Record writes use Write for a new file and Edit for an existing one, under the
   shared record protocol.
 

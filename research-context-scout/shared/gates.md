@@ -34,7 +34,7 @@ stopped.
 | G2 math formulation | state, controls/variables, constraints, objective | — |
 | G2A context alignment | context mirror, pilot-search directions, user status | the user has not confirmed, corrected or delegated the context |
 | G3 landscape preview | structured search clusters, recent synthesis and candidate sources | the user has not aligned the search lanes |
-| G3A bounded closure | search boundary, acquisition manifest and corpus plan | a source selected for synthesis is absent and the user has not confirmed the manifest |
+| G3A bounded closure | search boundary, acquisition manifest and corpus plan | corpus readiness is `pending`, or the user has not confirmed the manifest |
 | G4 corpus extraction | coverage extraction for every incorporated paper and decisive deep reads | a selected source failed extraction without user-confirmed exclusion or replacement |
 | G5 relation map | normalized achievement/model/mechanism and physics-math relation | a material mapping remains unaligned |
 | G6 existing vs new ledger | known results separated from proposed differences | nothing survives into the new direction ledger |

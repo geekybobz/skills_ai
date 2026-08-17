@@ -74,31 +74,70 @@ class ResearchContextScoutTests(unittest.TestCase):
         self.assertIn("validated mode", wrapper)
         self.assertIn("mode-fallback.md", wrapper)
 
-    def test_codex_tool_contract_matches_verified_runtime(self) -> None:
-        wrapper = " ".join(self.read("codex/SKILL.md").split())
-        lifecycle = self.read("codex/CODEX.md")
+    # Evidence policy is host-neutral and lives in the shared rule. A wrapper may
+    # only name its host's tools. Keeping policy in one wrapper is what left
+    # Claude without the empty-response guard that Codex had.
+    SHARED_POLICY_PHRASES = (
+        "A control probe is the only thing that establishes health",
+        "backend health is **unverified**",
+        "reclassify that call as pass 2",
+        "Never infer that a host approval setting will prompt",
+        "only normal acquisition trigger",
+    )
+    HOST_TOOLS = (
+        "extract_key_findings",
+        "smart_extract_paper",
+        "download_and_read_paper",
+        "zotero_get_item_fulltext",
+        "list_library_papers",
+        "zotero_search_items",
+    )
 
-        for tool in (
-            "extract_key_findings",
-            "smart_extract_paper",
-            "download_and_read_paper",
-            "zotero_get_item_fulltext",
-            "list_library_papers",
-            "zotero_search_items",
-        ):
-            with self.subTest(tool=tool):
-                self.assertIn(tool, wrapper)
-                self.assertNotIn(tool, lifecycle)
+    def test_evidence_policy_is_shared_and_wrappers_only_name_tools(self) -> None:
+        rule = " ".join(self.read("shared/rules/literature-corpus.md").split())
+        wrappers = {
+            name: " ".join(self.read(name).split())
+            for name in ("codex/SKILL.md", "claude/CLAUDE.md")
+        }
+        for phrase in self.SHARED_POLICY_PHRASES:
+            flat = " ".join(phrase.split())
+            with self.subTest(phrase=phrase):
+                self.assertIn(flat, rule, "policy must live in the shared rule")
+                for name, text in wrappers.items():
+                    self.assertNotIn(flat, text, f"{name} restates shared policy")
+        # Both hosts must name every tool the shared guards require.
+        for name, text in wrappers.items():
+            for tool in self.HOST_TOOLS:
+                with self.subTest(wrapper=name, tool=tool):
+                    self.assertIn(tool, text)
+            with self.subTest(wrapper=name):
+                self.assertIn("literature-corpus.md", text)
+        self.assertNotIn("list_library_papers", self.read("codex/CODEX.md"))
 
-        self.assertIn("prefer `extract_key_findings`", wrapper)
-        self.assertIn("bounded content preview", wrapper)
-        self.assertIn("returns a full paper body, reclassify that call as pass 2", wrapper)
-        self.assertIn("different backends", wrapper)
-        self.assertIn("does not prove `absent`", wrapper)
-        self.assertIn("positive health evidence", wrapper)
-        self.assertIn("never turn the empty response", wrapper)
-        self.assertIn('approval_mode = "approve"', wrapper)
-        self.assertIn("require explicit user authority", wrapper)
+    def test_corpus_stop_condition_has_one_predicate(self) -> None:
+        # gates.md, the checkpoint rule and the corpus rule previously disagreed
+        # about an unreachable backend: one said stop, two said continue.
+        gates = " ".join(self.read("shared/gates.md").split())
+        checkpoints = " ".join(self.read("shared/rules/alignment-checkpoints.md").split())
+        rule = " ".join(self.read("shared/rules/literature-corpus.md").split())
+        self.assertIn("corpus readiness is `pending`", gates)
+        self.assertIn("Stop while corpus readiness is `pending`", checkpoints)
+        self.assertIn("Corpus readiness is `pending` whenever", rule)
+        # Only the corpus rule may enumerate which states hold it pending.
+        for other in (gates, checkpoints):
+            self.assertNotIn("lacks locally available full text", other)
+        # An unfinished check is never an exclusion and never an absence.
+        self.assertIn("`missing`, `unknown` and `failed` all hold it pending", rule)
+        self.assertIn("neither be excluded nor counted as absent", rule)
+
+    def test_local_state_enum_covers_every_mandated_value(self) -> None:
+        rule = self.read("shared/rules/literature-corpus.md")
+        enum_line = next(l for l in rule.splitlines() if l.startswith("local state:"))
+        values = {v.strip() for v in enum_line.split(":", 1)[1].split("|")}
+        # Every state the rule tells the agent to record must be in the enum.
+        for mandated in ("missing", "failed", "unknown", "available"):
+            with self.subTest(value=mandated):
+                self.assertIn(mandated, values)
 
     def test_scout_runtime_does_not_depend_on_zotero_semantic_search(self) -> None:
         for path in sorted(PACKAGE.rglob("*")):
@@ -236,7 +275,7 @@ class ResearchContextScoutTests(unittest.TestCase):
     # template is the user's record, not prompt text.
     CANONICAL_PHRASES = (
         "successfully extracted",
-        "mark corpus readiness",
+        "Corpus readiness is `pending`",
         "lowers the status",
         "Scout never acquires silently",
         "caps at `source-read`",
@@ -297,14 +336,14 @@ class ResearchContextScoutTests(unittest.TestCase):
             "shared/rules/evidence-gate.md": 8000,
             "shared/rules/journal-thresholds.md": 2000,
             "shared/rules/journal-level-up.md": 2000,
-            "shared/rules/literature-corpus.md": 5500,
+            "shared/rules/literature-corpus.md": 8000,
             "shared/rules/relation-taxonomy.md": 6000,
             "shared/rules/record-and-brief.md": 4000,
             "shared/rules/source-status.md": 3000,
             "shared/rules/mode-fallback.md": 2500,
             "codex/SKILL.md": 4000,
             "codex/CODEX.md": 4000,
-            "claude/CLAUDE.md": 2500,
+            "claude/CLAUDE.md": 3200,
         }
         for relative, limit in limits.items():
             with self.subTest(relative=relative):
@@ -469,19 +508,17 @@ class ResearchContextScoutTests(unittest.TestCase):
         self.assertIn("does not permit automatic downloads", rule)
         self.assertIn("One confirmation covers the whole manifest", rule)
         # Absence requires a healthy backend and an exact negative identity lookup.
-        self.assertIn("independent positive health evidence", rule)
+        self.assertIn("A control probe is the only thing that establishes health", rule)
         self.assertIn("exact canonical-identity lookup explicitly reports", rule)
-        self.assertIn("empty or successful library search is not evidence", rule)
-        self.assertIn("unknown (backend health unverified or unreachable)", rule)
+        self.assertIn("empty library search is never evidence of absence", rule)
         # An unreachable library is an infrastructure failure, never a missing paper.
-        self.assertIn("unreachable** — the library did not answer", rule)
-        self.assertIn("never convert it into a corpus-readiness stop", rule)
-        self.assertIn("another healthy backend or a supplied local file", rule)
+        self.assertIn("unreachable** — the backend did not answer", rule)
+        self.assertIn("another healthy backend or a user-supplied local file", rule)
         self.assertIn("Every paper incorporated into the collective synthesis", rule)
         self.assertIn("locally available as full text", rule)
         self.assertIn("successfully extracted", rule)
-        self.assertIn("corpus readiness `pending` and stop", rule)
-        self.assertIn("user confirms its exclusion or replacement", rule)
+        self.assertIn("Corpus readiness is `pending` whenever", rule)
+        self.assertIn("confirm exclusion", rule)
         self.assertIn("source-read` alone does not waive", source)
         self.assertIn("## Paper acquisition and corpus coverage", template)
         self.assertIn("stop until every paper selected for synthesis", initial.lower())
@@ -595,23 +632,24 @@ class ResearchContextScoutTests(unittest.TestCase):
     # gate-sized refactor: always-on 12910, Cycle A 20519, Cycle B 30998,
     # Deepen 27027, and no early-stop path existed.
     #
-    # After deferring the gate index into gates.md and binding the corpus rule to
-    # two-pass reading: always-on 8060 (was 10495), Cycle A 23583 (was 25350),
-    # Cycle B 50390, Deepen 42335, early stop 44546. Deferral only pays on paths
-    # that never reach a gate -- Cycle A and ambiguity bounces. A path that does
-    # reach a gate still loads gates.md, so it is close to a wash there, and the
-    # evidence-flow rules deliberately spend bytes here to save far more paper
-    # tokens at run time.
+    # After deferring the gate index into gates.md, binding the corpus rule to
+    # two-pass reading, and moving evidence policy out of the wrappers into the
+    # shared rule: always-on 8675, Cycle A 24198, Cycle B 53077,
+    # Deepen 45022, early stop 47233. Deferral pays only on paths that
+    # never reach a gate -- Cycle A and ambiguity bounces. A path that does reach
+    # a gate still loads gates.md, so it is close to a wash there, and the
+    # evidence rules deliberately spend bytes here to save far more paper tokens
+    # at run time.
 
     def test_always_on_load_path_stays_bounded(self) -> None:
         # Read on every single run before any research happens.
-        self.assert_path_under("Always-on", 8700, *self.ALWAYS_ON)
+        self.assert_path_under("Always-on", 9300, *self.ALWAYS_ON)
 
     def test_cycle_a_load_path_stays_bounded(self) -> None:
         # Reconstruct, ask, stop: no gate rule beyond the record contract.
         self.assert_path_under(
             "Cycle A",
-            25200,
+            25900,
             *self.ALWAYS_ON,
             "shared/phases/initial-scout.md",
             "shared/rules/record-and-brief.md",
@@ -622,7 +660,7 @@ class ResearchContextScoutTests(unittest.TestCase):
         # Worst case: every gate rule plus the template in one initial cycle.
         self.assert_path_under(
             "Cycle B",
-            54000,
+            56800,
             *self.ALWAYS_ON,
             self.GATE_INDEX,
             "shared/phases/initial-scout.md",
@@ -633,7 +671,7 @@ class ResearchContextScoutTests(unittest.TestCase):
     def test_deepen_load_path_stays_bounded(self) -> None:
         self.assert_path_under(
             "Deepen",
-            45300,
+            48200,
             *self.ALWAYS_ON,
             self.GATE_INDEX,
             "shared/phases/deepen-scout.md",
@@ -656,7 +694,7 @@ class ResearchContextScoutTests(unittest.TestCase):
             "shared/rules/collective-synthesis.md",
             "shared/templates/research-orientation.md",
         )
-        self.assert_path_under("Early stop", 47700, *early)
+        self.assert_path_under("Early stop", 50500, *early)
         full = self.path_bytes(
             *self.ALWAYS_ON,
             self.GATE_INDEX,

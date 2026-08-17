@@ -44,9 +44,9 @@ silently leaves an old search lane, mapping or conclusion active.
    representative candidate sources and proposed search lanes before bounded
    closure. Stop while its state is `pending`.
 3. **Corpus readiness (G3A, mandatory when papers are required):** show the
-   acquisition and coverage plan. Stop while any source selected for synthesis
-   lacks locally available full text or has a failed extraction without
-   user-confirmed exclusion or replacement.
+   acquisition and coverage plan. Stop while corpus readiness is `pending`.
+   `literature-corpus.md` owns which states hold it pending and which of them
+   the user may resolve by exclusion.
 4. **Interpretation alignment (G5, conditional):** show an equation,
    achievement or mechanism mapping when a plausible alternative would change
    the direction. Stop while the material ambiguity is unresolved.

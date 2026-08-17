@@ -48,7 +48,7 @@ decision it may change:
 stable landing page:
 full-text/PDF availability:
 download priority: essential | useful | background
-local state: missing | available | duplicate | wrong-version | failed
+local state: missing | available | duplicate | wrong-version | failed | unknown
 ```
 
 A source is **locally available** when the host's configured reference library
@@ -60,22 +60,47 @@ automatic downloads or writes elsewhere. Present the acquisition manifest once
 and add sources only after the user confirms it. One confirmation covers the
 whole manifest, not one source at a time.
 
-Separate two states that look alike and are not:
+### Backend health probe
 
-- **absent** — the same backend has independent positive health evidence for
-  the current check, and an exact canonical-identity lookup explicitly reports
-  that it does not hold the source. This is a normal acquisition trigger.
-- **unreachable** — the library did not answer. This is an infrastructure
-  failure. Report it as `local state: unknown (library unreachable)`, name the
-  backend, and never convert it into a corpus-readiness stop or an exclusion.
+Host-neutral, and required before any absence claim. A backend is **healthy for
+this check** only when a control probe succeeds: the same backend, in the same
+session, returns an item you already know it holds. Use a source already marked
+`available` in this record, or any item the user named as present. If no control
+item exists, or the probe fails or errors, backend health is **unverified**.
 
-An empty or successful library search is not evidence of absence by itself. If
-backend health is not independently established, classify the result as
-`unknown (backend health unverified or unreachable)`, not `absent`. An
-unreachable library cannot establish that a source is missing, and a missing
-library is never evidence about the literature. Do not stop the corpus solely
-because one backend is unreachable; try another healthy backend or a supplied
-local file.
+A control probe is the only thing that establishes health. Tool success, an
+empty result, a fast response and a prior probe in an earlier session do not.
+
+### Three states that look alike
+
+- **absent** — the backend is healthy for this check *and* an exact
+  canonical-identity lookup explicitly reports it does not hold the source. This
+  is the only normal acquisition trigger.
+- **unreachable** — the backend did not answer, or answered with an error.
+- **unknown** — anything else, including an empty or successful search on a
+  backend whose health is unverified.
+
+Record `unreachable` and `unknown` as `local state: unknown`, and name the
+backend and which of the two applies. An empty library search is never evidence
+of absence by itself, an unreachable library cannot establish that a source is
+missing, and a missing library is never evidence about the literature.
+
+Before stopping, try another healthy backend or a user-supplied local file. One
+unreachable backend is not a reason to stop when another can answer.
+
+### Pass-shape and authority guards
+
+Host-neutral, and binding on every wrapper:
+
+- If a pass-1 extractor returns a full paper body, reclassify that call as
+  pass 2 and charge it to the source-read budget. Do not carry the body as
+  cheap coverage context.
+- Never infer that a host approval setting will prompt the user. Obtain
+  explicit user authority for the acquisition or deep read before calling a
+  pass-2 tool.
+
+A wrapper supplies the host's tool names for these guards. It never restates,
+narrows or replaces the guards themselves.
 
 ## Incorporation rule
 
@@ -87,10 +112,23 @@ candidate/acquisition ledger but cannot influence a mathematical idea,
 relationship, gap, importance claim or report conclusion.
 
 Record selected, locally available, successfully extracted, deep-read, used,
-excluded and failed counts. If any source selected for synthesis is missing or
-fails extraction, mark corpus readiness `pending` and stop until the user
-confirms its exclusion or replacement. An excluded source cannot influence the
-collective synthesis.
+excluded and failed counts.
+
+Corpus readiness is `pending` whenever any source selected for synthesis is not
+both available and successfully extracted. `missing`, `unknown` and `failed` all
+hold it pending; only the remedy differs:
+
+| State | Remedy offered | May be excluded on this basis |
+|---|---|---|
+| `missing` (absence established) | acquire it, or confirm exclusion | yes, with user confirmation |
+| `failed` extraction | replace it, or confirm exclusion | yes, with user confirmation |
+| `unknown` (unreachable or health unverified) | repair or change backend, or supply the file | **never** |
+
+An `unknown` source is an unfinished check, not a verdict about the literature,
+so it can neither be excluded nor counted as absent. Proceeding to synthesis
+while any selected source is still `unknown` is not permitted; report the
+backend problem instead. An excluded source cannot influence the collective
+synthesis.
 
 ## Two-pass reading
 
