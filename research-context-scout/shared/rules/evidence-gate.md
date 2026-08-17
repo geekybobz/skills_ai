@@ -4,6 +4,10 @@ Use this rule whenever proposing or ranking a research direction. Match the
 support to the claim; do not add mathematics, computation or experimental
 discussion when it is irrelevant.
 
+This gate is fail-closed on the terms `source-status.md` sets: whatever lowers a
+source's status lowers the claim state built on it, and an unmatched physical
+assumption does the same. Nothing here licenses a stronger recommendation.
+
 ## Direction contract
 
 Represent a direction as
@@ -27,6 +31,10 @@ paper contribution.
 
 Theoretical recommendations normally require E2. If a check cannot yet be
 performed, keep the direction at E1 and give its first falsification test.
+
+Source status tokens and their allowed use are defined in `source-status.md`,
+loaded earlier at G3. A direction may not exceed the status of the sources
+supporting it.
 
 ## Proof-of-plausibility
 

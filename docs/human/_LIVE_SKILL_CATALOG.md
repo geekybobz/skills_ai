@@ -9,68 +9,148 @@ generated: true
 
 # Live Skill Catalog
 
-Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the canonical registry and declared package boundaries. It never loads a skill body into ordinary routing. Hidden and deprecated identifiers remain omitted outside maintenance; current counts are 0 hidden and 0 deprecated.
+Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the canonical registry and declared inventory boundaries. The always-active orchestrator is shown separately and never counted as a skill. Public skill inventory counts packages only; routes, modes, components, and files are internal capabilities, never additional skills. Hidden and deprecated skills remain omitted outside maintenance; current counts are 0 hidden and 0 deprecated.
 
-| Skill | Family | State | Purpose | Trigger | Not for | Structure | Source | Approx. tokens |
-|---|---|---|---|---|---|---|---|---:|
-| auth-implementation | build-ops | active | working login/signup with Clerk or Supabase Auth — real code | auth code, implement login, signup, Clerk | login *UX* → `auth-security-ux-specialist` | single-file | [design-with-claude/auth-implementation.md](../../design-with-claude/auth-implementation.md) | 1180 |
-| code-explainer | build-ops | active | paste a file → plain-language explanation, no jargon | explain this code, what does this do | writing new code | single-file | [design-with-claude/code-explainer.md](../../design-with-claude/code-explainer.md) | 743 |
-| database-setup | build-ops | active | Supabase tables, queries, connecting to a frontend | database, supabase, table, query | schema design at scale | single-file | [design-with-claude/database-setup.md](../../design-with-claude/database-setup.md) | 868 |
-| debug-helper | build-ops | active | paste an error → plain-language cause and one exact fix | error message, stack trace, broken build | designed error *states* → `error-handling-specialist` | single-file | [design-with-claude/debug-helper.md](../../design-with-claude/debug-helper.md) | 1064 |
-| deploy-to-vercel | build-ops | active | deploy to Vercel, fix build errors, custom domains | deploy, vercel, domain, build failing | other hosts | single-file | [design-with-claude/deploy-to-vercel.md](../../design-with-claude/deploy-to-vercel.md) | 755 |
-| environment-setup | build-ops | active | what `.env` files are, how to set them, what never to commit | .env, API key, secret key, environment variable | production secret management | single-file | [design-with-claude/environment-setup.md](../../design-with-claude/environment-setup.md) | 821 |
-| setup-guide | build-ops | active | install Node and Claude Code, create a first project | install, node, terminal, first project | an existing configured project | single-file | [design-with-claude/setup-guide.md](../../design-with-claude/setup-guide.md) | 772 |
-| quantum-job-collector | career | off | exhaustive quantum job collection for Quantum Career Radar | quantum jobs, career radar, update review queue, pending jobs, source coverage | generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled | external pointer | `external-skills/quantum-job-collector/SKILL.md` | — |
-| brand-designer | design | active | visual identity, logo usage, brand colour and type expression | brand, identity, logo | a generic palette → `color-specialist` | single-file | [design-with-claude/brand-designer.md](../../design-with-claude/brand-designer.md) | 884 |
-| color-specialist | design | active | palettes, contrast ratios, semantic tokens, OKLCH scales | colour, palette, contrast, hue | dark theme only → `dark-mode-specialist` | single-file | [design-with-claude/color-specialist.md](../../design-with-claude/color-specialist.md) | 1105 |
-| content-strategist | design | active | microcopy, empty states, tone of voice, content hierarchy | copy, wording, tone, empty state | error *flows* → `error-handling-specialist` | single-file | [design-with-claude/content-strategist.md](../../design-with-claude/content-strategist.md) | 871 |
-| dark-mode-specialist | design | active | dark surfaces, elevation, colour remapping, FOUC, mode switch | dark mode, night theme, theme switch | building a full light palette → `color-specialist` | single-file | [design-with-claude/dark-mode-specialist.md](../../design-with-claude/dark-mode-specialist.md) | 963 |
-| dashboard-designer | design | active | KPI cards, data density, dense grids, filters, drill-down | dashboard, KPI, stat cards, dense grid | one chart → `data-visualization-specialist` | single-file | [design-with-claude/dashboard-designer.md](../../design-with-claude/dashboard-designer.md) | 897 |
-| data-visualization-specialist | design | active | chart selection, axes, colour encoding, tooltips | chart, graph, data plot, plot a function, scientific figure | the grid they sit in → `dashboard-designer` | single-file | [design-with-claude/data-visualization-specialist.md](../../design-with-claude/data-visualization-specialist.md) | 1026 |
-| design-brief | design | active | turns loose requirements into a structured brief | brief, plan, requirements unclear | an ask that is already specific | single-file | [design-with-claude/design-brief.md](../../design-with-claude/design-brief.md) | 1671 |
-| design-system-architect | design | active | tokens, component APIs, variants, theming, governance | design system, tokens, variants | one-off page → `poster-lead` | single-file | [design-with-claude/design-system-architect.md](../../design-with-claude/design-system-architect.md) | 1674 |
-| information-architect | design | active | taxonomy, labelling, content organisation, reading order | structure, hierarchy, flow, section order | nav *components* → `navigation-specialist` | single-file | [design-with-claude/information-architect.md](../../design-with-claude/information-architect.md) | 911 |
-| motion-designer | design | active | transitions, easing, micro-interactions, reduced motion | animation, transition, motion | perceived speed → `performance-specialist` | single-file | [design-with-claude/motion-designer.md](../../design-with-claude/motion-designer.md) | 1123 |
-| poster-lead | design | active | adaptive design lead; proposes 2-3 layouts with rationale, routes onward | poster, A0, HTML page, any new visual task | a single narrow question | single-file | [design-with-claude/poster-lead.md](../../design-with-claude/poster-lead.md) | 1382 |
-| print-export-designer | design | active | print CSS, PDF-safe colour, A0/A4 page sizing, receipts | print, PDF, export, A0 | screen-only work | single-file | [design-with-claude/print-export-designer.md](../../design-with-claude/print-export-designer.md) | 1526 |
-| responsive-design-specialist | design | active | breakpoints, fluid type, container queries, responsive images | responsive, breakpoint, fluid layout | touch targets, thumb zones → `mobile-specialist` | single-file | [design-with-claude/responsive-design-specialist.md](../../design-with-claude/responsive-design-specialist.md) | 868 |
-| spacing-layout-specialist | design | active | grid systems, spacing scales, density modes, column math | spacing, gap, padding, column math | overall section order → `information-architect` | single-file | [design-with-claude/spacing-layout-specialist.md](../../design-with-claude/spacing-layout-specialist.md) | 1129 |
-| table-designer | design | active | data tables, sorting, pagination, row selection, inline edit | table, comparison grid, data grid | static comparison layout → `dashboard-designer` | single-file | [design-with-claude/table-designer.md](../../design-with-claude/table-designer.md) | 961 |
-| typography-specialist | design | active | type scales, font pairing, line height, vertical rhythm | font, readability, type scale | A0 poster sizing → `poster-lead` | single-file | [design-with-claude/typography-specialist.md](../../design-with-claude/typography-specialist.md) | 1613 |
-| visual-hierarchy-specialist | design | active | size, weight and contrast to direct the eye | emphasis, focal point, visual weight | the type scale itself → `typography-specialist` | single-file | [design-with-claude/visual-hierarchy-specialist.md](../../design-with-claude/visual-hierarchy-specialist.md) | 1551 |
-| research-context-scout | research | manual | reconstruct a new or evolving project, ask and record decisive user input, map current research and applications, test proposed directions and identify the strongest evidence-backed paper route | research context scout, initial research orientation, supervisor assessment, map related research and applications | exhaustive literature review, editing research artifacts, mature focused proof or implementation work without an orientation request | packaged skill | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 653 |
-| theory-reference | theory | active | entry route declared by theory.md | LaTeX, theory notes, math reference, chapter plan, outline, refresher |  | submodule package | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 69 |
-| accessibility-specialist | ui-patterns | active | WCAG, ARIA, keyboard nav, screen readers | a11y, WCAG, ARIA, screen reader, keyboard | colour contrast maths → `color-specialist` | single-file | [design-with-claude/accessibility-specialist.md](../../design-with-claude/accessibility-specialist.md) | 1875 |
-| auth-security-ux-specialist | ui-patterns | active | login flows, password UX, 2FA/passkey, sessions, trust signals | auth UX, login flow, password, 2FA, passkey | writing the auth *code* → `auth-implementation` | single-file | [design-with-claude/auth-security-ux-specialist.md](../../design-with-claude/auth-security-ux-specialist.md) | 1419 |
-| b2b-saas-specialist | ui-patterns | active | enterprise patterns, RBAC UI, multi-tenant, admin dashboards | saas, enterprise, RBAC, multi-tenant, admin | dashboard *layout* → `dashboard-designer` | single-file | [design-with-claude/b2b-saas-specialist.md](../../design-with-claude/b2b-saas-specialist.md) | 864 |
-| checkout-specialist | ui-patterns | active | cart UX, payment forms, guest checkout, trust, confirmation | checkout, cart, payment, order | browsing and discovery → `ecommerce-specialist` | single-file | [design-with-claude/checkout-specialist.md](../../design-with-claude/checkout-specialist.md) | 938 |
-| conversational-ui-designer | ui-patterns | active | chat interfaces, bot personality, message design, voice UI | chat, bot, conversational, voice | generic forms → `form-designer` | single-file | [design-with-claude/conversational-ui-designer.md](../../design-with-claude/conversational-ui-designer.md) | 1091 |
-| drag-drop-specialist | ui-patterns | active | drag affordances, drop zones, reordering, canvas, multi-select | drag, drop, reorder, canvas | generic click interactions → `interaction-designer` | single-file | [design-with-claude/drag-drop-specialist.md](../../design-with-claude/drag-drop-specialist.md) | 1401 |
-| ecommerce-specialist | ui-patterns | active | product pages, filtering, galleries, reviews, comparison | ecommerce, product page, catalogue | the checkout itself → `checkout-specialist` | single-file | [design-with-claude/ecommerce-specialist.md](../../design-with-claude/ecommerce-specialist.md) | 783 |
-| error-handling-specialist | ui-patterns | active | error messages, validation, recovery flows, retry, HTTP pages | error state, validation, retry, 404 | debugging a real build error → [[registry/build-ops]] | single-file | [design-with-claude/error-handling-specialist.md](../../design-with-claude/error-handling-specialist.md) | 1018 |
-| form-designer | ui-patterns | active | form layout, validation timing, input types, multi-step | form, input, validation | the copy inside it → `content-strategist` | single-file | [design-with-claude/form-designer.md](../../design-with-claude/form-designer.md) | 1073 |
-| healthcare-ux-specialist | ui-patterns | active | clinical workflows, HIPAA UI, patient data display, terminology | healthcare, clinical, patient, HIPAA | generic dashboards → `dashboard-designer` | single-file | [design-with-claude/healthcare-ux-specialist.md](../../design-with-claude/healthcare-ux-specialist.md) | 978 |
-| i18n-designer | ui-patterns | active | RTL layouts, string expansion, locale-aware UI, date/number formats | i18n, RTL, locale, translation | tone of voice → `content-strategist` | single-file | [design-with-claude/i18n-designer.md](../../design-with-claude/i18n-designer.md) | 1342 |
-| interaction-designer | ui-patterns | active | user flows, states, gestures, feedback, keyboard patterns | interaction, flow, state, feedback | pure animation timing → `motion-designer` | single-file | [design-with-claude/interaction-designer.md](../../design-with-claude/interaction-designer.md) | 1772 |
-| landing-page-specialist | ui-patterns | active | hero sections, CTAs, value props, social proof, pricing tables | landing page, hero, CTA, pricing, conversion | in-app pages → `poster-lead` | single-file | [design-with-claude/landing-page-specialist.md](../../design-with-claude/landing-page-specialist.md) | 871 |
-| mobile-specialist | ui-patterns | active | touch targets, thumb zones, bottom nav, gestures, safe areas | mobile, touch, thumb zone, safe area | CSS breakpoints → `responsive-design-specialist` | single-file | [design-with-claude/mobile-specialist.md](../../design-with-claude/mobile-specialist.md) | 919 |
-| navigation-specialist | ui-patterns | active | sidebar, top bar, tabs, breadcrumbs, mega menus, command palette | navigation, sidebar, breadcrumbs, menu | site taxonomy → `information-architect` | single-file | [design-with-claude/navigation-specialist.md](../../design-with-claude/navigation-specialist.md) | 910 |
-| onboarding-specialist | ui-patterns | active | first-run, tooltip tours, empty states, checklists, discovery | onboarding, first run, empty state, tour | writing the copy → `content-strategist` | single-file | [design-with-claude/onboarding-specialist.md](../../design-with-claude/onboarding-specialist.md) | 928 |
-| performance-specialist | ui-patterns | active | skeletons, optimistic updates, loading states, perceived speed | loading, skeleton, spinner, perceived speed | real runtime performance work | single-file | [design-with-claude/performance-specialist.md](../../design-with-claude/performance-specialist.md) | 1012 |
-| search-specialist | ui-patterns | active | search UX, autocomplete, faceted filtering, zero-results | search, autocomplete, filter, facets | table filtering → `table-designer` | single-file | [design-with-claude/search-specialist.md](../../design-with-claude/search-specialist.md) | 971 |
+# Skills Orchestrator
 
-# Package Contents
+| Control plane | Mode | State | Structure | Entry |
+|---|---|---|---|---|
+| skills-orchestrator | always-active | active | control-plane | [runtime/skills-orchestrator/SKILL.md](../../runtime/skills-orchestrator/SKILL.md) |
+
+# Public Skills
+
+| Public skill | Role | State | Boundary | Structure | Entry | Task capabilities |
+|---|---|---|---|---|---|---:|
+| interaction-protocol | interaction | active | response context composed without consuming the task-package slot | interaction-package | [interaction-protocol/README.md](../../interaction-protocol/README.md) | — |
+| design-with-claude | task | active | design, UI-pattern, and build-operation capabilities | capability-package | [registry/design.md](../../registry/design.md) | 42 |
+| theory-reference | task | active | theory notes, LaTeX, derivation planning, and reference work | git-submodule | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 1 |
+| research-context-scout | task | manual | exact package request, `#> scout`, or `#> scout-again` only | repository-package | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 1 |
+| optimizer | task | manual | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates | repository-package | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 1 |
+| quantum-job-collector | task | off | exhaustive Quantum Career Radar job collection | external-symlink | `external-skills/quantum-job-collector/SKILL.md` | 1 |
+
+# Internal Capabilities
+
+These technical routes select focused instructions inside a public task package. They are not public skills and must never be added to the package count.
+
+| Package | Capability | Family | State | Purpose | Trigger | Not for | Structure | Source | Approx. tokens |
+|---|---|---|---|---|---|---|---|---|---:|
+| design-with-claude | auth-implementation | build-ops | active | working login/signup with Clerk or Supabase Auth — real code | auth code, implement login, signup, Clerk | login *UX* → `auth-security-ux-specialist` | single-file capability | [design-with-claude/auth-implementation.md](../../design-with-claude/auth-implementation.md) | 1180 |
+| design-with-claude | code-explainer | build-ops | active | paste a file → plain-language explanation, no jargon | explain this code, what does this do | writing new code | single-file capability | [design-with-claude/code-explainer.md](../../design-with-claude/code-explainer.md) | 743 |
+| design-with-claude | database-setup | build-ops | active | Supabase tables, queries, connecting to a frontend | database, supabase, table, query | schema design at scale | single-file capability | [design-with-claude/database-setup.md](../../design-with-claude/database-setup.md) | 868 |
+| design-with-claude | debug-helper | build-ops | active | paste an error → plain-language cause and one exact fix | error message, stack trace, broken build | designed error *states* → `error-handling-specialist` | single-file capability | [design-with-claude/debug-helper.md](../../design-with-claude/debug-helper.md) | 1064 |
+| design-with-claude | deploy-to-vercel | build-ops | active | deploy to Vercel, fix build errors, custom domains | deploy, vercel, domain, build failing | other hosts | single-file capability | [design-with-claude/deploy-to-vercel.md](../../design-with-claude/deploy-to-vercel.md) | 755 |
+| design-with-claude | environment-setup | build-ops | active | what `.env` files are, how to set them, what never to commit | .env, API key, secret key, environment variable | production secret management | single-file capability | [design-with-claude/environment-setup.md](../../design-with-claude/environment-setup.md) | 821 |
+| design-with-claude | setup-guide | build-ops | active | install Node and Claude Code, create a first project | install, node, terminal, first project | an existing configured project | single-file capability | [design-with-claude/setup-guide.md](../../design-with-claude/setup-guide.md) | 772 |
+| quantum-job-collector | quantum-job-collector | career | off | exhaustive quantum job collection for Quantum Career Radar | quantum jobs, career radar, update review queue, pending jobs, source coverage | generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled | external pointer | `external-skills/quantum-job-collector/SKILL.md` | — |
+| design-with-claude | brand-designer | design | active | visual identity, logo usage, brand colour and type expression | brand, identity, logo | a generic palette → `color-specialist` | single-file capability | [design-with-claude/brand-designer.md](../../design-with-claude/brand-designer.md) | 884 |
+| design-with-claude | color-specialist | design | active | palettes, contrast ratios, semantic tokens, OKLCH scales | colour, palette, contrast, hue | dark theme only → `dark-mode-specialist` | single-file capability | [design-with-claude/color-specialist.md](../../design-with-claude/color-specialist.md) | 1105 |
+| design-with-claude | content-strategist | design | active | microcopy, empty states, tone of voice, content hierarchy | copy, wording, tone, empty state | error *flows* → `error-handling-specialist` | single-file capability | [design-with-claude/content-strategist.md](../../design-with-claude/content-strategist.md) | 871 |
+| design-with-claude | dark-mode-specialist | design | active | dark surfaces, elevation, colour remapping, FOUC, mode switch | dark mode, night theme, theme switch | building a full light palette → `color-specialist` | single-file capability | [design-with-claude/dark-mode-specialist.md](../../design-with-claude/dark-mode-specialist.md) | 963 |
+| design-with-claude | dashboard-designer | design | active | KPI cards, data density, dense grids, filters, drill-down | dashboard, KPI, stat cards, dense grid | one chart → `data-visualization-specialist` | single-file capability | [design-with-claude/dashboard-designer.md](../../design-with-claude/dashboard-designer.md) | 897 |
+| design-with-claude | data-visualization-specialist | design | active | chart selection, axes, colour encoding, tooltips | chart, graph, data plot, plot a function, scientific figure | the grid they sit in → `dashboard-designer` | single-file capability | [design-with-claude/data-visualization-specialist.md](../../design-with-claude/data-visualization-specialist.md) | 1026 |
+| design-with-claude | design-brief | design | active | turns loose requirements into a structured brief | brief, plan, requirements unclear | an ask that is already specific | single-file capability | [design-with-claude/design-brief.md](../../design-with-claude/design-brief.md) | 1671 |
+| design-with-claude | design-system-architect | design | active | tokens, component APIs, variants, theming, governance | design system, tokens, variants | one-off page → `poster-lead` | single-file capability | [design-with-claude/design-system-architect.md](../../design-with-claude/design-system-architect.md) | 1674 |
+| design-with-claude | information-architect | design | active | taxonomy, labelling, content organisation, reading order | structure, hierarchy, flow, section order | nav *components* → `navigation-specialist` | single-file capability | [design-with-claude/information-architect.md](../../design-with-claude/information-architect.md) | 911 |
+| design-with-claude | motion-designer | design | active | transitions, easing, micro-interactions, reduced motion | animation, transition, motion | perceived speed → `performance-specialist` | single-file capability | [design-with-claude/motion-designer.md](../../design-with-claude/motion-designer.md) | 1123 |
+| design-with-claude | poster-lead | design | active | adaptive design lead; proposes 2-3 layouts with rationale, routes onward | poster, A0, HTML page, any new visual task | a single narrow question | single-file capability | [design-with-claude/poster-lead.md](../../design-with-claude/poster-lead.md) | 1382 |
+| design-with-claude | print-export-designer | design | active | print CSS, PDF-safe colour, A0/A4 page sizing, receipts | print, PDF, export, A0 | screen-only work | single-file capability | [design-with-claude/print-export-designer.md](../../design-with-claude/print-export-designer.md) | 1526 |
+| design-with-claude | responsive-design-specialist | design | active | breakpoints, fluid type, container queries, responsive images | responsive, breakpoint, fluid layout | touch targets, thumb zones → `mobile-specialist` | single-file capability | [design-with-claude/responsive-design-specialist.md](../../design-with-claude/responsive-design-specialist.md) | 868 |
+| design-with-claude | spacing-layout-specialist | design | active | grid systems, spacing scales, density modes, column math | spacing, gap, padding, column math | overall section order → `information-architect` | single-file capability | [design-with-claude/spacing-layout-specialist.md](../../design-with-claude/spacing-layout-specialist.md) | 1129 |
+| design-with-claude | table-designer | design | active | data tables, sorting, pagination, row selection, inline edit | table, comparison grid, data grid | static comparison layout → `dashboard-designer` | single-file capability | [design-with-claude/table-designer.md](../../design-with-claude/table-designer.md) | 961 |
+| design-with-claude | typography-specialist | design | active | type scales, font pairing, line height, vertical rhythm | font, readability, type scale | A0 poster sizing → `poster-lead` | single-file capability | [design-with-claude/typography-specialist.md](../../design-with-claude/typography-specialist.md) | 1613 |
+| design-with-claude | visual-hierarchy-specialist | design | active | size, weight and contrast to direct the eye | emphasis, focal point, visual weight | the type scale itself → `typography-specialist` | single-file capability | [design-with-claude/visual-hierarchy-specialist.md](../../design-with-claude/visual-hierarchy-specialist.md) | 1551 |
+| optimizer | optimizer | optimizer-workflow | manual | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer, #> build-system, #> optimize, #> skill optimizer route, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run | package capability | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 822 |
+| research-context-scout | research-context-scout | research | manual | align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test | research context scout, initial research orientation, supervisor assessment, align research context, collect and synthesize papers, translate literature ideas into this project | claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request | package capability | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 711 |
+| theory-reference | theory-reference | theory | active | entry route declared by theory.md | LaTeX, theory notes, math reference, chapter plan, outline, refresher |  | submodule capability | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 69 |
+| design-with-claude | accessibility-specialist | ui-patterns | active | WCAG, ARIA, keyboard nav, screen readers | a11y, WCAG, ARIA, screen reader, keyboard | colour contrast maths → `color-specialist` | single-file capability | [design-with-claude/accessibility-specialist.md](../../design-with-claude/accessibility-specialist.md) | 1875 |
+| design-with-claude | auth-security-ux-specialist | ui-patterns | active | login flows, password UX, 2FA/passkey, sessions, trust signals | auth UX, login flow, password, 2FA, passkey | writing the auth *code* → `auth-implementation` | single-file capability | [design-with-claude/auth-security-ux-specialist.md](../../design-with-claude/auth-security-ux-specialist.md) | 1419 |
+| design-with-claude | b2b-saas-specialist | ui-patterns | active | enterprise patterns, RBAC UI, multi-tenant, admin dashboards | saas, enterprise, RBAC, multi-tenant, admin | dashboard *layout* → `dashboard-designer` | single-file capability | [design-with-claude/b2b-saas-specialist.md](../../design-with-claude/b2b-saas-specialist.md) | 864 |
+| design-with-claude | checkout-specialist | ui-patterns | active | cart UX, payment forms, guest checkout, trust, confirmation | checkout, cart, payment, order | browsing and discovery → `ecommerce-specialist` | single-file capability | [design-with-claude/checkout-specialist.md](../../design-with-claude/checkout-specialist.md) | 938 |
+| design-with-claude | conversational-ui-designer | ui-patterns | active | chat interfaces, bot personality, message design, voice UI | chat, bot, conversational, voice | generic forms → `form-designer` | single-file capability | [design-with-claude/conversational-ui-designer.md](../../design-with-claude/conversational-ui-designer.md) | 1091 |
+| design-with-claude | drag-drop-specialist | ui-patterns | active | drag affordances, drop zones, reordering, canvas, multi-select | drag, drop, reorder, canvas | generic click interactions → `interaction-designer` | single-file capability | [design-with-claude/drag-drop-specialist.md](../../design-with-claude/drag-drop-specialist.md) | 1401 |
+| design-with-claude | ecommerce-specialist | ui-patterns | active | product pages, filtering, galleries, reviews, comparison | ecommerce, product page, catalogue | the checkout itself → `checkout-specialist` | single-file capability | [design-with-claude/ecommerce-specialist.md](../../design-with-claude/ecommerce-specialist.md) | 783 |
+| design-with-claude | error-handling-specialist | ui-patterns | active | error messages, validation, recovery flows, retry, HTTP pages | error state, validation, retry, 404 | debugging a real build error → [[registry/build-ops]] | single-file capability | [design-with-claude/error-handling-specialist.md](../../design-with-claude/error-handling-specialist.md) | 1018 |
+| design-with-claude | form-designer | ui-patterns | active | form layout, validation timing, input types, multi-step | form, input, validation | the copy inside it → `content-strategist` | single-file capability | [design-with-claude/form-designer.md](../../design-with-claude/form-designer.md) | 1073 |
+| design-with-claude | healthcare-ux-specialist | ui-patterns | active | clinical workflows, HIPAA UI, patient data display, terminology | healthcare, clinical, patient, HIPAA | generic dashboards → `dashboard-designer` | single-file capability | [design-with-claude/healthcare-ux-specialist.md](../../design-with-claude/healthcare-ux-specialist.md) | 978 |
+| design-with-claude | i18n-designer | ui-patterns | active | RTL layouts, string expansion, locale-aware UI, date/number formats | i18n, RTL, locale, translation | tone of voice → `content-strategist` | single-file capability | [design-with-claude/i18n-designer.md](../../design-with-claude/i18n-designer.md) | 1342 |
+| design-with-claude | interaction-designer | ui-patterns | active | user flows, states, gestures, feedback, keyboard patterns | interaction, flow, state, feedback | pure animation timing → `motion-designer` | single-file capability | [design-with-claude/interaction-designer.md](../../design-with-claude/interaction-designer.md) | 1772 |
+| design-with-claude | landing-page-specialist | ui-patterns | active | hero sections, CTAs, value props, social proof, pricing tables | landing page, hero, CTA, pricing, conversion | in-app pages → `poster-lead` | single-file capability | [design-with-claude/landing-page-specialist.md](../../design-with-claude/landing-page-specialist.md) | 871 |
+| design-with-claude | mobile-specialist | ui-patterns | active | touch targets, thumb zones, bottom nav, gestures, safe areas | mobile, touch, thumb zone, safe area | CSS breakpoints → `responsive-design-specialist` | single-file capability | [design-with-claude/mobile-specialist.md](../../design-with-claude/mobile-specialist.md) | 919 |
+| design-with-claude | navigation-specialist | ui-patterns | active | sidebar, top bar, tabs, breadcrumbs, mega menus, command palette | navigation, sidebar, breadcrumbs, menu | site taxonomy → `information-architect` | single-file capability | [design-with-claude/navigation-specialist.md](../../design-with-claude/navigation-specialist.md) | 910 |
+| design-with-claude | onboarding-specialist | ui-patterns | active | first-run, tooltip tours, empty states, checklists, discovery | onboarding, first run, empty state, tour | writing the copy → `content-strategist` | single-file capability | [design-with-claude/onboarding-specialist.md](../../design-with-claude/onboarding-specialist.md) | 928 |
+| design-with-claude | performance-specialist | ui-patterns | active | skeletons, optimistic updates, loading states, perceived speed | loading, skeleton, spinner, perceived speed | real runtime performance work | single-file capability | [design-with-claude/performance-specialist.md](../../design-with-claude/performance-specialist.md) | 1012 |
+| design-with-claude | search-specialist | ui-patterns | active | search UX, autocomplete, faceted filtering, zero-results | search, autocomplete, filter, facets | table filtering → `table-designer` | single-file capability | [design-with-claude/search-specialist.md](../../design-with-claude/search-specialist.md) | 971 |
+
+# Orchestrator Contents
+
+| Orchestrator file | Role |
+|---|---|
+| [runtime/skills-orchestrator/SKILL.md](../../runtime/skills-orchestrator/SKILL.md) | Skill entry or shared workflow instructions. |
+| [runtime/skills-orchestrator/agents/openai.yaml](../../runtime/skills-orchestrator/agents/openai.yaml) | Package support file. |
+
+# Skill Contents
 
 ## interaction-protocol
 
-**Type:** `shared-protocol`
+**Type:** `interaction-package`
 
-**Purpose:** Small shared response contract with a human graph entry and a canonical JSON source.
+**Purpose:** Public interaction skill package with general and mathematical modes that consume no task-package slot.
 
 | Package file | Role |
 |---|---|
 | [interaction-protocol/README.md](../../interaction-protocol/README.md) | Human orientation for the package. |
 | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | Canonical machine-readable protocol. |
+
+## design-with-claude
+
+**Type:** `capability-package`
+
+**Purpose:** One public task package containing focused design, UI-pattern, and build-operation capabilities.
+
+| Package file | Role |
+|---|---|
+| [design-with-claude/accessibility-specialist.md](../../design-with-claude/accessibility-specialist.md) | Package support file. |
+| [design-with-claude/auth-implementation.md](../../design-with-claude/auth-implementation.md) | Package support file. |
+| [design-with-claude/auth-security-ux-specialist.md](../../design-with-claude/auth-security-ux-specialist.md) | Package support file. |
+| [design-with-claude/b2b-saas-specialist.md](../../design-with-claude/b2b-saas-specialist.md) | Package support file. |
+| [design-with-claude/brand-designer.md](../../design-with-claude/brand-designer.md) | Package support file. |
+| [design-with-claude/checkout-specialist.md](../../design-with-claude/checkout-specialist.md) | Package support file. |
+| [design-with-claude/code-explainer.md](../../design-with-claude/code-explainer.md) | Package support file. |
+| [design-with-claude/color-specialist.md](../../design-with-claude/color-specialist.md) | Package support file. |
+| [design-with-claude/content-strategist.md](../../design-with-claude/content-strategist.md) | Package support file. |
+| [design-with-claude/conversational-ui-designer.md](../../design-with-claude/conversational-ui-designer.md) | Package support file. |
+| [design-with-claude/dark-mode-specialist.md](../../design-with-claude/dark-mode-specialist.md) | Package support file. |
+| [design-with-claude/dashboard-designer.md](../../design-with-claude/dashboard-designer.md) | Package support file. |
+| [design-with-claude/data-visualization-specialist.md](../../design-with-claude/data-visualization-specialist.md) | Package support file. |
+| [design-with-claude/database-setup.md](../../design-with-claude/database-setup.md) | Package support file. |
+| [design-with-claude/debug-helper.md](../../design-with-claude/debug-helper.md) | Package support file. |
+| [design-with-claude/deploy-to-vercel.md](../../design-with-claude/deploy-to-vercel.md) | Package support file. |
+| [design-with-claude/design-brief.md](../../design-with-claude/design-brief.md) | Package support file. |
+| [design-with-claude/design-system-architect.md](../../design-with-claude/design-system-architect.md) | Package support file. |
+| [design-with-claude/drag-drop-specialist.md](../../design-with-claude/drag-drop-specialist.md) | Package support file. |
+| [design-with-claude/ecommerce-specialist.md](../../design-with-claude/ecommerce-specialist.md) | Package support file. |
+| [design-with-claude/environment-setup.md](../../design-with-claude/environment-setup.md) | Package support file. |
+| [design-with-claude/error-handling-specialist.md](../../design-with-claude/error-handling-specialist.md) | Package support file. |
+| [design-with-claude/form-designer.md](../../design-with-claude/form-designer.md) | Package support file. |
+| [design-with-claude/healthcare-ux-specialist.md](../../design-with-claude/healthcare-ux-specialist.md) | Package support file. |
+| [design-with-claude/i18n-designer.md](../../design-with-claude/i18n-designer.md) | Package support file. |
+| [design-with-claude/information-architect.md](../../design-with-claude/information-architect.md) | Package support file. |
+| [design-with-claude/interaction-designer.md](../../design-with-claude/interaction-designer.md) | Package support file. |
+| [design-with-claude/landing-page-specialist.md](../../design-with-claude/landing-page-specialist.md) | Package support file. |
+| [design-with-claude/mobile-specialist.md](../../design-with-claude/mobile-specialist.md) | Package support file. |
+| [design-with-claude/motion-designer.md](../../design-with-claude/motion-designer.md) | Package support file. |
+| [design-with-claude/navigation-specialist.md](../../design-with-claude/navigation-specialist.md) | Package support file. |
+| [design-with-claude/onboarding-specialist.md](../../design-with-claude/onboarding-specialist.md) | Package support file. |
+| [design-with-claude/performance-specialist.md](../../design-with-claude/performance-specialist.md) | Package support file. |
+| [design-with-claude/poster-lead.md](../../design-with-claude/poster-lead.md) | Package support file. |
+| [design-with-claude/print-export-designer.md](../../design-with-claude/print-export-designer.md) | Package support file. |
+| [design-with-claude/responsive-design-specialist.md](../../design-with-claude/responsive-design-specialist.md) | Package support file. |
+| [design-with-claude/search-specialist.md](../../design-with-claude/search-specialist.md) | Package support file. |
+| [design-with-claude/setup-guide.md](../../design-with-claude/setup-guide.md) | Package support file. |
+| [design-with-claude/spacing-layout-specialist.md](../../design-with-claude/spacing-layout-specialist.md) | Package support file. |
+| [design-with-claude/table-designer.md](../../design-with-claude/table-designer.md) | Package support file. |
+| [design-with-claude/typography-specialist.md](../../design-with-claude/typography-specialist.md) | Package support file. |
+| [design-with-claude/visual-hierarchy-specialist.md](../../design-with-claude/visual-hierarchy-specialist.md) | Package support file. |
 
 ## theory-reference
 
@@ -111,7 +191,7 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 
 **Type:** `repository-package`
 
-**Purpose:** Human-guided early research orientation with shared initial/deepening phases, evidence rules, a project record template, and thin platform wrappers.
+**Purpose:** Physics-objective-first research orientation with shared initial/deepening phases, an optional math-method lens, anti-hallucination, relation, evidence and journal-threshold rules, a project record template, and thin platform wrappers.
 
 | Package file | Role |
 |---|---|
@@ -121,11 +201,42 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 | [research-context-scout/claude/CLAUDE.md](../../research-context-scout/claude/CLAUDE.md) | Platform wrapper or platform metadata. |
 | [research-context-scout/codex/CODEX.md](../../research-context-scout/codex/CODEX.md) | Platform wrapper or platform metadata. |
 | [research-context-scout/codex/SKILL.md](../../research-context-scout/codex/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/load-graph.json](../../research-context-scout/load-graph.json) | Package support file. |
 | [research-context-scout/shared/SKILL.md](../../research-context-scout/shared/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/shared/gates.md](../../research-context-scout/shared/gates.md) | Package support file. |
 | [research-context-scout/shared/phases/deepen-scout.md](../../research-context-scout/shared/phases/deepen-scout.md) | Phase-specific instructions loaded only for that operation. |
 | [research-context-scout/shared/phases/initial-scout.md](../../research-context-scout/shared/phases/initial-scout.md) | Phase-specific instructions loaded only for that operation. |
+| [research-context-scout/shared/phases/math-method-lens.md](../../research-context-scout/shared/phases/math-method-lens.md) | Phase-specific instructions loaded only for that operation. |
+| [research-context-scout/shared/rules/alignment-checkpoints.md](../../research-context-scout/shared/rules/alignment-checkpoints.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/anti-hallucination.md](../../research-context-scout/shared/rules/anti-hallucination.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/collective-synthesis.md](../../research-context-scout/shared/rules/collective-synthesis.md) | Reusable constraint shared by multiple phases. |
 | [research-context-scout/shared/rules/evidence-gate.md](../../research-context-scout/shared/rules/evidence-gate.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/journal-level-up.md](../../research-context-scout/shared/rules/journal-level-up.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/journal-thresholds.md](../../research-context-scout/shared/rules/journal-thresholds.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/literature-corpus.md](../../research-context-scout/shared/rules/literature-corpus.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/mode-fallback.md](../../research-context-scout/shared/rules/mode-fallback.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/record-and-brief.md](../../research-context-scout/shared/rules/record-and-brief.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/relation-taxonomy.md](../../research-context-scout/shared/rules/relation-taxonomy.md) | Reusable constraint shared by multiple phases. |
+| [research-context-scout/shared/rules/source-status.md](../../research-context-scout/shared/rules/source-status.md) | Reusable constraint shared by multiple phases. |
 | [research-context-scout/shared/templates/research-orientation.md](../../research-context-scout/shared/templates/research-orientation.md) | Reusable output template. |
+
+## optimizer
+
+**Type:** `repository-package`
+
+**Purpose:** Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence.
+
+| Package file | Role |
+|---|---|
+| [optimizer/SKILL.md](../../optimizer/SKILL.md) | Skill entry or shared workflow instructions. |
+| [optimizer/agents/openai.yaml](../../optimizer/agents/openai.yaml) | Package support file. |
+| [optimizer/build-system.md](../../optimizer/build-system.md) | Package support file. |
+| [optimizer/claude/CLAUDE.md](../../optimizer/claude/CLAUDE.md) | Platform wrapper or platform metadata. |
+| [optimizer/codex/CODEX.md](../../optimizer/codex/CODEX.md) | Platform wrapper or platform metadata. |
+| [optimizer/optimize.md](../../optimizer/optimize.md) | Package support file. |
+| [optimizer/scripts/optimizer_api.py](../../optimizer/scripts/optimizer_api.py) | Deterministic support, installation, synchronization, or validation script. |
+| [optimizer/scripts/optimizer_session.py](../../optimizer/scripts/optimizer_session.py) | Deterministic support, installation, synchronization, or validation script. |
+| [optimizer/situation-analysis.md](../../optimizer/situation-analysis.md) | Package support file. |
 
 ## quantum-job-collector
 

@@ -16,9 +16,22 @@ Back to the [[docs/00_SKILLS_HUB|Skills Hub]]. Runtime files:
 
 - [[research-context-scout/SKILL|skill entry]];
 - [[research-context-scout/shared/SKILL|shared workflow]];
+- [[research-context-scout/shared/gates|gate order and rule loading]];
 - [[research-context-scout/shared/phases/initial-scout|initial phase]];
 - [[research-context-scout/shared/phases/deepen-scout|deepening phase]];
+- [[research-context-scout/shared/phases/math-method-lens|math-method lens]];
+- [[research-context-scout/shared/rules/record-and-brief|record and brief contract]];
+- [[research-context-scout/shared/rules/alignment-checkpoints|alignment checkpoints]];
+- [[research-context-scout/shared/rules/literature-corpus|literature acquisition and corpus rule]];
+- [[research-context-scout/shared/rules/collective-synthesis|collective synthesis and report rule]];
+- [[research-context-scout/shared/rules/mode-fallback|mode fallback]];
+- [[research-context-scout/shared/rules/source-status|source status]];
+- [[research-context-scout/shared/rules/anti-hallucination|anti-hallucination rule]];
+- [[research-context-scout/shared/rules/relation-taxonomy|relation taxonomy]];
 - [[research-context-scout/shared/rules/evidence-gate|evidence gate]];
+- [[research-context-scout/shared/rules/journal-thresholds|journal thresholds]];
+- [[research-context-scout/shared/rules/journal-level-up|journal level-up tests]];
+- [[research-context-scout/shared/templates/research-orientation|record template]];
 - [[research-context-scout/codex/SKILL|Codex wrapper]]; and
 - [[research-context-scout/claude/CLAUDE|Claude integration boundary]].
 
@@ -27,32 +40,54 @@ never becomes routing or permission authority.
 
 ## Purpose
 
-Plan a research-start assistant that behaves like an experienced supervisor
-during the initial phase of a project. It should:
+Behave like an experienced supervisor at the start of a research project, and
+answer the question the project actually needs answered first: **is this already
+done, and if not, what exactly is left?**
+
+Scout should:
 
 - reconstruct the supplied work and its present evidence;
-- interact with the user through a compact recorded Markdown cycle;
-- independently discover current research, applications and importance;
-- distinguish attractive language from technically supported directions;
-- test recommendations for mathematical, numerical or physical plausibility;
-- identify the strongest evidence-backed route toward a meaningful paper; and
-- preserve enough shared context for the user, Codex and Claude to continue the
-  work efficiently.
+- lock the physics objective before any method discussion;
+- search for work that already achieves that objective;
+- show its structured understanding and pilot directions for user alignment
+  before broad search;
+- present a structured search preview before bounded closure and paper
+  acquisition;
+- use only locally available, successfully extracted full text in synthesis;
+- normalize achievements, models, mechanisms, terminology and equations before
+  declaring sources related;
+- combine useful ideas across papers and translate them into project notation;
+- label each comparison as same/different physics against same/different math;
+- keep what is already known strictly separate from what is proposed;
+- refuse to call anything a gap until a read source says so;
+- set a minimum journal threshold instead of naming an ambitious venue; and
+- name the next test most likely to change the decision; and
+- render a concise beginner-facing research synthesis without pretending to
+  replace the user's expert judgment.
 
 The initial phase is orientation and direction selection. It is not a complete
-literature review, proof, simulation campaign, paper draft or permanent
-research database.
+literature review, proof, simulation campaign, paper draft or research database.
 
 ## Core Principle
 
-**Understand the project, interact until the central intent is clear, discover
-why the result matters, and recommend only directions supported by a formal
-claim and a proof-of-plausibility.**
+**Fail closed.** No claim may be stronger than its inspected evidence. If a
+source has not been read, a derivation has not been checked, or a search
+returned nothing, the claim stays `candidate`, `unknown` or `hypothesis` — it
+does not become a research direction.
 
-User-owned intent should be requested and recorded. Research applications,
-related literature and useful comparisons should be discovered by the skill.
-Missing technical values may receive clearly labelled, defensible defaults
-when different choices do not change the research direction.
+Two consequences worth stating plainly:
+
+- **Absence of results is not a gap.** "Nothing found" records an
+  `existing-work verdict: unknown` together with the lanes searched and not
+  searched. It never promotes a direction.
+- **Abstracts do not settle anything.** Titles, snippets and abstracts nominate
+  candidates. Only a read source supports a claim about what that source
+  achieves.
+
+User-owned intent is asked for and recorded. Literature, applications and
+comparisons are discovered by the skill, not requested from the user. Missing
+technical values may receive clearly labelled defaults when different choices do
+not change the research direction.
 
 There is no required paper count, suggestion count or fixed search depth.
 
@@ -122,8 +157,9 @@ do not activate the skill. The canonical form is:
 Alias and canonical forms inject `mode=initial|deepen`; the canonical form
 requires one of those two modes and rejects a missing or unknown value. In
 either form, record completeness wins over invocation intent: when the user
-answers exist but the Research and application map is empty, the workflow runs
-initial Cycle B before delta-based deepening.
+answers exist but the physics objective, existing-understanding ledger, relation
+map or gap verdict is empty, the workflow runs initial Cycle B before
+delta-based deepening.
 
 `#> skill normal` remains an explicit opt-out. `#> override <instruction>` retains its
 higher-priority local-protocol override and does not activate this skill.
@@ -132,41 +168,67 @@ higher-priority local-protocol override and does not activate this skill.
 
 ```mermaid
 flowchart TD
-    A["New project"] --> B["Fast project reconstruction"]
-    B --> C["Create or update one interaction record"]
-    C --> D["Ask one to three consequential questions"]
-    D --> E["User responds in the record"]
-    E --> X{"Research and application map populated?"}
-    X -- "No" --> F["Run initial Cycle B"]
-    X -- "Yes" --> Q["Apply supplied delta"]
-    F --> G["Extract or revise transferable capability"]
-    Q --> G
-    G --> H["Build research and application map"]
-    H --> I["Formulate candidate paper directions"]
-    I --> J["Apply proof-of-plausibility gate"]
-    J --> K{"Direction adequately supported?"}
-    K -- "No" --> L["Record uncertainty or run one bounded check"]
-    L --> J
-    K -- "Yes" --> M["Give supervisor assessment"]
-    M --> N["Recommend the next decisive investigation"]
+    A["Project supplied"] --> B["Lock physics objective and formulation"]
+    B --> C["Context mirror plus pilot directions"]
+    C --> D{"User aligns context"}
+    D -- "Correct" --> B
+    D -- "Proceed" --> E["Structured landscape preview"]
+    E --> F{"User aligns search lanes"}
+    F -- "Refine" --> E
+    F -- "Proceed" --> G["Bounded search and acquisition manifest"]
+    G --> H["User provides selected full texts"]
+    H --> I["Extract every incorporated paper"]
+    I --> J["Normalize and synthesize collective ideas"]
+    J --> K["Translate ideas into project notation"]
+    K --> L{"Evidence-supported gap or useful route?"}
+    L --> M["Beginner synthesis and smallest next check"]
+    M --> N{"User accepts, corrects or redirects"}
+    N -- "Refine" --> C
+    N -- "Continue" --> O["Scout-again with the new result"]
 ```
+
+## The Gate Ladder
+
+The shared workflow runs eleven gates in order and stops at the first one whose
+missing information would change the decision.
+
+| Gate | Output |
+|---|---|
+| G0 | input lock — exact problem, target path, focus, assumptions |
+| G1 | physics objective — system, operation, observable, success metric |
+| G2 | math formulation — state, controls/variables, constraints, objective |
+| G2A | context alignment — context mirror, pilot directions and user state |
+| G3 | landscape preview — structured clusters, recent synthesis and candidates |
+| G3A | bounded closure — search boundary, acquisition manifest and corpus plan |
+| G4 | corpus extraction — every incorporated paper extracted, decisive sources deep-read |
+| G5 | relation map — normalized achievement/model/mechanism plus physics-math relation |
+| G6 | existing vs new ledger — known results separated from proposals |
+| G6A | collective synthesis — useful ideas translated into project notation |
+| G7 | gap predicate — real gap, why it matters, falsifier |
+| G8 | journal ladder — minimum target and level-up conditions |
+| G9 | next test — smallest derivation, source check, benchmark or simulation |
+| G10 | result review — stay, stop, reproduce, adapt, or level up |
+
+Each gate also carries a **stop if** condition. Pending context or search
+alignment stops further research; missing or failed full text stops synthesis;
+and `same-physics-same-math` stops the new-direction branch without preventing
+the user from receiving a clear evidence-backed report.
+
+The record stores the tier and search budget, which lanes were searched and which
+were not, the source reads used, the highest gate reached, and the gate and
+reason whenever a cycle stops early. Gate IDs appear beside the matching steps in
+the phase files, so an interrupted run can be resumed at the right place.
 
 ## 1. Begin With the Project
 
-Inspect the supplied material before searching broadly. Inputs may include:
-
-- TeX or Markdown drafts;
-- equations and derivations;
-- code and numerical results;
-- figures or experimental observations;
-- research notes;
-- PDFs; or
-- a verbal problem statement or early idea.
+Inspect the supplied material before searching broadly. Inputs may include TeX
+or Markdown drafts, equations and derivations, code and numerical results,
+figures or experimental observations, research notes, PDFs, or a verbal problem
+statement.
 
 Identify:
 
 - the central problem and intended achievement;
-- the result or capability the project may produce;
 - existing derivations, implementations, simulations or results;
 - important assumptions and constraints;
 - model, notation or consistency errors;
@@ -176,7 +238,24 @@ Identify:
 Do not begin with a broad paper search before understanding the project. Do not
 edit supplied research artifacts during orientation.
 
-## 2. Use One Recorded Interaction Cycle
+## 2. Lock the Physics Objective Before the Method
+
+This is the change that separates orientation from restating what is already in
+the folder. Before any discussion of technique, record:
+
+- the operation or phenomenon;
+- the physical system and regime;
+- the measurable success criterion; and
+- the target consumer, or the reason the result matters.
+
+Only then extract the mathematical formulation, and only as far as needed to
+compare assumptions: state, controls or variables, objective, constraints and
+evidence.
+
+Method families may be recorded, but a familiar method is not a research
+direction and does not establish direction quality.
+
+## 3. Use Recorded Alignment Cycles
 
 When the project workflow authorizes its declared record, create or update
 exactly one file in the project root:
@@ -185,18 +264,25 @@ exactly one file in the project root:
 research-orientation.md
 ```
 
-The record should contain:
+The record contains:
 
 ```markdown
 # Research Orientation
 
 ## Active project state
-## Current central claim
-## Current evidence level
-## Strongest application or importance
-## Strongest paper direction
-## Current blocking question
-
+## Input lock
+## Literature search boundary
+## Paper acquisition and corpus coverage
+## Existing understanding ledger
+## Physics-math relation map
+## Terminology and symbol mappings
+## New direction ledger
+## Claim and evidence ledger
+## Collective mathematical ideas
+## Project-notation translations
+## Paper directions
+## Beginner research synthesis
+## Optional math method lens
 ## Superseded conclusions
 
 ## Interaction cycle N
@@ -221,22 +307,16 @@ Rules:
   choices;
 - update the compact active state instead of duplicating earlier analysis;
 - consult older cycles only when a changed assumption requires them; and
-- stop cycling once the project, importance, strongest direction and next
+- stop cycling once the objective, orientation, strongest direction and next
   validation are clear.
 
-```mermaid
-flowchart TD
-    A["Write current understanding and questions"] --> B["User answers in research-orientation.md"]
-    B --> C["Read answers without altering them"]
-    C --> D["Update project map and assumptions"]
-    D --> E["Perform bounded research or validation"]
-    E --> F["Record findings and next questions"]
-    F --> G{"Another material decision?"}
-    G -- "Yes" --> B
-    G -- "No" --> H["Prepare the supervisor brief"]
-```
+Four alignment states make the interaction visible: context, search, corpus
+readiness and interpretation. A packet shows what Scout understands, inspected
+evidence, pilot findings, assumptions, what may change and the proposed next
+action. The user may confirm, correct, add, remove, prioritize or defer. A
+correction reopens every dependent search lane, mapping and conclusion.
 
-## 3. Classify the State of the Work
+## 4. Classify the State of the Work
 
 | State | Meaning |
 |---|---|
@@ -250,87 +330,159 @@ flowchart TD
 Also record provenance as `supplied`, `derived`, `literature`, `user answer`,
 `assumed` or `unknown`.
 
-## 4. Extract the Transferable Capability
+## 5. Align, Then Search for What Already Achieves the Objective
 
-Do not search only by the project's wording. First ask:
+After G2, the cheapest pilot query exposes plausible vocabulary, achievements
+and search lanes. Scout places those provisional findings beside the context
+mirror and waits for user alignment. It then returns a structured landscape
+preview and waits again before bounded closure. Pilot findings remain
+`search-candidate`; they do not settle the project.
 
-> What operation, theorem, mechanism, bound, resource or design principle could
-> this project provide?
+Only if that does not settle it do the other lanes open, in this order and within
+the tier budget:
 
-Use that capability to find related work and downstream uses even when they use
-different terminology.
+1. the same enabling mechanism;
+2. the same mathematical structure;
+3. nearby realizations;
+4. downstream applications; and
+5. bounds and no-go results.
 
-## 5. Build a Current Research and Application Map
+The aligned search then uses the same objective, mechanism, mathematical
+structure, realization, application and bound/no-go lanes. The tier is set at
+G1 and caps pilot, preview and closure together:
 
-Inspect relevant lanes broadly before selecting the most useful ones:
+| Tier | Problem | Query lanes | Source reads |
+|---|---|---|---|
+| T1 | known technique applied to a standard setting | 1 | 3 |
+| T2 | extension of a published result | 3 | 8 |
+| T3 | open or contested question | 5 | 15 plus citation closure |
 
-1. the same objective;
-2. the same physical mechanism;
-3. the same mathematical structure;
-4. the same method or algorithm;
-5. known bounds and no-go results;
-6. experimental realizations;
-7. downstream scientific or technological applications; and
-8. transferable ideas from adjacent fields.
+If the budget runs out before the orientation is clear, the record says
+`existing-work verdict: unknown` and names the lanes that were not searched. **An
+exhausted budget is a search state, never a gap** — the same rule that makes an
+empty search safe.
 
-Use breadth before depth:
+Do not search only by the project's own vocabulary. Prefer primary sources and
+current work together with canonical results. Start from the newest credible
+review, update it with primary results after its cutoff, and retain seminal work
+when it is the actual source of a theorem, model or mechanism. Age alone does
+not prove obsolescence. Label preprints, analogies and transferred methods
+accurately.
 
-```mermaid
-flowchart LR
-    B["Broad candidate map"] --> S["Select useful lanes"]
-    S --> D1["Deep comparison 1"]
-    S --> D2["Deep comparison 2"]
-    S --> D3["Deep comparison 3 when necessary"]
-    D1 --> P["Project position"]
-    D2 --> P
-    D3 --> P
-```
+## 6. Label the Relation: Physics vs Math
 
-Prefer primary sources. Use current research together with canonical results.
-Search results, titles and snippets may identify candidates but cannot support
-strong claims. Label preprints, analogies and transferred methods accurately.
-Do not claim confirmed novelty or a confirmed research gap during the initial
-phase.
+Every serious source gets one primary label. The label, not the wording of the
+abstract, decides what happens next.
 
-### Application and Importance Contract
+| Label | Meaning | Default action |
+|---|---|---|
+| `same-physics-same-math` | same objective and essentially the same formulation | existing result: reproduce, benchmark, cite, or stop |
+| `same-physics-different-math` | same objective, different method or proof route | possible new route; test whether it improves something measurable |
+| `different-physics-same-math` | similar equations, different objective or system | transfer candidate only; prove the physical mapping |
+| `different-physics-different-math` | neither is close | background only |
 
-Represent each serious application as
+Secondary labels refine a primary one: `same-mechanism`, `same-application`,
+`loose-analogy`, `stronger-assumptions`, `weaker-assumptions` and
+`no-go-or-bound`.
+
+Same mathematics does not prove the same physics. Same physics with different
+math is often the useful case — but only if it improves a measurable quantity or
+clarifies a real limitation.
+
+Before choosing a label, normalize the project's and source's achievement,
+model and mechanism. An equivalence under a coordinate, frame, limit or
+assumption change needs that explicit map. Different terminology may hide the
+same achievement; shared vocabulary may hide incompatible physics.
+
+## 7. Keep Two Ledgers
+
+The **existing understanding ledger** records, per source: the physics already
+achieved, the method and assumptions, the result strength and limits, and which
+project claim it already settles.
+
+The **new direction ledger** records: the proposed difference from existing
+work, why that difference is not already settled, its physical importance, the
+required evidence, the first falsifier and the next test.
+
+A source result cannot enter the new direction ledger until the existing
+understanding ledger states what that source already achieved. This is what
+stops a known result from being re-presented as novelty.
+
+## 8. Source Status Before Evidence
+
+Every literature-derived statement carries one status, and the status caps what
+the statement may be used for.
+
+| Status | Meaning | Allowed use |
+|---|---|---|
+| `search-candidate` | title, snippet or metadata only | candidate list only |
+| `abstract-only` | abstract inspected, no methods or results check | weak context only |
+| `source-read` | paper, PDF or full text inspected | evidence for a stated claim |
+| `equation-checked` | relevant equations and assumptions compared | math relation evidence |
+| `result-verified` | derivation, benchmark or numerical claim independently checked | strong project evidence |
+
+Novelty, feasibility, optimality and journal suitability are never inferred from
+metadata, citation count, search rank or shared terminology.
+
+## 8A. Acquire And Extract the Corpus
+
+Scout records a bounded search: query families, sources searched, cutoff,
+backward/forward citation closure, inclusion and exclusion rules, inaccessible
+sources, unsearched regions and stopping condition. It does not claim to find
+all papers globally.
+
+The acquisition manifest gives each selected paper a canonical identity and
+version, source role, relation hypothesis, stable landing page, full-text
+availability, priority and local state. Scout checks the reference library
+first, then presents the manifest once; record-only authority does not allow
+automatic downloads, so acquisition waits for a single confirmation covering the
+whole manifest. A library that answers "not held" means the paper is absent and
+should be acquired. A library that does not answer at all is unreachable — an
+infrastructure failure Scout reports rather than mistaking for a missing paper.
+
+Every paper used in synthesis must be locally available as full text and
+successfully extracted. Reading happens in two passes. Pass 1 runs a mechanical
+extractor over every incorporated paper without loading its full text, recording
+the achievement, system, dynamics, controls/resources, mechanism, observable,
+mathematical idea, result, assumptions, limitations and source anchors; a
+pass-1-only paper can support context and relation candidates but never an
+equation-level claim. Pass 2 spends the source-read budget on full text for the
+decisive same-objective, contradictory, no-go and equivalence-critical papers.
+Failed or unread papers keep corpus readiness pending until the user confirms
+exclusion or replacement; excluded papers cannot influence the result.
+
+## 8B. Build A Collective Mathematical Synthesis
+
+Individual paper cards remain evidence. The visible report groups sources by
+useful mathematical idea or physical mechanism, states the supporting extracted
+sources, assumptions and limitations, then translates the idea into project
+notation. The chain is:
 
 \[
-\mathcal A=(\text{consumer},\text{required result},\text{mapping},
-\text{benefit},\text{assumption},\text{evidence}).
+\text{extracted sources}\rightarrow\text{collective idea}\rightarrow
+\text{project notation}\rightarrow\text{candidate re-derivation}\rightarrow
+\text{smallest check}.
 \]
 
-Explain:
+Scout tags material statements as source-established, mapped, Scout-derived,
+independently verified, proposed inspiration or unknown. It organizes evidence
+and possible routes; the user retains the final expert judgment.
 
-- who or what could use the result;
-- which project result is required;
-- how the project maps to that use;
-- which measurable quantity could improve;
-- which assumption could break the connection; and
-- which source or project evidence supports the application.
+## 9. The Gap Predicate
 
-Reject applications supported only by shared vocabulary.
+Before any direction is recommended, all four questions must be answered:
 
-### Research Stop Rule
+1. What existing work already achieves the same or nearby physics objective?
+2. What does that work not achieve under the project's assumptions?
+3. Why does the remaining difference matter physically?
+4. What test would falsify the proposed gap?
 
-Stop the initial research map when it can explain:
+An answer counts only if it names an inspected artifact. Questions 1 and 2
+require at least one source at `source-read` or stronger. "Nothing found" is not
+an answer to question 1. If any answer is missing, the direction is downgraded
+to a candidate, or reproduction and benchmarking are recommended instead.
 
-- what the project has established;
-- which capability it may produce;
-- why that capability may matter;
-- which approaches, bounds and applications are most instructive;
-- which uncertainty matters most; and
-- which investigation would most improve the paper direction.
-
-Do not stop merely because several papers were found. Do not continue after the
-decision is already clear.
-
-## 6. Apply an Evidence Gate to Recommendations
-
-Never recommend a direction using wording alone. Before endorsement, provide
-project-specific evidence that its mechanism is possible, useful or at least
-technically plausible.
+## 10. Evidence Gate
 
 Represent a direction as
 
@@ -338,120 +490,76 @@ Represent a direction as
 \mathcal D=(C,M,A,E,T,F,U,P),
 \]
 
-where:
-
-- \(C\): precise candidate claim;
-- \(M\): mathematical or physical model;
-- \(A\): assumptions;
-- \(E\): current supporting evidence;
-- \(T\): project-specific test or derivation;
-- \(F\): falsification condition;
-- \(U\): scientific use or importance; and
-- \(P\): possible paper contribution.
-
-### Evidence Levels
+with claim \(C\), model \(M\), assumptions \(A\), evidence \(E\), next test
+\(T\), falsifier \(F\), use \(U\) and possible paper contribution \(P\).
 
 | Level | Meaning | Allowed treatment |
 |---|---|---|
 | E0 | verbal analogy only | do not recommend |
-| E1 | formal claim and falsifiable test, but untested | present as an open candidate |
-| E2 | project-specific derivation, bound, numerical check or mapped theorem | recommend provisionally |
-| E3 | several consistent evidence types plus relevant literature | strong research direction |
-| E4 | independently verified and physically or experimentally credible | candidate central paper result |
+| E1 | formal claim and falsifiable test, but untested | open candidate |
+| E2 | derivation, bound, mapped theorem or verified numerical check | recommend provisionally |
+| E3 | several consistent evidence types plus relevant literature | strong direction |
+| E4 | independently verified and physically or experimentally credible | candidate central result |
 
-For a mathematical or theoretical direction, recommendation normally requires
-at least E2.
+Theoretical recommendations normally require E2. A missing source, inaccessible
+PDF, unchecked derivation or unmatched physical assumption lowers the claim
+state; it never licenses a stronger recommendation.
 
-### Mathematical Support
+The proof-of-plausibility must match the claim. A mathematical claim needs a
+derivation, mapped theorem, bound, symmetry argument, constructive example or
+counterexample. A numerical claim needs an objective and admissible set, a
+baseline, an error metric, a convergence test and a reproducible pass/fail
+condition. A physical claim needs a realizable interaction and parameter regime,
+control limits, bandwidth, loss and decoherence, overhead and a measurable
+benefit. Mathematical possibility, numerical reachability and physical
+realizability stay separate claim states.
 
-When recommending a mathematical direction, provide at least one relevant
-proof-of-plausibility:
-
-- a short derivation;
-- a symmetry or conservation-law argument;
-- a reachable-set or controllability calculation;
-- an analytical bound;
-- a constructive example;
-- a counterexample that removes a naive alternative; or
-- a published theorem with assumptions mapped explicitly to the project.
-
-A complete proof is not required during orientation, but unsupported confidence
-is not allowed.
-
-### Numerical Support
-
-A numerical recommendation requires, as relevant:
-
-- a well-posed objective and constraints;
-- a meaningful baseline;
-- discretization or truncation convergence;
-- multiple initializations for non-convex optimization;
-- residuals or error metrics;
-- comparison with analytical bounds; and
-- reproducible success and failure criteria.
-
-### Physical Support
-
-A physical recommendation requires, as relevant:
-
-- a realistic parameter regime;
-- an available control or interaction;
-- amplitude, slew-rate and bandwidth constraints;
-- decoherence, loss and preparation requirements;
-- reset or resource overhead; and
-- a measurable physical benefit.
-
-If an appropriate supporting check cannot yet be performed, keep the idea at
-E1, state its first falsification test and do not recommend it as the main
-direction.
-
-## 7. Shape a Strong Paper Opportunity
-
-Assess publication potential without promising a venue. A promising paper
-direction should contain
+Applications use
 
 \[
-\mathcal P=(Q,C,N,E,G,A,F),
+\mathcal A=(\text{consumer},\text{required result},\text{mapping},
+\text{benefit},\text{assumption},\text{evidence}).
 \]
 
-where:
+Shared terminology alone is E0.
 
-- \(Q\): precise research question;
-- \(C\): central claim;
-- \(N\): novelty hypothesis relative to inspected research;
-- \(E\): required evidence package;
-- \(G\): generality beyond one example;
-- \(A\): scientific or practical importance; and
-- \(F\): result that would falsify or weaken the claim.
+## 11. Journal Threshold Ladder
 
-Use the following contribution ladder:
+Used only after a real gap predicate exists. Journal ambition never creates a
+gap, and the threshold is a working target, not a prediction of acceptance.
 
-| Level | Contribution |
-|---|---|
-| 1 | solution for one parameter set |
-| 2 | verified method across a parameter family |
-| 3 | mathematical mechanism or bound explaining the result |
-| 4 | transferable principle connecting several systems |
-| 5 | broadly important capability with realistic application |
+| Level | Working target | Required evidence |
+|---|---|---|
+| J0 | not paper-ready | no verified physics contribution or no clear gap |
+| J1 | specialist Physical Review journal for the subfield (PRA, PRB, PRD, PRE, PRApplied) | high-quality, specific physics contribution with proper context |
+| J2 | PRResearch style | significant physics-connected development beyond a narrow technical note |
+| J3 | PRL style | concise result with impact, innovation, broad interest, and a claim statable in one sentence a non-specialist physicist can evaluate |
+| J4 | PRX style | breakthrough, paradigm shift, major cross-field connection, or long-term field-level impact |
 
-Strong publication positioning should come from soundness, novelty, generality,
-importance and evidence—not from naming a high-impact journal.
+Start at J1 when a real but narrow gap exists, and pick the J1 journal from the
+subfield rather than from habit. Move up only after a new result survives the
+next decisive test and strengthens the physical importance. A
+`same-physics-same-math` relation forces J0 regardless of result quality.
 
-## 8. Recommend Directions Without Filler
+Each threshold decision records the current target, why it is realistic, why the
+next one is not yet justified, the evidence needed to level up, and the evidence
+that would force a downgrade.
 
-Return:
+## 12. Optional Math-Method Lens
 
-- one strongest supported direction;
-- zero to two credible alternatives; and
-- no additional ideas merely to reach a number.
+Available only on explicit request — mathematical tricks, control techniques,
+derivation intuition or method comparison — and only after the physics objective
+and existing-work verdict are locked.
 
-For each direction, state its formal claim, assumptions, current evidence
-level, proof-of-plausibility, falsification condition, application and paper
-value.
+The lens explains methods. It does not decide novelty, journal level, physical
+feasibility or the existence of a gap. It never presents a familiar method
+family as a new research direction, never treats mathematical elegance as
+physical importance, and never claims unrestricted optimality from a restricted
+calculation or physical realizability from mathematical reachability.
 
-## 9. Use `#> scout-again` for Iterative Deepening
+## 13. Deepening With `#> scout-again`
 
-The continuation command must revise the existing state rather than repeat the
+The continuation command revises the existing state rather than repeating the
 initial scan:
 
 \[
@@ -461,66 +569,47 @@ S_{k+1}=\operatorname{revise}(S_k,\Delta_k),
 where \(S_k\) is the active project state and \(\Delta_k\) is a new answer,
 idea, derivation, result, constraint or source.
 
-Classify each delta before searching:
-
 | Delta | Required action |
 |---|---|
 | new user idea | convert it into a testable claim |
-| new derivation | verify its assumptions and steps |
-| new numerical result | check objective, baseline and convergence |
-| new physical constraint | reassess feasibility and applications |
-| new source | map its problem, method, assumptions and result |
+| new derivation | verify its assumptions, steps, limits and counterexamples |
+| new numerical result | check objective, baseline, residuals and convergence |
+| new physical constraint | reassess feasibility and application mappings |
+| new source | map its problem, method, assumptions, result and difference |
 | corrected assumption | reopen every dependent conclusion |
-| negative result | determine whether it rejects or redirects the claim |
-
-`#> scout-again` should then:
-
-- read the active state and new information;
-- reopen only affected claims and applications;
-- translate user ideas into formal hypotheses;
-- inspect the most relevant primary sources more deeply;
-- search for support, counterevidence and no-go results;
-- perform the relevant mathematical, numerical or physical check;
-- reassess novelty, importance and paper potential;
-- update the interaction record; and
-- ask another bounded question cycle only if a material decision remains.
+| negative result | determine whether it rejects, bounds or redirects the claim |
 
 ```mermaid
 flowchart TD
-    A["New idea, result or source"] --> B["Load active project state"]
-    B --> C["Classify the information delta"]
-    C --> D["Identify affected claims"]
-    D --> E["Deep research and counterevidence search"]
-    E --> F["Proof-of-plausibility check"]
-    F --> G["Update claim and application map"]
-    G --> H["Revise strongest paper direction"]
-    H --> I{"User decision required?"}
-    I -- "Yes" --> J["Record one to three questions"]
-    I -- "No" --> K["Return revised supervisor brief"]
+    A["New idea, result or source"] --> B["Load active state"]
+    B --> C["Classify the delta"]
+    C --> D["Reopen affected claims and relation labels"]
+    D --> E["Targeted search for support and counterevidence"]
+    E --> F["Re-apply anti-hallucination and evidence gates"]
+    F --> G["Update ledgers and gap verdict"]
+    G --> H["Result review: stay, stop, reproduce, adapt, level up"]
+    H --> I["Revised beginner synthesis"]
 ```
 
-Stop the deeper pass when it can state which idea survived, which failed or
-remains speculative, what evidence changed, how the application map changed,
-whether the paper direction became stronger and which investigation would most
-increase confidence next.
+The deeper pass stops when it can state which idea survived, which failed or
+remains speculative, what evidence changed, whether the delta moved a claim
+between the two ledgers, whether the paper threshold strengthened, and which
+next test has the highest information value.
 
-## 10. Compact Shared Output
+## 14. Compact Beginner-Facing Output
 
-The active assessment should contain six adaptive sections:
+The shared workflow first produces a compact structured packet for the active
+platform agent, which then renders a beginner-facing synthesis. It starts with
+the current problem, what the extracted literature collectively suggests, the
+useful mathematical ideas, their translation into project notation, candidate
+reformulations, evidence boundaries, the smallest next check and the user
+decision. It is a bounded orientation, not an authoritative expert verdict.
 
-1. project reconstruction;
-2. interaction-derived understanding;
-3. claim and evidence ledger;
-4. current research, applications and importance;
-5. supported paper directions; and
-6. next decisive investigation.
+The main report does not show one card per paper. Paper-level evidence and long
+derivations are expanded only when the user requests them.
 
-The shared workflow should first produce a compact structured packet for the
-active platform agent. Codex or Claude then converts it into a clean,
-supervisor-style response for the user.
-
-The single `research-orientation.md` is the only initial persistent project
-artifact. Do not copy full papers, source files or search output into it.
+The single `research-orientation.md` is the only persistent project artifact. Do
+not copy full papers, source files or search output into it.
 
 ## Initial Restrictions
 
@@ -530,6 +619,7 @@ Do not initially produce:
 - a large unexplained bibliography;
 - definitive novelty or research-gap claims;
 - recommendations supported only by wording;
+- a gap inferred from an empty or abstract-only search;
 - many weakly differentiated suggestions;
 - a complete mathematical solution;
 - an unnecessary simulation campaign;
@@ -551,12 +641,22 @@ research-context-scout/
 ├── agents/
 │   └── openai.yaml            # Codex UI metadata
 ├── shared/
-│   ├── SKILL.md              # compact shared mode router
+│   ├── SKILL.md              # gate order and shared mode router
 │   ├── phases/
 │   │   ├── initial-scout.md
-│   │   └── deepen-scout.md
+│   │   ├── deepen-scout.md
+│   │   └── math-method-lens.md
 │   ├── rules/
-│   │   └── evidence-gate.md
+│   │   ├── record-and-brief.md   # record protocol + packet + brief, one home
+│   │   ├── alignment-checkpoints.md # user-alignment states and packets
+│   │   ├── literature-corpus.md  # search, acquisition and extraction
+│   │   ├── collective-synthesis.md # normalization, translation and report
+│   │   ├── mode-fallback.md      # only when no mode= was injected
+│   │   ├── source-status.md      # G3-G4
+│   │   ├── anti-hallucination.md # G6-G7
+│   │   ├── relation-taxonomy.md  # G5
+│   │   ├── evidence-gate.md      # G7-G9
+│   │   └── journal-thresholds.md # G8
 │   └── templates/
 │       └── research-orientation.md
 ├── codex/
@@ -566,28 +666,32 @@ research-context-scout/
     └── CLAUDE.md              # Claude-owned integration
 ```
 
-This page links to the real files above and to the main Obsidian Skills AI hub.
+Rules are sized to gates and loaded only when their gate opens. A run that
+settles before a gap never loads the G7–G9 rules. The math-method lens is
+loaded beside the selected phase, never instead of one.
+
+The record protocol, the packet keys and the brief contract live in exactly one
+file, `shared/rules/record-and-brief.md`. Neither wrapper restates them, and a
+test fails if one starts to — that duplication is what previously let the Claude
+wrapper drift out of sync with the shared workflow.
+
 The shared core owns research behavior. Codex and Claude wrappers contain only
-platform-specific entry and lifecycle behavior. Claude creates or certifies its
-own integration unless the user explicitly requests otherwise.
+platform-specific entry and lifecycle behavior: tool names and host lifecycle,
+nothing else. Claude creates or certifies its own integration unless the user
+explicitly requests otherwise.
 
 ```mermaid
 flowchart TD
-    C["Codex wrapper"] --> R["Shared mode router"]
+    C["Codex wrapper"] --> R["Shared gate router"]
     L["Claude-owned wrapper"] --> R
     R --> S{"#> scout or #> scout-again?"}
     S -- "#> scout" --> I["Initial-scout phase"]
     S -- "#> scout-again" --> D["Deepen-scout phase"]
     I --> P["research-orientation.md"]
     D --> P
-    P --> E["Shared evidence gate"]
+    P --> E["Gate rules G3 to G8"]
     E --> O["Structured result packet"]
-    O --> C
-    O --> L
 ```
-
-Version one should contain no database and no helper script unless repeated
-forward testing proves that a deterministic operation is necessary.
 
 ## Build and Validation Gate
 
@@ -604,9 +708,20 @@ The implementation must continue to verify:
 - alias routing or its approved fallback;
 - source and write boundaries;
 - Markdown interaction-state preservation;
-- evidence-gate behavior;
+- gap-predicate behavior, including empty and abstract-only searches;
+- mandatory context, search and corpus-readiness checkpoints;
+- recent-review/primary/seminal source selection and bounded search closure;
+- acquisition manifests, full-text readiness and extraction failures;
+- collective rather than paper-by-paper visible synthesis;
+- terminology normalization and explicit equation/assumption mappings;
+- project-notation translation and provenance labels;
+- concise beginner-facing output without an authoritative-expert posture;
+- a single source-status vocabulary across every file;
+- relation labels present in both the taxonomy and the record template;
+- the platform packet and brief contract on Codex and Claude alike;
+- evidence-gate and journal-threshold behavior;
 - initial versus deepening depth;
-- compact token loading;
+- compact token loading, per file and across the whole initial path;
 - shared/Codex/Claude ownership;
 - Obsidian and human-guide links;
 - failure behavior for missing, ambiguous or cross-project paths; and

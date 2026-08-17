@@ -1,7 +1,7 @@
 interface:
   display_name: "Research Context Scout"
-  short_description: "Evidence-led early research orientation"
-  default_prompt: "Use $research-context-scout to assess this new project and identify its strongest evidence-backed research direction."
+  short_description: "Physics-objective scout with evidence gates"
+  default_prompt: "Use $research-context-scout to assess this project from its physics objective, compare existing achievements, separate known results from new directions, and choose the next decisive test."
 
 policy:
   allow_implicit_invocation: false

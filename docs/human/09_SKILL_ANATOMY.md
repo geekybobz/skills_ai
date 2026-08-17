@@ -7,130 +7,96 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 # Skill Anatomy
 
 Back: [repository atlas](08_REPOSITORY_ATLAS.md). Return to the
-[human guide](../../README.md). For the exhaustive current result, open the
+[human guide](../../README.md). Generated facts:
 [live skill catalog](_LIVE_SKILL_CATALOG.md).
 
-A skill may be one file or a package of several files. The router always returns
-one canonical entry path; it does not load every possible skill or package.
-
-Before either form exists, an idea may live as only
-`skill-plans/<name>/plan.md`. That directory is not a skill package. The
-presence of `SKILL.md` is the clear promotion boundary that activates the full
-registry, tests, graph, documentation, and validation protocol.
-
-## Single-file skill
-
-Most files under `design-with-claude/` are independent single-file skills.
-
-```mermaid
-flowchart LR
-    Q["Request"] --> R["Registry record"]
-    R --> S["One skill Markdown file"]
-    S --> O["Task result"]
-
-    classDef route fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef result fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class Q,R,S route
-    class O result
-```
-
-| Part | Role |
-|---|---|
-| Family registry row | Says what the skill does, when it triggers, what it is not for, and where it lives |
-| Activation state | Allows automatic use, explicit-only use, or disables routing |
-| Skill Markdown file | Contains the actual task instructions |
-| Prompt fixtures and tests | Check positive, negative, ambiguous, negated, and injection-resistant routing |
-
-The registry describes the skill but does not copy its instruction body.
-A `manual` task skill is never automatically selected: the request must name
-its exact id through `#> skill <id>`, the equivalent exact “use the `<id>` skill”
-form, or a registry-declared leading directive alias. Output format and receipt
-controls change presentation without consuming this one task-skill slot.
-
-In the Obsidian graph, Activation is a teal switchboard, the family registry is
-green, and the actual skill Markdown is violet. This makes those three parts of
-the same route visually distinct.
-
-## Multi-file packaged skill
-
-The `theory-reference/` submodule and repository-owned Research Context Scout
-are packages with reusable layers.
+## Public package and internal capability
 
 ```mermaid
 flowchart TD
-    W["Platform wrapper"] --> E["Shared skill entry"]
-    E --> P["One selected phase"]
-    E --> R["Shared rules"]
-    P --> T["Templates and support scripts"]
-    R --> T
-    T --> O["Requested theory result"]
-
-    classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef source fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class W,E entry
-    class P,R,T,O source
+    Q["Request"] --> S["Skills Orchestrator"]
+    S --> P["One public task package"]
+    P --> C["One internal capability"]
+    C --> F["Focused instruction file or phase"]
+    F --> O["Verified phase result"]
+    I["Interaction package"] --> O
 ```
 
-| Package file type | Meaning |
+The package is the public skill and inventory unit. A capability is an internal
+route used to select focused instructions. Files, phases, modes, components,
+family rows, and route leaves never increase the public skill count.
+
+The Skills Orchestrator sits above this anatomy. It routes and manages skills
+but is not a package, capability, or inventory row.
+
+## Package forms
+
+| public package | anatomy |
 |---|---|
-| Wrapper | Connects a platform to the shared skill without duplicating its logic |
-| Shared entry | Defines the common workflow and chooses the necessary phase |
-| Phase | Instructions for one operation such as planning, evaluation, or chapter building |
-| Rule | Constraint reused across phases, such as notation or writing rules |
-| Template | Reusable output skeleton |
-| Script | Deterministic installation, synchronization, figure, or validation support |
-| README | Human orientation rather than runtime authority |
+| `interaction-protocol` | canonical JSON contract, human hub, general/math modes; no task slot |
+| `design-with-claude` | one composite package whose capability instructions are individual Markdown files |
+| `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
+| `research-context-scout` | repository package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
+| `optimizer` | repository package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
+| `quantum-job-collector` | externally owned pointer whose package state is currently off |
 
-The main repository records the submodule commit. Changes inside the submodule
-belong to its own Git history and require an explicit boundary crossing.
+## Capability record
 
-Research Context Scout instead lives in the top-level
-`research-context-scout/` package. Its long `README.md` preserves the approved
-human plan, while its root entry loads one
-shared phase and one thin host wrapper. The manual route can be selected by the
-validated `#> skill research-context-scout initial|deepen ...` form or its
-exact `#> scout` and `#> scout-again` task directives. Optional presentation
-controls may precede them. All forms carry `initial` or `deepen` without
-creating duplicate skill routes.
+An internal task capability has a family, package id, activation state, purpose,
+triggers, exclusions, canonical path, and tests. The registry describes these
+facts without copying the instruction body. A selected path is loaded only
+after package state and path validation.
 
-## Shared protocol package
+For example, `dark-mode-specialist` is not a public skill. It is an internal
+capability of `design-with-claude`. Exact selection is:
 
-`interaction-protocol/` shapes the response but is not a selected task skill:
+```text
+#> skill design-with-claude dark-mode-specialist
+```
 
-- `protocol.json` is the canonical machine-readable contract.
-- `README.md` is the visible human and Obsidian entry.
-- Runtime code applies the selected general or mathematical response context.
-- It does not consume the one task-skill slot.
-
-Its `README.md` is therefore a teal protocol hub rather than a violet skill.
-
-## External skill pointer
-
-An external symlink is different from a submodule. Skills AI may record its
-identifier, activation state, and pointer, but the external repository owns the
-content. The generated catalog deliberately does not traverse that target.
-
-## Follow one real request
+## Multi-phase packages
 
 ```mermaid
 flowchart TD
-    Q["User request"] --> M["Manifest metadata"]
-    M --> D{"One clear route?"}
-    D -- "No" --> N["NORMAL reasoning"]
-    D -- "Yes" --> E["Canonical skill entry"]
-    E --> P["Only required package files"]
-    P --> O["Result"]
-    N --> O
-
-    classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
-    classDef action fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef result fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class D decision
-    class Q,M,E,P action
-    class N,O result
+    E["Package entry"] --> D["Discover required phase"]
+    D --> P["Load one phase capability"]
+    P --> R["Load required rules or templates"]
+    R --> V["Execute and verify"]
+    V --> N{"Another phase needed?"}
+    N -- "Yes" --> D
+    N -- "No" --> O["Finish"]
 ```
 
-The [live skill catalog](_LIVE_SKILL_CATALOG.md) is the final factual layer. It
-shows current states, triggers, exclusions, paths, approximate token sizes, and
-the file roles inside declared packages without loading those bodies into an
-ordinary task.
+The orchestrator contract may coordinate several capabilities, but the host
+verifies and reroutes between phases instead of preloading them. The router
+validates and transports a bounded checkpoint; it does not enforce phase
+transitions. A checkpoint may record stable approved progress, never prompts or
+permission.
+
+Research Context Scout is a concrete example: its initial phase opens only the
+rules needed by the current gate, records user alignment before broad search,
+and blocks synthesis until every incorporated paper is locally available and
+extracted. The gate order and rule-loading table live in a separate `gates.md`
+that a first cycle never has to open, and a machine-readable `load-graph.json`
+records which file belongs to which gate for tooling and tests rather than for
+the model. Its collective report translates source-supported ideas into project
+notation; individual paper cards remain evidence rather than separate public
+capabilities or visible report sections.
+
+## Promotion boundary
+
+An idea containing only `skill-plans/<name>/plan.md` is not a skill package.
+Creating a new package normally introduces a governed `SKILL.md` and package
+record. Existing composite and protocol packages may use another explicitly
+declared canonical entry, such as a registry hub or protocol README. In every
+case, exactly one Activation row defines the public package.
+
+Nested platform wrappers, shared entries, phases, and capability files remain
+package support. Their presence never creates additional public skills.
+
+## Generated catalog rule
+
+The live catalog must contain one separate orchestrator record and exactly one
+public row per Activation skill package. Its separate Internal Capabilities
+section may list routes, triggers, paths, and token estimates for technical
+inspection, but those rows are not skills.

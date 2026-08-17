@@ -1,12 +1,16 @@
 ---
 name: research-context-scout
-description: Orient a new or evolving research project through a recorded supervisor-style dialogue, selective project reconstruction, current related-work and application discovery, evidence-graded research directions, and paper-potential assessment. Use when explicitly invoked with #> scout, #> scout-again, #> skill research-context-scout, or an exact request to use the research-context-scout skill. The initial mode asks consequential questions before deep research; the deepen mode revises an existing research-orientation.md after new ideas, derivations, results, constraints, or sources.
+description: Orient a new or evolving research project through a recorded physics-objective-first workflow with user alignment checkpoints, bounded literature discovery and acquisition, mandatory extraction of every paper used, semantic relation mapping, collective mathematical synthesis, project-notation translation, evidence gates, and a concise beginner-facing report. Use when explicitly invoked with #> scout, #> scout-again, #> skill research-context-scout, or an exact request to use the research-context-scout skill. The initial mode aligns context before broad research; the deepen mode revises an existing research-orientation.md after new ideas, derivations, results, constraints, sources, or user corrections.
 ---
 
 # Research Context Scout
 
-Route into the compact shared workflow. Do not read `README.md` during task
-execution; it is explanatory material for humans.
+Route into the compact shared workflow. The skill is fail-closed: if an
+inspected artifact or source does not support a claim, keep the claim as
+`unknown`, `candidate`, or `hypothesis`; do not promote it into a research
+direction. Scout organizes and translates research evidence; it does not
+pretend to replace the user's subject-matter judgment. Do not read `README.md`
+during task execution; it is explanatory material for humans.
 
 ## Load the minimum path
 
@@ -15,26 +19,21 @@ execution; it is explanatory material for humans.
    - Codex: `codex/SKILL.md`;
    - Claude: `claude/CLAUDE.md`.
 3. Let the shared entry select one phase from the record state and load only
-   rules it requires. Do not preload both phases. Load the other phase only for
-   a late state-recovery explicitly declared by the selected phase.
+   the phase and rules it requires. Do not preload every gate. Load another
+   phase only for a state recovery or explicit user request declared by the
+   selected phase.
 
 ## Resolve the mode
 
-Read the injected `mode=` line when present; it is
-`context.skill_invocation.mode` at the API layer. Alias and canonical directive
-forms inject a validated `initial` or `deepen` mode. Without injected context:
-
-- `#> scout ...` or `#> skill research-context-scout initial ...` means `initial`;
-- `#> scout-again ...` or `#> skill research-context-scout deepen ...` means
-  `deepen`;
-- an existing `research-orientation.md` plus explicitly supplied new
-  information means `deepen`; and
-- no existing record means `initial`.
+Read the injected `mode=` line; it is `context.skill_invocation.mode` at the API
+layer, and alias and canonical directive forms inject a validated `initial` or
+`deepen` value. Only when no injected line is present, read
+`shared/rules/mode-fallback.md`.
 
 Invocation mode expresses user intent, but record completeness selects the
-next phase. If the intake answers exist while the Research and application map
-is still empty, run initial Cycle B even after `#> scout-again`; deepen only
-after that map exists.
+next phase. If the intake answers exist while the physics objective,
+existing-understanding ledger, relation map or gap verdict is still empty, run
+initial Cycle B even after `#> scout-again`; deepen only after those exist.
 
 If the target path is missing or ambiguous, ask for the path and stop. Do not
 search unrelated directories to guess it.

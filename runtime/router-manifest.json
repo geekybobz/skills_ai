@@ -1,6 +1,27 @@
 {
   "command_aliases": [
     {
+      "boundary": "first task directive; requires a user-pointed derivation/problem source",
+      "command": "#> build-system",
+      "family": "optimizer-workflow",
+      "mode": "build-system",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "first task directive; requires an existing system/project and stated goal",
+      "command": "#> optimize",
+      "family": "optimizer-workflow",
+      "mode": "optimize",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "first task directive; presentation controls may precede; an operation may follow",
+      "command": "#> optimizer",
+      "family": "optimizer-workflow",
+      "mode": "route",
+      "skill_id": "optimizer"
+    },
+    {
       "boundary": "first task directive; presentation controls may precede",
       "command": "#> scout",
       "family": "research",
@@ -70,37 +91,95 @@
   "families": {
     "build-ops": {
       "boundary": "setup, deploy, auth code, debugging",
+      "package": "design-with-claude",
       "path": "registry/build-ops.md",
       "state": "active"
     },
     "career": {
       "boundary": "career radar and job-search workflows",
+      "package": "quantum-job-collector",
       "path": "registry/career.md",
       "state": "off"
     },
     "design": {
       "boundary": "visual, layout, color, typography, print",
+      "package": "design-with-claude",
       "path": "registry/design.md",
       "state": "active"
     },
     "interaction": {
       "boundary": "compact general responses and equation-led mathematical reasoning",
+      "package": "interaction-protocol",
       "path": "registry/interaction.md",
       "state": "active"
     },
+    "optimizer-workflow": {
+      "boundary": "exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates",
+      "package": "optimizer",
+      "path": "registry/optimizer.md",
+      "state": "manual"
+    },
     "research": {
       "boundary": "early project orientation, evidence, applications and paper direction",
+      "package": "research-context-scout",
       "path": "registry/research.md",
       "state": "active"
     },
     "theory": {
       "boundary": "LaTeX theory reference and math notes",
+      "package": "theory-reference",
       "path": "registry/theory.md",
       "state": "active"
     },
     "ui-patterns": {
       "boundary": "forms, navigation, search, product UX",
+      "package": "design-with-claude",
       "path": "registry/ui-patterns.md",
+      "state": "active"
+    }
+  },
+  "orchestrator": {
+    "boundary": "routing, management, documentation coordination, and project context",
+    "id": "skills-orchestrator",
+    "mode": "always-active",
+    "path": "runtime/skills-orchestrator/SKILL.md",
+    "state": "active"
+  },
+  "packages": {
+    "design-with-claude": {
+      "boundary": "design, UI-pattern, and build-operation capabilities",
+      "path": "registry/design.md",
+      "role": "task",
+      "state": "active"
+    },
+    "interaction-protocol": {
+      "boundary": "response context composed without consuming the task-package slot",
+      "path": "interaction-protocol/README.md",
+      "role": "interaction",
+      "state": "active"
+    },
+    "optimizer": {
+      "boundary": "exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates",
+      "path": "optimizer/SKILL.md",
+      "role": "task",
+      "state": "manual"
+    },
+    "quantum-job-collector": {
+      "boundary": "exhaustive Quantum Career Radar job collection",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "role": "task",
+      "state": "off"
+    },
+    "research-context-scout": {
+      "boundary": "exact package request, `#> scout`, or `#> scout-again` only",
+      "path": "research-context-scout/SKILL.md",
+      "role": "task",
+      "state": "manual"
+    },
+    "theory-reference": {
+      "boundary": "theory notes, LaTeX, derivation planning, and reference work",
+      "path": "theory-reference/SKILL.md",
+      "role": "task",
       "state": "active"
     }
   },
@@ -185,6 +264,7 @@
       ],
       "id": "auth-implementation",
       "not_for": "login *UX* \u2192 `auth-security-ux-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/auth-implementation.md",
       "state": "active",
       "triggers": [
@@ -213,6 +293,7 @@
       ],
       "id": "code-explainer",
       "not_for": "writing new code",
+      "package": "design-with-claude",
       "path": "design-with-claude/code-explainer.md",
       "state": "active",
       "triggers": [
@@ -239,6 +320,7 @@
       ],
       "id": "database-setup",
       "not_for": "schema design at scale",
+      "package": "design-with-claude",
       "path": "design-with-claude/database-setup.md",
       "state": "active",
       "triggers": [
@@ -267,6 +349,7 @@
       ],
       "id": "debug-helper",
       "not_for": "designed error *states* \u2192 `error-handling-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/debug-helper.md",
       "state": "active",
       "triggers": [
@@ -294,6 +377,7 @@
       ],
       "id": "deploy-to-vercel",
       "not_for": "other hosts",
+      "package": "design-with-claude",
       "path": "design-with-claude/deploy-to-vercel.md",
       "state": "active",
       "triggers": [
@@ -322,6 +406,7 @@
       ],
       "id": "environment-setup",
       "not_for": "production secret management",
+      "package": "design-with-claude",
       "path": "design-with-claude/environment-setup.md",
       "state": "active",
       "triggers": [
@@ -350,6 +435,7 @@
       ],
       "id": "setup-guide",
       "not_for": "an existing configured project",
+      "package": "design-with-claude",
       "path": "design-with-claude/setup-guide.md",
       "state": "active",
       "triggers": [
@@ -372,6 +458,7 @@
       ],
       "id": "quantum-job-collector",
       "not_for": "generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled",
+      "package": "quantum-job-collector",
       "path": "external-skills/quantum-job-collector/SKILL.md",
       "state": "off",
       "triggers": [
@@ -405,6 +492,7 @@
       ],
       "id": "brand-designer",
       "not_for": "a generic palette \u2192 `color-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/brand-designer.md",
       "state": "active",
       "triggers": [
@@ -436,6 +524,7 @@
       ],
       "id": "color-specialist",
       "not_for": "dark theme only \u2192 `dark-mode-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/color-specialist.md",
       "state": "active",
       "triggers": [
@@ -468,6 +557,7 @@
       ],
       "id": "content-strategist",
       "not_for": "error *flows* \u2192 `error-handling-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/content-strategist.md",
       "state": "active",
       "triggers": [
@@ -500,6 +590,7 @@
       ],
       "id": "dark-mode-specialist",
       "not_for": "building a full light palette \u2192 `color-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/dark-mode-specialist.md",
       "state": "active",
       "triggers": [
@@ -531,6 +622,7 @@
       ],
       "id": "dashboard-designer",
       "not_for": "one chart \u2192 `data-visualization-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/dashboard-designer.md",
       "state": "active",
       "triggers": [
@@ -563,6 +655,7 @@
       ],
       "id": "data-visualization-specialist",
       "not_for": "the grid they sit in \u2192 `dashboard-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/data-visualization-specialist.md",
       "state": "active",
       "triggers": [
@@ -596,6 +689,7 @@
       ],
       "id": "design-brief",
       "not_for": "an ask that is already specific",
+      "package": "design-with-claude",
       "path": "design-with-claude/design-brief.md",
       "state": "active",
       "triggers": [
@@ -627,6 +721,7 @@
       ],
       "id": "design-system-architect",
       "not_for": "one-off page \u2192 `poster-lead`",
+      "package": "design-with-claude",
       "path": "design-with-claude/design-system-architect.md",
       "state": "active",
       "triggers": [
@@ -658,6 +753,7 @@
       ],
       "id": "information-architect",
       "not_for": "nav *components* \u2192 `navigation-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/information-architect.md",
       "state": "active",
       "triggers": [
@@ -690,6 +786,7 @@
       ],
       "id": "motion-designer",
       "not_for": "perceived speed \u2192 `performance-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/motion-designer.md",
       "state": "active",
       "triggers": [
@@ -721,6 +818,7 @@
       ],
       "id": "poster-lead",
       "not_for": "a single narrow question",
+      "package": "design-with-claude",
       "path": "design-with-claude/poster-lead.md",
       "state": "active",
       "triggers": [
@@ -753,6 +851,7 @@
       ],
       "id": "print-export-designer",
       "not_for": "screen-only work",
+      "package": "design-with-claude",
       "path": "design-with-claude/print-export-designer.md",
       "state": "active",
       "triggers": [
@@ -785,6 +884,7 @@
       ],
       "id": "responsive-design-specialist",
       "not_for": "touch targets, thumb zones \u2192 `mobile-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/responsive-design-specialist.md",
       "state": "active",
       "triggers": [
@@ -816,6 +916,7 @@
       ],
       "id": "spacing-layout-specialist",
       "not_for": "overall section order \u2192 `information-architect`",
+      "package": "design-with-claude",
       "path": "design-with-claude/spacing-layout-specialist.md",
       "state": "active",
       "triggers": [
@@ -848,6 +949,7 @@
       ],
       "id": "table-designer",
       "not_for": "static comparison layout \u2192 `dashboard-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/table-designer.md",
       "state": "active",
       "triggers": [
@@ -879,6 +981,7 @@
       ],
       "id": "typography-specialist",
       "not_for": "A0 poster sizing \u2192 `poster-lead`",
+      "package": "design-with-claude",
       "path": "design-with-claude/typography-specialist.md",
       "state": "active",
       "triggers": [
@@ -910,6 +1013,7 @@
       ],
       "id": "visual-hierarchy-specialist",
       "not_for": "the type scale itself \u2192 `typography-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/visual-hierarchy-specialist.md",
       "state": "active",
       "triggers": [
@@ -919,7 +1023,27 @@
       ]
     },
     {
-      "description": "reconstruct a new or evolving project, ask and record decisive user input, map current research and applications, test proposed directions and identify the strongest evidence-backed paper route",
+      "description": "independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence",
+      "family": "optimizer-workflow",
+      "family_state": "manual",
+      "family_triggers": [
+        "#> optimizer"
+      ],
+      "id": "optimizer",
+      "not_for": "automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run",
+      "package": "optimizer",
+      "path": "optimizer/SKILL.md",
+      "state": "manual",
+      "triggers": [
+        "exact `#> optimizer",
+        "#> build-system",
+        "#> optimize",
+        "#> skill optimizer route",
+        "or exact request to use the optimizer skill"
+      ]
+    },
+    {
+      "description": "align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test",
       "family": "research",
       "family_state": "active",
       "family_triggers": [
@@ -930,14 +1054,17 @@
         "applications and paper direction"
       ],
       "id": "research-context-scout",
-      "not_for": "exhaustive literature review, editing research artifacts, mature focused proof or implementation work without an orientation request",
+      "not_for": "claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request",
+      "package": "research-context-scout",
       "path": "research-context-scout/SKILL.md",
       "state": "manual",
       "triggers": [
         "research context scout",
         "initial research orientation",
         "supervisor assessment",
-        "map related research and applications"
+        "align research context",
+        "collect and synthesize papers",
+        "translate literature ideas into this project"
       ]
     },
     {
@@ -954,6 +1081,7 @@
       ],
       "id": "theory-reference",
       "not_for": "",
+      "package": "theory-reference",
       "path": "theory-reference/SKILL.md",
       "state": "active",
       "triggers": [
@@ -990,6 +1118,7 @@
       ],
       "id": "accessibility-specialist",
       "not_for": "colour contrast maths \u2192 `color-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/accessibility-specialist.md",
       "state": "active",
       "triggers": [
@@ -1025,6 +1154,7 @@
       ],
       "id": "auth-security-ux-specialist",
       "not_for": "writing the auth *code* \u2192 `auth-implementation`",
+      "package": "design-with-claude",
       "path": "design-with-claude/auth-security-ux-specialist.md",
       "state": "active",
       "triggers": [
@@ -1060,6 +1190,7 @@
       ],
       "id": "b2b-saas-specialist",
       "not_for": "dashboard *layout* \u2192 `dashboard-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/b2b-saas-specialist.md",
       "state": "active",
       "triggers": [
@@ -1095,6 +1226,7 @@
       ],
       "id": "checkout-specialist",
       "not_for": "browsing and discovery \u2192 `ecommerce-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/checkout-specialist.md",
       "state": "active",
       "triggers": [
@@ -1129,6 +1261,7 @@
       ],
       "id": "conversational-ui-designer",
       "not_for": "generic forms \u2192 `form-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/conversational-ui-designer.md",
       "state": "active",
       "triggers": [
@@ -1163,6 +1296,7 @@
       ],
       "id": "drag-drop-specialist",
       "not_for": "generic click interactions \u2192 `interaction-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/drag-drop-specialist.md",
       "state": "active",
       "triggers": [
@@ -1197,6 +1331,7 @@
       ],
       "id": "ecommerce-specialist",
       "not_for": "the checkout itself \u2192 `checkout-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/ecommerce-specialist.md",
       "state": "active",
       "triggers": [
@@ -1230,6 +1365,7 @@
       ],
       "id": "error-handling-specialist",
       "not_for": "debugging a real build error \u2192 [[registry/build-ops]]",
+      "package": "design-with-claude",
       "path": "design-with-claude/error-handling-specialist.md",
       "state": "active",
       "triggers": [
@@ -1264,6 +1400,7 @@
       ],
       "id": "form-designer",
       "not_for": "the copy inside it \u2192 `content-strategist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/form-designer.md",
       "state": "active",
       "triggers": [
@@ -1297,6 +1434,7 @@
       ],
       "id": "healthcare-ux-specialist",
       "not_for": "generic dashboards \u2192 `dashboard-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/healthcare-ux-specialist.md",
       "state": "active",
       "triggers": [
@@ -1331,6 +1469,7 @@
       ],
       "id": "i18n-designer",
       "not_for": "tone of voice \u2192 `content-strategist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/i18n-designer.md",
       "state": "active",
       "triggers": [
@@ -1365,6 +1504,7 @@
       ],
       "id": "interaction-designer",
       "not_for": "pure animation timing \u2192 `motion-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/interaction-designer.md",
       "state": "active",
       "triggers": [
@@ -1399,6 +1539,7 @@
       ],
       "id": "landing-page-specialist",
       "not_for": "in-app pages \u2192 `poster-lead`",
+      "package": "design-with-claude",
       "path": "design-with-claude/landing-page-specialist.md",
       "state": "active",
       "triggers": [
@@ -1434,6 +1575,7 @@
       ],
       "id": "mobile-specialist",
       "not_for": "CSS breakpoints \u2192 `responsive-design-specialist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/mobile-specialist.md",
       "state": "active",
       "triggers": [
@@ -1468,6 +1610,7 @@
       ],
       "id": "navigation-specialist",
       "not_for": "site taxonomy \u2192 `information-architect`",
+      "package": "design-with-claude",
       "path": "design-with-claude/navigation-specialist.md",
       "state": "active",
       "triggers": [
@@ -1502,6 +1645,7 @@
       ],
       "id": "onboarding-specialist",
       "not_for": "writing the copy \u2192 `content-strategist`",
+      "package": "design-with-claude",
       "path": "design-with-claude/onboarding-specialist.md",
       "state": "active",
       "triggers": [
@@ -1536,6 +1680,7 @@
       ],
       "id": "performance-specialist",
       "not_for": "real runtime performance work",
+      "package": "design-with-claude",
       "path": "design-with-claude/performance-specialist.md",
       "state": "active",
       "triggers": [
@@ -1570,6 +1715,7 @@
       ],
       "id": "search-specialist",
       "not_for": "table filtering \u2192 `table-designer`",
+      "package": "design-with-claude",
       "path": "design-with-claude/search-specialist.md",
       "state": "active",
       "triggers": [
@@ -1581,11 +1727,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "26dc3aeb8a7f347dcd60c8ca071bc84ff04de17d2e95245ed2f3a65de1acb280",
+  "source_hash": "bf0077fa7d5742bf8fc92f982f6f4c0d73b691e3caed3d2893d630415a217288",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "d8f3ad6305b210f1644fe7f107d435d13920ab27166ff14be7aced042806a4d0"
+      "sha256": "ff8bfa5417f73feea962dc8ff708a9a966fda3e8b94eeaf3881662af13bc1d66"
     },
     {
       "path": "interaction-protocol/protocol.json",
@@ -1593,43 +1739,51 @@
     },
     {
       "path": "registry/activation.md",
-      "sha256": "87638c83f3c87ca11b534a838227cea6ff1a5c1eb2eb40a748778d36d796dff4"
+      "sha256": "a1b32ac07a0bd21bfe2c4505fa2bc1e5642c74dd19f168fe4fb7fd0f94f902db"
     },
     {
       "path": "registry/build-ops.md",
-      "sha256": "ffd80da5caa11f2ce66d84b8fce6224f5ddc72e10a2f7aaaca25c6ede58024fe"
+      "sha256": "6bb05cb9bff3ba823815b2d068a302dc9e42c6a2ed45185810911b68e190c122"
     },
     {
       "path": "registry/career.md",
-      "sha256": "3ce9b46fcdddc2540e105a1694b3b799afd251ac9e156e6dc8603b8966d7255f"
+      "sha256": "826db080755956bd50b3dc41c23301bd6ec7cd98c6affc1fdec8c9cb9a569fed"
     },
     {
       "path": "registry/design.md",
-      "sha256": "f74d9bb54322acc4a6b5609f7b9b2268de0d1f602cdbb8ef5044f74f4196eff8"
+      "sha256": "c5b7eda98ba193028e450445c10c4127f6619bcf8a9b24883dca3dbf8ed7cb32"
     },
     {
       "path": "registry/interaction.md",
-      "sha256": "5d384ae161ee4201d166e0f6fc6f14795f1cafca917442c9dcee14df7ff229eb"
+      "sha256": "0cb407ff30ffbb650bcd14e83192efeada059d5cc8514b4cd2d434d0f9ea07cc"
+    },
+    {
+      "path": "registry/optimizer.md",
+      "sha256": "2412f35809f3b594308691e0dcd992564b9f85622da5414668ff91385f9d96e9"
     },
     {
       "path": "registry/research.md",
-      "sha256": "f64487f2eb507348ae119bc1c454dbc23c7911627f50aa9c0deacd5b5d9bedd2"
+      "sha256": "14ab35f6a3623ed053fc80ed8fe01adfb7ef06f333fd6016f8e59b4370cf809a"
     },
     {
       "path": "registry/theory.md",
-      "sha256": "fe8d704cc5bbc687f0b062b547ba18fdb5256ec0d896fd58a2031efe2b091d47"
+      "sha256": "473f7a9c7432536e58016acc9d7fde6ccdb73c8f4d1edbc6a4aef6560b5e579d"
     },
     {
       "path": "registry/ui-patterns.md",
-      "sha256": "3ec32095237ba4ee256a6eb0ed2e14774add26eff435de7a3d5b1ee20b6d4e9c"
+      "sha256": "722226a4295ed4086b354f0c1647319c51c914c8cf5af7bfe949b826098d37d4"
     }
   ],
   "stats": {
+    "active_packages": 3,
     "active_routes": 43,
-    "families": 7,
+    "families": 8,
+    "inactive_packages": 1,
     "inactive_routes": 1,
-    "manual_routes": 1,
-    "routes": 45
+    "manual_packages": 2,
+    "manual_routes": 2,
+    "packages": 6,
+    "routes": 46
   },
   "warnings": []
 }
