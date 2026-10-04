@@ -12,10 +12,10 @@ def main() -> int:
     try:
         expected = json.dumps(build_manifest(), indent=2, sort_keys=True) + "\n"
         if not DEFAULT_MANIFEST.exists():
-            print("error: runtime/router-manifest.json is missing")
+            print("error: runtime/manifest.json is missing")
             return 1
         if DEFAULT_MANIFEST.read_text(encoding="utf-8") != expected:
-            print("error: runtime/router-manifest.json is stale; run scripts/compile_registry.py")
+            print("error: runtime/manifest.json is stale; run scripts/compile_registry.py")
             return 1
         manifest = json.loads(expected)
         stats = manifest["stats"]

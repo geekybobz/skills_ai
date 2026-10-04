@@ -40,32 +40,33 @@ amendment. Keep the architecture rationale in
 [[docs/SHARED_DOCUMENTATION_MODEL]], regenerate all affected projections, and
 verify that ordinary routing still excludes human-facing material.
 
-Protocol version 7 additionally separates generated-guide freshness from
-hand-written coverage, admits only role-resolved untracked additions into the
-live repository view, and reserves ignored `.runtime/` state for bounded,
-prompt-free observations. Runtime observations never become routing or
-documentation authority.
+## Current contract
 
-Protocol version 8 makes Obsidian colour an architectural node-type contract.
-All declared concept entries and the Activation switchboard are L1 hubs, family
-registries are L2, parked cards are L3, executable skills and phases are L4,
-and support remains L5. `CONTRACT.json` records role sentinels, the graph
-validator rejects a hub with a registry or skill colour, and the default global
-view hides low-level maintenance paths without changing the underlying graph.
+Protocol version 16 keeps these boundaries:
 
-Protocol version 9 separates an unimplemented `plan.md` idea from a routable
-skill, adds a current-request local-procedure escape,
-supports proportional and baseline-aware validation, and provides a one-step
-maintenance classifier. Higher-level authority and safety boundaries remain
-unchanged.
+- The host model owns intent, compatible capability selection, methods, modes,
+  composition and evidence assessment. Local tools check artifacts and expose
+  exact metadata and instructions; they do not perform semantic routing.
+- The orchestrator is always active and is not a public skill. Count packages,
+  with capabilities and response modes listed as internal detail.
+- Shared coordination uses the platform-neutral `#>` controls. User authority,
+  host permissions, manual/disabled gates and external-action boundaries remain
+  separate from selection and stored state.
+- Repository roles, graph layers and generated source-to-view mappings stay
+  explicit. Generated human-guide freshness differs from hand-written coverage;
+  human guides remain outside ordinary runtime loading.
+- Initial `skill-plans/*/plan.md` ideas remain proposals until explicit promotion.
+  Tasks started outside this maintenance workspace use [[EXTERNAL_CHANGE_REQUEST]].
+- Chat-scoped repair uses the source-owned controller and retained rollback.
+  Exact update review, actual agreement and separately bounded live staging
+  protect existing work. Saved records confer no authority.
+- Context assembly receives no task prose. Claude restores full core context at
+  lifecycle events and only changed sections on continuation. Private markers
+  attest delivery rather than model retention; uncertain retention requires full
+  recovery. Codex uses one source-bound installed entry.
+- The shared interface is context, discovery and exact loading, with current-flow
+  measurement. Native-host acceptance remains separate from local tool checks.
 
-Protocol version 10 replaces custom leading slash controls with the
-platform-neutral `#>` directive namespace. `#> override` is the local-protocol
-escape; `#> scout`, `#> skill`, `#> interaction`, `#> format`, `#> depth`, and
-`#> receipt` are explicit routing or presentation directives. This avoids host
-interfaces consuming unregistered slash commands before the shared router can
-inspect them. Higher-level authority and safety boundaries remain unchanged.
-
-An amendment requested from outside the Skills AI maintenance workspace first
-uses [[EXTERNAL_CHANGE_REQUEST]]. The external task records the proposal but
-does not edit this protocol directly.
+Keep this card current when amending the contract. Git history and private
+rollback receipts retain previous revisions; operational documentation explains
+current behavior.

@@ -4,20 +4,20 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · Protocol:
 [[interaction-protocol/README|Interaction Protocol]] · Runtime:
 [[runtime/PROTOCOL|Runtime Protocol]]
 
-Shared response behavior, not a task skill. Check [[registry/activation]] before
-using either protocol.
+One public interaction skill package, not a task package. Check
+[[registry/activation]] before using either internal mode.
 
-## Protocols
+## Internal Modes
 
 | protocol | does | selection | not for |
 |---|---|---|---|
 | `interaction.general` | gives the result first, then only enough polished context to understand and use it | applied to every request while active | extreme compression or character voice |
-| `interaction.math` | leads with equations and mathematical reasoning, then adds short supporting context | automatic high-confidence mathematical reasoning while active; explicit request only while manual | keyword mentions in code, paths, filenames, settings, search, or rendering tasks |
+| `interaction.math` | leads with equations and mathematical reasoning, then adds short supporting context | automatic response support for clear mathematical intent while active; explicit request only while manual | keyword mentions in code, paths, filenames, settings, search, or rendering tasks |
 
 The canonical machine-readable contract is linked from
-[[interaction-protocol/README|the protocol hub]]. The shared runtime composes these response
-rules with at most one independently selected task skill. Math therefore does
-not consume the task-skill slot.
+[[interaction-protocol/README|the protocol hub]]. The host composes these response
+rules with its phase-specific compatible task capability set. Math
+therefore remains independent response support within one public package.
 
 ## Automatic Math Boundary
 
@@ -29,8 +29,8 @@ Automatic selection requires mathematical intent, not a lone keyword:
 
 Explicit style controls are `#> interaction math` and
 `#> interaction general`. The shared request layer also supports
-`#> skill auto|normal|<exact-id>`, `#> format`,
-`#> depth brief|standard|detailed`, and `#> receipt auto|on|off`.
+`#> use auto|none|<package IDs>`, `#> mode`, `#> format`,
+`#> depth compact|standard|deep`, and `#> receipt auto|on|off`.
 Current-request controls win over session, project, global, and automatic
 defaults. Natural-language output instructions remain authoritative.
 
@@ -40,4 +40,4 @@ defaults. Natural-language output instructions remain authoritative.
 - `manual`: only an explicit math control selects the math protocol.
 - `off`: the protocol is not added to runtime context.
 - No interaction protocol grants file, network, credential, or account access.
-- Route Fit 0–3 describes skill suitability, not factual confidence.
+- Suitability assessments concern task fit, never factual confidence.

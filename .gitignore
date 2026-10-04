@@ -8,7 +8,13 @@ __pycache__/
 # Local prompt-free runtime observations. Never version user activity.
 .runtime/
 
+# Local feedback-ticket reports, copied context, and source registry.
+feedback-tickets/
+
 # Obsidian — track the vault design (graph colours, plugins, ignore filters),
 # not machine-local window state.
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+
+# Local course material and personal notes; not repository source.
+sample_resources/

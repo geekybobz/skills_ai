@@ -6,7 +6,7 @@ family is reworked and activated.
 
 Graph card: [[cards/legacy/quantum-job-collector|quantum-job-collector legacy card]].
 
-## Skills
+## Package Capability
 
 | route | use | triggers | not for | risk |
 |---|---|---|---|---|

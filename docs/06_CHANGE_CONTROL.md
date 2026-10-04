@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `10`.
+Protocol version: `16`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
 amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. Human
@@ -26,7 +26,7 @@ unmapped and therefore blocked.
 
 | intended change | read |
 |---|---|
-| add a canonical file, route, skill, component, adapter, script, or document | [[protocols/repository/ADD\|ADD]] |
+| add a canonical file, route, package, capability, adapter, script, or document | [[protocols/repository/ADD\|ADD]] |
 | localized change that preserves identity and public contracts | [[protocols/repository/EDIT\|EDIT]] |
 | change a schema, protocol, dependency, installer, or public behavior | [[protocols/repository/UPDATE_MIGRATE\|UPDATE_MIGRATE]] |
 | change an identifier, path, or owner | [[protocols/repository/MOVE_RENAME\|MOVE_RENAME]] |
@@ -79,6 +79,11 @@ After permission, a non-sensitive turn or review reference may be passed with
 verify or manufacture authority; the user's actual instruction remains the
 source of permission.
 
+The always-active Skills Orchestrator coordinates this transaction: it identifies
+the exact package/capability operation, finds canonical and generated
+documentation, and sequences verification. It does not replace this change
+control, the selected operation card, the risk map, or host permissions.
+
 ## Shared transaction
 
 Use the same lifecycle for every canonical addition, edit, update, move,
@@ -97,7 +102,7 @@ working tree and preserves unrelated changes. `staged` is the commit gate. A
 only deterministic code can produce the final absence of blocking findings.
 
 After explicit approval, `apply-generated` may rebuild only an allowlisted
-derived artifact such as `runtime/router-manifest.json`. It never writes a
+derived artifact such as `runtime/manifest.json`. It never writes a
 skill body, registry meaning, protocol prose, human guide, external
 configuration, staging area, or commit.
 
@@ -112,7 +117,7 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 1. Inspect live Git state and preserve unrelated changes.
 2. Modify canonical sources, not generated mirrors.
 3. Never cross a submodule or external-configuration boundary implicitly.
-4. Skill selection does not grant write or installation authority.
+4. Package or capability selection does not grant write or installation authority.
 5. Run `scripts/scan_consistency.py plan` before structural work, `changed`
    after edits, and `staged` before committing. `change_guard.py` remains the
    compatible authority/scope classifier used by the scanner.
@@ -125,7 +130,7 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
    `python3 scripts/graph_layers.py --check`. A new layer or colour is a
    protocol amendment. Every declared graph-concept entry is an L1 hub;
    Activation is an L1 switchboard; family registries are L2; parked cards are
-   L3; executable skills and phases are L4; runtime and supporting material are
+   L3; package entries, capabilities, and phases are L4; runtime and supporting material are
    L5. Draft `skill-plans/*/plan.md` files are not graph nodes. Future canonical additions must extend the matching query and role regression in
    the same change rather than inheriting a misleading fallback colour.
 10. Evaluate every declared change against `docs/human/_SOURCE_MAP.json`. A
@@ -173,9 +178,15 @@ inbox; agent instructions alone are not a filesystem security boundary.
 - [[05_COLOR_LAYERS]]: graph-layer assignment and colour-query authority.
 - `docs/human/`: derivative human guide, loaded only for explicit guide work or
   required synchronization.
-- `runtime/PROTOCOL.md`: router wire and lifecycle contract.
+- `runtime/skills-orchestrator/SKILL.md`: always-active orchestration and management contract.
+- `runtime/PROTOCOL.md`: shared context, package/capability access, capsule, and lifecycle contract.
 - `registry/activation.md`: user-controlled routing state.
 - `requests/pending/`: external intent packets, never skill or routing source.
 
-The registry remains routing metadata. Repository governance is not a skill
-family and is not compiled into `runtime/router-manifest.json`.
+The registry remains routing metadata. Repository governance is not a task
+package; the orchestrator invokes it for management work without compiling its
+procedures as task capabilities.
+
+## Contained repair work
+
+For user-enabled `#> repair on`, use [[protocols/repository/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. Update means preview and user review before exact application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.

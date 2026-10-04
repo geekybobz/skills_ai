@@ -16,6 +16,7 @@ from graph_layers import (  # noqa: E402
     _markdown_paths,
     check_graph,
     classify_path,
+    graph_inventory_errors,
     graph_link_errors,
     graph_role_errors,
     interaction_link_errors,
@@ -29,11 +30,14 @@ class GraphLayerTests(unittest.TestCase):
         cases = {
             "docs/06_CHANGE_CONTROL.md": "L1",
             "registry/activation.md": "L1",
+            "graph/orchestration/skills-orchestrator.md": "L1",
             "interaction-protocol/README.md": "L1",
             "docs/SHARED_DOCUMENTATION_MODEL.md": "L1",
-            "registry/design.md": "L2",
-            "design-with-claude/poster-lead.md": "L4",
+            "registry/theory.md": "L2",
+            "theory-reference/SKILL.md": "L4",
+            "optimizer/SKILL.md": "L4",
             "research-context-scout/SKILL.md": "L4",
+            "graph/skills/theory-reference.md": "L4",
             "protocols/repository/ADD.md": "L5",
             "docs/07_BUILD_AND_RELEASE.md": "L5",
             "runtime/PROTOCOL.md": "L5",
@@ -53,6 +57,58 @@ class GraphLayerTests(unittest.TestCase):
 
     def test_declared_graph_roles_are_layered_by_node_type(self) -> None:
         self.assertEqual([], graph_role_errors(ROOT))
+
+    def test_orchestrator_and_skill_inventory_nodes_are_visible_and_descriptive(self) -> None:
+        self.assertEqual([], graph_inventory_errors(ROOT))
+
+    def test_generic_or_hidden_inventory_nodes_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            contract_path = root / "protocols" / "repository" / "CONTRACT.json"
+            model_path = root / "protocols" / "repository" / "DOCUMENTATION.json"
+            graph_path = root / ".obsidian" / "graph.json"
+            node_path = root / "graph" / "orchestration" / "SKILL.md"
+            for path in (contract_path, model_path, graph_path, node_path):
+                path.parent.mkdir(parents=True, exist_ok=True)
+            contract_path.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "roles": [{"id": "fixture", "patterns": ["**"]}],
+                        "graph_inventory_policy": {
+                            "orchestrator_layer": "L1",
+                            "skill_layer": "L4",
+                            "reserved_entry_names": ["SKILL.md", "README.md"],
+                            "require_default_visibility": True,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "orchestrator": {
+                            "id": "skills-orchestrator",
+                            "display_name": "Skills Orchestrator",
+                            "graph_entry": "graph/orchestration/SKILL.md",
+                        },
+                        "packages": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            graph_path.write_text(
+                json.dumps({"search": "-path:graph/orchestration/"}),
+                encoding="utf-8",
+            )
+            node_path.write_text(
+                "# Skills Orchestrator\n\ngraph_kind: orchestrator\n\n[[registry/activation]]\n",
+                encoding="utf-8",
+            )
+            errors = graph_inventory_errors(root)
+        self.assertTrue(any("generic graph inventory filename" in error for error in errors))
+        self.assertTrue(any("hidden by the default filter" in error for error in errors))
 
     def test_future_declared_hub_cannot_inherit_support_layer(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -17,6 +17,7 @@ from change_guard import GuardError, load_contract
 ROOT = Path(__file__).resolve().parents[1]
 GRAPH_PATH = Path(".obsidian/graph.json")
 POLICY_PATH = Path("docs/05_COLOR_LAYERS.md")
+DOCUMENTATION_MODEL_PATH = Path("protocols/repository/DOCUMENTATION.json")
 
 LAYERS = (
     {
@@ -28,6 +29,7 @@ LAYERS = (
         "id": "L1",
         "query": (
             "path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR "
+            "path:graph/orchestration/skills-orchestrator.md OR "
             "path:interaction-protocol/README.md OR "
             "path:docs/SHARED_DOCUMENTATION_MODEL.md OR "
             "path:docs/03_COMBO_MAP.md OR "
@@ -41,7 +43,8 @@ LAYERS = (
     {
         "id": "L4",
         "query": (
-            "path:design-with-claude/ OR path:theory-reference/SKILL.md OR "
+            "path:optimizer/ OR path:theory-reference/SKILL.md OR "
+            "path:graph/skills/ OR "
             "path:theory-reference/shared/SKILL.md OR "
             "path:theory-reference/shared/phases/ OR path:external-skills/ OR "
             "path:research-context-scout/"
@@ -191,6 +194,84 @@ def graph_role_errors(root: Path = ROOT) -> list[str]:
     return errors
 
 
+def _path_is_excluded(path: str, search: str) -> bool:
+    for target in re.findall(r"(?:^|\s)-path:([^\s]+)", search):
+        normalized = target.strip('"\'').rstrip("/")
+        if path == normalized or path.startswith(normalized + "/"):
+            return True
+    return False
+
+
+def graph_inventory_errors(root: Path = ROOT) -> list[str]:
+    """Require one visible, descriptive graph node per orchestrator/skill record."""
+    try:
+        contract = load_contract(root)
+        model = json.loads((root / DOCUMENTATION_MODEL_PATH).read_text(encoding="utf-8"))
+        graph = json.loads((root / GRAPH_PATH).read_text(encoding="utf-8"))
+    except (GuardError, OSError, json.JSONDecodeError) as exc:
+        return [f"cannot validate graph inventory: {type(exc).__name__}"]
+
+    policy = contract.get("graph_inventory_policy")
+    if not isinstance(policy, dict):
+        return ["repository contract is missing graph_inventory_policy"]
+    orchestrator = model.get("orchestrator")
+    packages = model.get("packages")
+    if not isinstance(orchestrator, dict) or not isinstance(packages, list):
+        return ["documentation model must declare one orchestrator and a package list"]
+
+    reserved = set(policy.get("reserved_entry_names", []))
+    entries = [(orchestrator, policy.get("orchestrator_layer"), "orchestrator")]
+    entries.extend((package, policy.get("skill_layer"), "skill-package") for package in packages)
+    errors: list[str] = []
+    seen_paths: set[str] = set()
+    seen_names: set[str] = set()
+    search = graph.get("search", "")
+    require_visibility = policy.get("require_default_visibility") is True
+    orchestrator_entry = orchestrator.get("graph_entry")
+
+    for record, expected_layer, kind in entries:
+        record_id = record.get("id")
+        display_name = record.get("display_name")
+        entry = record.get("graph_entry")
+        if not all(isinstance(value, str) and value for value in (record_id, display_name, entry)):
+            errors.append(f"invalid {kind} graph declaration: {record_id or '(missing id)'}")
+            continue
+        name = Path(entry).name
+        if entry in seen_paths:
+            errors.append(f"duplicate graph inventory path: {entry}")
+        seen_paths.add(entry)
+        if name in seen_names:
+            errors.append(f"duplicate graph inventory filename: {name}")
+        seen_names.add(name)
+        if name in reserved:
+            errors.append(f"generic graph inventory filename is forbidden: {entry}")
+        if Path(entry).stem != record_id:
+            errors.append(f"graph inventory filename must match id: {entry} != {record_id}.md")
+        actual_layer = classify_path(entry)
+        if actual_layer != expected_layer:
+            errors.append(
+                f"graph inventory node has wrong layer: {entry} is {actual_layer or 'unclassified'}, "
+                f"expected {expected_layer}"
+            )
+        path = root / entry
+        if not path.is_file():
+            errors.append(f"missing graph inventory node: {entry}")
+            continue
+        text = path.read_text(encoding="utf-8")
+        if not re.search(rf"^#\s+{re.escape(display_name)}\s*$", text, flags=re.MULTILINE):
+            errors.append(f"graph inventory label mismatch: {entry} must use '# {display_name}'")
+        if f"graph_kind: {kind}" not in text:
+            errors.append(f"graph inventory kind mismatch: {entry} must be {kind}")
+        if not _has_wikilink(text, "registry/activation"):
+            errors.append(f"graph inventory node must link Activation: {entry}")
+        if kind == "skill-package" and isinstance(orchestrator_entry, str):
+            if not _has_wikilink(text, orchestrator_entry.removesuffix(".md")):
+                errors.append(f"skill graph node must link the orchestrator: {entry}")
+        if require_visibility and _path_is_excluded(entry, search):
+            errors.append(f"graph inventory node is hidden by the default filter: {entry}")
+    return errors
+
+
 def wikilink_errors(root: Path = ROOT) -> list[str]:
     """Reject dangling repository wikilinks without loading external submodule notes."""
     markdown = list(_markdown_paths(root))
@@ -274,6 +355,7 @@ def check_graph(root: Path = ROOT, *, check_policy: bool = True) -> list[str]:
     if check_policy:
         errors.extend(graph_link_errors(root))
         errors.extend(graph_role_errors(root))
+        errors.extend(graph_inventory_errors(root))
         errors.extend(wikilink_errors(root))
     return errors
 

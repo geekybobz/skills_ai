@@ -534,14 +534,14 @@ def _registry_findings(root: Path, changed_paths: set[str]) -> list[dict[str, An
 
     try:
         expected = json.dumps(manifest, indent=2, sort_keys=True) + "\n"
-        manifest_path = root / "runtime" / "router-manifest.json"
+        manifest_path = root / "runtime" / "manifest.json"
         if not manifest_path.is_file() or manifest_path.read_text(encoding="utf-8") != expected:
             findings.append(
                 finding(
                     "block",
                     "STALE_GENERATED_MANIFEST",
                     "The generated router manifest does not match canonical registry sources.",
-                    paths=["runtime/router-manifest.json"],
+                    paths=["runtime/manifest.json"],
                     suggestion="Run python3 scripts/compile_registry.py after reviewing the canonical source changes.",
                 )
             )
@@ -713,7 +713,7 @@ def apply_generated_outputs(
         target = root / output
         if target.is_symlink():
             raise ScanError(f"refusing generated write through symlink: {output}")
-        if output == "runtime/router-manifest.json":
+        if output == "runtime/manifest.json":
             content = json.dumps(build_manifest(root), indent=2, sort_keys=True) + "\n"
         else:
             if view_outputs is None:
@@ -778,7 +778,7 @@ def execute_checks(
     if "registry" in selected:
         commands.append(("activation", [sys.executable, "scripts/toggle_registry.py", "--check"]))
     if "adapter" in selected:
-        commands.append(("adapter-syntax", ["node", "--check", "adapters/claude/skills-ai-router.js"]))
+        commands.append(("adapter-syntax", ["node", "--check", "adapters/claude/skills-ai-context.js"]))
     if "unit" in selected:
         commands.append(("unit", [sys.executable, "-m", "unittest", "discover", "-s", "tests"]))
     else:
@@ -786,7 +786,7 @@ def execute_checks(
             commands.append(
                 (
                     "lifecycle",
-                    [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_router_lifecycle.py"],
+                    [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_claude_adapter.py"],
                 )
             )
         if "change-request" in selected:
@@ -794,7 +794,7 @@ def execute_checks(
                 ("change-request", [sys.executable, "-m", "unittest", "tests.test_change_request"])
             )
     if "benchmark" in selected:
-        commands.append(("benchmark", [sys.executable, "scripts/benchmark_router.py", "--json"]))
+        commands.append(("benchmark", [sys.executable, "scripts/measure_context.py", "--json"]))
     if "views" in selected:
         commands.append(("views", [sys.executable, "scripts/compile_repository_views.py", "--check"]))
     return [_run_command(check_id, command, root=root) for check_id, command in commands]

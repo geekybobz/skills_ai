@@ -1,0 +1,273 @@
+{
+  "command_aliases": [
+    {
+      "boundary": "first task directive; requires a user-pointed derivation/problem source",
+      "command": "#> build-system",
+      "family": "optimizer-workflow",
+      "mode": "build-system",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "first task directive; requires an existing system/project and stated goal",
+      "command": "#> optimize",
+      "family": "optimizer-workflow",
+      "mode": "optimize",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "first task directive; presentation controls may precede; an operation may follow",
+      "command": "#> optimizer",
+      "family": "optimizer-workflow",
+      "mode": "route",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "first task directive; presentation controls may precede",
+      "command": "#> scout",
+      "family": "research",
+      "mode": "initial",
+      "skill_id": "research-context-scout"
+    },
+    {
+      "boundary": "first task directive; presentation controls may precede",
+      "command": "#> scout-again",
+      "family": "research",
+      "mode": "deepen",
+      "skill_id": "research-context-scout"
+    }
+  ],
+  "components": {
+    "interaction.general": {
+      "boundary": "direct result plus adequate polished context on every request",
+      "path": "registry/interaction.md",
+      "state": "active"
+    },
+    "interaction.math": {
+      "boundary": "automatic equation-led reasoning; `manual` requires an explicit math control",
+      "path": "registry/interaction.md",
+      "state": "active"
+    },
+    "quantum-job-collector.append-pending": {
+      "boundary": "write new jobs into pending queue",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.browser-fallback": {
+      "boundary": "use browser or JS fallback",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.cron": {
+      "boundary": "scheduled automation",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.full-run": {
+      "boundary": "exhaustive all-tier run",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.paid-fallback": {
+      "boundary": "paid or remote fallback tools",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.source-evidence": {
+      "boundary": "persist source result records and evidence",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.tier1-structured": {
+      "boundary": "Greenhouse, Lever, Teamtailor structured pass",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    },
+    "quantum-job-collector.unresolved-retry": {
+      "boundary": "retry unresolved sources only",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off"
+    }
+  },
+  "families": {
+    "career": {
+      "boundary": "career radar and job-search workflows",
+      "package": "quantum-job-collector",
+      "path": "registry/career.md",
+      "state": "off"
+    },
+    "interaction": {
+      "boundary": "compact general responses and equation-led mathematical reasoning",
+      "package": "interaction-protocol",
+      "path": "registry/interaction.md",
+      "state": "active"
+    },
+    "optimizer-workflow": {
+      "boundary": "exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates",
+      "package": "optimizer",
+      "path": "registry/optimizer.md",
+      "state": "manual"
+    },
+    "research": {
+      "boundary": "early project orientation, evidence, applications and paper direction",
+      "package": "research-context-scout",
+      "path": "registry/research.md",
+      "state": "active"
+    },
+    "theory": {
+      "boundary": "LaTeX theory reference and math notes",
+      "package": "theory-reference",
+      "path": "registry/theory.md",
+      "state": "active"
+    }
+  },
+  "orchestrator": {
+    "boundary": "model-led selection, composition, management, evidence and recovery",
+    "id": "skills-orchestrator",
+    "mode": "model-led",
+    "path": "runtime/skills-orchestrator/SKILL.md",
+    "state": "active"
+  },
+  "packages": {
+    "interaction-protocol": {
+      "boundary": "response support independent of task selection",
+      "path": "interaction-protocol/README.md",
+      "role": "interaction",
+      "state": "active"
+    },
+    "optimizer": {
+      "boundary": "exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates",
+      "path": "optimizer/SKILL.md",
+      "role": "task",
+      "state": "manual"
+    },
+    "quantum-job-collector": {
+      "boundary": "exhaustive Quantum Career Radar job collection",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "role": "task",
+      "state": "off"
+    },
+    "research-context-scout": {
+      "boundary": "exact package request, `#> scout`, or `#> scout-again` only",
+      "path": "research-context-scout/SKILL.md",
+      "role": "task",
+      "state": "manual"
+    },
+    "theory-reference": {
+      "boundary": "theory notes, LaTeX, derivation planning, and reference work",
+      "path": "theory-reference/SKILL.md",
+      "role": "task",
+      "state": "active"
+    }
+  },
+  "routes": [
+    {
+      "description": "exhaustive quantum job collection for Quantum Career Radar",
+      "family": "career",
+      "family_state": "off",
+      "id": "quantum-job-collector",
+      "not_for": "generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled",
+      "package": "quantum-job-collector",
+      "path": "external-skills/quantum-job-collector/SKILL.md",
+      "state": "off",
+      "triggers": [
+        "quantum jobs",
+        "career radar",
+        "update review queue",
+        "pending jobs",
+        "source coverage"
+      ]
+    },
+    {
+      "description": "independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence",
+      "family": "optimizer-workflow",
+      "family_state": "manual",
+      "id": "optimizer",
+      "not_for": "automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run",
+      "package": "optimizer",
+      "path": "optimizer/SKILL.md",
+      "state": "manual",
+      "triggers": [
+        "exact `#> optimizer",
+        "#> build-system",
+        "#> optimize",
+        "#> skill optimizer route",
+        "or exact request to use the optimizer skill"
+      ]
+    },
+    {
+      "description": "align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test",
+      "family": "research",
+      "family_state": "active",
+      "id": "research-context-scout",
+      "not_for": "claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request",
+      "package": "research-context-scout",
+      "path": "research-context-scout/SKILL.md",
+      "state": "manual",
+      "triggers": [
+        "research context scout",
+        "initial research orientation",
+        "supervisor assessment",
+        "align research context",
+        "collect and synthesize papers",
+        "translate literature ideas into this project"
+      ]
+    },
+    {
+      "description": "build a rigorous compact LaTeX reference through planning, evaluation and chapter phases",
+      "family": "theory",
+      "family_state": "active",
+      "id": "theory-reference",
+      "not_for": "unrelated prose or software implementation",
+      "package": "theory-reference",
+      "path": "theory-reference/SKILL.md",
+      "state": "active",
+      "triggers": [
+        "theoretical references and mathematical learning documents"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "source_hash": "03152652f1f2561c87a3eabf4c277b869c08d1e9ec6abcb51d9b74ef82b2d4a4",
+  "sources": [
+    {
+      "path": "docs/00_SKILLS_HUB.md",
+      "sha256": "edd45d4afae6583ec1b0bc0afa531817b949de16daab9e7f4acd1730d92530ec"
+    },
+    {
+      "path": "registry/activation.md",
+      "sha256": "59025ee9f372aa3d3f3aa6a918dbecb5b2b2cbb4e2ea4535c32dbf7752152edd"
+    },
+    {
+      "path": "registry/career.md",
+      "sha256": "826db080755956bd50b3dc41c23301bd6ec7cd98c6affc1fdec8c9cb9a569fed"
+    },
+    {
+      "path": "registry/interaction.md",
+      "sha256": "d37453ba55ecd764d7c53aef7dfb9713ba53f14a66e4a74496cb82391f9855b0"
+    },
+    {
+      "path": "registry/optimizer.md",
+      "sha256": "2412f35809f3b594308691e0dcd992564b9f85622da5414668ff91385f9d96e9"
+    },
+    {
+      "path": "registry/research.md",
+      "sha256": "14ab35f6a3623ed053fc80ed8fe01adfb7ef06f333fd6016f8e59b4370cf809a"
+    },
+    {
+      "path": "registry/theory.md",
+      "sha256": "b62106a1cf0f4065994c4290cd85fd35b18b559175b1412fc86a3bc4108b34a4"
+    }
+  ],
+  "stats": {
+    "active_packages": 2,
+    "active_routes": 1,
+    "families": 5,
+    "inactive_packages": 1,
+    "inactive_routes": 1,
+    "manual_packages": 2,
+    "manual_routes": 2,
+    "packages": 5,
+    "routes": 4
+  },
+  "warnings": []
+}

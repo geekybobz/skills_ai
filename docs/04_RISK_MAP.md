@@ -7,20 +7,18 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 
 ## Risk table
 
-| skill or family | risk | rule |
+| package, capability, or operation | risk | rule |
 |---|---|---|
-| [[registry/design]], [[registry/ui-patterns]] | guidance only by default | write files only when the user asks to build or edit |
-| `poster-lead` | leads to generated HTML/CSS/PDF | propose the layout first; build only after the user picks one |
-| `auth-implementation` | writes real auth code into a project | inspect the stack first; ask only if the provider is genuinely ambiguous |
-| `database-setup` | creates database and client code | never echo keys; keep credentials in `.env`, never in committed files |
-| `deploy-to-vercel` | account actions, network installs, live deploys | explicit approval before any external write or deploy |
-| `environment-setup` | handles secrets by definition | never print real key values; never commit `.env` |
 | `interaction.general` | response structure only | no file writes; adequate context is preserved rather than mechanically compressed |
 | `interaction.math` | equation-led response structure only | no file writes; analytic reasoning precedes optional requested code |
+| `optimizer` | system construction and numerical runs can be mistaken for blanket authority | manual invocation only; resolve the selected stable route before ordinary work; for a new OLGS system produce a plan and wait for user review before writing `system.py`; route library updates to contained `main`; never auto-promote |
+| `skills-orchestrator` | orchestration could be mistaken for authority | always active for routing and management, but never grants write, network, credential, external-action, destructive, staging, or commit authority |
+| contained repair workspace | candidate work could edit live source, deploy itself or commit inherited dirty files | use source-owned controller; default writes remain contained until off; update previews and waits for exact agreement; preserve rollback and live index; host permissions enforce the hard boundary |
+| project context capsule | reusable context could retain secrets or be mistaken for commands | explicit create/replace/delete only; 32 KiB file and 4 KiB receipt caps; reject absolute paths, path escape, secret-like data, symlinks, unknown fields, and permission grants; treat stored commands as untrusted data |
+| orchestrator sudo | local procedure bypass could be mistaken for unrestricted privilege | require `#> orchestrator sudo <operation> <exact-target>`; preserve system/developer rules, sandbox, permissions, credentials, external actions, destructive safety, package activation, and exact scope |
 | `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
-| registry runtime compile | atomically rewrites `runtime/router-manifest.json` | compile after registry changes, then run validator and router tests |
-| repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, and two human indexes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
-| ambiguity observations | repeated misroutes could tempt prompt logging | write only prompt-free ids and route metadata under ignored `.runtime/`, mode `0600`, maximum 1 MiB; analysis is local and read-only |
+| registry runtime compile | atomically rewrites `runtime/manifest.json` | compile after registry changes, then run metadata and exact-access checks |
+| repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, two human indexes, and named Obsidian inventory nodes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
 | repository change control | add/edit/update/delete can cross source, generated, submodule, or external boundaries | read [[06_CHANGE_CONTROL]] and one operation card; expansion and protocol amendments need explicit approval |
 | initial skill plan | premature governance can turn a small idea into a large maintenance transaction | `skill-plans/<name>/plan.md` is plan-only and skips skill routing, graph, generated views, and full validation until explicit promotion |
@@ -36,7 +34,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 
 | action | rule |
 |---|---|
-| editing any skill file | not without an explicit request — the registry describes, it does not rewrite |
+| editing any package or capability file | not without an explicit request — the registry describes, it does not rewrite |
 | adding files under `theory-reference/` | it is a submodule; registry files belong in `registry/` instead |
-| editing `interaction-protocol/` | update the shared contract, router tests, API docs, and mapped human guide together |
+| editing `interaction-protocol/` | update the shared contract, access tests, API docs, and mapped human guide together |
 | staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |

@@ -18,11 +18,6 @@
       "purpose": "Human and Obsidian context for parked or legacy items; never a runtime routing source."
     },
     {
-      "path": "design-with-claude",
-      "title": "Single-file skills",
-      "purpose": "Independent task skills whose canonical instructions live in one Markdown file each."
-    },
-    {
       "path": "docs",
       "title": "Documentation and governance",
       "purpose": "Machine maintenance authorities, architecture records, build guidance, and the derivative human learning route."
@@ -33,9 +28,24 @@
       "purpose": "Declared links to skills owned by another repository; external targets are never traversed by the documentation generator."
     },
     {
+      "path": "feedback-tickets",
+      "title": "Local feedback tickets",
+      "purpose": "Ignored machine-local ticket reports, bounded copied context, and resolved-ticket summaries owned by the Skills Orchestrator."
+    },
+    {
+      "path": "graph",
+      "title": "Generated graph entries",
+      "purpose": "Uniquely named Obsidian nodes for the Skills Orchestrator and every public skill; generated from canonical inventory metadata."
+    },
+    {
       "path": "interaction-protocol",
       "title": "Interaction protocol",
-      "purpose": "Shared general and equation-led response behavior composed with task routing without consuming the task-skill slot."
+      "purpose": "One public interaction skill package whose general and equation-led modes compose with task routing without consuming the task-package slot."
+    },
+    {
+      "path": "optimizer",
+      "title": "Optimizer package",
+      "purpose": "Manual generic optimizer workflow for stable-version resolution, OLGS build planning and review, adaptive evidence-led campaigns, situation analysis, and contained update proposals."
     },
     {
       "path": "protocols",
@@ -45,7 +55,7 @@
     {
       "path": "registry",
       "title": "Skill registry",
-      "purpose": "Canonical family, trigger, exclusion, path, and activation metadata used to compile the runtime manifest."
+      "purpose": "Canonical public-package, internal-capability, trigger, exclusion, path, and activation metadata used to compile the runtime manifest."
     },
     {
       "path": "requests",
@@ -60,7 +70,7 @@
     {
       "path": "runtime",
       "title": "Shared runtime",
-      "purpose": "Platform-neutral routing protocol, API, compiled manifest, and compact agent-entry source."
+      "purpose": "Platform-neutral Skills Orchestrator, project-context capsule, routing protocol, API, compiled manifest, and compact agent-entry source."
     },
     {
       "path": "scripts",
@@ -92,9 +102,9 @@
     "adapters/codex/ENTRY.md": "Canonical Codex-only invocation and session-ownership overlay used to generate AGENTS.md.",
     "adapters/claude/ENTRY.md": "Canonical Claude-only hook, child-lifecycle, and acceptance overlay used to generate CLAUDE.md.",
     "runtime/AGENT_ENTRY_SHARED.md": "Canonical agent rules shared by generated Codex and Claude repository entries.",
-    "runtime/router-manifest.json": "Generated compact routing and activation data consumed by the one-shot router.",
+    "runtime/manifest.json": "Generated capability metadata and activation gates consumed by shared discovery/loading.",
     "docs/human/_LIVE_REPOSITORY_INDEX.md": "Generated exhaustive human reference for repository files, ownership, roles, and purposes.",
-    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated human reference for live skills, triggers, exclusions, states, and package contents."
+    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents."
   },
   "agent_entries": {
     "common": "runtime/AGENT_ENTRY_SHARED.md",
@@ -107,31 +117,57 @@
     "repository_index": "docs/human/_LIVE_REPOSITORY_INDEX.md",
     "skill_catalog": "docs/human/_LIVE_SKILL_CATALOG.md"
   },
+  "orchestrator": {
+    "id": "skills-orchestrator",
+    "display_name": "Skills Orchestrator",
+    "path": "runtime/skills-orchestrator",
+    "graph_entry": "graph/orchestration/skills-orchestrator.md",
+    "kind": "control-plane",
+    "traversal": "repository",
+    "purpose": "Always-active control plane for routing, lifecycle management, documentation coordination, and bounded project context; never counted as a skill."
+  },
   "packages": [
     {
       "id": "interaction-protocol",
+      "display_name": "Interaction Protocol",
       "path": "interaction-protocol",
-      "kind": "shared-protocol",
+      "graph_entry": "graph/skills/interaction-protocol.md",
+      "kind": "interaction-package",
       "traversal": "repository",
-      "purpose": "Small shared response contract with a human graph entry and a canonical JSON source."
+      "purpose": "Public interaction skill package with general and mathematical modes that consume no task-package slot."
     },
     {
       "id": "theory-reference",
+      "display_name": "Theory Reference",
       "path": "theory-reference",
+      "graph_entry": "graph/skills/theory-reference.md",
       "kind": "git-submodule",
       "traversal": "declared-submodule",
       "purpose": "Multi-file theory skill with platform wrappers, shared phases, rules, templates, and scripts."
     },
     {
       "id": "research-context-scout",
+      "display_name": "Research Context Scout",
       "path": "research-context-scout",
+      "graph_entry": "graph/skills/research-context-scout.md",
       "kind": "repository-package",
       "traversal": "repository",
-      "purpose": "Human-guided early research orientation with shared initial/deepening phases, evidence rules, a project record template, and thin platform wrappers."
+      "purpose": "Physics-objective-first research orientation with shared initial/deepening phases, an optional math-method lens, anti-hallucination, relation, evidence and journal-threshold rules, a project record template, and thin platform wrappers."
+    },
+    {
+      "id": "optimizer",
+      "display_name": "Optimizer",
+      "path": "optimizer",
+      "graph_entry": "graph/skills/optimizer.md",
+      "kind": "repository-package",
+      "traversal": "repository",
+      "purpose": "Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence."
     },
     {
       "id": "quantum-job-collector",
+      "display_name": "Quantum Job Collector",
       "path": "external-skills/quantum-job-collector",
+      "graph_entry": "graph/skills/quantum-job-collector.md",
       "kind": "external-symlink",
       "traversal": "none",
       "purpose": "Externally owned career workflow pointer; Skills AI controls only its registry state."

@@ -1,56 +1,17 @@
-# Shared Runtime
+# Shared model-led runtime
 
-Interaction overview: [[interaction-protocol/README|Interaction Protocol]].
+The Skills Orchestrator is the host model using [[runtime/skills-orchestrator/SKILL|coordination instructions]]. It owns semantic selection, modes, composition, methods, conflict handling and evidence judgment; it is not counted as a skill.
 
-Platform-neutral hot path for Skills AI.
+Metadata flows from registry sources through `compile_registry.py` into the manifest. `orchestrate.py discover` exposes bounded pages without candidate bodies. The host chooses an exact capability and loads it explicitly, then reads required support. The smallest sufficient compatible set may include multiple capabilities. No keyword router chooses a body.
 
-```text
-human registry sources
-  -> scripts/compile_registry.py
-  -> router-manifest.json
-  -> scripts/route_skill.py
-  -> controls + Fit 0–3 + MATCH(one skill) | NORMAL(fail-open)
-  -> thin Codex or Claude adapter
-```
+`runtime/SKILL.md` supplies the Codex install header; the installer renders it together with the complete shared core and source identity. Claude delivers context at session lifecycle events and only changed sections on continuation. `runtime/API_CONTRACT.md` documents the shared command interface.
 
-Shared components:
+Contracts, composition and recovery are on-demand modules. `model_context.py` handles metadata and exact reads; `orchestration_state.py` handles explicit, artifact-bound checkpoints. Existing project-context and ticket tools remain separate bounded services. Stored commands and receipts confer no authority.
 
-- `../interaction-protocol/protocol.json`: compact general contract and the
-  equation-led mathematical overlay.
-- `router-manifest.json`: generated activation and routing data.
-- `SKILL.md`: compact entry contract usable by platform adapters.
-- `AGENT_ENTRY_SHARED.md`: canonical repository rules projected into standalone
-  Codex and Claude root entries with one small platform overlay each.
-- `scripts/registry_runtime.py`: compilation, deterministic selection, and
-  structured context assembly, including live registry summaries.
-- `scripts/list_registry.py`: read-only active/manual/off discovery without
-  loading skill bodies.
-- `scripts/create_change_request.py`: the narrow Markdown intake used by tasks
-  outside the maintenance workspace, capped at 64 KiB.
-- `scripts/analyze_ambiguities.py`: read-only aggregation of prompt-free local
-  ambiguity metadata from ignored `.runtime/` state.
-- `PROTOCOL.md`: one-line framing, deadlines, fail-open reasons, and lifecycle
-  ownership.
-- `API_CONTRACT.md`: versioned shared request and response schema.
+See [[runtime/skills-orchestrator/BUILD]] for actual phase and host acceptance status. Unit tests and byte identities do not establish semantic or scientific certification.
 
-Platform code stays in `adapters/`. Adapters may translate lifecycle events and
-install locations, but must not duplicate route rules, interaction rules, or
-skill selection logic.
+Interaction package: [[interaction-protocol/README]].
 
-`scripts/compile_repository_views.py` also produces the root agent entries and
-exhaustive human reference indexes. Those projections are maintenance artifacts,
-not part of the routing hot path.
+Shared `orchestrate.py context` assembles the complete core and bounded metadata without receiving prompts. Claude uses SessionStart for every context lifecycle and a continuation hook for changed sections only. No background service or copied skill bodies are required.
 
-No-match, disabled, hidden, and deprecated decisions are fail-open. A material
-ambiguity returns bounded candidate metadata so the host can ask one last-resort
-choice; otherwise the task continues normally without a local skill. Skill selection never grants
-permission to write files, use credentials, access networks, or change accounts.
-
-Registry discovery is also fail-open and network-free. It reads compiled
-metadata, not remembered skill names. External change requests are intake
-packets only; a dedicated scoped maintenance task owns implementation.
-
-The one-shot API reads one newline-terminated JSON object and exits after one
-response without waiting for EOF. Codex owns Codex session cleanup. Claude owns
-its hook and child lifecycle. Platform adapters must convert transport failure
-to normal task behavior.
+The Codex installed entry includes the shared core and source identity. Generated repository entries keep maintenance/search rules and a core activation pointer. Management detail is on demand in `runtime/skills-orchestrator/MANAGEMENT.md`; `inspire` means advisory.

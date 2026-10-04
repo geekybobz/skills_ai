@@ -1,15 +1,10 @@
 # Skills Registry Entry
 
-Normal tasks enter through `runtime/SKILL.md`, which selects one active skill or
-continues normally. Read [[00_SKILLS_HUB]] for registry maintenance and audits.
+Normal tasks enter through `runtime/SKILL.md`. The host model uses the shared coordination instructions to select the minimum sufficient compatible capability set, or continues with normal host tools. Read [[00_SKILLS_HUB]] only for bounded registry maintenance and audits.
 
-Route: hub → activation register → one enabled family registry → active skill
-or component. No active match → continue normally without a local skill. Never
-invent or substitute a skill.
+Flow: host reasoning → compact discovery → exact selected entries and required support → authorized work and artifact-bound evidence. Tools provide metadata and identity/path checks; they never rank skills or select modes. Public inventory counts packages, not capability files.
 
-Conditional: [[03_COMBO_MAP]] when two families match · [[04_RISK_MAP]] before
-any write · [[06_CHANGE_CONTROL]] plus one operation card before repository
-changes.
+Composition: [[03_COMBO_MAP]]. Risk: [[04_RISK_MAP]]. Repository changes: [[06_CHANGE_CONTROL]] and one operation card. Human walkthrough: [[docs/human/10_MODEL_LED_ORCHESTRATOR]].
 
 An explicit question about available skills uses the live manifest summary; do
 not answer from remembered skill names. A task started outside this workspace

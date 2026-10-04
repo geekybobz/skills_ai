@@ -201,7 +201,7 @@ def main(argv: list[str] | None = None) -> int:
 
                 expected = serialized_manifest()
                 if not DEFAULT_MANIFEST.exists() or DEFAULT_MANIFEST.read_text(encoding="utf-8") != expected:
-                    raise RegistryError("runtime/router-manifest.json is missing or stale")
+                    raise RegistryError("runtime/manifest.json is missing or stale")
             try:
                 display = str(register.relative_to(ROOT))
             except ValueError:

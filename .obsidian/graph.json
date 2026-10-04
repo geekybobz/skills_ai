@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "-path:docs/human/ -path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/",
+  "search": "",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -15,7 +15,7 @@
       }
     },
     {
-      "query": "path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md",
+      "query": "path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:graph/orchestration/skills-orchestrator.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md",
       "color": {
         "a": 1,
         "rgb": 35195
@@ -36,7 +36,7 @@
       }
     },
     {
-      "query": "path:design-with-claude/ OR path:theory-reference/SKILL.md OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/",
+      "query": "path:optimizer/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/",
       "color": {
         "a": 1,
         "rgb": 6953882
@@ -60,6 +60,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.86086493960722,
+  "scale": 0.5382062223372934,
   "close": true
 }

@@ -34,21 +34,47 @@ flowchart TD
     class ASK,REPORT safe
 ```
 
-Selecting a skill is never permission. Deletion, external installation,
+Selecting a package or capability is never permission. Deletion, external installation,
 credentials, account actions, Git-history rewrites, protocol changes, and
 unexpected expansion require their own explicit authority.
 
-The general and math interaction protocols only shape an answer. They do not
+Removing a package also removes its routing records and generated inventory
+entry, and updates dependent examples and tests. Preserve unrelated working-tree
+changes and a recoverable copy of dirty files being removed; package cleanup
+does not authorize deleting external installations or rewriting Git history.
+
+The Interaction Protocol is one public skill package whose general and math
+modes only shape an answer. They do not
 grant permission or weaken any read-only, review, write, network, credential,
 or destructive-action boundary.
+
+The manual `optimizer` package also does not grant broad implementation
+permission. `#> build-system` must first present a system-build plan and wait
+for review before it creates or edits `system.py`; `#> optimize` accepts only an
+existing verified system. `#> optimizer intervene` and `branch` make tactic or
+new-problem changes explicit; neither silently edits a system or upgrades a
+claim. Ordinary work resolves the selected stable route; library improvements
+belong in contained development and are never promoted automatically.
+
+The always-active Skills Orchestrator coordinates package and capability changes,
+documentation mapping, regeneration, and verification. It does not replace the
+risk map, change control, operation cards, host permissions, or user approval.
+
+Orchestrator sudo requires an exact operation and target and bypasses only local
+Skills AI procedure. Bare `#> sudo` is inert. Project capsule values are also
+permission-neutral untrusted data; create, replace, and delete remain explicit.
+Normal receipts omit operational commands, and receipt rendering neutralizes
+instruction-like role and `#>` markers. Explicit inspection still grants no
+permission and never executes stored text.
 
 Changes anywhere under `interaction-protocol/` are mapped canonical changes:
 the routing guide pages and visible protocol hub must remain synchronized.
 
 External change-request packets are capped at 64 KiB before any Markdown is
-written. Local ambiguity observations are different: they contain no prompt,
-answer, path, or file content; stay under ignored `.runtime/` with restrictive
-permissions; stop growing at 1 MiB; and never grant authority or affect routing.
+written. Private context-delivery markers contain section hashes only and stay
+under ignored `.runtime/` with restrictive permissions. Repair records carry
+workspace and recovery information. Neither kind of record grants authority or
+chooses task skills; they are not transcript or prompt logs.
 
 ## Keeping this human guide current
 
@@ -97,23 +123,22 @@ documentation model, common agent-entry source, or platform overlay, then run
 stale projections, while semantic review still checks whether the illustrated
 teaching pages remain accurate and understandable.
 
-For a multi-file package, only its root `SKILL.md` is a routable registry
-entry. Conventional nested `shared/SKILL.md`, `codex/SKILL.md`, or
-`claude/SKILL.md` files are support wrappers beneath that registered root. The
-scanner allows only those positions; an arbitrary nested `SKILL.md` remains an
-unregistered-source block.
+The orchestrator and public skill packages have separate Activation sections.
+A task package
+may expose internal capability files or a root `SKILL.md`; protocol and
+composite packages may use another declared canonical entry. Conventional
+nested `shared/SKILL.md`, `codex/SKILL.md`, or `claude/SKILL.md` files remain
+support wrappers, not extra public skills.
 
-Protocol version 8 also guards graph meaning. A future declared hub must be L1
-teal, a family registry L2 green, and a skill or phase L4 violet. The graph
-validator blocks a change that silently lets one node type inherit another
-type's fallback colour.
+Graph roles are explicit: declared hubs are L1 teal, family registries L2 green,
+and skill or phase files L4 violet. The validator checks these meanings and
+their links. Graph file counts are never public skill counts.
 
-Protocol version 9 adds two narrow escape valves. A draft under
-`skill-plans/<name>/plan.md` needs no skill machinery until explicit promotion.
-A leading `#> override <instruction>` can bypass local procedure for one request, but
-cannot widen the user's targets or override host permissions and safety. For a
-dirty worktree, an optional prompt-free baseline may preserve an identical old
-failure; any new or changed failure still blocks.
+A draft under `skill-plans/<name>/plan.md` needs no package machinery until
+explicit promotion. A leading `#> override <instruction>` can bypass local
+procedure for one request while preserving user scope and higher authority.
+For a dirty worktree, an optional prompt-free baseline can preserve an identical
+pre-existing failure; new, worsened and in-scope failures still block.
 
 ## External tasks
 
@@ -121,3 +146,74 @@ A task that starts outside this repository treats Skills AI as read-only. With
 explicit permission it may create one Markdown request under `requests/pending/`.
 Implementation then moves to a dedicated maintenance task rooted in this folder.
 The request inbox is never routing or skill authority.
+
+A task receipt names the objective, plan, selected skills and adherence mode. It is an action summary and does not create approval. A use list explicitly invokes named packages while preserving write, worker and scope boundaries; use none leaves governance active.
+
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
+
+## Contained repair mode
+
+Use these commands across ordinary messages:
+
+```text
+#> repair on
+```
+
+This creates or resumes this chat's contained copy. Continue discussing, editing
+and testing there for as many messages as needed. The active source and installed
+adapters remain unchanged. Repeating on resumes the same copy.
+
+```text
+#> update
+```
+
+The assistant compares the contained changes, runs relevant checks and explains
+what would change. After your agreement it applies only the reviewed changes,
+checks the installation and retains rollback and Git history. Update preserves
+repair mode. Changed files or conflicts require an updated review.
+
+```text
+#> repair off
+```
+
+Off returns to normal working locations and retains the contained copy. It does
+not deploy or delete pending work. An explicit live-edit exception applies only
+to that action. New chats default off; repair is independent of use/mode controls.
+
+The permanent local folder is `.runtime/repair/workspaces/<workspace-id>/repo/`.
+The leading dot hides it in normal Finder views, and `.runtime/` is ignored by Git.
+Use Finder **Go → Go to Folder** (Command-Shift-G), enter
+`/Users/billabobz/skills_ai/.runtime/repair/`, and open the returned workspace.
+The assistant also reports its exact working location when enabling repair.
+No manual copying or repeated cloning is necessary.
+
+The source-owned `scripts/repair_workspace.py` handles snapshots, resume, checks,
+exact update previews and recovery. A candidate controller cannot approve its own
+installation. Tests run against the contained copy with separate test configs.
+Saved state identifies work; actual conversation instructions supply authority.
+Git records are first kept in the contained repository; live staging must exclude
+inherited changes. The first version operates in Skills AI maintenance chats;
+other projects retain the request/handoff boundary.
+
+```mermaid
+flowchart TD
+    A["repair on"] --> B["Create or resume copy"]
+    B --> C["Discuss, edit and test"]
+    C --> D["update: explain exact changes"]
+    D --> E["Your agreement"]
+    E --> F["Apply, verify and retain rollback"]
+    F --> C
+    C --> G["repair off: retain pending work"]
+```
+
+See [the repair protocol](../../protocols/repository/REPAIR_WORKSPACE.md) for
+script operations, drift handling and recovery. Filesystem permissions provide
+the hard write boundary; contained paths and locks govern the managed workflow.
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+## Current context flow
+
+Context markers and load identities grant no permission. Repair work remains contained; update requires agreement on the exact checked preview. A failed delivery repeats context safely, and known corrupt repair state never redirects edits live. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

@@ -1,8 +1,6 @@
 # Codex Adapter
 
-Codex uses the shared `runtime/SKILL.md` as its compact entry skill. The entry
-calls the same Python router used by every adapter and loads only a returned
-skill path.
+Codex loads one installed entry containing the shared coordination core, source identity and checkout binding. The host selects capabilities using bounded discovery and exact access tools. No local router selects a task body.
 
 The repository-level `AGENTS.md` is generated from
 `runtime/AGENT_ENTRY_SHARED.md` plus `adapters/codex/ENTRY.md`. Edit those
@@ -20,7 +18,6 @@ python3 scripts/install_runtime_adapter.py --adapter codex --check
 The default target is `~/.codex/skills/skills-ai-registry/SKILL.md`. Use
 `--config-dir` for an alternate Codex configuration directory.
 
-Explicit registry-discovery questions are answered from returned live metadata.
-The entry does not retain a catalog or preload skill bodies. A Codex task
-started outside this repository uses the shared pending-request handoff instead
-of editing Skills AI directly.
+The entry does not retain a catalog or preload package bodies. Metadata pages are expanded only when necessary. A supplied project root allows only exact validated capsule inspection. Tasks started outside the maintenance repository preserve its request-only change boundary. Semantic live acceptance and end-to-end verification are recorded separately in the build record.
+
+The installer renders the shared header and core together. Reinstallation updates the source identity; `--check` compares the complete rendered copy. Runtime and generated repository entries point to this canonical core instead of repeating its controls.

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 10,
+  "protocol_version": 16,
   "approval_operations": [
     "move",
     "deprecate",
@@ -10,8 +10,8 @@
     "protocol"
   ],
   "protected_prefixes": [
-    "design-with-claude/",
     "interaction-protocol/",
+    "runtime/skills-orchestrator/",
     "theory-reference/"
   ],
   "request_inbox": "requests/pending",
@@ -41,10 +41,11 @@
         ".obsidian/**",
         "adapters/**",
         "cards/**",
-        "design-with-claude/**",
         "docs/**",
         "external-skills/**",
+        "graph/**",
         "interaction-protocol/**",
+        "optimizer/**",
         "protocols/**",
         "research-context-scout/**",
         "registry/**",
@@ -60,27 +61,77 @@
       "source_patterns": [
         "docs/00_SKILLS_HUB.md",
         "registry/**",
-        "design-with-claude/**",
         "interaction-protocol/**",
         "theory-reference",
         "external-skills/**",
+        "optimizer/**",
+        "runtime/skills-orchestrator/**",
         "research-context-scout/**",
         "protocols/repository/DOCUMENTATION.json",
         "scripts/compile_repository_views.py"
       ],
       "check": "views"
     },
-    "runtime/router-manifest.json": {
+    "runtime/manifest.json": {
       "source_patterns": [
         "interaction-protocol/protocol.json",
         "docs/00_SKILLS_HUB.md",
         "registry/**"
       ],
       "check": "registry"
+    },
+    "graph/orchestration/skills-orchestrator.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/interaction-protocol.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/theory-reference.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/research-context-scout.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/optimizer.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/quantum-job-collector.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
     }
   },
   "ignored_worktree_patterns": [
     ".runtime/**",
+    "feedback-tickets/**",
     "sample_resources/**"
   ],
   "user_owned_paths": [
@@ -92,13 +143,30 @@
   "roles": [
     {
       "id": "platform-entry",
-      "patterns": ["AGENTS.md", "CLAUDE.md"],
-      "checks": ["consistency", "human-docs", "unit", "views"]
+      "patterns": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "checks": [
+        "consistency",
+        "human-docs",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "human-guide",
-      "patterns": ["README.md", "docs/human/**", "research-context-scout/README.md"],
-      "checks": ["consistency", "graph", "human-docs", "views"]
+      "patterns": [
+        "README.md",
+        "docs/human/**",
+        "research-context-scout/README.md"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "views"
+      ]
     },
     {
       "id": "governance",
@@ -110,7 +178,13 @@
         "docs/07_BUILD_AND_RELEASE.md",
         "protocols/repository/**"
       ],
-      "checks": ["consistency", "graph", "human-docs", "unit", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "registry-source",
@@ -119,46 +193,98 @@
         "registry/**",
         "interaction-protocol/**"
       ],
-      "checks": ["consistency", "graph", "human-docs", "registry", "unit", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "registry",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "skill-source",
       "patterns": [
-        "design-with-claude/*.md",
         "external-skills/**/SKILL.md",
+        "optimizer/SKILL.md",
         "research-context-scout/SKILL.md",
         "theory-reference/SKILL.md",
         "theory-reference/shared/SKILL.md"
       ],
-      "checks": ["consistency", "graph", "registry", "unit", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "registry",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "skill-plan-draft",
-      "patterns": ["skill-plans/*/plan.md"],
+      "patterns": [
+        "skill-plans/*/plan.md"
+      ],
       "checks": []
     },
     {
       "id": "skill-support",
       "patterns": [
         "external-skills/**",
+        "optimizer/**",
         "research-context-scout/**",
         "theory-reference/shared/phases/**"
       ],
-      "checks": ["consistency", "graph", "unit", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "shared-runtime",
       "patterns": [
         "runtime/**",
-        "scripts/benchmark_router.py",
+        "scripts/measure_context.py",
         "scripts/compile_registry.py",
         "scripts/list_registry.py",
         "scripts/registry_runtime.py",
         "scripts/route_skill.py",
         "scripts/toggle_registry.py",
-        "scripts/validate_registry.py"
+        "scripts/validate_registry.py",
+        "scripts/orchestrate.py",
+        "scripts/replacement_packet.py",
+        "scripts/repair_workspace.py",
+        "scripts/measure_context.py",
+        "scripts/benchmark_router.py"
       ],
-      "checks": ["benchmark", "consistency", "human-docs", "lifecycle", "registry", "unit", "views"]
+      "checks": [
+        "benchmark",
+        "consistency",
+        "human-docs",
+        "lifecycle",
+        "registry",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "ticket-hub-cli",
+      "patterns": [
+        "scripts/ticket_hub.py"
+      ],
+      "checks": [
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "ticket-hub-local-state",
+      "patterns": [
+        "feedback-tickets/**"
+      ],
+      "checks": []
     },
     {
       "id": "maintenance-runtime",
@@ -171,27 +297,74 @@
         "scripts/human_docs_guard.py",
         "scripts/scan_consistency.py"
       ],
-      "checks": ["consistency", "graph", "human-docs", "unit", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "platform-adapter",
-      "patterns": ["adapters/**", "scripts/install_runtime_adapter.py"],
-      "checks": ["adapter", "consistency", "human-docs", "unit", "views"]
+      "patterns": [
+        "adapters/**",
+        "scripts/install_runtime_adapter.py"
+      ],
+      "checks": [
+        "adapter",
+        "consistency",
+        "human-docs",
+        "unit",
+        "views"
+      ]
     },
     {
       "id": "test-source",
-      "patterns": ["tests/**"],
-      "checks": ["consistency", "unit", "views"]
+      "patterns": [
+        "tests/**"
+      ],
+      "checks": [
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "graph-entry",
+      "patterns": [
+        "graph/**"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "views"
+      ]
     },
     {
       "id": "graph-configuration",
-      "patterns": [".obsidian/graph.json", "docs/05_COLOR_LAYERS.md"],
-      "checks": ["graph", "human-docs", "views"]
+      "patterns": [
+        ".obsidian/graph.json",
+        "docs/05_COLOR_LAYERS.md"
+      ],
+      "checks": [
+        "graph",
+        "human-docs",
+        "views"
+      ]
     },
     {
       "id": "change-request",
-      "patterns": ["requests/**"],
-      "checks": ["change-request", "consistency", "graph", "views"]
+      "patterns": [
+        "requests/**"
+      ],
+      "checks": [
+        "change-request",
+        "consistency",
+        "graph",
+        "views"
+      ]
     },
     {
       "id": "repository-support",
@@ -206,35 +379,134 @@
         "docs/SKILLS.md",
         "theory-reference"
       ],
-      "checks": ["consistency", "graph", "views"]
+      "checks": [
+        "consistency",
+        "graph",
+        "views"
+      ]
     },
     {
       "id": "ignored-sample",
-      "patterns": ["sample_resources/**"],
+      "patterns": [
+        "sample_resources/**"
+      ],
       "checks": []
     },
     {
       "id": "ignored-runtime-state",
-      "patterns": [".runtime/**"],
+      "patterns": [
+        ".runtime/**"
+      ],
       "checks": []
+    },
+    {
+      "id": "retired-deletion-checkpoint",
+      "patterns": [
+        "design-with-claude/accessibility-specialist.md",
+        "design-with-claude/auth-implementation.md",
+        "design-with-claude/auth-security-ux-specialist.md",
+        "design-with-claude/b2b-saas-specialist.md",
+        "design-with-claude/brand-designer.md",
+        "design-with-claude/checkout-specialist.md",
+        "design-with-claude/code-explainer.md",
+        "design-with-claude/color-specialist.md",
+        "design-with-claude/content-strategist.md",
+        "design-with-claude/conversational-ui-designer.md",
+        "design-with-claude/dark-mode-specialist.md",
+        "design-with-claude/dashboard-designer.md",
+        "design-with-claude/data-visualization-specialist.md",
+        "design-with-claude/database-setup.md",
+        "design-with-claude/debug-helper.md",
+        "design-with-claude/deploy-to-vercel.md",
+        "design-with-claude/design-brief.md",
+        "design-with-claude/design-system-architect.md",
+        "design-with-claude/drag-drop-specialist.md",
+        "design-with-claude/ecommerce-specialist.md",
+        "design-with-claude/environment-setup.md",
+        "design-with-claude/error-handling-specialist.md",
+        "design-with-claude/form-designer.md",
+        "design-with-claude/healthcare-ux-specialist.md",
+        "design-with-claude/i18n-designer.md",
+        "design-with-claude/information-architect.md",
+        "design-with-claude/interaction-designer.md",
+        "design-with-claude/landing-page-specialist.md",
+        "design-with-claude/mobile-specialist.md",
+        "design-with-claude/motion-designer.md",
+        "design-with-claude/navigation-specialist.md",
+        "design-with-claude/onboarding-specialist.md",
+        "design-with-claude/performance-specialist.md",
+        "design-with-claude/poster-lead.md",
+        "design-with-claude/print-export-designer.md",
+        "design-with-claude/responsive-design-specialist.md",
+        "design-with-claude/search-specialist.md",
+        "design-with-claude/setup-guide.md",
+        "design-with-claude/spacing-layout-specialist.md",
+        "design-with-claude/table-designer.md",
+        "design-with-claude/typography-specialist.md",
+        "design-with-claude/visual-hierarchy-specialist.md"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "human-docs",
+        "unit",
+        "views"
+      ]
     }
   ],
   "graph_role_policy": {
     "graph_contract_entry_layer": "L1",
     "required_paths": {
       "registry/activation.md": "L1",
-      "registry/design.md": "L2",
+      "graph/orchestration/skills-orchestrator.md": "L1",
+      "registry/theory.md": "L2",
       "cards/legacy/quantum-job-collector.md": "L3",
-      "design-with-claude/poster-lead.md": "L4",
-      "research-context-scout/SKILL.md": "L4",
+      "optimizer/SKILL.md": "L4",
+      "graph/skills/optimizer.md": "L4",
+      "graph/skills/research-context-scout.md": "L4",
       "runtime/PROTOCOL.md": "L5"
     }
   },
+  "graph_inventory_policy": {
+    "documentation_model": "protocols/repository/DOCUMENTATION.json",
+    "orchestrator_layer": "L1",
+    "skill_layer": "L4",
+    "reserved_entry_names": [
+      "SKILL.md",
+      "README.md",
+      "CLAUDE.md",
+      "CODEX.md",
+      "ENTRY.md"
+    ],
+    "require_default_visibility": true
+  },
   "graph_contracts": [
+    {
+      "id": "skills-orchestrator",
+      "entry": "graph/orchestration/skills-orchestrator.md",
+      "canonical_sources": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json"
+      ],
+      "required_links": {
+        "graph/orchestration/skills-orchestrator.md": [
+          "docs/00_SKILLS_HUB",
+          "registry/activation",
+          "runtime/skills-orchestrator/SKILL",
+          "graph/skills/interaction-protocol",
+          "graph/skills/theory-reference",
+          "graph/skills/research-context-scout",
+          "graph/skills/optimizer",
+          "graph/skills/quantum-job-collector"
+        ]
+      }
+    },
     {
       "id": "interaction-protocol",
       "entry": "interaction-protocol/README.md",
-      "canonical_sources": ["interaction-protocol/protocol.json"],
+      "canonical_sources": [
+        "interaction-protocol/protocol.json"
+      ],
       "required_links": {
         "docs/00_SKILLS_HUB.md": [
           "registry/interaction",
@@ -254,10 +526,18 @@
           "runtime/API_CONTRACT",
           "docs/INTERACTION_PROTOCOL_MIGRATION"
         ],
-        "docs/INTERACTION_PROTOCOL_MIGRATION.md": ["interaction-protocol/README"],
-        "runtime/README.md": ["interaction-protocol/README"],
-        "runtime/PROTOCOL.md": ["interaction-protocol/README"],
-        "runtime/API_CONTRACT.md": ["interaction-protocol/README"]
+        "docs/INTERACTION_PROTOCOL_MIGRATION.md": [
+          "interaction-protocol/README"
+        ],
+        "runtime/README.md": [
+          "interaction-protocol/README"
+        ],
+        "runtime/PROTOCOL.md": [
+          "interaction-protocol/README"
+        ],
+        "runtime/API_CONTRACT.md": [
+          "interaction-protocol/README"
+        ]
       }
     },
     {
@@ -273,8 +553,12 @@
           "protocols/repository/PROTOCOL_AMENDMENT",
           "docs/human/07_MAINTAINING_SKILLS"
         ],
-        "docs/07_BUILD_AND_RELEASE.md": ["docs/06_CHANGE_CONTROL"],
-        "protocols/repository/PROTOCOL_AMENDMENT.md": ["docs/06_CHANGE_CONTROL"]
+        "docs/07_BUILD_AND_RELEASE.md": [
+          "docs/06_CHANGE_CONTROL"
+        ],
+        "protocols/repository/PROTOCOL_AMENDMENT.md": [
+          "docs/06_CHANGE_CONTROL"
+        ]
       }
     },
     {

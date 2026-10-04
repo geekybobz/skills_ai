@@ -26,6 +26,7 @@ class ChangeGuardTests(unittest.TestCase):
             "SCOPE_EXPANSION.md",
             "PROTOCOL_AMENDMENT.md",
             "EXTERNAL_CHANGE_REQUEST.md",
+            "REPAIR_WORKSPACE.md",
         }
         actual = {path.name for path in (ROOT / "protocols" / "repository").glob("*.md")}
         self.assertEqual(cards, actual)
@@ -65,8 +66,8 @@ class ChangeGuardTests(unittest.TestCase):
     def test_staged_file_outside_scope_is_blocked(self) -> None:
         report = assess_change(
             "update",
-            ["scripts/route_skill.py"],
-            staged_paths=["scripts/route_skill.py", "README.md"],
+            ["scripts/orchestrate.py"],
+            staged_paths=["scripts/orchestrate.py", "README.md"],
         )
         self.assertEqual("blocked-by-invariant", report["status"])
         self.assertEqual(["README.md"], report["staged_outside_scope"])
@@ -77,7 +78,7 @@ class ChangeGuardTests(unittest.TestCase):
 
     def test_external_request_operation_is_limited_to_pending_inbox(self) -> None:
         allowed = assess_change("request", ["requests/pending/request.md"])
-        blocked = assess_change("request", ["registry/design.md"])
+        blocked = assess_change("request", ["registry/theory.md"])
         self.assertEqual("allowed", allowed["status"])
         self.assertEqual("blocked-by-invariant", blocked["status"])
 
@@ -88,20 +89,20 @@ class ChangeGuardTests(unittest.TestCase):
     def test_skill_change_derives_registry_and_unit_checks(self) -> None:
         report = assess_change(
             "add",
-            ["design-with-claude/new-skill.md"],
+            ["external-skills/fixture-skill/SKILL.md"],
             approval_ref="approved-skill-add",
         )
-        self.assertIn("skill-source", report["roles"]["design-with-claude/new-skill.md"])
+        self.assertIn("skill-source", report["roles"]["external-skills/fixture-skill/SKILL.md"])
         self.assertIn("registry", report["required_check_ids"])
         self.assertIn("unit", report["required_check_ids"])
 
     def test_registry_source_reports_affected_generated_manifest(self) -> None:
-        report = assess_change("edit", ["registry/build-ops.md"])
+        report = assess_change("edit", ["registry/optimizer.md"])
         self.assertEqual(
             [
                 "docs/human/_LIVE_REPOSITORY_INDEX.md",
                 "docs/human/_LIVE_SKILL_CATALOG.md",
-                "runtime/router-manifest.json",
+                "runtime/manifest.json",
             ],
             report["affected_generated_outputs"],
         )

@@ -24,7 +24,7 @@ class ChangeRequestTests(unittest.TestCase):
             "original_request": "Please fix the ambiguous trigger.",
             "problem": "An ordinary sentence selects the wrong skill.",
             "desired_behavior": "Qualified technical prompts match; ordinary prose falls back.",
-            "targets": ["registry/design.md", "tests/router_cases.json"],
+            "targets": ["registry/theory.md", "tests/model_orchestration_cases.json"],
             "evidence": ["A negative routing fixture reproduces the mismatch."],
             "risks": ["Over-qualification may reduce recall."],
             "rollback": ["Revert the focused registry commit."],
@@ -50,7 +50,7 @@ class ChangeRequestTests(unittest.TestCase):
             content = path.read_text(encoding="utf-8")
             self.assertIn('id: "SCR-20260731-120000-abcd1234"', content)
             self.assertIn("## Original user request", content)
-            self.assertIn("`registry/design.md`", content)
+            self.assertIn("`registry/theory.md`", content)
             self.assertIn("## Maintenance handoff", content)
             self.assertIn("Commit: pending", content)
             self.assertIn(str(root), result["handoff_prompt"])

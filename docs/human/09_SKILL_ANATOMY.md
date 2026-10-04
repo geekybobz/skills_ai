@@ -15,10 +15,10 @@ Back: [repository atlas](08_REPOSITORY_ATLAS.md). Return to the
 ```mermaid
 flowchart TD
     Q["Request"] --> S["Skills Orchestrator"]
-    S --> P["One public task package"]
-    P --> C["One internal capability"]
+    S --> P["Relevant public packages"]
+    P --> C["Selected compatible capabilities"]
     C --> F["Focused instruction file or phase"]
-    F --> O["Verified phase result"]
+    F --> O["Phase result and check evidence"]
     I["Interaction package"] --> O
 ```
 
@@ -33,8 +33,7 @@ but is not a package, capability, or inventory row.
 
 | public package | anatomy |
 |---|---|
-| `interaction-protocol` | canonical JSON contract, human hub, general/math modes; no task slot |
-| `design-with-claude` | one composite package whose capability instructions are individual Markdown files |
+| `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
 | `research-context-scout` | repository package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
 | `optimizer` | repository package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
@@ -47,11 +46,15 @@ triggers, exclusions, canonical path, and tests. The registry describes these
 facts without copying the instruction body. A selected path is loaded only
 after package state and path validation.
 
-For example, `dark-mode-specialist` is not a public skill. It is an internal
-capability of `design-with-claude`. Exact selection is:
+Locating that path requires no background semantic index. The host
+selects an exact capability from discovery metadata; maintenance work otherwise
+uses bounded native filename and literal searches followed by targeted reads.
+
+For example, optimizer's build-system and optimization workflows belong to
+one public package. An exact build-workflow selection is:
 
 ```text
-#> skill design-with-claude dark-mode-specialist
+#> build-system <problem.tex>
 ```
 
 ## Multi-phase packages
@@ -68,9 +71,7 @@ flowchart TD
 ```
 
 The orchestrator contract may coordinate several capabilities, but the host
-verifies and reroutes between phases instead of preloading them. The router
-validates and transports a bounded checkpoint; it does not enforce phase
-transitions. A checkpoint may record stable approved progress, never prompts or
+verifies and reroutes between phases instead of preloading them. Explicit checkpoint tools inspect saved content bindings; the host decides recovery and phase transitions. A checkpoint may record content-bound progress, never prompts or
 permission.
 
 Research Context Scout is a concrete example: its initial phase opens only the
@@ -100,3 +101,19 @@ The live catalog must contain one separate orchestrator record and exactly one
 public row per Activation skill package. Its separate Internal Capabilities
 section may list routes, triggers, paths, and token estimates for technical
 inspection, but those rows are not skills.
+
+A comma-separated use list explicitly selects named public packages; the host resolves their exact entries and relevant phases. The task receipt reports planned selection and useful roles without treating capability leaves as extra skills or claiming unread files were loaded.
+
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
+
+## Working with contained changes
+
+Repair mode belongs to orchestration, not a skill package or capability. It changes the working location while existing package contracts and required evidence remain in force. See [Safe changes](04_SAFE_CHANGES.md).
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+## Current context flow
+
+A package may declare several capabilities in `registry/contracts/`. Each has an exact complete entry and optional dependencies. The loader returns composite identities and separate reference bindings; it does not automatically choose or load dependencies. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

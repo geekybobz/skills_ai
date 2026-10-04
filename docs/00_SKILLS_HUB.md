@@ -1,37 +1,33 @@
 # Skills Hub
 
-Human-readable routing authority and maintenance hub. Normal tasks use the
-compiled entry at `runtime/SKILL.md`: the runtime returns one active skill or a
-fail-open `NORMAL` result without loading this file into model context.
+Human-readable routing authority and maintenance hub. The always-active
+[[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] uses the compiled entry at
+`runtime/SKILL.md`: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
 
 Shared response behavior: [[interaction-protocol/README|Interaction Protocol]].
 
 When maintaining or auditing the registry, check [[registry/activation]], then
-pick the enabled family registry and load the active skill or component.
+pick the enabled family registry and load the selected package capability.
 
 ## Route
 
 | task looks like | if enabled in [[registry/activation]], read |
 |---|---|
-| poster, A0, HTML page, layout, spacing, hierarchy, colour, dark mode, type, brand, motion, chart, table, print, PDF | [[registry/design]] |
-| form, nav, search, error state, onboarding, loading, drag, chat UI, a11y, mobile, i18n, saas, ecommerce, checkout, landing, auth UX, healthcare | [[registry/ui-patterns]] |
-| install, node, `.env`, secret, database, supabase, deploy, vercel, domain, build error, explain this code | [[registry/build-ops]] |
 | concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
 | LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
 | `#> scout`, `#> scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[registry/research]] |
+| `#> optimizer` | [[registry/optimizer\|optimizer]] |
 | quantum jobs, career radar, update review queue, pending jobs, source coverage | `registry/career.md` (off in activation) |
 
 ## Rules
 
-1. Read [[registry/activation]] first. If a matching family, skill, or component
-   is `off`, `hidden`, or `deprecated`, do not route to it.
-2. Read exactly one enabled family registry. Not two, not all.
-3. Name the chosen active skill/component and why, then load it. One or two
-   skill files maximum.
-4. **No active row matches → load no local skill and continue normally. Never invent or substitute a skill.**
-5. Two rows match → read [[03_COMBO_MAP]] before loading anything.
-6. About to write files, run scripts, or overwrite → read [[04_RISK_MAP]] first.
-7. Never load a whole family. The design family alone is ~30k tokens.
+This hub is for bounded maintenance inspection. Normal work uses the model-led core and compact discovery, rather than the Markdown hub or trigger tables. Trigger phrases below are descriptive metadata, never a keyword routing engine.
+
+1. Read [[registry/activation]] for user-controlled availability. Off, hidden and deprecated capabilities cannot be loaded.
+2. Inspect exactly the relevant family for maintenance; do not preload every registry or skill body.
+3. The host chooses the minimum sufficient compatible capability set, exact entries and required support using semantic reasoning. It never invents an ID or grants permissions through selection.
+4. Normal host work is valid when no optional capability helps. Resolve material ambiguity and ownership conflicts before dependent work; see [[03_COMBO_MAP]].
+5. Before governed writes or registry scripts, read [[04_RISK_MAP]] and change control.
 
 ## Layers
 
@@ -41,5 +37,5 @@ L0 entry · L1 hubs and switchboards · L2 family registries · L3 cards · L4 s
 ## Do Not
 
 - Do not preload a family "to see what's there". The registry is the answer to that question.
-- Interaction protocols shape responses and do not consume the one task-skill slot.
+- The interaction skill shapes responses and is independent of task capability selection.
 - Do not modify skill files unless the user explicitly asks.

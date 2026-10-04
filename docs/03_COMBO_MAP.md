@@ -1,33 +1,7 @@
-# Combo Map
+# Composition map
 
-Read only when a task genuinely spans two families or two skills.
-Load the smallest useful pair — never the whole chain.
+Back: [[docs/00_SKILLS_HUB]]. Normative composition: [[runtime/skills-orchestrator/COMPOSITION]].
 
-Back: [[00_SKILLS_HUB]] · Risk: [[04_RISK_MAP]] · Layers: [[05_COLOR_LAYERS]]
+The host selects the minimum sufficient compatible capability set for the current phase. Single work has one owner; sequential work has explicit producer/consumer artifacts; cooperative work has one output owner and complete supporting constraints; parallel work has authorized independent contexts, controlled write sets and one synthesis owner. Structured checkpoints provide durability across any topology.
 
-## Within design
-
-| combo | use when | order |
-|---|---|---|
-| `poster-lead` + 2-3 specialists | new poster or HTML visual task | [[design-with-claude/poster-lead]] picks them — load only what it names |
-| `design-brief` + one specialist | loose requirements need structure first | [[design-with-claude/design-brief]], then the domain skill |
-| `dark-mode-specialist` + `color-specialist` | dark theme *and* a full palette | dark sets surface logic, colour builds the scale on top |
-| `dashboard-designer` + `spacing-layout-specialist` | dense grid needing exact column maths | grid hierarchy first, then spacing precision |
-| `data-visualization-specialist` + `dashboard-designer` | figure-heavy poster or dashboard | chart logic first, then where they land |
-| `typography-specialist` + `visual-hierarchy-specialist` | readability *and* attention flow | type scale first, hierarchy weights follow from it |
-| `print-export-designer` + `color-specialist` | PDF or print with palette constraints | print rules first, then audit colours for print safety |
-
-## Across families
-
-| combo | use when | order |
-|---|---|---|
-| [[registry/theory]] + [[registry/design]] | theory content becomes an academic poster | theory gives structure, `poster-lead` gives layout |
-| [[registry/interaction]] + any family | every request needs the shared compact-professional response contract | compose the protocol context with the independently selected task skill |
-| `interaction.math` + `theory-reference` | equation-led explanation while building rigorous notes | math controls answer shape; theory controls notation, phases, and files |
-| [[registry/ui-patterns]] + [[registry/build-ops]] | auth UX *and* auth code | `auth-security-ux-specialist` for the flow, `auth-implementation` for the code |
-| `cavecrew` + investigation work | delegating to save main context | `cavecrew` decides, then the subagent pattern it names |
-
-## Rule
-
-Two skills is a combo. Four is a preload. If the pair does not appear above, pick
-the single closest skill and say what you left out.
+Do not load entire families or combine full bodies merely because several skills were named. Resolve contradictory assumptions, exclusions, unavailable dependencies and overlapping output ownership before dependent execution. Independent authorized work can continue. Metadata and artifact checks inform the host; they do not choose a topology.

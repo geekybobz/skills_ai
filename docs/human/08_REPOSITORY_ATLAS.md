@@ -9,90 +9,88 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 Back: [maintaining skills](07_MAINTAINING_SKILLS.md). Next:
 [skill anatomy](09_SKILL_ANATOMY.md). Return to the [human guide](../../README.md).
 
-This chapter moves from the simple picture to the real repository. Use it when
-you want to know where an idea lives before opening individual files.
-
-## First picture: four responsibilities
+## Responsibility map
 
 ```mermaid
-flowchart TD
-    ROOT["skills_ai/"] --> ROUTE["Route a request"]
-    ROOT --> WORK["Perform one selected skill"]
-    ROOT --> SAFE["Maintain the repository safely"]
-    ROOT --> LEARN["Explain the system to a human"]
+flowchart LR
+    ROOT["skills_ai/"] --> SUP["Orchestrate and manage"]
+    ROOT --> ROUTE["Expose metadata and exact access"]
+    ROOT --> WORK["Host coordinates selected capabilities"]
+    ROOT --> SAFE["Govern and verify changes"]
+    ROOT --> LEARN["Explain to humans"]
+    ROOT --> VIEW["Visualize inventory"]
+```
 
-    ROUTE --> REG["registry + runtime"]
-    WORK --> SKILL["skill collections"]
+```mermaid
+flowchart LR
+    SUP --> RUN["runtime/skills-orchestrator"]
+    ROUTE --> REG["registry + manifest"]
+    WORK --> PKG["package content"]
     SAFE --> GOV["protocols + scripts + tests"]
     LEARN --> DOC["README + docs/human"]
-
-    classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef action fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class ROOT entry
-    class ROUTE,WORK,SAFE,LEARN,REG,SKILL,GOV,DOC action
+    VIEW --> GRAPH["generated graph nodes"]
 ```
 
 ## Folder meanings
 
-| Folder | Plain-language purpose | Open it when |
-|---|---|---|
-| `registry/` | Directory of skill purpose, triggers, exclusions, paths, and activation | You want to know why or whether a skill can be selected |
-| `runtime/` | Shared request/response contract and generated router manifest | You want to understand the fast normal-task path |
-| `design-with-claude/` | Many independent single-file skills | One visual, UI, setup, deploy, or explanation skill was selected |
-| `theory-reference/` | Separately owned multi-file theory skill | A theory phase was selected or you are inspecting package anatomy |
-| `interaction-protocol/` | General and mathematical response behavior | You want to understand answer style rather than task selection |
-| `protocols/repository/` | Rules for repository operations | A file, protocol, skill, or integration will change |
-| `scripts/` | Deterministic local commands | You need to compile, route, validate, scan, benchmark, or install |
-| `tests/` | Mechanical evidence | You want to see which promises are actually tested |
-| `adapters/` | Codex- and Claude-specific access | You are checking platform lifecycle or installation |
-| `docs/human/` | Progressive illustrated learning route | You are learning or reviewing the architecture |
-| `requests/` | Controlled external-task intake | A request started outside this repository |
-| `research-context-scout/` | Repository-owned multi-file research-orientation skill | A new project needs user-guided context, evidence, applications, or iterative deepening |
-| `external-skills/` | Pointers to separately owned skills | You need ownership or activation information without traversing the target |
-| `.runtime/` | Ignored prompt-free ambiguity observations | You are locally analyzing repeated equal route pairs; never commit it |
+| folder | meaning |
+|---|---|
+| `runtime/` | orchestrator, shared coordination core and on-demand modules, capsule validator/schema, API, protocol, entry, and manifest |
+| `registry/` | public package states plus internal family/capability metadata |
+| `graph/` | generated, uniquely named Obsidian entries for the orchestrator and five public skills |
+| `interaction-protocol/` | one public interaction package with general and math modes |
+| `theory-reference/` | one public task package owned as a Git submodule |
+| `research-context-scout/` | one repository-owned manual task package |
+| `optimizer/` | one repository-owned manual task package for version-resolved OLGS build review, adaptive campaigns, and explicit situation analysis |
+| `external-skills/` | non-traversed pointers to externally owned packages |
+| `protocols/repository/` | operation-specific repository rules |
+| `scripts/` | on-demand metadata access, compilation, context, validation, scanning, context measurement and installation tools |
+| `tests/` | mechanical evidence for runtime and documentation promises |
+| `adapters/` | thin Codex and Claude lifecycle layers |
+| `docs/human/` | progressive explanation outside the routing hot path |
+| `requests/` | bounded intake from tasks that started outside this workspace |
+| `skill-plans/` | design plans, distinct from public package entries |
+| `.runtime/` | ignored local diagnostic and recovery data; never selection authority |
 
-Cross-platform prompt controls use the shared `#>` directive namespace. This
-keeps routing, presentation, Scout, and local-override instructions in ordinary
-prompt text so a host command menu cannot consume them before the router runs.
+The optional `.skills-ai/project.json` capsule lives in the external project
+being worked on, not in this repository's `.runtime/`. It is validated before
+use and remains advisory. Normal receipts exclude stored commands and
+validation commands; explicit inspection may expose only neutralized data.
 
-## How to move deeper
+There is no separate repository code-index directory or background indexing
+service. Agents locate context with bounded native file search, then open only
+the relevant files or line ranges. The generated `graph/` directory is a small
+human-facing inventory projection, not a code index and not a runtime service.
 
-```mermaid
-flowchart TD
-    I["Illustrated chapter"] --> A["Folder meaning"]
-    A --> F["Real file in live index"]
-    F --> C["Canonical source"]
-    C --> T["Test or validation command"]
+## File authority
 
-    classDef learn fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef proof fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class I,A,F learn
-    class C,T proof
-```
+| kind | editing rule |
+|---|---|
+| canonical source | edit through the matching operation protocol |
+| generated projection | regenerate from canonical sources; never hand-edit |
+| human explanation | synchronize with behavior; never use as routing authority |
+| package entry | defines one public package boundary or workflow |
+| capability file | focused internal instructions selected for one phase |
+| platform overlay | host-specific lifecycle only |
+| external/submodule | preserve ownership boundary |
+| personal state | preserve unless explicitly requested |
 
-For an exhaustive current list, open the
-[live repository index](_LIVE_REPOSITORY_INDEX.md). It is generated from Git,
-the repository roles, registry metadata, and file introductions. It shows every
-tracked file plus role-resolved untracked additions without letting arbitrary
-scratch files make the view stale. Ignored runtime state remains outside it.
+The [live repository index](_LIVE_REPOSITORY_INDEX.md) is the exhaustive
+generated file reference. The [live skill catalog](_LIVE_SKILL_CATALOG.md) is
+package-first and separates its capability appendix.
 
-## Canonical, generated, and explanatory files
+The simple commands and visible receipt are defined in runtime/skills-orchestrator/SKILL.md and CONTRACT.md. Their agent-entry projection is generated from runtime/AGENT_ENTRY_SHARED.md. No separate command parser or persistent receipt store is required.
 
-| Kind | Meaning | Editing rule |
-|---|---|---|
-| Canonical source | Defines behavior or governance | Edit only through the matching repository protocol |
-| Generated projection | Repeats canonical facts in a usable view | Regenerate; do not hand-edit |
-| Human explanation | Teaches the idea with diagrams and examples | Keep synchronized, but it never overrides canonical behavior |
-| Platform overlay | Contains only Codex- or Claude-specific lifecycle differences | Shared routing rules do not belong here |
-| Test | Proves a deterministic promise | Update when public behavior changes |
-| Personal state | Local display preference such as Obsidian graph layout | Preserve unless explicitly requested |
-| External or submodule | Separately owned content | Do not cross the ownership boundary implicitly |
-| Plan-only idea | One `skill-plans/<name>/plan.md` draft | Keep outside routing, generated views, and graph until explicit promotion |
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
 
-The deeper technical rationale is recorded in the
-[shared documentation model](../SHARED_DOCUMENTATION_MODEL.md).
+## Working with contained changes
 
-Obsidian color groups are the controlled part of `.obsidian/graph.json`: they
-encode node roles and are validated. Zoom, force settings, orphan visibility,
-and collapsed panels remain personal state. The approved default overview
-filter hides maintenance folders without removing their files or links.
+`scripts/repair_workspace.py` is the maintenance CLI; `runtime/repair_workspace.py` implements snapshots and exact transactions. Their private workspace records live under `.runtime/repair/` and are excluded from this atlas’s generated inventory. See [Safe changes](04_SAFE_CHANGES.md).
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+## Current context flow
+
+`runtime/manifest.json` is generated metadata. `scripts/orchestrate.py` supplies context, discovery and exact access; `scripts/measure_context.py` measures delivery. `adapters/claude/skills-ai-context.js` owns hook lifecycle; shared management detail is in `runtime/skills-orchestrator/MANAGEMENT.md`. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

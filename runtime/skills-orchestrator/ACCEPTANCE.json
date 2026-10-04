@@ -1,0 +1,106 @@
+{
+  "schema": "skills-ai/build-acceptance/1",
+  "date": "2026-10-04",
+  "deployment": "Deployed to the source repository on 2026-10-04; live artifact checks and installed Codex/Claude source-binding checks passed. Native semantic acceptance remains unperformed.",
+  "isolation": {
+    "workspace": "repair-6e465d893655987b",
+    "branch": "codex/orchestrator-efficiency",
+    "baseline_commit": "3274a14"
+  },
+  "instruction_bindings": [
+    {
+      "path": "runtime/skills-orchestrator/SKILL.md",
+      "sha256": "349a0c6bf1e999ccf555580409a24a27a3cc6041faed00bba5c1668a9db6288e"
+    },
+    {
+      "path": "runtime/skills-orchestrator/CONTRACT.md",
+      "sha256": "563b43f80248a6b9dd9df6fa71f5742b6bf10ed40e3712561037ef14fea16860"
+    },
+    {
+      "path": "runtime/skills-orchestrator/COMPOSITION.md",
+      "sha256": "54e8892f214c61f21bb6d8fcec8d7e742ceeffbda204ee342cc36959caca501e"
+    },
+    {
+      "path": "runtime/skills-orchestrator/RECOVERY.md",
+      "sha256": "cb8204647710369fe4f6c7d7051e3f77d9cbdbd63f7b52cc11d4ae431f6ca71e"
+    },
+    {
+      "path": "runtime/skills-orchestrator/MANAGEMENT.md",
+      "sha256": "2ed66e4babca3424991e9801e2f15fc29d0af0c9493aecc509e185ea05197755"
+    }
+  ],
+  "automated": {
+    "status": "PASS",
+    "unit_tests_run": 251,
+    "unit_tests_passed": 250,
+    "skipped": 1,
+    "skip_reason": "Opt-in optimizer live integration; no domain execution authorized by these local tests.",
+    "checks": [
+      "diff",
+      "activation",
+      "unit",
+      "context measurements",
+      "views",
+      "graph",
+      "human guide",
+      "changed/staged governance"
+    ],
+    "scope": "Deployed efficiency implementation; 251 live tests and source-owned update verification. Subsequent repository cleanup is checked separately."
+  },
+  "adapters": {
+    "codex": {
+      "disposable_cli_install": "PASS",
+      "merged_core_and_source_binding": "PASS",
+      "stale_copy_detection": "PASS",
+      "native_semantic_acceptance": "Not performed for these instruction hashes.",
+      "installed_source_binding": "PASS"
+    },
+    "claude": {
+      "disposable_cli_install": "PASS",
+      "startup_resume_clear_compact_fork_fixture_delivery": "PASS",
+      "unchanged_continuation": "PASS",
+      "foreign_settings_and_exact_owned_migration": "PASS",
+      "timeout_and_process_cleanup": "PASS",
+      "native_semantic_acceptance": "Not performed for these instruction hashes; synthetic hook-event tests do not prove native event firing or model behavior.",
+      "installed_source_binding": "PASS",
+      "installed_hook_smoke": "PASS: full startup and zero unchanged continuation bytes; not native host certification."
+    },
+    "repair": {
+      "committed_deletion_preview_apply_recovery": "Passed 19 focused synthetic lifecycle tests; candidate preview stages only existing/tracked paths and retains all baseline-relative packet entries.",
+      "source_preview_compatibility": "Permanent committed-deletion preview correction deployed; no host staging shim is required for subsequent updates."
+    }
+  },
+  "measurement": {
+    "schema": "skills-ai/measure/1",
+    "bytes": {
+      "core": 6796,
+      "catalog": 2318,
+      "bootstrap": 9481,
+      "unchanged_continuation": 0,
+      "changed_core": 6884
+    },
+    "estimated_bootstrap_tokens": 2371,
+    "token_measurement": "bytes/4 estimate, not tokenizer output or total task savings",
+    "process_latency_ms": {
+      "median": 39.329,
+      "maximum": 39.789
+    },
+    "failures": [],
+    "candidate_bodies_loaded": 0,
+    "semantic_acceptance": "not-measured",
+    "repeat": 3,
+    "authority": "none"
+  },
+  "preservation": {
+    "live_index_sha256": "88e46a1677d9a44713e0ac6d66328426a2684ad89e4067b86e3199dd93f447bc",
+    "live_files": "Exact reviewed update applied; 92 unrelated owned files and 35 reference files preserved. The recorded index hash describes the deployment boundary, before the separately authorized cleanup checkpoint.",
+    "rollback": "Retained; no historical operational backup/state pruning.",
+    "theory_reference": "Preserved independent snapshot; no submodule file edits or commits."
+  },
+  "limits": [
+    "Local checks do not certify semantic model decisions or scientific claims.",
+    "Byte/4 estimates measure delivery, not total task cost.",
+    "No global automatic memory, sticky selection defaults or skill-folder relocation.",
+    "Project capsules tied to changed manifest hashes may become stale; only explicit context management refreshes them."
+  ]
+}

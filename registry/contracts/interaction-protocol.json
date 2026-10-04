@@ -1,0 +1,32 @@
+{
+  "schema": "skills-ai/package/1",
+  "package": {
+    "id": "interaction-protocol",
+    "version": "1.0.0",
+    "purpose": "General and mathematical response presentation, independently controlled by activation."
+  },
+  "capabilities": [
+    {
+      "id": "interaction.general",
+      "entry": "interaction-protocol/protocol.json",
+      "purpose": "Present the result first with sufficient clear context and precise terms.",
+      "roles": [
+        "supporting"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "interaction.math",
+      "entry": "interaction-protocol/protocol.json",
+      "purpose": "Explain mathematical reasoning through results, defined symbols and justified equations.",
+      "roles": [
+        "supporting"
+      ],
+      "dependencies": []
+    }
+  ],
+  "rules": [],
+  "verification": {
+    "checks": []
+  }
+}

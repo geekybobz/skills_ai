@@ -6,7 +6,7 @@ related: "[[docs/SHARED_DOCUMENTATION_MODEL]]"
 
 ## Claude-specific access
 
-- Normal routing is injected by the managed `UserPromptSubmit` hook. Do not keep
+- Model-led coordination context and compact metadata are injected by managed `SessionStart` and selective `UserPromptSubmit` hooks. Do not keep
   or preload a duplicate skill catalog, activation table, or skill body in
   persistent instructions.
 - Claude owns its hook, installation, managed-memory cleanup, child lifecycle,

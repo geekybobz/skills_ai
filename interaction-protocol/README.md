@@ -1,7 +1,7 @@
 ---
 title: Interaction Protocol
 type: protocol-hub
-graph_layer: L4
+graph_layer: L1
 tags:
   - interaction
   - response-contract
@@ -18,10 +18,11 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · Controls:
 [[runtime/API_CONTRACT|API Contract]] · Migration:
 [[docs/INTERACTION_PROTOCOL_MIGRATION|Migration Record]]
 
-This is the visible Obsidian hub for the shared response protocol. The canonical
+This is one public interaction skill package and its visible Obsidian hub. The canonical
 machine-readable wording lives in [protocol.json](protocol.json). The registry
 controls whether general and math behavior is active; the runtime decides the
-current response mode and independently selects at most one task skill.
+current response mode and independently selects at most one task package
+capability. The interaction package consumes no task-package slot.
 
 ## Authority map
 
@@ -43,10 +44,10 @@ flowchart LR
     U["User request"] --> G["interaction.general"]
     G --> M{"Mathematical reasoning?"}
     M -- "Yes" --> X["Add interaction.math"]
-    M -- "No" --> R["Route task skill"]
+    M -- "No" --> R["Route task package"]
     X --> R
     R --> S{"Routing Fit?"}
-    S -- "Yes" --> L["Load one task skill"]
+    S -- "Yes" --> L["Load one capability"]
     S -- "No match" --> N["NORMAL"]
     S -- "Material ambiguity" --> C["Ask one short choice"]
     C --> L
@@ -72,10 +73,11 @@ flowchart LR
 
 - `interaction.general`: active or off.
 - `interaction.math`: active, manual, or off.
-- `#> skill auto`: select at most one relevant active skill.
-- `#> skill normal` or “do not use any local skill”: use no local task skill.
-- `#> skill <exact-id>`: explicitly request one enabled route; required for a
-  `manual` task skill.
+- `#> skill auto`: select at most one relevant active task package capability.
+- `#> skill normal` or “do not use any local skill”: use no local task package.
+- `#> skill <exact-package> [capability]`: explicitly request one enabled
+  package and optional internal capability; required for a manual package.
+- `#> skill interaction-protocol general|math`: select this public package's mode.
 - `#> interaction math`: explicit math response for the current request.
 - `#> interaction general`: explicit general response for the current request.
 - `#> format mermaid+summary`: request known output forms.

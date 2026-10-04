@@ -36,6 +36,15 @@ class HumanDocsTests(unittest.TestCase):
         self.assertIn("docs/human/00_START_HERE.md", required)
         self.assertIn("docs/human/01_FOLLOW_A_REQUEST.md", required)
 
+    def test_orchestrator_and_capsule_changes_map_to_human_guides(self) -> None:
+        orchestrator = required_guides(["runtime/skills-orchestrator/SKILL.md"], self.config)
+        capsule = required_guides(["runtime/project_context.py"], self.config)
+        for required in (orchestrator, capsule):
+            self.assertIn("README.md", required)
+            self.assertIn("docs/human/01_FOLLOW_A_REQUEST.md", required)
+            self.assertIn("docs/human/03_SKILLS_AND_CONTROLS.md", required)
+            self.assertIn("docs/human/05_SPEED_AND_TROUBLESHOOTING.md", required)
+
     def test_dot_prefixed_graph_path_keeps_its_source_mapping(self) -> None:
         required = required_guides([".obsidian/graph.json"], self.config)
         self.assertIn("docs/human/06_GRAPH_AND_COLORS.md", required)
@@ -94,7 +103,7 @@ class HumanDocsTests(unittest.TestCase):
                 self.assertIn("authority:", text[:500])
 
     def test_human_guide_is_not_a_runtime_route(self) -> None:
-        manifest = (ROOT / "runtime" / "router-manifest.json").read_text(encoding="utf-8")
+        manifest = (ROOT / "runtime" / "manifest.json").read_text(encoding="utf-8")
         self.assertNotIn("docs/human/", manifest)
         self.assertNotIn('"path": "README.md"', manifest)
 

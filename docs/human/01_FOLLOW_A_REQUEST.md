@@ -8,139 +8,89 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 Back: [start here](00_START_HERE.md). Next: [folder and platforms](02_FOLDER_AND_PLATFORMS.md).
 
-## Request entry and boundaries
+## Normal request
 
 ```mermaid
 flowchart TD
-    U["User request"] --> E["Shared runtime entry"]
-    E --> P["Apply general interaction contract"]
-    P --> Y{"Genuine math reasoning?"}
-    Y -- "Yes" --> O["Add equation-led math overlay"]
-    Y -- "No" --> R["Fast task-skill router"]
-    O --> R
-    R --> B{"Boundary failure?"}
-    B -- "Invalid, timeout, unavailable" --> N["NORMAL"]
-    B -- "No" --> D{"Registry-status question?"}
-    D -- "Yes" --> M["Return live metadata"]
-    D -- "No" --> C["Score allowed routes"]
-
-    classDef route fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
-    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
-    classDef normal fill:#546E7A,color:#fff,stroke:#29434E
-    class U,E,P,R,C route
-    class Y,B,D decision
-    class O safe
-    class N,M normal
+    U[User request and trusted scope] --> H[Host model resolves intent and controls]
+    H --> D[Compact metadata discovery]
+    D --> C{Useful compatible capabilities?}
+    C -->|None| N[Normal host work]
+    C -->|Material ambiguity| Q[One focused clarification]
+    Q --> C
+    C -->|Selected set| L[Complete selected instructions and required support]
+    L --> M[Model chooses methods ownership and composition]
+    M --> E[Authorized execution]
+    N --> E
+    E --> V[Artifact-bound verification]
+    V --> R[Qualified result and optional recovery checkpoint]
 ```
 
-## Skill decision and answer
+The compatibility process returns neutral metadata, not a semantic decision. The original request stays with the host model. Discovery is bounded and a first page is not exhaustive. Selection never grants write or external-action permission. Complete obligations must remain available when support is summarized or context is recovered.
+
+## Management request
 
 ```mermaid
 flowchart TD
-    C["Allowed routes"] --> X{"Routing result"}
-    X -- "No match or disabled" --> N["NORMAL"]
-    X -- "Material ambiguity" --> Q["Ask one short choice"]
-    X -- "One clear match" --> S["Return one skill path"]
-    Q --> S
-    S --> L["Load only that skill"]
-    L --> A["Answer the task"]
-    N --> A
-    M["Live registry metadata"] --> A
-
-    classDef route fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef decision fill:#EF6C00,color:#fff,stroke:#A64700
-    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
-    classDef normal fill:#546E7A,color:#fff,stroke:#29434E
-    class C route
-    class X decision
-    class S,L,A safe
-    class N,M normal
+    C["Exact orchestrator command"] --> V{"Supported action and target?"}
+    V -- "No" --> F["INVALID_ORCHESTRATOR_ACTION"]
+    V -- "Yes" --> L["Inspect live package and docs state"]
+    L --> P["Compute canonical and generated impact"]
+    P --> B{"Scope and permission resolved?"}
+    B -- "No" --> H["Stop consequential work"]
+    B -- "Yes" --> E["Apply smallest transaction"]
+    E --> G["Regenerate and verify"]
+    G --> R["Report receipt and boundaries"]
 ```
 
-The router returns a compact receipt with Fit 0–3, interaction style, output
-shape, depth, format, and access. It never returns the original prompt or a
-whole family. After a `MATCH`, the caller validates the returned path and reads
-only that selected skill. At Fit 1 it returns candidate ids and purposes, not
-paths or bodies; the host asks one numbered last-resort choice only when the
-alternatives materially change the task.
+Management uses no coordination capacity. Supported action groups are inventory and
+diagnosis, project context, package/capability lifecycle, repair, migration, and
+documentation. The orchestrator owns coordination, not unlimited authority.
 
-Depth is rendered explicitly as `depth=brief|standard|detailed` in the shared
-Codex context and the Claude hook context instead of remaining internal router
-metadata.
+`#> orchestrator sudo <operation> <exact-target>` bypasses only local
+Skills AI procedure. Bare `#> sudo`, quoted examples, code blocks, and later
+mentions are inert.
 
-A request to add, edit, move, delete, scan, or repair Skills AI itself returns
-`NORMAL / SKILLS_AI_MAINTENANCE` before ordinary skill scoring. This prevents
-maintenance words such as “node” from selecting the setup guide. Negated phrases
-such as “no external install” are not treated as positive installation intent.
+The host interprets the leading user-authored control block and current natural instructions. The shared core is available for ordinary coordination; detailed management and recovery modules are read only when needed. No router state machine chooses phase transitions.
 
-A leading `#> override <instruction>` returns `NORMAL / USER_OVERRIDE` before skill
-scoring. It means “follow this exact request without local Skills AI ceremony,”
-not “ignore the host, sandbox, permissions, credentials, or safety rules.” A
-later, quoted, code-block, bare, or shell `sudo` mention has no special meaning.
+## Package and capability controls
 
-A family registry may declare an exact task directive for one manual skill.
-`#> scout` selects the initial Research Context Scout phase and `#> scout-again`
-selects its delta-based deepening phase. The receipt carries only the command
-and mode; paths and other arguments stay in the host request. Scout narrows the
-receipt to `write-scoped:research-orientation.md` and a supervisor-brief shape;
-everything else stays read-only. Invocation mode does not skip incomplete
-state: answered intake with an empty research map completes initial Cycle B
-before delta deepening. Canonical `#> skill research-context-scout <mode> ...`
-requires `initial` or `deepen` and injects the same mode. Receipt, depth, format
-or interaction controls may precede the Scout task directive. `#> skill normal`
-still opts out, while malformed, quoted, embedded, later and near-matching text
-fails safely.
+`#> skill theory-reference` selects that public package.
+`#> skill theory-reference theory-reference` names its registered capability
+explicitly. An invalid capability is reported rather than silently substituted.
 
-The interaction protocol is independent of `MATCH`. General guidance keeps the
-answer direct and adequately explained. The math overlay activates only for
-mathematical actions and objects, explicit mathematical research reasoning, or
-an explicit `#> interaction math` control. Code, filenames, search terms,
-settings, and rendering tasks cannot activate it merely by mentioning
-“equation” or “formula”. Current-request controls override session, project,
-global, and automatic defaults.
+`#> skill interaction-protocol math` selects the interaction package's math
+mode independently of task-package selection. `#> skill research-context-scout
+initial|deepen ...`, `#> scout`, and `#> scout-again` all select the same manual
+public package. Scout first mirrors the understood context and search direction
+for user alignment, then works from a bounded, successfully extracted local
+paper corpus to produce collective mathematical ideas and project-notation
+translations in a beginner-readable report. It records acquisition needs but
+does not download papers automatically or substitute for the user's scientific
+judgment. `#> optimizer [operation]`, `#> build-system <problem.tex>`,
+and `#> optimize <system/project> <goal>` select the separate manual Optimizer
+package. `build-system` plans a new OLGS system and pauses for review before
+implementation; the other optimizer operations remain within that same package.
 
-See the [Interaction Protocol hub](../../interaction-protocol/README.md) for the
-same general and math branches as a connected Obsidian graph route.
+## Requests without a suitable local capability
 
-## The strict design gate
+The host uses its ordinary tools when no available local capability suits the
+request. It can still follow the requested interaction style, scope and evidence
+requirements. A missing task skill does not prevent useful authorized work.
+The interaction package can still shape an ordinary response.
 
-Visual design and UI skills are intentionally harder to activate because words
-such as “search,” “table,” “plot,” and “structure” occur in many non-design
-tasks.
+Resolve the leading `use` and `mode` controls before optional task loading. A named list explicitly requests each target; `use none` skips optional bodies. After minimal inspection, show the task receipt before consequential work and reuse it on routine continuations.
 
-```mermaid
-flowchart TD
-    P["Prompt"] --> CLEAN["Ignore code, URLs, paths, and filenames"]
-    CLEAN --> REQUEST{"Actual design request?"}
-    REQUEST -- "No" --> SKIP["Skip design and UI families"]
-    REQUEST -- "Yes" --> DOMAIN{"Visual or UI domain cue?"}
-    DOMAIN -- "No" --> SKIP
-    DOMAIN -- "Yes" --> TARGET{"Non-visual direct target?"}
-    TARGET -- "API, code, database, equation, router..." --> SKIP
-    TARGET -- "No" --> SCORE["Score design and UI routes"]
-    SKIP --> OTHER["Continue other families or NORMAL"]
-    SCORE --> RESULT["One design skill or NORMAL if ambiguous"]
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
 
-    classDef check fill:#EF6C00,color:#fff,stroke:#A64700
-    classDef safe fill:#2E7D32,color:#fff,stroke:#1B5E20
-    classDef normal fill:#546E7A,color:#fff,stroke:#29434E
-    class REQUEST,DOMAIN,TARGET check
-    class SCORE,RESULT safe
-    class SKIP,OTHER normal
-```
+## Working with contained changes
 
-## Examples
+Repair mode changes where edits and generated outputs go, independently of the chosen skills or adherence. On resumes this chat’s copy; update presents a checked delta and waits for agreement; off retains pending work. See [Safe changes](04_SAFE_CHANGES.md).
 
-| Request | Design/UI result | Why |
-|---|---|---|
-| “Search recent papers about quantum control” | Not activated | Search is a research action here |
-| “Search for design-system examples” | Not activated | Design is the subject, not the requested action |
-| “Create a plot of a sine function” | Not activated | No explicit design request |
-| “Design a search interface with autocomplete” | `search-specialist` | Explicit design request plus UI domain |
-| “Help me design a sidebar with breadcrumbs” | `navigation-specialist` | Explicit request plus navigation cues |
-| “Design an API that returns a table” | Design families skipped | API is a non-visual direct target; another family may match |
-| “Design a responsive mobile dashboard” | May return `NORMAL` | Several equally strong design routes can be ambiguous |
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
 
-This gate changes only the visual design and UI-pattern families. Other enabled
-families continue through their normal matching rules.
+## Current context flow
+
+The current request flow reuses reliable delivered metadata, loads exact selected entries together when useful, performs scoped work and checks its outputs. Unknown context after compaction restores complete instructions before consequential work. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

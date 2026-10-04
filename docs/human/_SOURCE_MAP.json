@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "human_entry": "README.md",
   "required_marker": "audience: human",
   "generated_guides": [
@@ -17,15 +17,40 @@
       "sources": [
         "interaction-protocol/**",
         "scripts/registry_runtime.py",
-        "scripts/route_skill.py",
         "runtime/PROTOCOL.md",
         "runtime/API_CONTRACT.md",
-        "tests/router_cases.json"
+        "runtime/model_context.py",
+        "scripts/orchestrate.py",
+        "tests/model_orchestration_cases.json"
       ],
       "guides": [
         "README.md",
         "docs/human/00_START_HERE.md",
         "docs/human/01_FOLLOW_A_REQUEST.md"
+      ]
+    },
+    {
+      "name": "orchestrator-and-project-context",
+      "sources": [
+        "runtime/skills-orchestrator/**",
+        "runtime/project_context.py",
+        "runtime/project-context.schema.json",
+        "runtime/orchestration_state.py",
+        "scripts/replacement_packet.py",
+        "runtime/repair_workspace.py",
+        "scripts/repair_workspace.py"
+      ],
+      "guides": [
+        "README.md",
+        "docs/human/00_START_HERE.md",
+        "docs/human/01_FOLLOW_A_REQUEST.md",
+        "docs/human/02_FOLDER_AND_PLATFORMS.md",
+        "docs/human/03_SKILLS_AND_CONTROLS.md",
+        "docs/human/04_SAFE_CHANGES.md",
+        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
+        "docs/human/07_MAINTAINING_SKILLS.md",
+        "docs/human/08_REPOSITORY_ATLAS.md",
+        "docs/human/09_SKILL_ANATOMY.md"
       ]
     },
     {
@@ -54,7 +79,7 @@
         "scripts/list_registry.py",
         "scripts/toggle_registry.py",
         "scripts/validate_registry.py",
-        "runtime/router-manifest.json"
+        "runtime/manifest.json"
       ],
       "guides": [
         "docs/human/03_SKILLS_AND_CONTROLS.md",
@@ -102,9 +127,8 @@
     {
       "name": "performance-and-lifecycle",
       "sources": [
-        "scripts/benchmark_router.py",
-        "scripts/analyze_ambiguities.py",
-        "tests/test_router_lifecycle.py"
+        "scripts/measure_context.py",
+        "tests/test_claude_adapter.py"
       ],
       "guides": [
         "docs/human/05_SPEED_AND_TROUBLESHOOTING.md"

@@ -29,15 +29,15 @@ OPERATIONS = {
 
 CHECK_COMMANDS = {
     "adapter": (
-        "node --check adapters/claude/skills-ai-router.js",
+        "node --check adapters/claude/skills-ai-context.js",
         "temporary Codex and Claude adapter install and check",
     ),
     "change-request": ("python3 -m unittest tests.test_change_request",),
-    "benchmark": ("python3 scripts/benchmark_router.py --json",),
+    "benchmark": ("python3 scripts/measure_context.py --json",),
     "consistency": ("python3 scripts/scan_consistency.py changed --path <declared-path>",),
     "graph": ("python3 scripts/graph_layers.py --check",),
     "human-docs": ("python3 scripts/human_docs_guard.py --check",),
-    "lifecycle": ("python3 -m unittest discover -s tests -p test_router_lifecycle.py",),
+    "lifecycle": ("python3 -m unittest discover -s tests -p test_claude_adapter.py",),
     "registry": (
         "python3 scripts/compile_registry.py --check",
         "python3 scripts/validate_registry.py",

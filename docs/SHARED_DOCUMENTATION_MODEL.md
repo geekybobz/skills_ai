@@ -9,16 +9,18 @@ Back: [[docs/06_CHANGE_CONTROL|Change Control]] · Human route:
 
 ## Motivation
 
-The repository had one shared runtime but repeated facts across root agent
+The repository has one orchestrator-controlled shared runtime but repeated facts across root agent
 entries and explanatory pages. The human guide explained the first layers well,
 yet it did not provide an exhaustive file atlas or show how single-file,
 packaged, submodule, and external skills differ. Requiring every audience to use
 the same prose would either burden agents with teaching material or leave the
 human route too technical.
 
-The adopted rule is **same truth, different projection**. Canonical facts live
-once; deterministic code creates factual views; hand-written human pages teach
-the meaning and link to those views.
+The adopted rule is **same truth, different projection**. The Skills
+Orchestrator is a separate control plane; public skill inventory is
+package-first; internal routes remain capability metadata.
+Canonical facts live once; deterministic code creates factual views;
+hand-written human pages teach the meaning and link to those views.
 
 ## Source and projection model
 
@@ -27,6 +29,7 @@ flowchart TD
     F["Canonical facts"] --> G["Repository-view compiler"]
     F --> S["Consistency scanner"]
     G --> H["Human live indexes"]
+    G --> O["Named Obsidian inventory nodes"]
     G --> C["Codex entry"]
     G --> L["Claude entry"]
     S --> V["Freshness and integration gate"]
@@ -36,7 +39,7 @@ flowchart TD
     classDef result fill:#546E7A,color:#fff,stroke:#29434E
     class F source
     class G,S action
-    class H,C,L,V result
+    class H,O,C,L,V result
 ```
 
 Canonical inputs are:
@@ -45,8 +48,10 @@ Canonical inputs are:
   overrides, package boundaries, projections, and exclusions.
 - `protocols/repository/CONTRACT.json`: path roles, checks, generated outputs,
   graph contracts, graph-node role policy, and protected boundaries.
-- Registry and activation sources: skill purpose, triggers, exclusions, state,
-  and canonical path.
+- Registry and activation sources: package role, capability purpose, triggers,
+  exclusions, state, and canonical path.
+- `runtime/skills-orchestrator/SKILL.md` and the project-context schema/runtime:
+  management, documentation coordination, capsule validation, and safety boundaries.
 - `runtime/AGENT_ENTRY_SHARED.md`: common Codex and Claude repository rules.
 - `adapters/codex/ENTRY.md` and `adapters/claude/ENTRY.md`: the platform-only
   lifecycle differences.
@@ -56,11 +61,22 @@ Generated outputs are:
 - `AGENTS.md` and `CLAUDE.md`.
 - `docs/human/_LIVE_REPOSITORY_INDEX.md`.
 - `docs/human/_LIVE_SKILL_CATALOG.md`.
-- The separately compiled `runtime/router-manifest.json`.
+- `graph/orchestration/skills-orchestrator.md` and one `graph/skills/<id>.md`
+  node per declared skill.
+- The separately compiled `runtime/manifest.json`.
 
 Each declared documentation or protocol concept has one visible L1 graph hub.
 The graph role policy prevents that hub from being colored as a family registry
 or executable skill merely because of its directory.
+
+The live skill catalog renders the orchestrator separately and exactly one
+public row per manifest skill package. It
+may include a separate technical capability appendix, but no route, mode,
+component, phase, or file may enter the public skill count. The documentation
+model must declare the same skill ids as the compiled manifest and exactly one
+matching orchestrator. Generated graph entries use descriptive id-based
+filenames so mandatory technical names such as `SKILL.md` never become the
+public inventory labels.
 
 ## Human pedagogy
 
@@ -69,6 +85,10 @@ language, real folder, real file, and canonical result. The exhaustive indexes
 are reference layers, not the starting page. Human prose may provide intuition
 and examples, but it must not copy or override live activation, routing, or
 permission facts.
+
+The Skills Orchestrator owns documentation coordination: it locates canonical
+facts, mapped explanations, generated projections, and freshness checks. It
+does not centralize every package's content or load human pages on the hot path.
 
 ## Agent efficiency
 
@@ -109,10 +129,10 @@ freshness does not prove pedagogical quality, so the bounded semantic review
 must still check clarity, trigger meaning, privacy, platform ownership, and the
 user's approved intent.
 
-Local ambiguity observations are operational evidence, not documentation
-source. They stay prompt-free, ignored by Git and repository views, bounded to
-1 MiB, and may be summarized read-only with
-`python3 scripts/analyze_ambiguities.py`.
+Local delivery markers, repair transactions and checkpoint observations are
+operational data, not documentation sources. They remain private under ignored
+`.runtime/`, use the bounds of their owning runtime, and never supply task
+selection or action authority. There is no ambiguity logger or analysis service.
 
 ## Update rule
 
@@ -127,3 +147,7 @@ Revert the focused documentation-model commit, then regenerate the previous
 views from the previous canonical sources. Do not hand-edit generated files,
 discard unrelated worktree changes, cross the theory submodule boundary, or
 rewrite shared Git history.
+
+The replacement core is model-led: semantic decisions belong to Codex or Claude; generated metadata and artifact checks only supply evidence. Codex installation binds the source root, while Claude injects that root with the shared core. Full contracts, composition and recovery instructions are loaded on demand. Compatibility transport emits version 2 and never chooses a candidate body.
+
+Contained repair workspaces are local operational state under ignored `.runtime/repair/`, not documentation sources or graph concepts. [[protocols/repository/REPAIR_WORKSPACE]] owns the lifecycle; human pages explain on/off/update and how to find the hidden folder. No new graph layer or public skill is introduced.

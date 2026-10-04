@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills Orchestrator"
+  short_description: "Model-led skill coordination and evidence review"
+  default_prompt: "Use the shared Skills Orchestrator instructions to discover, select and coordinate capabilities within user scope."

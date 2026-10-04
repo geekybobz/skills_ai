@@ -1,8 +1,6 @@
 # Claude Adapter
 
-Thin `UserPromptSubmit` adapter over the shared Python router. It receives the
-Claude prompt, asks the shared runtime for `MATCH` or `NORMAL`, and injects the
-compact response context plus only the selected skill body.
+The managed `SessionStart` hook injects the shared model-led coordination core and bounded untrusted metadata. Claude interprets the original request and selects capabilities with exact access tools; the hook never injects a selected candidate body.
 
 The repository-level `CLAUDE.md` is generated from
 `runtime/AGENT_ENTRY_SHARED.md` plus `adapters/claude/ENTRY.md`. The overlay owns
@@ -20,8 +18,8 @@ python3 scripts/install_runtime_adapter.py --adapter claude --check
 
 The installer:
 
-- copies `skills-ai-router.js` into the Claude hooks directory;
-- preserves foreign settings while adding one managed `UserPromptSubmit` hook;
+- copies `skills-ai-context.js` into the Claude hooks directory;
+- preserves foreign settings while adding one managed `SessionStart` and one selective `UserPromptSubmit` hook;
 - removes an obsolete Claude bootstrap only when it is a byte-for-byte
   installer-managed copy of `runtime/SKILL.md`;
 - preserves the first `settings.json.skills-ai.bak` snapshot and writes a
@@ -29,42 +27,12 @@ The installer:
 - refuses to replace symlinks or unrecognized foreign hook files; and
 - supports `CLAUDE_CONFIG_DIR` or `--config-dir`.
 
-The hook is the Claude bootstrap. It sends a newline-framed request to the
-shared router, suppresses child stderr, resolves selected skill paths through
-real paths, and fails open with prompt-free diagnostics. Claude does not own or
-certify Codex-specific invocation and terminal cleanup.
+The hook is the Claude bootstrap. It forwards the absolute project root for exact capsule access, runs one prompt-free context command and suppresses child stderr. Core instructions are read at a fixed path under the runtime root with symlink/realpath and file-size checks. Metadata is clearly labelled untrusted data, never executable instructions or permission.
 
-One budget covers the whole hook run: `SKILLS_AI_ADAPTER_TIMEOUT_MS`, default
-2,500 ms, inside the `"timeout": 3` seconds the installer writes into Claude
-settings. While the adapter waits for host input, a timer enforces that budget
-and returns `ADAPTER_INPUT_TIMEOUT`. Once input ends, the blocking phases cannot
-be interrupted by a timer, so the adapter enforces the same deadline by
-arithmetic instead: the Python child receives whichever is smaller,
-`SKILLS_AI_ROUTER_TIMEOUT_MS` (default 1,000 ms) or the budget left after a
-250 ms reserve for reading one skill body and writing the reply. Slow host input
-therefore shortens the child rather than overrunning the hook deadline. A
-selected skill body over 1 MiB, or a run whose budget expires before the reply
-is written, fails open with `ADAPTER_SKILL_TOO_LARGE` or
-`ADAPTER_DEADLINE_EXCEEDED`.
+The hook retains its bounded input/run budget, shorter Python child deadline, process-group timeout reaping, and prompt-free failure/cancellation diagnostics. It creates no background worker. A core over 32 KiB or expired deadline fails open. Tests cover framing, privacy, file bounds, installer preservation and child lifecycle. Live Claude semantic acceptance is required separately; Codex test results cannot certify it.
 
-Child cleanup has two independent layers, because `python3` is often a shell
-shim and because Claude, not the hook, decides when a hook run ends:
+## Context lifecycle
 
-- the child is started as its own process-group leader, so a child timeout
-  terminates the group rather than only the shim that fronts the interpreter;
-- the child is given the same deadline through `--stdin-timeout-ms`, so it still
-  exits on time when the host ends the hook before the adapter can reap it.
+SessionStart restores the complete bootstrap on startup, resume, clear, compact and fork. UserPromptSubmit supplies only changed sections; unchanged continuations produce no context. The exact session and source root identify private hash-only delivery markers. Missing session identity uses full read-only delivery. Markers never certify instruction presence or task state; uncertain context must be recovered. Core, discovery, capsule and repair changes are tracked separately. Installation preserves foreign hooks and settings and remains idempotent.
 
-Detaching the child means a host that signals only the hook's process group no
-longer reaches the router; the child's own deadline is the bound in that case.
-`SIGTERM` and `SIGINT` during the input phase fail open with
-`ADAPTER_CANCELLED`. Once the child is running the event loop is blocked, so the
-two layers above are what apply.
-
-This repository tests the hook protocol and shared routing core. A live Claude
-session test remains a Claude-side acceptance step.
-
-For explicit registry-discovery questions, the hook injects active, manual, and
-off route metadata from the current manifest without loading skill bodies. For
-write requests targeting Skills AI itself, it injects the shared external-task
-request-only boundary and maintenance workspace.
+The hook acknowledges private section hashes only after its output has been emitted. Failure or cancellation before emission leaves delivery pending; a failed acknowledgment safely repeats context next time. This is a delivery receipt, never evidence the model retained instructions.

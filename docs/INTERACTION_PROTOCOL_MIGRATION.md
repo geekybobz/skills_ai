@@ -1,86 +1,41 @@
----
-title: Interaction Protocol Migration
-type: migration-record
-status: implemented
-topic: interaction-protocol
-tags:
-  - interaction
-  - routing
-  - migration
-  - token-efficiency
----
+# Interaction Protocol Integration
 
-# Interaction Protocol Migration
+Back to [[00_SKILLS_HUB]]. Package: [[interaction-protocol/README|Interaction Protocol]].
+Registry: [[registry/interaction]]. Runtime: [[runtime/PROTOCOL]].
 
-Back to [[00_SKILLS_HUB]]. Protocol:
-[[interaction-protocol/README|Interaction Protocol]]. Registry:
-[[registry/interaction]]. Runtime: [[runtime/PROTOCOL]].
+## Responsibility
 
-## Git checkpoint
+Interaction Protocol is one public skill package with general and mathematical
+presentation capabilities. It shapes the response independently of task-package
+selection. It does not choose task skills, own a task slot or grant authority.
+The host coordinates the minimum sufficient compatible capability set.
 
-- Baseline commit: `043909b095e6c2ead44706208c22eb1d76db2501`
-- Baseline subject: `feat(skills-ai): harden routing and add guide`
-- Pre-existing `.obsidian/graph.json` display preferences and untracked
-  `sample_resources/` were excluded from the migration scope.
-
-The commit hash is the rollback checkpoint. Reversal should use a focused Git
-revert of the migration commit rather than rewriting history or discarding
-unrelated work.
-
-## Motivation
-
-The former Caveman family combined compact replies, character voice,
-mathematical explanation, file compression, review, commit, delegation, help,
-telemetry, installers, and platform packages. Ordinary mathematical prompts
-still required narrow phrases such as “formula first,” and response style
-competed for the single task-skill slot.
-
-The replacement keeps only two needs:
-
-1. a compact professional general response with adequate context; and
-2. equation-led mathematical reasoning followed by short supporting prose.
-
-## Contract change
-
-```text
-before: prompt -> one Caveman skill or one task skill -> response
-after:  prompt -> general protocol -> optional math overlay
-               -> zero or one task skill -> response
+```mermaid
+flowchart LR
+    U[User request and controls] --> H[Host interprets intent and scope]
+    H --> I[Available interaction guidance]
+    H --> T[Compatible task capabilities if useful]
+    I --> R[Clear result with sufficient context]
+    T --> R
 ```
 
-Interaction guidance is now structured context, not a task skill. It can
-therefore compose with `theory-reference`, design, build, or another selected
-skill without loading a second skill body.
+## Controls and availability
 
-## Selection boundary
+`#> interaction general` requests general presentation. `#> interaction math`
+explicitly requests mathematical presentation. The host checks the current
+package, family and component states before loading the complete protocol.
+Active components may be selected when useful, manual components require actual
+user invocation, and disabled components remain unavailable. Response settings
+never grant permission to edit files or run domain work.
 
-Automatic math mode requires mathematical intent: a mathematical action and
-object or expression, an explanatory question about a strong mathematical
-object, or research context explicitly requesting mathematical reasoning.
-Code, paths, filenames, URLs, settings, search, parser, field, and rendering
-mentions cannot activate math merely by containing a trigger word.
+`#> use none` skips optional task packages while retaining orchestration,
+explicit interaction preferences and higher-priority obligations. A phase may
+use several compatible task capabilities with one output owner.
 
-Controls:
+## Maintenance and verification
 
-- `interaction.math = active`: automatic and explicit selection;
-- `interaction.math = manual`: explicit `#> interaction math` only;
-- `interaction.math = off`: disabled; and
-- `#> interaction general`: current-request general override.
-
-## Deliberate removals
-
-- Caveman branding and character grammar.
-- Lite, full, ultra, and Wenyan modes.
-- Caveman help, stats, status line, commit, review, compression, and delegation
-  skills.
-- Caveman commands, hooks, installers, generated mirrors, and packages.
-- The superseded broad eight-operation migration plan.
-
-Generic review, commit, explain, investigate, implement, and write shapes remain
-in the shared runtime without separate response-style skills.
-
-## Verification boundary
-
-The shared Python runtime and repository Claude adapter are tested here. A live
-Claude installation remains Claude-owned acceptance. No external Codex or
-Claude configuration is changed by this repository migration.
+The package contract, registry metadata, shared access checks and mapped human
+pages describe one interface. Regenerate repository projections after approved
+source changes. Local tests verify metadata and exact loading; native model
+adherence and host lifecycle acceptance require separate evidence. See
+[[docs/CLAUDE_VERIFICATION_PROMPT]] and [[runtime/skills-orchestrator/BUILD]].

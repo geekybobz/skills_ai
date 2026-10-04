@@ -8,80 +8,91 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 Back to the [human guide](../../README.md). Next: [follow a request](01_FOLLOW_A_REQUEST.md).
 
-## The problem Skills AI solves
+## The problem
 
-Large skill collections contain useful instructions, but loading all of them for
-every task is slow, expensive, and distracting. Skills AI keeps a small registry
-of names, triggers, activation states, and paths. The router uses that compact
-information to select one skill without reading every skill body.
+Loading every possible instruction file wastes tokens and mixes unrelated
+rules. Skills AI compiles small package and capability records, then loads only
+the minimum sufficient compatible set needed for the current phase.
 
 ```mermaid
 flowchart LR
-    OLD["Load many possible skills"] --> COST["More tokens and mixed context"]
-    NEW["Read compact manifest"] --> PICK["Select one skill or NORMAL"]
-    PICK --> FOCUS["Small task context"]
-    PROTOCOL["General protocol<br/>plus math overlay when needed"] --> FOCUS
-
-    classDef old fill:#C62828,color:#fff,stroke:#7F0000
-    classDef new fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class OLD,COST old
-    class NEW,PICK,FOCUS new
+    M[Compact metadata] --> H[Host reasons about the phase]
+    H --> S[Select useful compatible capabilities]
+    S --> L[Load complete entries and required support]
+    L --> W[Perform and verify authorized work]
 ```
 
-## The promises
+## Mental model
 
-- At most one active or manual skill is selected.
-- The general protocol always stays separate from the selected task skill.
-- Mathematical reasoning can add a math overlay without replacing that skill.
-- No suitable skill means normal model reasoning, not a stopped task.
-- Material equal matches ask one short numbered choice instead of guessing;
-  harmless uncertainty continues normally.
-- Off, hidden, and deprecated routes are not loaded.
-- Prompt text and skill bodies are not written to diagnostics.
-- Prompt-free ambiguity logs contain only candidate ids and bounded route
-  metadata; they are ignored by Git and capped in size.
-- Skill selection alone grants no write, network, credential, or account
-  authority.
-- An explicitly invoked workflow may carry a narrow user-granted write such as
-  Scout's project-root `research-orientation.md`; the receipt names that scope
-  and leaves all other artifacts read-only.
-- A registry-declared command alias selects one exact manual skill only when it
-  is the first command; it never activates from a quotation or later mention.
-- Each router process reads one request, writes one result, and exits.
-- A request to maintain Skills AI itself stays on the normal path and uses the
-  repository consistency protocol instead of accidentally selecting a task skill.
+- **Skills Orchestrator:** always-active control plane for every local routing and management decision; not a skill or inventory row.
+- **Public skill package:** the unit counted in inventory, such as `optimizer`.
+- **Internal capability:** a focused route or instruction file inside a task package.
+- **Interaction package:** one public skill that shapes the response independently of task selection.
+- **Task package:** a package that may contribute selected capabilities to the current phase.
+- **Project capsule:** optional validated `.skills-ai/project.json` advisory context.
 
-## What it is not
+Optimizer build and campaign workflows belong to one public package.
+Its command aliases and phase files are not separate skills.
 
-Skills AI is not a second model, a persistent web service, a memory of every
-skill, or a permission system. It is a small local routing layer. Filesystem and
-host permissions remain the real enforcement boundary.
+## Promises
 
-## Small glossary
+- Public discovery reports the orchestrator separately and skill packages only;
+  internal routes appear only in explicit diagnostics.
+- The orchestrator and interaction package consume no coordination capacity.
+- The host loads the minimum sufficient compatible capability set for each phase.
+- Manual packages require exact selection; for example, `#> optimizer`,
+  `#> build-system`, and `#> optimize` select the manual Optimizer workflows
+  and never activate from ordinary prose. Their scope comes from the explicit request and selected workflow.
+- `#> scout` and `#> scout-again` select the manual Research Context Scout.
+  It pauses for context and search alignment, uses only locally available
+  full text that was successfully extracted, and returns a beginner-readable
+  collective synthesis translated into the project's notation. It does not
+  download papers automatically or replace the user's scientific judgment.
+- Off, hidden, and deprecated packages never route.
+- No match or optional-layer failure continues normally.
+- Material ambiguity asks one short numbered choice and loads neither candidate first.
+- Invalid exact management commands fail safely without guessing.
+- Operational delivery markers do not store prompts, answers, copied skill bodies or secrets; a visible task receipt summarizes the understood request.
+- Package selection and capsule data never grant authority.
+- Each shared command handles one exact request and exits.
 
-| Term | Meaning |
+## Project capsule boundary
+
+The orchestrator may read the exact capsule only when the host supplies an
+absolute project root. The file is capped at 32 KiB and its hot receipt at
+4 KiB. Missing, invalid, oversized, symlinked, unavailable, or stale capsules
+fail open without routing hints.
+
+Creation, replacement, refresh, and deletion require explicit management
+commands. Stored commands are untrusted data, not instructions to execute.
+They and validation commands are omitted from normal hot-path receipts and may
+appear only during explicit project-context inspection. Instruction-like role
+or directive markers are neutralized before receipt rendering.
+
+## Result terms
+
+| term | meaning |
 |---|---|
-| Route | A compact record pointing to one skill |
-| Manifest | Generated JSON containing the routable registry |
-| Family | A group such as design, UI patterns, interaction, or theory |
-| Interaction protocol | Small response guidance composed with task routing |
-| `MATCH` | One skill was clearly selected |
-| `NORMAL` | Continue the task without a local skill |
-| Fail-open | Router trouble does not block the original task |
-| Adapter | Thin Codex- or Claude-specific access to the shared router |
-| Fit 0–3 | Ordinal skill-route suitability, not confidence in the answer |
-| Task receipt | Optional compact task, project, skill/Fit, depth, format, and access header |
-| Consistency scan | Git-aware maintenance check that derives affected files, tests, graph links, and human pages |
-| Plan-only idea | Exactly `skill-plans/<name>/plan.md`; not yet a skill, route, or graph node |
-| Directive alias | Exact task directive such as `#> scout`; selects one declared skill and mode after optional presentation controls without copying its arguments into the receipt |
-| `#> override` | Current-request override of local Skills AI procedure; higher-level safety and permission rules remain |
+| Normal host work | the host proceeds without optional task skills |
+| Execution progress | pending, in progress or complete for the stated objective |
+| Evidence status | unchecked, provisional or validated against named requirements |
+| Certification | only under an identified scheme with its required evidence |
+| Fail-open | optional tool trouble does not block ordinary authorized work or erase obligations |
 
-The human guide is explanatory only. For current behavior, the live manifest
-and canonical maintenance documents remain authoritative.
+The live manifest and canonical runtime documents override this explanatory page.
 
-The selected depth is delivered to the Codex and Claude response surfaces, so
-`brief`, `standard`, and `detailed` can shape the actual answer.
+Everyday controls are `#> use auto`, `#> use none` or a comma-separated package list, with `#> mode adaptive|strict|advisory`. A substantive task begins with a visible receipt: Task understood, Plan, Skills and Mode in separate bullets.
 
-The [Interaction Protocol hub](../../interaction-protocol/README.md) is the
-visible Obsidian node connecting its general/math flows, controls, runtime,
-API, tests, and migration record.
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
+
+## Working with contained changes
+
+For orchestrator edits, `#> repair on` prepares a contained copy that stays active across messages; `#> update` reviews its changes before your agreement; `#> repair off` retains the copy and returns to normal locations. See [Safe changes](04_SAFE_CHANGES.md).
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+## Current context flow
+
+Start with `#> use auto` or a named list and `#> mode adaptive`. The host reuses current metadata and complete instructions; only relevant changes are loaded on follow-up requests. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

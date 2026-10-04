@@ -15,14 +15,13 @@ does not appear in the table or count below.
 
 | package | state | role |
 |---|---|---|
-| `interaction-protocol` | active | interaction, no task slot |
-| `design-with-claude` | active | task package |
+| `interaction-protocol` | active | interaction independent of task selection |
 | `theory-reference` | active | task package |
 | `research-context-scout` | manual | task package |
 | `optimizer` | manual | task package |
 | `quantum-job-collector` | off | task package |
 
-These six rows are the complete public skill count. Internal capability routes
+These five rows are the complete public skill count. Internal capability routes
 are never added to it.
 
 ## Activation states
@@ -33,10 +32,10 @@ are never added to it.
 | `manual` | exact explicit selection only |
 | `off` | visible in status, never routed |
 | `hidden` | not routed or shown in ordinary discovery |
-| `deprecated` | not routed; retained temporarily for history |
+| `deprecated` | unavailable for execution; visible in explicit lifecycle inspection |
 
 An internal capability cannot bypass its package or family state. Selection
-changes availability only; it grants no authority.
+chooses among available capabilities; it grants no authority.
 
 ## Discovery
 
@@ -50,15 +49,52 @@ The first command lists public skills, the second adds package-level purpose and
 trigger metadata, and the third intentionally lists internal technical
 capability routes. None loads instruction bodies.
 
+## Everyday request
+
+```text
+#> use optimizer, theory-reference
+#> mode adaptive
+
+Describe the task, inputs and allowed outputs here.
+Prepare the proposal and wait before edits.
+```
+
+Replace the example package names with actual available packages. Use `#> use auto`
+for automatic selection or `#> use none` to work without task skills. Each listed
+package is explicitly requested; list order does not force a workflow or authorize
+parallel agents. Required support and incompatible targets are resolved openly.
+`mode` chooses method flexibility; ordinary language states the execution boundary.
+The detailed controls below remain available when needed.
+
+## Visible task receipt
+
+At the beginning of a substantive task, expect a short block like this:
+
+> **Task receipt**
+>
+> - **Task understood:** Review the supplied model and explain its assumptions and the requested outputs.
+> - **Plan:** Inspect the relevant inputs, prepare the proposed approach and identify the checks needed before implementation.
+> - **Skills:** Optimizer and Theory Reference, planned for their relevant phases.
+> - **Mode:** Adaptive.
+> - **Boundary:** Proposal only; wait before edits or numerical runs.
+
+The task and plan are short paragraphs within separate bullets. Boundary is
+optional. Planned selection does not claim instructions are already loaded.
+`receipt auto` shows this once for substantive new work and skips trivial requests
+and routine follow-ups. `on` shows it for each new request; `off` hides the block.
+Material task changes update only affected fields. Equivalent visible native-host
+fields are reused, with missing fields added. A receipt does not create an approval
+pause or save memory; actual task boundaries still govern execution.
+
 ## Task and interaction controls
 
 | control | effect |
 |---|---|
-| `#> skill auto` | select at most one active task-package capability |
+| `#> skill auto` | host selects the minimum sufficient compatible capability set |
 | `#> skill normal` | use no local task package |
 | `#> skill <package>` | select one exact enabled public package |
 | `#> skill <package> <capability>` | select one exact internal capability within that package |
-| `#> skill interaction-protocol general|math` | select the interaction package mode without using the task slot |
+| `#> skill interaction-protocol general|math` | select the interaction package mode independently of task-package selection |
 | `#> scout <project> [focus]` | start the manual research-context workflow: align project context, preview search lanes, acquire/extract selected papers, synthesize ideas and translate them into project notation |
 | `#> scout-again <project> [new information]` | reopen only the affected Scout alignment, corpus, mapping or synthesis state |
 | `#> optimizer [status\|catalog\|explore\|intervene\|continue\|branch]` | select the manual optimizer route, its narrow discovery actions, or an explicit adaptive campaign operation |
@@ -66,11 +102,10 @@ capability routes. None loads instruction bodies.
 | `#> optimize <system/project> <goal>` | run a bounded evidence-led campaign only on an existing verified system |
 | `#> interaction general|math` | shorter interaction-mode control |
 | `#> format mermaid+summary` | request known output forms |
-| `#> depth brief|standard|detailed` | select explanation depth |
+| `#> depth compact|standard|deep` | select explanation depth |
 | `#> receipt auto|on|off` | control compact receipt visibility |
 
-Exact controls win over project hints and automatic matching. Fit describes
-route suitability, not answer correctness.
+Current request > session > project > global > automatic defaults. The host interprets controls and assesses suitability; metadata transport does not score answer correctness.
 
 Scout pauses at context, search and corpus-readiness boundaries. Papers used in
 its collective synthesis must be locally available as full text and extracted;
@@ -84,10 +119,9 @@ equation-level claim. Its beginner-facing orientation organizes evidence and
 possible project-specific derivations while leaving final research judgment to
 the user.
 
-`#> skill` is exact only as the first task directive, optionally after leading
-presentation controls. Quoted, embedded, code-block, URL, and later examples
-are inert. A capability belonging to another package is reported as rejected
-and is never silently substituted.
+The host honors explicit natural instructions and the leading directive block; quoted or retrieved controls are data. `#> skill only <id>`, `prefer <id>`, `exclude <id>`, `off` and `auto` refine selection. `normal` is shorthand for off; an exact package selection is shorthand for only. Required manual support is disclosed and actual invocation scope resolved before loading.
+
+`#> adherence advisory|adaptive|strict` chooses method flexibility. `#> autonomy review-first|standard|autonomous` chooses continuation behavior within actual authority. `#> composition auto|single|sequential|cooperative|parallel` guides topology; structured recovery applies independently. Scope is request by default; persistent project controls require explicit storage authorization. See the integration contract for full meanings.
 
 ## Orchestrator management
 
@@ -103,8 +137,7 @@ and is never silently substituted.
 #> orchestrator sudo <operation> <exact-target>
 ```
 
-Target-requiring actions without a target and unsupported actions return
-`INVALID_ORCHESTRATOR_ACTION`. Bare `#> sudo` is inert. Local sudo never overrides
+The host reports unsupported actions or missing exact targets without substitution. Bare `#> sudo` is inert. Local sudo never overrides
 higher authority, permissions, credentials, external actions, destructive
 safety, package activation, or exact scope.
 The deprecated `#> skill skills-supervisor ...` syntax remains a temporary
@@ -126,4 +159,20 @@ Normal routing receipts omit stored commands and validation commands. Exact
 `show-project-context` inspection may include their neutralized values.
 
 The generated [live skill catalog](_LIVE_SKILL_CATALOG.md) shows the orchestrator
-separately, then these six skills, then a separately labelled capability appendix.
+separately, then these five skills, then a separately labelled capability appendix.
+
+For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
+
+## Working with contained changes
+
+Use `#> repair on` once, continue work across messages, then `#> update` to review changes before agreement. `#> repair off` stops containment without deleting or deploying. These controls are independent of `#> use` and `#> mode`. See [Safe changes](04_SAFE_CHANGES.md).
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+Discovery can use compact text with explicit continuation and complete-metadata expansion. Metadata identity includes integration contracts and activation; it is separate from instruction-file identity. Interaction general/math are independently gated supporting capabilities, and their complete protocol is loaded when needed.
+
+## Current context flow
+
+`#> mode inspire` means advisory. Interaction general/math are separately gated response capabilities; manual targets require actual invocation. Exact package requests avoid broad discovery while preserving capability ambiguity and required support checks. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

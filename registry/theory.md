@@ -3,8 +3,17 @@
 Rigorous compact LaTeX reference documents: theory notes, math refreshers,
 chapter-based academic material.
 
+`theory-reference` is one public task package. The entry, phases, rules,
+templates, and scripts below are internal package structure, not additional skills.
+
 `theory-reference/` is a **git submodule**. Registry files never live inside it —
 this file is the whole registry entry for that family.
+
+## Package Capability
+
+| capability | does | selection | not for |
+|---|---|---|---|
+| [[theory-reference/SKILL\|theory-reference]] | build a rigorous compact LaTeX reference through planning, evaluation and chapter phases | theoretical references and mathematical learning documents | unrelated prose or software implementation |
 
 ## Load route
 
@@ -44,7 +53,7 @@ reorders nothing without explicit sign-off. See [[04_RISK_MAP]].
 
 ## Combines with
 
-Theory content → academic poster: pair with [[registry/design]] (`poster-lead`).
+For a poster derived from theory content, finish and verify the theory phase first; visual design uses normal host capabilities, not a local design package.
 Keep notes focused at drafting time; no separate response-style compressor is required.
 
 ## Rules

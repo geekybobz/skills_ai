@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import re
 import json
 import os
 import shlex
@@ -14,8 +16,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 SHARED_ENTRY = ROOT / "runtime" / "SKILL.md"
-CLAUDE_HOOK = ROOT / "adapters" / "claude" / "skills-ai-router.js"
+CLAUDE_HOOK = ROOT / "adapters" / "claude" / "skills-ai-context.js"
 CLAUDE_MANAGED_MARKERS = (
+    b"// skills-ai-managed: claude-context",
     b"// skills-ai-managed: claude-router",
     b"// Claude UserPromptSubmit adapter for the shared Skills AI runtime.",
 )
@@ -47,6 +50,17 @@ def atomic_write(path: Path, content: bytes, *, mode: int = 0o600) -> None:
         raise
 
 
+def installed_content(source: Path) -> bytes:
+    content = source.read_bytes()
+    if source == SHARED_ENTRY:
+        core_path=ROOT / 'runtime/skills-orchestrator/SKILL.md'
+        raw=core_path.read_bytes()
+        core=re.sub(rb'^---[\s\S]*?---\s*',b'',raw)
+        content = content.replace(b'{{SKILLS_AI_ROOT}}', str(ROOT).encode()).replace(b'{{CORE_SHA256}}',hashlib.sha256(raw).hexdigest().encode())
+        content += b'\n' + core
+    return content
+
+
 def install_file(
     source: Path,
     target: Path,
@@ -58,7 +72,7 @@ def install_file(
         raise InstallError(f"source is missing: {source}")
     if target.is_symlink():
         raise InstallError(f"refusing to replace symlink target: {target}")
-    content = source.read_bytes()
+    content = installed_content(source)
     target_content = target.read_bytes() if target.exists() else None
     if target_content == content:
         return "unchanged"
@@ -85,7 +99,7 @@ def remove_managed_file(source: Path, target: Path, *, dry_run: bool = False) ->
         return "absent"
     if target.is_symlink() or not target.is_file():
         return "preserved-foreign"
-    if target.read_bytes() != source.read_bytes():
+    if target.read_bytes() not in (source.read_bytes(), installed_content(source)):
         return "preserved-foreign"
     if dry_run:
         return "would-remove"
@@ -99,34 +113,29 @@ def claude_hook_command(hook_path: Path) -> str:
 
 def merged_claude_settings(settings: dict[str, Any], hook_path: Path) -> dict[str, Any]:
     hooks = settings.setdefault("hooks", {})
-    entries = hooks.setdefault("UserPromptSubmit", [])
-    if not isinstance(entries, list):
-        raise InstallError("Claude settings hooks.UserPromptSubmit must be a list")
+    if not isinstance(hooks, dict): raise InstallError("Claude hooks must be an object")
     command = claude_hook_command(hook_path)
-    for entry in entries:
-        for hook in entry.get("hooks", []) if isinstance(entry, dict) else []:
-            if "skills-ai-router.js" in str(hook.get("command", "")):
-                hook.update(
-                    {
-                        "type": "command",
-                        "command": command,
-                        "timeout": 3,
-                        "statusMessage": "Selecting local skill...",
-                    }
-                )
-                return settings
-    entries.append(
-        {
-            "hooks": [
-                {
-                    "type": "command",
-                    "command": command,
-                    "timeout": 3,
-                    "statusMessage": "Selecting local skill...",
-                }
-            ]
-        }
-    )
+    previous_path=hook_path.with_name('skills-ai-router.js')
+    previous_owned=previous_path.is_file() and not previous_path.is_symlink() and any(marker in previous_path.read_bytes() for marker in CLAUDE_MANAGED_MARKERS)
+    def owned_command(value):
+        if value==command:return True
+        if not previous_owned or not isinstance(value,str):return False
+        try:parts=shlex.split(value)
+        except ValueError:return False
+        return len(parts)==4 and parts[0]=='node' and parts[1]==str(previous_path) and parts[2]=='--root' and Path(parts[3]).is_absolute()
+    for event in ("SessionStart", "UserPromptSubmit"):
+        entries = hooks.setdefault(event, [])
+        if not isinstance(entries, list): raise InstallError(f"Claude hooks.{event} must be a list")
+        retained = []
+        for entry in entries:
+            if not isinstance(entry, dict) or not isinstance(entry.get("hooks"), list):
+                retained.append(entry); continue
+            # Only exact commands owned by this installer are migrated.
+            foreign = [hook for hook in entry["hooks"] if not isinstance(hook, dict) or not owned_command(hook.get("command"))]
+            if foreign: retained.append(entry | {"hooks": foreign})
+        retained.append({"hooks": [{"type": "command", "command": command, "timeout": 3,
+                                    "statusMessage": "Refreshing Skills AI context..."}]})
+        hooks[event] = retained
     return settings
 
 
@@ -160,7 +169,7 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
     settings_path = config_dir / "settings.json"
     settings, original_settings = _load_settings(settings_path)
     skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
-    hook_target = config_dir / "hooks" / "skills-ai-router.js"
+    hook_target = config_dir / "hooks" / "skills-ai-context.js"
     hook_result = install_file(
         CLAUDE_HOOK,
         hook_target,
@@ -193,20 +202,19 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
 def check_adapter(adapter: str, config_dir: Path) -> bool:
     if adapter == "codex":
         target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
-        return target.is_file() and not target.is_symlink() and target.read_bytes() == SHARED_ENTRY.read_bytes()
+        return target.is_file() and not target.is_symlink() and target.read_bytes() == installed_content(SHARED_ENTRY)
     skill_target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
-    hook_target = config_dir / "hooks" / "skills-ai-router.js"
-    if skill_target.is_file() and not skill_target.is_symlink() and skill_target.read_bytes() == SHARED_ENTRY.read_bytes():
+    hook_target = config_dir / "hooks" / "skills-ai-context.js"
+    if skill_target.is_file() and not skill_target.is_symlink() and skill_target.read_bytes() == installed_content(SHARED_ENTRY):
         return False
     if not hook_target.is_file() or hook_target.read_bytes() != CLAUDE_HOOK.read_bytes():
         return False
     settings, _ = _load_settings(config_dir / "settings.json")
-    entries = settings.get("hooks", {}).get("UserPromptSubmit", [])
-    return any(
-        "skills-ai-router.js" in str(hook.get("command", ""))
-        for entry in entries if isinstance(entry, dict)
-        for hook in entry.get("hooks", []) if isinstance(hook, dict)
-    )
+    expected = claude_hook_command(hook_target)
+    return all(sum(hook.get("command") == expected
+                   for entry in settings.get("hooks", {}).get(event, []) if isinstance(entry, dict)
+                   for hook in entry.get("hooks", []) if isinstance(hook, dict)) == 1
+               for event in ("SessionStart", "UserPromptSubmit"))
 
 
 def default_config_dir(adapter: str) -> Path:

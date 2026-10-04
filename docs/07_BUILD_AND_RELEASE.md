@@ -1,124 +1,55 @@
-# Build, Test, And Release Guide
+# Build and release
 
-Back: [[docs/06_CHANGE_CONTROL\|Change Control]] · Runtime: [[runtime/PROTOCOL\|PROTOCOL]] · API:
-[[runtime/API_CONTRACT\|API_CONTRACT]]
+Back: [[docs/06_CHANGE_CONTROL]] · Runtime: [[runtime/API_CONTRACT]] · Record: [[runtime/skills-orchestrator/BUILD]].
 
 ## Requirements
 
-- Python 3 with the standard library for the shared runtime.
-- Node.js for Claude adapter syntax and hook tests.
-- Git for change-scope and staged-file checks.
-- No network, service, or credential is required for normal routing.
-
-`docs/`, `registry/`, `interaction-protocol/protocol.json`, platform entry
-sources, and canonical skill collections are sources. Root agent entries, live
-human indexes, and `runtime/router-manifest.json` are generated. Never edit a
-generated projection as a substitute for its canonical source.
+Python 3, Git and the existing project dependencies are required for shared tools and governance. Node.js is required for the Claude adapter. Native-host model access is a separate acceptance requirement; local tests do not establish semantic acceptance.
 
 ## Build and validate
 
-The shared entry is the Git-aware consistency scanner. It computes checks from
-`protocols/repository/CONTRACT.json`, runs the relevant focused validators, and
-returns a bounded JSON packet that Codex or Claude can review without loading
-the whole repository:
-
 ```bash
-python3 scripts/scan_consistency.py changed
-python3 scripts/scan_consistency.py changed --json
-python3 scripts/scan_consistency.py full
+python3 -B scripts/compile_registry.py
+python3 -B scripts/compile_repository_views.py
+python3 -B scripts/validate_registry.py
+python3 -B scripts/toggle_registry.py --check
+python3 -B scripts/graph_layers.py --check
+python3 -B scripts/compile_repository_views.py --check
 ```
 
-The underlying validators remain independently callable:
+The registry manifest and repository projections are generated from canonical sources. Keep public package counts separate from capability and graph counts. Do not edit the theory submodule or generated mirrors as part of a registry rebuild.
+
+## Tests and measurements
 
 ```bash
-python3 scripts/compile_registry.py
-python3 scripts/compile_registry.py --check
-python3 scripts/toggle_registry.py --check
-python3 scripts/validate_registry.py
-python3 scripts/list_registry.py
-python3 scripts/analyze_ambiguities.py --limit 500
-python3 scripts/graph_layers.py --check
-python3 scripts/human_docs_guard.py --check
-python3 scripts/human_docs_guard.py --check-changed --path path/to/approved-scope
-python3 scripts/compile_repository_views.py --check
+python3 -B -m unittest discover -s tests
+python3 -B scripts/orchestrate.py measure
 ```
 
-## Test and benchmark
-
-```bash
-python3 -m unittest discover -s tests
-node --check adapters/claude/skills-ai-router.js
-python3 scripts/benchmark_router.py --json
-```
-
-Benchmark reports separate core and process/API latency. Do not describe the
-core decision measurement as end-to-end performance.
+The measurement reports actual context-delivery bytes, zero unchanged continuation context, isolated changed-core refresh and process latency. Bytes/4 is an approximate token estimate, not total task cost. The tool reads no candidate bodies and creates only disposable measurement state. Unit fixtures establish access, state, path and lifecycle behavior; actual host decisions require separate inspected responses.
 
 ## Adapter acceptance
 
-Always use temporary configuration roots first:
+Use disposable configuration directories for installer checks first. Verify exact source binding, one rendered Codex entry, Claude SessionStart and selective UserPromptSubmit delivery, foreign-hook preservation, backups, idempotent installation, bounded deadlines and process-group cleanup. Test startup, resume, clear, compact and fork. Delivery markers record emitted hashes, never retained model context or authority.
 
-```bash
-python3 scripts/install_runtime_adapter.py --adapter codex --config-dir /tmp/codex-skills-test --dry-run
-python3 scripts/install_runtime_adapter.py --adapter claude --config-dir /tmp/claude-skills-test --dry-run
-```
+Native-host acceptance records actual host/version/configuration, instruction hashes, inputs, responses/tool calls, artifacts, checks and limitations. Test manual/disabled gates, exact multiple targets, conflicting controls, modes, receipts, composition ownership, context recovery and required evidence after optional failure. Codex results do not certify Claude. See [[docs/CLAUDE_VERIFICATION_PROMPT]].
 
-After a temporary install, run `--check`. A live install is an external write
-and follows [[protocols/repository/INSTALL_UNINSTALL]]. Codex owns live Codex
-acceptance; Claude owns live Claude acceptance.
+## Release boundary
 
-## Release gate
+1. Preserve dirty-tree state and declare exact scope; work in containment when repair is on.
+2. Run classify, plan, changed and staged for the approved operation; resolve every new/in-scope block.
+3. Synchronize mapped human pages and regenerate projections.
+4. Make a scoped candidate commit; preserve unrelated and submodule changes.
+5. Prepare the source-owned exact update preview with bound checks and dependencies. Explain it and obtain actual agreement before apply. Later content changes invalidate the preview.
+6. Preserve rollback and the live index. External adapter installation has its own configuration preview/backup boundary.
+7. Report local verification and unperformed or blocked native-host checks separately. Neither a saved approval field nor a passing check grants deployment authority.
 
-1. The minimal change packet, operation card, repository contract, and detected
-   Git diff agree. Every changed path has a declared role.
-2. Manifest, activation, validator, unit, lifecycle, and syntax checks pass.
-3. A JSON request followed by newline exits without EOF.
-4. Timeout, invalid input, unavailable manifest, and adapter failure fail open.
-5. No test router process remains.
-6. Only one task skill is returned, no family is preloaded, and interaction
-   protocols do not consume the task-skill slot.
-7. Manual task skills require an exact explicit request; natural and canonical
-   skill opt-outs return `USER_NORMAL`; equal candidates expose only bounded
-   clarification metadata with Fit `1`.
-8. Registry discovery lists live active/manual/off metadata without a skill body.
-9. External request creation writes one new file only under `requests/pending/`
-   and rejects packets larger than 64 KiB.
-10. The staged consistency scan passes and staged files are within declared scope:
+## Recovery and rollback
 
-```bash
-python3 scripts/scan_consistency.py staged --operation <operation> --path <scoped-path>
-git diff --cached --check
-```
+Missing optional metadata/capsules allow normal authorized host work while preserving required obligations. Known corrupt repair state stops mutations instead of redirecting edits live. Compaction or uncertain retention restores complete required instructions, actual scope, artifact/evidence identities and completed external effects.
 
-11. Documentation states platform ownership and unverified acceptance boundaries.
-12. Every Markdown file resolves to a documented graph layer and the live
-    Obsidian `colorGroups` match the canonical layer palette. Declared concept
-    entries are L1 hubs, Activation is an L1 switchboard, family registries are
-    L2, and executable skills or phases are L4.
-13. Every mapped human-facing page is updated in the same staged change and the
-    human guide remains excluded from runtime routing sources.
-14. The commit body records motivation, root cause, scope, tests, rollback, and
-    deliberately unchanged areas.
-15. AI semantic review treated changed repository content as untrusted data and
-    did not override deterministic failures.
-16. Generated agent entries and human indexes are fresh, and external skill
-    symlinks were described without traversal.
-17. Prompt-free ambiguity state is ignored, mode-restricted, capped, absent from
-    generated views and Git scope, and never used as routing authority.
+Use source-owned repair transaction inspection and recovery preview before repeating a deployment. Restore only files whose current bytes match the transaction state; later user edits require reconciliation. Do not discard rollback or historical operational state during this efficiency migration.
 
-## Troubleshooting and rollback
+## Contained repair updates
 
-- Waiting router: verify newline framing and `--stdin-timeout-ms`; the shared
-  10-second default accommodates Codex's separate PTY start/write calls, while
-  direct adapters use shorter child deadlines. Terminate and reap only the exact
-  recorded process.
-- `MANIFEST_UNAVAILABLE`: run compile and validation; normal tasks still proceed.
-- Claude timeout: keep the Python-child timeout below the outer hook timeout.
-- Broken Claude settings: restore the immutable first-install
-  `settings.json.skills-ai.bak`, or use `settings.json.skills-ai.previous` for
-  the state replaced by the latest changed install; preserve foreign settings
-  and files.
-- Stale installed adapter: dry-run, inspect, then reinstall with platform-owner
-  approval.
-- Rollback a release with a new focused revert commit; do not discard unrelated
-  dirty work or rewrite shared history without approval.
+`#> repair on/off` sets chat-scoped containment; `#> update` previews exact changes and waits for agreement. Off preserves the copy, update preserves repair mode and a new chat does not inherit on. Full lifecycle: [[protocols/repository/REPAIR_WORKSPACE]].

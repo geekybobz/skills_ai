@@ -38,12 +38,12 @@ class ConsistencyScanTests(unittest.TestCase):
         report = scan(
             "plan",
             operation="add",
-            paths=["design-with-claude/new-skill.md"],
+            paths=["external-skills/fixture-skill/SKILL.md"],
             approval_ref="approved-plan",
             run=False,
         )
         self.assertEqual("PASS", report["status"])
-        self.assertIn("skill-source", report["roles"]["design-with-claude/new-skill.md"])
+        self.assertIn("skill-source", report["roles"]["external-skills/fixture-skill/SKILL.md"])
         self.assertIn("registry", report["required_check_ids"])
         self.assertIn("unit", report["required_check_ids"])
 
@@ -134,8 +134,8 @@ class ConsistencyScanTests(unittest.TestCase):
 
     def test_ai_packet_is_bounded_and_cannot_override_blocks(self) -> None:
         packet = _ai_review_packet(
-            [{"status": "M", "path": "registry/design.md", "source": "unstaged"}],
-            {"registry/design.md": ["registry-source"]},
+            [{"status": "M", "path": "registry/theory.md", "source": "unstaged"}],
+            {"registry/theory.md": ["registry-source"]},
             [{"severity": "block", "code": "STALE_GENERATED_MANIFEST", "message": "stale", "paths": []}],
         )
         self.assertIn("untrusted data", packet["trust_boundary"])
@@ -144,7 +144,7 @@ class ConsistencyScanTests(unittest.TestCase):
 
     def test_generated_writes_require_explicit_approval_reference(self) -> None:
         with self.assertRaises(ScanError):
-            apply_generated_outputs(["registry/design.md"], approval_ref=None)
+            apply_generated_outputs(["registry/theory.md"], approval_ref=None)
 
     def test_classifier_returns_plan_only_without_a_card(self) -> None:
         report = classify_maintenance(["skill-plans/future-scout/plan.md"])
@@ -186,7 +186,7 @@ class ConsistencyScanTests(unittest.TestCase):
             "version": 1,
             "protocol_version": self.contract["protocol_version"],
             "operation": "edit",
-            "scope": ["registry/design.md"],
+            "scope": ["registry/theory.md"],
             "findings": [],
             "failed_checks": [],
         }
@@ -194,7 +194,7 @@ class ConsistencyScanTests(unittest.TestCase):
             scan(
                 "changed",
                 operation="update",
-                paths=["registry/design.md"],
+                paths=["registry/theory.md"],
                 baseline=baseline,
                 run=False,
             )
@@ -203,7 +203,7 @@ class ConsistencyScanTests(unittest.TestCase):
         report = {
             "protocol_version": self.contract["protocol_version"],
             "operation": "update",
-            "scope": ["registry/design.md"],
+            "scope": ["registry/theory.md"],
             "findings": [
                 {
                     "severity": "block",

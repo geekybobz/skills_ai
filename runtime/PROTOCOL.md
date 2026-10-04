@@ -1,215 +1,24 @@
-# Skills AI Runtime Protocol
+# Skills AI runtime protocol
 
-Interaction overview: [[interaction-protocol/README|Interaction Protocol]].
+The model-led responsibility and control contract lives in [[runtime/skills-orchestrator/CONTRACT]]. Exact process and access boundaries live in [[runtime/API_CONTRACT]]. Keep those facts there rather than duplicating a semantic router here.
 
-Protocol version: `skills-ai/1`.
+The host reads the coordination core, resolves user intent and leading controls, discovers bounded metadata, selects the minimum sufficient compatible capability set, loads complete selected entries and required support, performs authorized work, and assesses artifact-bound evidence. The host selects a phase-specific compatible set without a fixed package-count limit. Public counts remain package counts; interaction modes and capability files are internal details.
 
-## Invariants
+Everyday controls are `#> use auto|none|<comma-separated package IDs>` and
+`#> mode advisory|adaptive|strict`. The shared host instructions define their
+aliases, multi-target handling and the visible Task understood/Plan/Skills/Mode
+receipt. Presentation happens once at task start under auto, with significant
+updates as needed; host-native equivalent fields are reused. There is no new
+semantic parser, classifier, task logger or automatic approval gate.
 
-- One request selects at most one active/manual skill or returns `NORMAL`.
-- A `manual` task skill is eligible only when `#> skill <exact-id>`, the exact
-  “use the `<id>` skill” form, or a registry-declared leading command alias
-  names it. Explicit selection bypasses domain gates for that route but never
-  activation, path, or permission checks.
-- The interaction protocol is response context, not a task skill. The general
-  contract and optional math overlay do not consume the one-skill limit.
-- No match, invalid input, timeout, unavailable manifest, or expected adapter
-  failure never blocks the original task.
-- Routing does not preload the Markdown hub, family registries, or remembered
-  skill bodies.
-- Explicit registry-discovery questions return live manifest metadata without
-  loading a skill body.
-- The `design` and `ui-patterns` families require both an explicit design
-  request and a relevant visual/UI/UX domain cue in ordinary prompt prose.
-  Trigger-like text inside code, file names, paths, or URLs cannot establish
-  design intent.
-  Without that gate, routing continues through non-design families or `NORMAL`.
-- The request text is never returned or written to diagnostics.
-- Prompt-free ambiguity observations may be appended under ignored `.runtime/`
-  state with mode `0600`; they contain only time, client, candidate ids, Fit,
-  operation, and domain and stop at the 1 MiB file cap.
-- Skill selection grants no write, credential, network, or account authority.
-- Every one-shot router has a bounded input lifetime and exits after one reply.
+Optional tool or adapter failures fail open to ordinary host work. Failed required evidence obligations remain unresolved. Selection, override, sudo, adherence, autonomy and saved state confer no host authority. Result validation and certification require the named evidence, not a successful transport or identity comparison.
 
-## Interaction protocols
+Shared Python owns bounded metadata compilation, prompt-free context assembly, exact file access and structured errors. Codex owns its entry loading and invocation cleanup. Claude owns hook input deadlines, child process-group termination, output injection and native live acceptance. Adapters must not add semantic selection forks.
 
-`interaction.general` gives the result first and adds only enough polished
-context to understand and use it. `interaction.math` leads with equations and
-mathematical reasoning, followed by short supporting context. Its automatic
-gate requires mathematical intent rather than a lone keyword and ignores code,
-paths, filenames, URLs, settings, search, parser, and rendering mentions.
+A single Claude run budget bounds input, Python child execution, core reading and output. The child deadline is shorter than the remaining hook budget; timeout terminates and reaps its process group, including interpreter shims. Host cancellation during input returns a prompt-free reason. The hook does not forward task input to the child. No background watcher, indexer, updater or new ambiguity logger is started.
 
-Activation behavior is exact:
+Local governance scanners inspect repository artifacts; they do not determine the meaning of a user task. External maintenance tasks retain the request-only packet boundary. Generated entries and human guides are projections, not runtime routing or permission authority.
 
-- `active`: automatic and explicit math selection;
-- `manual`: explicit `#> interaction math` selection only;
-- `off`: no math overlay; and
-- `#> interaction general`: per-request general override.
+Interaction package: [[interaction-protocol/README]].
 
-The shared router returns the selected interaction mode and reason in every
-context packet. Adapters must render that context without duplicating the
-detection rules.
-
-An explicitly invoked workflow may narrow the generic access and output fields
-when its user-facing command contract grants that scope. Skill selection alone
-still grants nothing. Research Context Scout returns
-`write-scoped:research-orientation.md` and a supervisor-brief output shape;
-all other project artifacts remain read-only. This does not force the global
-math interaction mode: mathematical formulation is applied inside the skill
-only when a claim requires it.
-
-## Request controls and receipt
-
-Current-request controls have the highest presentation priority:
-
-- leading `#> override <exact instruction>` bypasses local Skills AI routing,
-  interaction formatting, and repository procedure for the current request;
-- `#> skill auto|normal|<exact-id>` controls the local task-skill slot;
-- registry-declared directives such as `#> scout` and `#> scout-again` select one
-  exact manual skill and attach a bounded invocation mode; presentation
-  controls may precede the first task directive;
-- natural “do not use any local skill” forms map to `USER_NORMAL`;
-- `#> interaction general|math` controls response style;
-- `#> format mermaid+summary` selects one or more known output forms;
-- `#> depth brief|standard|detailed` selects explanation depth; and
-- `#> receipt auto|on|off` controls the compact visible task receipt.
-
-The precedence is current request, session preference, project default, global
-default, then automatic detection. Natural-language output instructions in the
-prompt remain authoritative. Bounded project context means already available
-project instructions plus user-named or directly relevant files; routing never
-scans a repository merely to fill the receipt.
-
-Command aliases are data in one family registry, not hard-coded keyword
-substitutions. They activate as the first task directive, optionally after
-leading receipt, depth, format or interaction controls; they never activate
-from quotations, code, URLs, later prose mentions or near-matching words. The
-router returns only `command`, `mode` and current-request scope; it does not
-echo alias arguments. An option-like first alias argument is malformed rather
-than silently changing modes. `#> skill normal` still opts out, and leading
-`#> override` retains its earlier override boundary.
-
-Invocation mode expresses intent, not workflow completeness. A skill may
-finish a required earlier phase before acting on the requested mode. Canonical
-Research Context Scout selection requires `initial` or `deepen` and injects the
-validated mode just like an alias.
-
-`#> override` is deliberately not a presentation option and is not stored in the
-interaction protocol. It is recognized only as the first non-whitespace token
-and only when an instruction follows. It never activates from quoted text,
-code, a URL, a later mention, or a bare `override` word. The override is
-local: system and developer instructions, host permissions, sandbox limits,
-credentials, external actions, destructive-action safety, and exact user scope
-remain authoritative.
-
-`routing.fit` is ordinal route suitability: `3` explicit exact skill, `2`
-unique contextual match, `1` unresolved equal top candidates, and `0` no skill,
-disabled skill, opt-out, maintenance, or fail-open. It is not a probability and
-says nothing about answer correctness.
-
-An equal top score returns `NORMAL / AMBIGUOUS_SKILL_MATCH` with candidate id,
-family, and purpose but no path or body. The host asks one short numbered choice
-only when the alternatives materially change the work. After the user chooses,
-it reroutes by exact id and continues the original task.
-
-## Framing
-
-The caller writes one UTF-8 JSON object followed by `\n`. The router reads one
-line and does not wait for EOF. The default input deadline is 10,000 ms because
-Codex may start and write to a PTY in separate host calls; direct adapters may
-set a shorter bound. The request limit is 1 MiB. A raw one-line query remains
-accepted for compatibility. Any valid JSON value is parsed as JSON; a value
-that is not an object fails open with `INVALID_INPUT` instead of being routed as
-literal text. Non-JSON one-line text remains the raw-query compatibility path.
-
-```json
-{"protocol":"skills-ai/1","request_id":"optional","client":"codex","query":"Explain this code"}
-```
-
-The router emits one JSON decision. It never echoes `query`.
-
-```json
-{
-  "protocol": "skills-ai/1",
-  "request_id": "optional",
-  "result": "NORMAL",
-  "reason_code": "NO_SKILL_MATCH",
-  "context": {},
-  "router_ms": 1.2
-}
-```
-
-`--strict` preserves the JSON receipt but returns nonzero for maintenance tools.
-The default hot path returns zero after an operational fail-open receipt.
-
-## Stable reasons
-
-Routing reasons include `ACTIVE_SKILL_MATCH`, `NO_SKILL_MATCH`,
-`DISABLED_SKILL`, `AMBIGUOUS_SKILL_MATCH`, `USER_NORMAL`,
-`USER_OVERRIDE`, `UNKNOWN_SKILL_REQUEST`, `MALFORMED_COMMAND_ALIAS`,
-`INVALID_SKILL_MODE`, and `SKILLS_AI_MAINTENANCE`. The maintenance reason keeps repository-governance
-requests on the normal path instead of allowing words such as `node` or a
-negated `install` to select an ordinary task skill. Boundary reasons
-include `INVALID_INPUT`, `REQUEST_TOO_LARGE`, `INPUT_TIMEOUT`,
-`UNSUPPORTED_PROTOCOL`, `MANIFEST_UNAVAILABLE`,
-`SELECTED_SKILL_UNAVAILABLE`, `ROUTER_INTERNAL_ERROR`, `ADAPTER_TIMEOUT`, and
-`CANCELLED`.
-
-`REGISTRY_STATUS` is a non-skill metadata response. It keeps `result: NORMAL`
-and adds a `registry` object containing the source hash, active/manual/off route
-ids, gate summaries, hidden/deprecated counts, and the no-memory policy.
-
-Analyze prompt-free ambiguity frequencies without loading prompts or skills:
-
-```bash
-python3 scripts/analyze_ambiguities.py --limit 500
-```
-
-## Repository-change boundary
-
-An initial idea stored only at `skill-plans/<name>/plan.md` is not a skill and
-does not enter routing, graph, generated views, or full consistency validation.
-Creating `SKILL.md` is the explicit promotion boundary.
-
-For governed work, `scan_consistency.py classify --path ...` selects the one
-operation card and check set. Optional `plan --baseline-out
-.runtime/<name>.json` records prompt-free failure signatures; a later
-`changed --baseline .runtime/<name>.json` preserves only identical old
-failures while new or changed failures continue to block. A baseline is valid
-only for the same protocol version, operation, and declared path set.
-
-When a write-requested prompt explicitly targets Skills AI itself, the shared
-context identifies the external-task request-only boundary. A task started
-outside this workspace may create one pending request Markdown through
-`scripts/create_change_request.py`; canonical implementation belongs to a
-dedicated maintenance task rooted in this repository. Host permissions remain
-the hard enforcement layer.
-
-Maintenance intent is recognized before task-skill scoring. Negated action
-clauses such as “no external install” do not establish write access or positive
-installation intent.
-
-## Lifecycle ownership
-
-- Shared Python router: line framing, input deadline, manifest selection,
-  structured receipt, prompt privacy, and process exit.
-- Codex: writes one framed request, closes or reaps its execution session, and
-  continues normally if the session exceeds its host deadline.
-- Claude: bounds hook input, gives its Python child a shorter timeout than the
-  outer hook, reaps the child, and continues normally on adapter failure.
-
-Codex does not certify Claude integration. Claude does not certify or change
-Codex-specific lifecycle without an explicit request.
-
-## Cancellation
-
-The router creates no background child. A host cancellation targets the exact
-router session or child, sends `SIGTERM`, allows a short grace period, then may
-force-terminate only that exact process. The host must reap or close the process
-handle. If a caller abandons stdin, the internal input deadline ends the router.
-
-## Observability
-
-Safe diagnostics contain only adapter, reason code, elapsed milliseconds, and
-timeout/cancellation state. They do not contain the prompt, context body, skill
-body, credentials, user files, child-process stderr, or local child paths.
+Contained maintenance uses `#> repair on/off` and `#> update` under [[protocols/repository/REPAIR_WORKSPACE]]. The host interprets these controls. Source-owned tools snapshot, inspect and transact exact files; they never parse task text or approve deployment. Host-session metadata supports bounded association recovery, not global activation.

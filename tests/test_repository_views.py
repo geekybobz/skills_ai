@@ -4,6 +4,7 @@ import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,11 +17,26 @@ from compile_repository_views import (  # noqa: E402
     load_model,
     render_outputs,
     repository_paths,
+    render_agent_entries,
     stale_outputs,
 )
 
 
 class RepositoryViewTests(unittest.TestCase):
+    def test_agent_regeneration_replaces_unsupported_external_blocks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "common.md").write_text("Shared rules\n", encoding="utf-8")
+            (root / "overlay.md").write_text("Host rules\n", encoding="utf-8")
+            block = "<!-- external-tool:start -->\nUnsupported instructions\n<!-- external-tool:end -->"
+            (root / "AGENTS.md").write_text("Old generated text\n\n" + block + "\n", encoding="utf-8")
+            model = {"agent_entries": {"common": "common.md", "outputs": {"AGENTS.md": "overlay.md"}}}
+            output = render_agent_entries(root, model)["AGENTS.md"]
+            self.assertNotIn(block, output)
+            self.assertNotIn("Old generated text", output)
+            (root / "AGENTS.md").write_text(output, encoding="utf-8")
+            self.assertEqual(output, render_agent_entries(root, model)["AGENTS.md"])
+
     def test_expected_outputs_are_generated(self) -> None:
         outputs = render_outputs(ROOT)
         self.assertEqual(
@@ -30,6 +46,12 @@ class RepositoryViewTests(unittest.TestCase):
                 "CLAUDE.md",
                 "docs/human/_LIVE_REPOSITORY_INDEX.md",
                 "docs/human/_LIVE_SKILL_CATALOG.md",
+                "graph/orchestration/skills-orchestrator.md",
+                "graph/skills/interaction-protocol.md",
+                "graph/skills/optimizer.md",
+                "graph/skills/quantum-job-collector.md",
+                "graph/skills/research-context-scout.md",
+                "graph/skills/theory-reference.md",
             },
         )
         self.assertTrue(all(text.endswith("\n") for text in outputs.values()))
@@ -64,6 +86,53 @@ class RepositoryViewTests(unittest.TestCase):
             )
             self.assertIn(marker, repository_index)
 
+    def test_skill_catalog_separates_orchestrator_from_five_skills(self) -> None:
+        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        orchestrator_section = catalog.split("# Skills Orchestrator", 1)[1].split(
+            "# Public Skills", 1
+        )[0]
+        public_section = catalog.split("# Public Skills", 1)[1].split(
+            "# Internal Capabilities", 1
+        )[0]
+        internal_section = catalog.split("# Internal Capabilities", 1)[1].split(
+            "# Orchestrator Contents", 1
+        )[0]
+        self.assertIn("| skills-orchestrator |", orchestrator_section)
+        for package_id in (
+            "interaction-protocol",
+            "theory-reference",
+            "research-context-scout",
+            "optimizer",
+            "quantum-job-collector",
+        ):
+            self.assertIn(f"| {package_id} |", public_section)
+        public_rows = [
+            line
+            for line in public_section.splitlines()
+            if line.startswith("| ") and not line.startswith("| Public skill |")
+        ]
+        self.assertEqual(5, len(public_rows))
+        self.assertNotIn("skills-orchestrator", public_section)
+        self.assertNotIn("| code-explainer |", public_section)
+        self.assertIn("| theory-reference | theory-reference |", internal_section)
+        self.assertIn("never additional skills", catalog)
+
+    def test_orchestrator_and_every_live_skill_have_declared_contents_boundary(self) -> None:
+        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        orchestrator_contents = catalog.split("# Orchestrator Contents", 1)[1].split(
+            "# Skill Contents", 1
+        )[0]
+        self.assertIn("runtime/skills-orchestrator/SKILL.md", orchestrator_contents)
+        package_contents = catalog.split("# Skill Contents", 1)[1]
+        for package_id in (
+            "interaction-protocol",
+            "theory-reference",
+            "research-context-scout",
+            "optimizer",
+            "quantum-job-collector",
+        ):
+            self.assertIn(f"## {package_id}", package_contents)
+
     def test_external_skill_is_not_traversed_for_tokens_or_contents(self) -> None:
         external_file = ROOT / "external-skills/quantum-job-collector/SKILL.md"
         self.assertEqual(
@@ -71,7 +140,9 @@ class RepositoryViewTests(unittest.TestCase):
             "—",
         )
         catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
-        external_section = catalog.split("## quantum-job-collector", 1)[1]
+        external_section = catalog.split("# Skill Contents", 1)[1].split(
+            "## quantum-job-collector", 1
+        )[1]
         self.assertIn("does not traverse or copy its files", external_section)
         self.assertNotIn("| [external-skills/quantum-job-collector/SKILL.md]", external_section)
 
@@ -82,7 +153,9 @@ class RepositoryViewTests(unittest.TestCase):
             _token_estimate(internal_file, "research-context-scout/SKILL.md"),
         )
         catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
-        internal_section = catalog.split("## research-context-scout", 1)[1]
+        internal_section = catalog.split("# Skill Contents", 1)[1].split(
+            "## research-context-scout", 1
+        )[1]
         self.assertIn(
             "| [research-context-scout/shared/SKILL.md]",
             internal_section,
@@ -98,6 +171,22 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("claude/CLAUDE.md]", repository_index)
         self.assertIn("| Claude |", repository_index)
 
+    def test_generated_graph_nodes_are_uniquely_named_inventory_entries(self) -> None:
+        outputs = render_outputs(ROOT)
+        orchestrator = outputs["graph/orchestration/skills-orchestrator.md"]
+        self.assertIn("# Skills Orchestrator", orchestrator)
+        self.assertIn("graph_kind: orchestrator", orchestrator)
+        for skill_id in (
+            "interaction-protocol",
+            "theory-reference",
+            "research-context-scout",
+            "optimizer",
+            "quantum-job-collector",
+        ):
+            node = outputs[f"graph/skills/{skill_id}.md"]
+            self.assertIn("graph_kind: skill-package", node)
+            self.assertIn("[[graph/orchestration/skills-orchestrator|Skills Orchestrator]]", node)
+
     def test_checked_in_views_are_fresh(self) -> None:
         self.assertEqual(stale_outputs(ROOT), [])
 
@@ -105,11 +194,11 @@ class RepositoryViewTests(unittest.TestCase):
         model = load_model(ROOT)
         with patch(
             "compile_repository_views._git_paths",
-            side_effect=[["README.md"], ["NOTES_SCRATCH.md", "scripts/analyze_ambiguities.py"]],
+            side_effect=[["README.md"], ["NOTES_SCRATCH.md", "scripts/measure_context.py"]],
         ):
             paths = repository_paths(ROOT, model)
         self.assertIn("README.md", paths)
-        self.assertIn("scripts/analyze_ambiguities.py", paths)
+        self.assertIn("scripts/measure_context.py", paths)
         self.assertNotIn("NOTES_SCRATCH.md", paths)
 
     def test_deleted_tracked_files_do_not_enter_generated_views(self) -> None:

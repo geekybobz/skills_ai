@@ -12,30 +12,28 @@ related: "[[docs/SHARED_DOCUMENTATION_MODEL]]"
 during normal routing or task work; use them only when the user explicitly asks
 about the human guide or when synchronizing it after a relevant approved change.
 
-For a request that might benefit from a local skill, use the fast runtime entry
+For a request that might benefit from a local skill package, use the fast runtime entry
 in `runtime/SKILL.md`. Do not preload the Markdown hub, activation register,
 family registries, generated human indexes, or skill bodies on the normal path.
 
+## On-demand repository context
+
+- Do not start or require a background repository indexer, watcher, telemetry
+  process, or network update check.
+- If the relevant path is already known, open only that file or a bounded line
+  range. Otherwise use `rg --files` to narrow candidates, then `rg -n` with a
+  literal identifier, filename, error string, route id, or test name.
+- For blast radius, inspect exact references, `git diff`, registry contracts,
+  and the tests mapped to the changed path. Do not build a second semantic
+  index or scan unrelated skill bodies.
+- Keep repository understanding in the current task context. Re-query the
+  filesystem only when the target, revision, or task phase changes.
+
 ## Shared rules
 
-- `MATCH` → load only the returned skill path.
-- `NORMAL` → continue normally without a local skill.
-- `AMBIGUOUS_SKILL_MATCH` → ask only the returned short numbered choice when
-  the alternatives materially differ; after the user selects, reroute by exact
-  id and continue the original task. Never load both candidates.
-- Never invent or substitute a skill. Disabled routes are not routable.
-- `USER_OVERRIDE` means the leading `#> override <instruction>` directive bypasses local
-  Skills AI routing, response formatting, and repository procedure for this
-  request only. Follow the explicit targets, but never treat it as overriding
-  system/developer instructions, host permissions, credential or external-action
-  boundaries, destructive-action safety, or the sandbox.
-- Current-request `#> skill`, `#> interaction`, `#> format`, `#> depth`, and `#> receipt`
-  controls override session, project, global, and automatic defaults. Route
-  `fit` is 0–3 suitability evidence, never confidence in answer correctness.
-- Use only already available project instructions and user-named or directly
-  relevant files for the compact receipt. Never scan the repository merely to
-  fill a header.
-- Skill selection never grants write, credential, network, or account authority.
+- The Skills Orchestrator is always active and is not a skill. Load the installed entry or `runtime/skills-orchestrator/SKILL.md` once when its instructions are not reliably present. Core controls, selection, receipts, modes and recovery have one canonical home there.
+- Public inventory counts declared packages; files/routes are capabilities, never additional skills. No package selection grants authority.
+- Use available project instructions and directly relevant/user-named files; never scan merely to fill context or a receipt.
 - For registry maintenance or a stale/broken manifest, read
   `docs/00_SKILLS_HUB.md`, then `registry/activation.md`, then one family file.
 - Before registry writes or scripts, read `docs/04_RISK_MAP.md`.
@@ -58,14 +56,16 @@ family registries, generated human indexes, or skill bodies on the normal path.
   may only create one new packet through `scripts/create_change_request.py`,
   then hand off to a dedicated maintenance task rooted here. Read
   `protocols/repository/EXTERNAL_CHANGE_REQUEST.md`.
-- Never load a whole family. `design-with-claude/` alone is about 30k tokens.
-- Never edit skill files under `design-with-claude/`, `interaction-protocol/`, or
+- Never load a whole package or family; load only the selected capability and required support.
+- Never edit skill files under `interaction-protocol/` or
   `theory-reference/` unless explicitly asked. The registry describes; it does
   not rewrite.
-- Interaction protocols shape the response context and do not consume the one
-  selected task-skill slot.
+- `interaction-protocol` is one public interaction skill package. Its modes
+  shape response context and do not consume coordination capacity.
 - `theory-reference/` is a Git submodule. Never add registry files inside it.
 - Human indexes are generated projections, not routing or permission authority.
-- Prompt-free ambiguity observations may be written only to ignored `.runtime/`
-  state. They never contain prompts, file content, absolute paths, skill bodies,
-  or answers and never become routing authority.
+- The runtime does not log prompts. Ignored operational metadata is advisory, never selection authority.
+
+## Contained repair maintenance
+
+Use `protocols/repository/REPAIR_WORKSPACE.md` for source-owned containment and exact update review. Inspect the known chat association before maintenance mutations and after uncertainty; known missing/corrupt state blocks mutations instead of redirecting them live. Preserve dirty live changes and rollback. External tasks retain the request-only boundary.

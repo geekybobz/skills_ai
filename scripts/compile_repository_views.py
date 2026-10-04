@@ -19,7 +19,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from change_guard import _matches_pattern, load_contract, matching_roles  # noqa: E402
 from compile_registry import atomic_write  # noqa: E402
-from registry_runtime import build_manifest  # noqa: E402
+from registry_runtime import build_manifest
+from model_context import capability_records  # noqa: E402
 
 
 MODEL_PATH = Path("protocols/repository/DOCUMENTATION.json")
@@ -38,7 +39,7 @@ def load_model(root: Path = ROOT) -> dict[str, Any]:
         raise ViewError(f"cannot read {MODEL_PATH}: {type(exc).__name__}") from exc
     if model.get("version") != 1:
         raise ViewError("unsupported documentation model version")
-    for key in ("areas", "agent_entries", "human_outputs", "packages"):
+    for key in ("areas", "agent_entries", "human_outputs", "orchestrator", "packages"):
         if key not in model:
             raise ViewError(f"documentation model is missing {key}")
     return model
@@ -84,6 +85,8 @@ def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
     paths.update(model["agent_entries"]["outputs"].keys())
     paths.update(model["agent_entries"]["outputs"].values())
     paths.update(model["human_outputs"].values())
+    paths.add(model["orchestrator"]["graph_entry"])
+    paths.update(package["graph_entry"] for package in model["packages"])
     return sorted(path for path in paths if not _excluded(path, model))
 
 
@@ -206,10 +209,14 @@ def _audience(path: str, model: dict[str, Any]) -> str:
     return "Shared"
 
 
+def _inventory_units(model: dict[str, Any]) -> list[dict[str, Any]]:
+    return [model["orchestrator"], *model["packages"]]
+
+
 def _package_for_path(path: str, model: dict[str, Any]) -> dict[str, Any] | None:
     matches = [
         package
-        for package in model["packages"]
+        for package in _inventory_units(model)
         if path == package["path"] or path.startswith(package["path"].rstrip("/") + "/")
     ]
     return max(matches, key=lambda package: len(package["path"])) if matches else None
@@ -309,14 +316,12 @@ def render_repository_index(
     )
 
 
-def _route_kind(path: str, model: dict[str, Any]) -> str:
-    if path.startswith("design-with-claude/"):
-        return "single-file"
+def _capability_kind(path: str, model: dict[str, Any]) -> str:
     if path.startswith("theory-reference/"):
-        return "submodule package"
+        return "submodule capability"
     if _is_external_pointer(path, model):
         return "external pointer"
-    return "packaged skill"
+    return "package capability"
 
 
 def _token_estimate(path: Path, relative: str, model: dict[str, Any] | None = None) -> str:
@@ -362,23 +367,148 @@ def _package_file_role(path: str) -> str:
     return "Package support file."
 
 
+def _obsidian_target(path: str) -> str:
+    return path[:-3] if path.endswith(".md") else path
+
+
+def render_graph_entries(model: dict[str, Any], manifest: dict[str, Any]) -> dict[str, str]:
+    """Generate uniquely named human graph nodes from canonical inventory data."""
+    orchestrator = model["orchestrator"]
+    live_orchestrator = manifest["orchestrator"]
+    skill_links = [
+        f"- [[{_obsidian_target(package['graph_entry'])}|{package['display_name']}]]"
+        for package in model["packages"]
+    ]
+    outputs = {
+        orchestrator["graph_entry"]: (
+            "---\n"
+            "generated: true\n"
+            "graph_kind: orchestrator\n"
+            f"graph_label: {json.dumps(orchestrator['display_name'])}\n"
+            f"orchestrator_id: {orchestrator['id']}\n"
+            "state: active\n"
+            "---\n\n"
+            f"{GENERATED_NOTICE}\n\n"
+            f"# {orchestrator['display_name']}\n\n"
+            f"{orchestrator['purpose']}\n\n"
+            "Canonical control plane: "
+            f"[[{_obsidian_target(live_orchestrator['path'])}|runtime instructions]]. "
+            "Registry switchboard: [[registry/activation|Activation]]. "
+            "Maintenance hub: [[docs/00_SKILLS_HUB|Skills Hub]].\n\n"
+            "## Skills\n\n"
+            + "\n".join(skill_links)
+            + "\n"
+        )
+    }
+
+    live_packages = manifest["packages"]
+    for package in model["packages"]:
+        skill_id = package["id"]
+        live = live_packages[skill_id]
+        family_rows = sorted(
+            (family_id, family)
+            for family_id, family in manifest.get("families", {}).items()
+            if family.get("package") == skill_id
+        )
+        family_links = []
+        for family_id, family in family_rows:
+            if live["state"] in {"active", "manual"}:
+                family_links.append(
+                    f"- [[{_obsidian_target(family['path'])}|{family_id}]]"
+                )
+            else:
+                family_links.append(f"- `{family_id}`: `{family['path']}`")
+        if live["state"] in {"active", "manual"}:
+            canonical_entry = f"[[{_obsidian_target(live['path'])}|canonical entry]]"
+        else:
+            canonical_entry = f"`{live['path']}`"
+        outputs[package["graph_entry"]] = (
+            "---\n"
+            "generated: true\n"
+            "graph_kind: skill-package\n"
+            f"graph_label: {json.dumps(package['display_name'])}\n"
+            f"skill_id: {skill_id}\n"
+            f"state: {live['state']}\n"
+            f"role: {live['role']}\n"
+            "---\n\n"
+            f"{GENERATED_NOTICE}\n\n"
+            f"# {package['display_name']}\n\n"
+            f"{package['purpose']}\n\n"
+            f"**State:** `{live['state']}`\n\n"
+            f"**Role:** `{live['role']}`\n\n"
+            f"**Canonical entry:** {canonical_entry}\n\n"
+            "Control plane: "
+            f"[[{_obsidian_target(orchestrator['graph_entry'])}|Skills Orchestrator]]. "
+            "Registry switchboard: [[registry/activation|Activation]].\n\n"
+            "## Families\n\n"
+            + ("\n".join(family_links) if family_links else "No internal family registry.")
+            + "\n"
+        )
+    return outputs
+
+
 def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, Any]) -> str:
     visible_states = {"active", "manual", "off"}
-    rows: list[str] = []
-    for route in manifest["routes"]:
-        if route["state"] not in visible_states:
+    declared_orchestrator = model["orchestrator"]
+    live_orchestrator = manifest.get("orchestrator", {})
+    if declared_orchestrator["id"] != live_orchestrator.get("id"):
+        raise ViewError(
+            "documentation orchestrator declaration differs from the live manifest: "
+            f"declared={declared_orchestrator['id']}, live={live_orchestrator.get('id')}"
+        )
+    declared_packages = {package["id"]: package for package in model["packages"]}
+    manifest_packages = manifest.get("packages", {})
+    if set(declared_packages) != set(manifest_packages):
+        missing = sorted(set(manifest_packages) - set(declared_packages))
+        extra = sorted(set(declared_packages) - set(manifest_packages))
+        raise ViewError(
+            "documentation package declarations differ from the live manifest: "
+            f"missing={missing}, extra={extra}"
+        )
+
+    records = capability_records(root,manifest)
+    package_rows: list[str] = []
+    for package in model["packages"]:
+        package_id = package["id"]
+        live = manifest_packages[package_id]
+        if live["state"] not in visible_states:
             continue
-        triggers = ", ".join(route.get("triggers", [])) or "family triggers"
-        source = route["path"]
-        rows.append(
+        capability_count = sum(
+            route.get("package") == package_id and route["state"] in visible_states
+            for route in records
+        )
+        task_capabilities = str(capability_count) if live["role"] == "task" else "—"
+        package_rows.append(
             "| "
-            + f"{_escape(route['id'])} | {_escape(route['family'])} | {_escape(route['state'])} | "
-            + f"{_escape(route['description'])} | {_escape(triggers)} | "
-            + f"{_escape(route.get('not_for', ''))} | {_route_kind(source, model)} | "
-            + f"{_file_cell(source, model)} | {_token_estimate(root / source, source, model)} |"
+            + f"{_escape(package_id)} | {_escape(live['role'])} | {_escape(live['state'])} | "
+            + f"{_escape(live['boundary'])} | {_escape(package['kind'])} | "
+            + f"{_file_cell(live['path'], model)} | {task_capabilities} |"
+        )
+
+    capability_rows: list[str] = []
+    for record in records:
+        if record["state"] not in visible_states: continue
+        route = next((r for r in manifest['routes'] if r['id']==record['capability']), {})
+        family = route.get('family') or ', '.join(k for k,v in manifest['families'].items() if v['package']==record['package'])
+        source = record['entry']
+        capability_rows.append(
+            "| " + f"{_escape(record['package'])} | {_escape(record['capability'])} | "
+            + f"{_escape(family)} | {_escape(record['state'])} | {_escape(record['purpose'])} | "
+            + f"{_escape(', '.join(route.get('triggers',[])) or 'purpose metadata')} | "
+            + f"{_escape(route.get('not_for',''))} | {_capability_kind(source,model)} | "
+            + f"{_file_cell(source,model)} | {_token_estimate(root/source,source,model)} |"
         )
 
     main_paths = repository_paths(root, model)
+    orchestrator_paths = _package_paths(root, declared_orchestrator, main_paths)
+    orchestrator_contents = [
+        "| Orchestrator file | Role |",
+        "|---|---|",
+        *(
+            f"| [{_escape(path)}]({_link_from_human(path)}) | {_package_file_role(path)} |"
+            for path in orchestrator_paths
+        ),
+    ]
     package_sections: list[str] = []
     for package in model["packages"]:
         package_sections.extend(
@@ -408,8 +538,8 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
         )
         package_sections.append("")
 
-    hidden = sum(route["state"] == "hidden" for route in manifest["routes"])
-    deprecated = sum(route["state"] == "deprecated" for route in manifest["routes"])
+    hidden = sum(package["state"] == "hidden" for package in manifest_packages.values())
+    deprecated = sum(package["state"] == "deprecated" for package in manifest_packages.values())
     return (
         "---\n"
         "audience: human\n"
@@ -420,13 +550,30 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
         f"{GENERATED_NOTICE}\n\n"
         "# Live Skill Catalog\n\n"
         "Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from "
-        "the canonical registry and declared package boundaries. It never loads a skill "
-        "body into ordinary routing. Hidden and deprecated identifiers remain omitted "
-        f"outside maintenance; current counts are {hidden} hidden and {deprecated} deprecated.\n\n"
-        "| Skill | Family | State | Purpose | Trigger | Not for | Structure | Source | Approx. tokens |\n"
-        "|---|---|---|---|---|---|---|---|---:|\n"
-        + "\n".join(rows)
-        + "\n\n# Package Contents\n\n"
+        "the canonical registry and declared inventory boundaries. The always-active "
+        "orchestrator is shown separately and never counted as a skill. Public skill inventory "
+        "counts packages only; routes, modes, components, and files are internal capabilities, "
+        "never additional skills. Hidden and deprecated skills remain omitted outside "
+        f"maintenance; current counts are {hidden} hidden and {deprecated} deprecated.\n\n"
+        "# Skills Orchestrator\n\n"
+        "| Control plane | Mode | State | Structure | Entry |\n"
+        "|---|---|---|---|---|\n"
+        f"| {_escape(live_orchestrator['id'])} | {_escape(live_orchestrator['mode'])} | "
+        f"{_escape(live_orchestrator['state'])} | {_escape(declared_orchestrator['kind'])} | "
+        f"{_file_cell(live_orchestrator['path'], model)} |\n\n"
+        "# Public Skills\n\n"
+        "| Public skill | Role | State | Boundary | Structure | Entry | Task capabilities |\n"
+        "|---|---|---|---|---|---|---:|\n"
+        + "\n".join(package_rows)
+        + "\n\n# Internal Capabilities\n\n"
+        "These technical routes select focused instructions inside a public task package. "
+        "They are not public skills and must never be added to the package count.\n\n"
+        "| Package | Capability | Family | State | Purpose | Trigger | Not for | Structure | Source | Approx. tokens |\n"
+        "|---|---|---|---|---|---|---|---|---|---:|\n"
+        + "\n".join(capability_rows)
+        + "\n\n# Orchestrator Contents\n\n"
+        + "\n".join(orchestrator_contents)
+        + "\n\n# Skill Contents\n\n"
         + "\n".join(package_sections)
     )
 
@@ -442,6 +589,7 @@ def render_outputs(root: Path = ROOT) -> dict[str, str]:
     outputs[model["human_outputs"]["skill_catalog"]] = render_skill_catalog(
         root, model, manifest
     )
+    outputs.update(render_graph_entries(model, manifest))
     return dict(sorted(outputs.items()))
 
 

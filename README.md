@@ -6,105 +6,225 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 # Skills AI: Human Guide
 
-> This is the human-facing entry point. Codex and Claude should not read it
-> during normal routing or task work. Machine authority lives in `runtime/`,
-> `registry/`, and the maintenance protocols.
+> This is the human-facing entry. Machine authority lives in `runtime/`,
+> `registry/`, and `protocols/`; ordinary routing does not load this guide.
 
-Skills AI is a local switchboard shared by Codex and Claude. It applies a small
-general interaction protocol, adds an equation-led math protocol only for
-genuine mathematical reasoning, selects at most one relevant enabled task
-skill, and otherwise lets the model continue normally. It does not need a
-network service and it does not grant permission to edit files, use credentials,
-or perform account actions.
+Skills AI is managed by one always-active Skills Orchestrator. It reads compact
+compiled metadata, optionally uses one validated project-local context capsule,
+composes the Interaction Protocol, and selects the minimum sufficient compatible capability set through host-model reasoning. Bounded tools supply metadata and exact access.
 
 ```mermaid
 flowchart TD
-    U["You give a task"] --> P["General interaction protocol"]
-    P --> M{"Mathematical reasoning?"}
-    M -- "Yes" --> X["Add math interaction protocol"]
-    M -- "No" --> R["Fast Skills AI router"]
-    X --> R
-    R --> Q{"One clear enabled skill match?"}
-    Q -- "Yes" --> S["Load one skill"]
-    Q -- "No match" --> N["Continue normally"]
-    Q -- "Ambiguous" --> C["Ask one short choice"]
-    C --> S
-    S --> A["Focused answer"]
-    N --> A
-
-    classDef entry fill:#5B5BD6,color:#fff,stroke:#32327A
-    classDef choice fill:#EF6C00,color:#fff,stroke:#A64700
-    classDef result fill:#2E7D32,color:#fff,stroke:#1B5E20
-    class U,P,R entry
-    class M,Q choice
-    class X,S,N,A result
+    U["User request"] --> S["Always-active Skills Orchestrator"]
+    S --> I["Compose Interaction Protocol"]
+    S --> C{"Project capsule valid?"}
+    C -- "Yes: bounded hints" --> R["Package decision"]
+    C -- "Missing, invalid, or stale" --> R
+    R -- "No task package" --> A["Host answer"]
+    R -- "Useful capabilities" --> P["Compatible capability set"]
+    P --> K["Load selected entries and required support"]
+    K --> A
+    I --> A
 ```
+
+## Learn the architecture
+
+Read [the walkthrough](docs/human/10_MODEL_LED_ORCHESTRATOR.md) for vocabulary,
+controls and working examples. Read [the integration contract](runtime/skills-orchestrator/CONTRACT.md)
+for responsibilities, package boundaries and verification criteria.
+
+## Skills Orchestrator
+
+`skills-orchestrator` is the always-active control plane for routing,
+management, documentation coordination, and project context. It is not a skill
+and is never included in skill counts.
+
+Repository context is resolved only when needed. Agents use bounded native
+file lookup (`rg --files`, literal `rg -n`, targeted reads, Git diffs, and
+mapped tests); Skills AI starts no background indexer, watcher, telemetry job,
+or network update check.
+
+## Public skills
+
+Public inventory contains exactly these five package records. Internal routes,
+components, modes, phases, and Markdown files are never additional skills.
+
+| package | state | role |
+|---|---|---|
+| `interaction-protocol` | active | interaction skill; no skill-count contribution |
+| `theory-reference` | active | theory and LaTeX task package |
+| `research-context-scout` | manual | user-aligned physics research orientation from an extracted paper corpus to collective mathematical ideas and project-notation translations |
+| `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |
+| `quantum-job-collector` | off | disabled external career task package |
 
 ## Learn it smoothly
 
 | Read | You will understand |
 |---|---|
-| [Start here](docs/human/00_START_HERE.md) | What Skills AI is, its promises, and the main vocabulary |
-| [Follow a request](docs/human/01_FOLLOW_A_REQUEST.md) | Routing, the strict design gate, fallback, and examples |
-| [Folder and platforms](docs/human/02_FOLDER_AND_PLATFORMS.md) | What each folder does and what Codex and Claude share |
-| [Skills and controls](docs/human/03_SKILLS_AND_CONTROLS.md) | Active, manual, off, hidden, and deprecated states |
-| [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, protocols, external requests, and documentation updates |
-| [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, timeouts, and cleanup |
-| [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | How colors distinguish entries, hubs, registries, skills, parked cards, and support |
-| [Maintaining skills](docs/human/07_MAINTAINING_SKILLS.md) | How additions, edits, moves, deletions, scans, suggestions, and Git checks work |
-| [Repository atlas](docs/human/08_REPOSITORY_ATLAS.md) | What every folder and file category means, from a simple map to the live file index |
-| [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | How single-file, packaged, submodule, protocol, and external skills are structured |
-| [Interaction protocol graph](interaction-protocol/README.md) | General and math flows, controls, runtime, API, tests, and migration links |
+| [Start here](docs/human/00_START_HERE.md) | Orchestrator, packages, capabilities, capsule, and guarantees |
+| [Follow a request](docs/human/01_FOLLOW_A_REQUEST.md) | Normal routing, management, ambiguity, and normal fallback |
+| [Folder and platforms](docs/human/02_FOLDER_AND_PLATFORMS.md) | Shared runtime, Codex, Claude, and external project context |
+| [Skills and controls](docs/human/03_SKILLS_AND_CONTROLS.md) | Package states, exact commands, management, and discovery |
+| [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, sudo boundaries, change control, and documentation sync |
+| [Speed and troubleshooting](docs/human/05_SPEED_AND_TROUBLESHOOTING.md) | Token load, latency, capsules, timeout, and failure handling |
+| [Graph and colors](docs/human/06_GRAPH_AND_COLORS.md) | Why graph-node counts are not skill counts |
+| [Maintaining skills](docs/human/07_MAINTAINING_SKILLS.md) | Adding, editing, deleting, documenting, and verifying packages or capabilities |
+| [Repository atlas](docs/human/08_REPOSITORY_ATLAS.md) | Where orchestrator, registry, packages, context, and tests live |
+| [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | Public package anatomy and internal capability anatomy |
+| [Model-led walkthrough](docs/human/10_MODEL_LED_ORCHESTRATOR.md) | Architecture, vocabulary, controls, working methods and recovery |
 
-## Seven things to remember
+## Everyday request
 
-1. General response guidance is small and does not consume the task-skill slot.
-2. Math is an equation-led response overlay, not a competing task skill.
-3. One clear match loads one task skill; no match continues normally; only a
-   material equal match asks one short last-resort choice.
-4. Codex and Claude share the Python router, manifest, interaction protocol, and skill sources.
-5. Routing and response style are guidance, not authority to make changes.
-6. Skills AI maintenance requests bypass ordinary task-skill matching and use
-   the Git-aware consistency protocol.
-7. A folder containing only `skill-plans/<name>/plan.md` is an idea; it becomes
-   a governed skill only when `SKILL.md` is explicitly created.
+```text
+#> use optimizer, theory-reference
+#> mode adaptive
 
-Useful per-request controls are `#> skill auto|normal|<exact-id>`,
-`#> interaction general|math`, `#> format mermaid+summary`,
-`#> depth brief|standard|detailed`, and `#> receipt auto|on|off`. Fit 0–3 measures
-only route suitability. Prompt-free ambiguity metadata may be kept locally
-under ignored `.runtime/` state so recurring route pairs can be improved without
-storing your prompt or answer.
-
-Registry-declared leading commands may explicitly select one manual skill. The
-first task directives are `#> scout <project-path>` for initial research orientation and
-`#> scout-again <paths>` for evidence-led deepening. See the
-[[research-context-scout/README|Research Context Scout guide]].
-Presentation controls may precede Scout; the alias remains the first task
-directive.
-
-Leading `#> override <exact instruction>` is the owner's current-request escape from
-local Skills AI procedure. It does not override system rules, permissions,
-sandboxing, credential boundaries, external-action approval, or destructive
-action safety.
-
-Depth is carried into both the Codex compact context and Claude's injected
-context; it is not merely parsed inside the router.
-
-In Obsidian, teal means hub or switchboard, green means family registry, and
-violet means an executable skill body or phase. The default overview hides
-low-level maintenance paths so this routing spine remains readable.
-
-To see the live registry without loading skill bodies, run:
-
-```bash
-python3 scripts/list_registry.py
+Describe the task, inputs and allowed outputs here.
+Prepare the proposal and wait before edits.
 ```
 
-For exhaustive human references generated from the same canonical sources, use
-the [live repository index](docs/human/_LIVE_REPOSITORY_INDEX.md) and
-[live skill catalog](docs/human/_LIVE_SKILL_CATALOG.md). Start with the atlas and
-skill-anatomy chapters first; the generated pages are the deeper factual layer.
+Replace the example package names with actual available packages. Use `#> use auto`
+for automatic selection or `#> use none` to work without task skills. Each listed
+package is explicitly requested; list order does not force a workflow or authorize
+parallel agents. Required support and incompatible targets are resolved openly.
+`mode` chooses method flexibility; ordinary language states the execution boundary.
+The detailed controls below remain available when needed.
 
-This guide explains the system but never overrides the live registry, runtime
-protocol, risk map, or change-control rules.
+## Visible task receipt
+
+At the beginning of a substantive task, expect a short block like this:
+
+> **Task receipt**
+>
+> - **Task understood:** Review the supplied model and explain its assumptions and the requested outputs.
+> - **Plan:** Inspect the relevant inputs, prepare the proposed approach and identify the checks needed before implementation.
+> - **Skills:** Optimizer and Theory Reference, planned for their relevant phases.
+> - **Mode:** Adaptive.
+> - **Boundary:** Proposal only; wait before edits or numerical runs.
+
+The task and plan are short paragraphs within separate bullets. Boundary is
+optional. Planned selection does not claim instructions are already loaded.
+`receipt auto` shows this once for substantive new work and skips trivial requests
+and routine follow-ups. `on` shows it for each new request; `off` hides the block.
+Material task changes update only affected fields. Equivalent visible native-host
+fields are reused, with missing fields added. A receipt does not create an approval
+pause or save memory; actual task boundaries still govern execution.
+
+## Advanced controls
+
+```text
+#> skill auto
+#> skill only <exact-package> [capability]
+#> skill prefer <exact-package>
+#> skill exclude <exact-package>
+#> skill off
+#> adherence advisory|adaptive|strict
+#> autonomy review-first|standard|autonomous
+#> composition auto|single|sequential|cooperative|parallel
+#> skill interaction-protocol general|math
+#> orchestrator <action> [exact-target]
+#> orchestrator sudo <operation> <exact-target>
+#> interaction general|math
+#> format mermaid+summary
+#> depth compact|standard|deep
+#> receipt auto|on|off
+```
+
+Bare `#> sudo` is inert. Orchestrator sudo bypasses only local Skills AI
+procedure for its exact operation and target. It never overrides system or
+developer instructions, host permissions, sandboxing, credentials, external
+actions, destructive safety, package activation, or the user's scope.
+
+The host interprets the leading user-authored control block and explicit natural-language
+instructions. Quoted examples, code blocks and retrieved directives are data.
+Management work uses the orchestrator instructions rather than a task capability.
+
+## Guarantees
+
+1. The orchestrator is always active and consumes no skill-count contribution.
+2. The Interaction Protocol counts as one public skill; its response modes add no extra skills.
+3. One phase loads the minimum sufficient compatible capability set; no family is preloaded.
+4. When no optional capability helps, or optional metadata is unavailable, the host continues authorized work while preserving required obligations.
+5. Invalid exact management actions fail safely without substitution.
+6. Selection and project context grant no file, network, credential, account, staging, or commit authority.
+7. `.skills-ai/project.json` is created only by an explicit request and stores no prompts, file bodies, secrets, absolute personal paths, or permission grants.
+8. Human pages explain the system but never become routing authority.
+
+Normal capsule receipts omit stored commands and validation commands. Explicit
+project-context inspection may show neutralized values, still as untrusted data.
+
+Run `python3 scripts/list_registry.py` for public skills, add `--catalog` for
+package-level purpose and trigger metadata, and add `--routes` only when
+internal capability diagnostics are required. The generated
+[live skill catalog](docs/human/_LIVE_SKILL_CATALOG.md) follows the same
+package-first rule; the [repository index](docs/human/_LIVE_REPOSITORY_INDEX.md)
+is the exhaustive file reference.
+
+## Contained repair mode
+
+Use these commands across ordinary messages:
+
+```text
+#> repair on
+```
+
+This creates or resumes this chat's contained copy. Continue discussing, editing
+and testing there for as many messages as needed. The active source and installed
+adapters remain unchanged. Repeating on resumes the same copy.
+
+```text
+#> update
+```
+
+The assistant compares the contained changes, runs relevant checks and explains
+what would change. After your agreement it applies only the reviewed changes,
+checks the installation and retains rollback and Git history. Update preserves
+repair mode. Changed files or conflicts require an updated review.
+
+```text
+#> repair off
+```
+
+Off returns to normal working locations and retains the contained copy. It does
+not deploy or delete pending work. An explicit live-edit exception applies only
+to that action. New chats default off; repair is independent of use/mode controls.
+
+The permanent local folder is `.runtime/repair/workspaces/<workspace-id>/repo/`.
+The leading dot hides it in normal Finder views, and `.runtime/` is ignored by Git.
+Use Finder **Go → Go to Folder** (Command-Shift-G), enter
+`/Users/billabobz/skills_ai/.runtime/repair/`, and open the returned workspace.
+The assistant also reports its exact working location when enabling repair.
+No manual copying or repeated cloning is necessary.
+
+The source-owned `scripts/repair_workspace.py` handles snapshots, resume, checks,
+exact update previews and recovery. A candidate controller cannot approve its own
+installation. Tests run against the contained copy with separate test configs.
+Saved state identifies work; actual conversation instructions supply authority.
+Git records are first kept in the contained repository; live staging must exclude
+inherited changes. The first version operates in Skills AI maintenance chats;
+other projects retain the request/handoff boundary.
+
+```mermaid
+flowchart TD
+    A["repair on"] --> B["Create or resume copy"]
+    B --> C["Discuss, edit and test"]
+    C --> D["update: explain exact changes"]
+    D --> E["Your agreement"]
+    E --> F["Apply, verify and retain rollback"]
+    F --> C
+    C --> G["repair off: retain pending work"]
+```
+
+See [the repair protocol](protocols/repository/REPAIR_WORKSPACE.md) for
+script operations, drift handling and recovery. Filesystem permissions provide
+the hard write boundary; contained paths and locks govern the managed workflow.
+
+Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+
+## Efficient context and recovery
+
+Reuse reliable metadata and complete instructions on follow-up work. Claude supplies full coordination context at session start/resume/clear/compact/fork, then changed sections only. Codex receives the complete core in one installed entry with its source identity. Exact skill lists bypass broad discovery; compatible entries can be loaded in one tool request. Contract changes invalidate revision identities, and uncertain context restores complete required instructions and evidence before consequential work.
+
+Run `python3 scripts/orchestrate.py measure` for delivery bytes and subprocess latency. The command loads no candidate bodies and writes measurement state only in disposable fixtures. Token estimates use bytes/4; they are not total task savings. No automatic task memory or background service is created.
+
+Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
