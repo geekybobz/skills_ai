@@ -148,7 +148,7 @@ Management work uses the orchestrator instructions rather than a task capability
 5. Invalid exact management actions fail safely without substitution.
 6. Selection and project context grant no file, network, credential, account, staging, or commit authority.
 7. `.skills-ai/project.json` is created only by an explicit request and stores no prompts, file bodies, secrets, absolute personal paths, or permission grants.
-8. Human pages explain the system but never become routing authority.
+8. Human pages explain the current system; source history and rollback stay in Git and private backups, outside routing authority.
 
 Normal capsule receipts omit stored commands and validation commands. Explicit
 project-context inspection may show neutralized values, still as untrusted data.

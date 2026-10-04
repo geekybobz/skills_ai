@@ -42,7 +42,7 @@ but is not a package, capability, or inventory row.
 ## Capability record
 
 An internal task capability has a family, package id, activation state, purpose,
-triggers, exclusions, canonical path, and tests. The registry describes these
+triggers, exclusions, canonical path and appropriate verification obligations. The registry describes these
 facts without copying the instruction body. A selected path is loaded only
 after package state and path validation.
 

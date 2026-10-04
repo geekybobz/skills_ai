@@ -11,7 +11,8 @@ Back: [speed and troubleshooting](05_SPEED_AND_TROUBLESHOOTING.md). Next:
 
 Color describes architectural role, not topic. Entry notes, hubs, registries,
 skills and supporting files have distinct layers. Public packages do not receive
-individual colors, and graph-node counts are never skill counts.
+individual colors. Graph nodes describe current sources; archived copies and
+Git history do not add inventory entries or skill counts.
 
 The overview shows one named orchestrator node and one named node per public
 skill. Technical entries such as `SKILL.md` remain accessible through those nodes.

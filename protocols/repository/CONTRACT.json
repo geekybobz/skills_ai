@@ -249,14 +249,12 @@
         "scripts/compile_registry.py",
         "scripts/list_registry.py",
         "scripts/registry_runtime.py",
-        "scripts/route_skill.py",
         "scripts/toggle_registry.py",
         "scripts/validate_registry.py",
         "scripts/orchestrate.py",
         "scripts/replacement_packet.py",
         "scripts/repair_workspace.py",
-        "scripts/measure_context.py",
-        "scripts/benchmark_router.py"
+        "scripts/measure_context.py"
       ],
       "checks": [
         "benchmark",
@@ -290,7 +288,6 @@
       "id": "maintenance-runtime",
       "patterns": [
         "scripts/change_guard.py",
-        "scripts/analyze_ambiguities.py",
         "scripts/compile_repository_views.py",
         "scripts/create_change_request.py",
         "scripts/graph_layers.py",
@@ -398,60 +395,6 @@
         ".runtime/**"
       ],
       "checks": []
-    },
-    {
-      "id": "retired-deletion-checkpoint",
-      "patterns": [
-        "design-with-claude/accessibility-specialist.md",
-        "design-with-claude/auth-implementation.md",
-        "design-with-claude/auth-security-ux-specialist.md",
-        "design-with-claude/b2b-saas-specialist.md",
-        "design-with-claude/brand-designer.md",
-        "design-with-claude/checkout-specialist.md",
-        "design-with-claude/code-explainer.md",
-        "design-with-claude/color-specialist.md",
-        "design-with-claude/content-strategist.md",
-        "design-with-claude/conversational-ui-designer.md",
-        "design-with-claude/dark-mode-specialist.md",
-        "design-with-claude/dashboard-designer.md",
-        "design-with-claude/data-visualization-specialist.md",
-        "design-with-claude/database-setup.md",
-        "design-with-claude/debug-helper.md",
-        "design-with-claude/deploy-to-vercel.md",
-        "design-with-claude/design-brief.md",
-        "design-with-claude/design-system-architect.md",
-        "design-with-claude/drag-drop-specialist.md",
-        "design-with-claude/ecommerce-specialist.md",
-        "design-with-claude/environment-setup.md",
-        "design-with-claude/error-handling-specialist.md",
-        "design-with-claude/form-designer.md",
-        "design-with-claude/healthcare-ux-specialist.md",
-        "design-with-claude/i18n-designer.md",
-        "design-with-claude/information-architect.md",
-        "design-with-claude/interaction-designer.md",
-        "design-with-claude/landing-page-specialist.md",
-        "design-with-claude/mobile-specialist.md",
-        "design-with-claude/motion-designer.md",
-        "design-with-claude/navigation-specialist.md",
-        "design-with-claude/onboarding-specialist.md",
-        "design-with-claude/performance-specialist.md",
-        "design-with-claude/poster-lead.md",
-        "design-with-claude/print-export-designer.md",
-        "design-with-claude/responsive-design-specialist.md",
-        "design-with-claude/search-specialist.md",
-        "design-with-claude/setup-guide.md",
-        "design-with-claude/spacing-layout-specialist.md",
-        "design-with-claude/table-designer.md",
-        "design-with-claude/typography-specialist.md",
-        "design-with-claude/visual-hierarchy-specialist.md"
-      ],
-      "checks": [
-        "consistency",
-        "graph",
-        "human-docs",
-        "unit",
-        "views"
-      ]
     }
   ],
   "graph_role_policy": {

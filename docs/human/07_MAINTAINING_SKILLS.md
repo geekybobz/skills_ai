@@ -46,7 +46,9 @@ approval or absorbs unrelated dirty files.
 | document | synchronize canonical technical docs, mapped human explanations, and generated projections |
 
 Adding a phase under an existing package does not add another public skill.
-A new registered capability still needs its own routing metadata and tests.
+A new registered capability needs explicit metadata, appropriate access checks
+and domain verification. Removed files are not reusable entry points; restore
+and review them explicitly before integrating them again.
 
 The manual `optimizer` package illustrates one public package: one
 Activation row, one family registry, one root instruction entry, focused tests,

@@ -78,7 +78,8 @@ Generated `AGENTS.md` and `CLAUDE.md` come from one shared source plus one small
 platform overlay. Repository context is resolved on demand with bounded native
 file search; generated entries do not preserve externally appended tool blocks.
 Generated human indexes come from the documentation model,
-registry, and repository contract. All are projections, not canonical edit targets.
+registry, and repository contract. All are projections of current declared sources, not canonical edit targets.
+Deleted files and archived workspaces do not become available capabilities.
 
 Continue to the [repository atlas](08_REPOSITORY_ATLAS.md) for the deeper file map.
 

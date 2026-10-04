@@ -76,6 +76,11 @@ under ignored `.runtime/` with restrictive permissions. Repair records carry
 workspace and recovery information. Neither kind of record grants authority or
 chooses task skills; they are not transcript or prompt logs.
 
+Repository cleanup preserves local learning material and active repair work.
+Abandoned copies are archived and verified before removal; redundant branches
+are deleted only after their commits are retained. A clean canonical Git
+checkpoint records the intended current version without resetting existing work.
+
 ## Keeping this human guide current
 
 Relevant canonical sources are mapped to the human pages that explain them.

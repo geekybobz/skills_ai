@@ -49,7 +49,7 @@ flowchart LR
 | `adapters/` | thin Codex and Claude lifecycle layers |
 | `docs/human/` | progressive explanation outside the routing hot path |
 | `requests/` | bounded intake from tasks that started outside this workspace |
-| `skill-plans/` | design plans, distinct from public package entries |
+| `skill-plans/` | architecture notes and unimplemented proposals, distinct from active package entries |
 | `.runtime/` | ignored local diagnostic and recovery data; never selection authority |
 
 The optional `.skills-ai/project.json` capsule lives in the external project

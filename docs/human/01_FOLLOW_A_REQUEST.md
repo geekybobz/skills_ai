@@ -33,7 +33,7 @@ The compatibility process returns neutral metadata, not a semantic decision. The
 ```mermaid
 flowchart TD
     C["Exact orchestrator command"] --> V{"Supported action and target?"}
-    V -- "No" --> F["INVALID_ORCHESTRATOR_ACTION"]
+    V -- "No" --> F["Explain unsupported action or missing target"]
     V -- "Yes" --> L["Inspect live package and docs state"]
     L --> P["Compute canonical and generated impact"]
     P --> B{"Scope and permission resolved?"}
