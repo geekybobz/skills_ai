@@ -223,7 +223,11 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Efficient context and recovery
 
-Reuse reliable metadata and complete instructions on follow-up work. Claude supplies full coordination context at session start/resume/clear/compact/fork, then changed sections only. Codex receives the complete core in one installed entry with its source identity. Exact skill lists bypass broad discovery; compatible entries can be loaded in one tool request. Contract changes invalidate revision identities, and uncertain context restores complete required instructions and evidence before consequential work.
+Reuse complete instructions on follow-ups, while resolving controls for each request. `use none` prevents optional task skills even when one fits. Conflicting controls need clarification; a previous strict label does not persist unless you requested wider scope. Say `#> mode strict for this chat` to establish that default.
+
+Every connected host uses the same access contract. Exact skill lists avoid broad discovery; opt-in batch loading delivers shared bodies once while preserving each capability’s checks. Metadata lists helper-supported references; other identified support remains selectively readable. Restore complete required context after uncertainty.
+
+`#> orchestrator status` summarizes effective controls/scope, planned versus retained skills, catalog freshness, repair association and verification limits. It does not scan the repository or create task memory. Update reviews only the known associated workspace; denied containment remains pending, and corrupt known state blocks mutations.
 
 Run `python3 scripts/orchestrate.py measure` for delivery bytes and subprocess latency. The command loads no candidate bodies and writes measurement state only in disposable fixtures. Token estimates use bytes/4; they are not total task savings. No automatic task memory or background service is created.
 

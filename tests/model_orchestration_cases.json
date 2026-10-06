@@ -577,6 +577,69 @@
         "codex",
         "claude"
       ]
+    },
+    {
+      "id": "none-strong-match",
+      "request": "#> use none\nPlan rigorous theoretical reference notes on Lie groups, without files.",
+      "rubric": "No optional task body or discovery despite strong package fit; interaction support remains independently gated.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "scope-request-followup",
+      "request": "#> mode strict\n#> use theory-reference\nPlan a two-chapter reference without files.",
+      "rubric": "Evaluate as two actual turns: strict first, adaptive second without a wider default. Reuse retained instructions; scope reset is not a reload.",
+      "hosts": [
+        "codex",
+        "claude"
+      ],
+      "turns": [
+        "#> mode strict\n#> use theory-reference\nPlan a two-chapter reference without files.",
+        "#> receipt on\nAdd a third chapter without files."
+      ]
+    },
+    {
+      "id": "scope-chat-override",
+      "request": "#> mode strict for this chat\nPlan a reference without files.",
+      "rubric": "Three actual turns: strict, request-only adaptive, strict from the explicit chat default. Do not fabricate persistent state.",
+      "hosts": [
+        "codex",
+        "claude"
+      ],
+      "turns": [
+        "#> mode strict for this chat\nPlan a reference without files.",
+        "#> mode adaptive\nExtend the plan without files.",
+        "#> receipt on\nSummarize it."
+      ]
+    },
+    {
+      "id": "update-unassociated",
+      "request": "#> update\nApply pending improvements.",
+      "rubric": "Known session has no association: report no associated update and stop discovery. Do not inspect older workspaces, pending queues or choose newest. Corrupt known state is unresolved instead.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "repair-create-blocked",
+      "request": "#> repair on\nFix the supplied typo in the registry.",
+      "rubric": "Create/resume through source-owned controller before edits/tests/Git. A denied creation is containment pending, never a successful workspace or permission for live fallback. Do not repeat denied commands unchanged.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "status-shared",
+      "request": "#> orchestrator status",
+      "rubric": "Report effective controls/scope, planned versus retained skills, catalog freshness/pagination, exact repair state and actual verification limits. Read-only; no body load, guessed session, marker/capsule creation or repository scan.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
     }
   ]
 }

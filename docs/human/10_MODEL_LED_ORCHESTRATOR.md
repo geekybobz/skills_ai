@@ -10,7 +10,7 @@ Back: [human guide](../../README.md). Technical definitions: [integration contra
 
 ## What you are using
 
-The orchestrator is Codex or Claude reasoning with shared coordination instructions. It understands your objective, selects useful skills, coordinates their work and checks what the evidence supports. It is always active and is not counted as a skill. Local tools provide metadata, exact file access and artifact checks. You own skill creation, editing, activation and the scope of each task.
+The orchestrator is the connected host reasoning with shared coordination instructions. It understands your objective, selects useful skills, coordinates their work and checks what the evidence supports. It is always active and is not counted as a skill. Local tools provide metadata, exact file access and artifact checks. You own skill creation, editing, activation and the scope of each task.
 
 A skill keeps its own methods, tools, templates and domain rules. Its outer contract gives the orchestrator enough information to connect it to a task without prescribing the skill's internal design.
 
@@ -54,7 +54,7 @@ The bullets make the four fields easy to distinguish. Planned selection is not a
 
 ```mermaid
 flowchart TD
-    U[Your objective and allowed scope] --> C[Host resolves controls]
+    U[Your objective and allowed scope] --> C[Resolve controls and clarify conflicts]
     C --> D[Reuse reliable metadata or inspect missing details]
     D --> S{Useful compatible skills?}
     S -->|None| N[Normal host work]
@@ -89,6 +89,26 @@ Material ambiguity is resolved before dependent work. Independent authorized wor
 | Validation | Named checks on exact artifacts and revisions. |
 | Certification | Evidence under a named domain scheme, separate from workflow completion and validation. |
 
+## Control scope and status
+
+Controls apply to the current request unless you explicitly choose wider scope.
+After a request using strict, an unqualified follow-up returns to adaptive. The
+loaded instructions may still be reused. For persistent strict use:
+
+```text
+#> mode strict for this chat
+```
+
+A request-only adaptive override changes that request, then the chat default
+resumes. Repair on separately persists until off. Conflicting selection or mode
+values are clarified before affected loading/work; `use none` prevents optional
+task skills even if one matches.
+
+`#> orchestrator status` shows effective controls/scope, planned versus retained
+skills, catalog freshness, exact repair association and verification limits.
+These facts require no body loading, repository scan or memory write. Catalog
+metadata identifies local integration entries, not assumed host-native tools.
+
 ## Work with several skills
 
 Choose the simplest useful arrangement. Single uses one capability. Sequential passes an output to the next capability. Cooperative contributors work on the same objective with named responsibilities. Parallel contributors have independent work and separate writes before synthesis. Structured composition adds explicit input/output artifacts and recovery to any arrangement; it is not another topology.
@@ -107,7 +127,7 @@ The minimum sufficient compatible set may contain several skills. It avoids spec
 
 Claude receives the full coordination core at session start, resume, clear, compact and fork. Follow-up requests receive only changed core, catalog, capsule or repair sections. A delivery marker stores hashes only; it records emitted context, not model retention. Failed acknowledgment causes safe repeat delivery.
 
-Codex gets the shared core in one installed entry with its source identity. Both hosts reuse reliable metadata and complete loaded instructions. Missing or insufficient metadata expands explicitly. Exact compatible capabilities can load together in one tool call. A changed contract invalidates metadata and load identities even when the main entry and declared version did not change.
+Codex gets the shared core in one installed entry with its source identity. Both hosts reuse reliable metadata and complete loaded instructions. Missing or insufficient metadata expands explicitly. Exact compatible capabilities can load together with --deduplicate: shared bodies appear once, while each capability keeps its own gates, contract and identity. Existing single/default batch responses remain compatible. A changed contract invalidates metadata and load identities even when the main entry and declared version did not change.
 
 ```mermaid
 flowchart TD
@@ -121,7 +141,7 @@ flowchart TD
     A --> C
 ```
 
-`--if-changed` can omit an unchanged entry body only when the complete instructions remain reliably present. It cannot restore context after compaction. Required references have separate bindings. Consequential recovery checks actual authority, artifacts, evidence and completed external effects before continuing.
+`--if-changed` can omit an unchanged entry body only when the complete instructions remain reliably present. It cannot restore context after compaction. Metadata lists helper-supported reference paths. Empty means none declared; other identified support can use bounded reads. Required references have separate bindings. Consequential recovery checks actual authority, artifacts, evidence and completed external effects before continuing.
 
 Run `python3 scripts/orchestrate.py measure` to inspect context bytes and subprocess latency. Byte/4 token estimates are approximate and do not measure total task savings. No background indexer, updater, prompt logger or automatic memory is started.
 
@@ -137,7 +157,7 @@ This creates or resumes a contained workspace for this chat. Subsequent edits, t
 #> update
 ```
 
-This prepares the exact changes and checks, explains them and waits for your agreement before applying that preview. Later edits invalidate it. Live dirty work and rollback are preserved; update leaves repair mode on. A new chat does not inherit repair mode. Missing or corrupt known state stops mutations instead of silently editing live.
+This prepares the exact changes and checks, explains them and waits for your agreement before applying that preview. Later edits invalidate it. Live dirty work and rollback are preserved; update leaves repair mode on. A new chat does not inherit repair mode. Missing or corrupt known state stops mutations instead of silently editing live. With no association, update reports no associated changes and stops discovery. It does not pick another workspace. Denied workspace creation is reported as pending containment.
 
 ## Install and verify
 

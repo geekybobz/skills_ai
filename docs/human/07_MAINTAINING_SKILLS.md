@@ -143,6 +143,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-Maintain meaningful purposes, stable IDs, activation gates and required references. Contract changes invalidate metadata and composite load identities even without a version bump. Rebuild the manifest and generated views; verify the contained candidate before exact update review. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Test successful operations and exact artifacts, not only attempted commands or answer keywords. Record passes, failures, blocked checks, skips and superseded fixtures separately. Multi-turn scope scenarios must run as separate user turns. Keep shared verification separate from each host’s integration acceptance; preserve default batch compatibility and command aliases.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

@@ -95,6 +95,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-Codex installs the complete shared core in one entry with a source identity. Claude restores it at session lifecycle events and delivers changed sections on continuation. Both use the same discovery/load commands and preserve host-specific acceptance ownership. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Every connected host uses the shared controls, status and exact-access contract. Catalog IDs are local integration IDs, not assumed native tool names. Settings, permissions and transport remain each host’s responsibility. Status reads facts without loading skills or creating memory; the host reports effective controls and retained context.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

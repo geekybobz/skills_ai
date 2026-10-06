@@ -22,3 +22,14 @@ Local governance scanners inspect repository artifacts; they do not determine th
 Interaction package: [[interaction-protocol/README]].
 
 Contained maintenance uses `#> repair on/off` and `#> update` under [[protocols/repository/REPAIR_WORKSPACE]]. The host interprets these controls. Source-owned tools snapshot, inspect and transact exact files; they never parse task text or approve deployment. Host-session metadata supports bounded association recovery, not global activation.
+
+Shared status exposes bounded facts without loading skills or writing markers;
+the host supplies effective controls and retained-context claims. Request-default
+controls reset independently of instruction reuse; explicit wider defaults and
+repair on persist only within their declared scope. Conflicting controls stop
+affected loading/work, while independent authorized work can continue.
+
+The opt-in batch v2 interface deduplicates exact shared bodies without merging
+capability identities or activation gates. Discovery lists helper-supported
+reference paths; additional identified support remains selectively readable.
+Host-specific settings and transport fixes belong to each host integration.

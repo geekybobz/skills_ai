@@ -15,7 +15,7 @@ Checkpoint bindings use repository-relative instruction paths and project-relati
 
 A workflow can be completed while its next phase is blocked. Execution progress and verification status are separate host assessments. Report validated against named requirements only with inspected artifact-bound evidence; certification needs a named domain scheme.
 
-When required reference material is needed, use `scripts/orchestrate.py read-reference --capability ID --reference PATH` or a bounded normal file read. Record that exact file's identity in checkpoint bindings. The loader binds the capability entry and its contract; it does not claim an unread reference has been loaded.
+When required reference material is needed, use `scripts/orchestrate.py read-reference --capability ID --reference PATH` only for metadata-listed references; otherwise use a bounded normal read of identified support. Record that exact file's identity in checkpoint bindings. The loader binds the capability entry and its contract; it does not claim an unread reference has been loaded.
 
 ## Repair workspace recovery
 
@@ -23,4 +23,10 @@ When this chat has repair mode, inspect its exact source-owned association befor
 
 ## Proportional reloading
 
-Continue from reliable current context without rereading unchanged instructions on every message. A phase change needs only newly relevant capabilities and obligations. Batch exact compatible selections in one `load` request. `--if-changed IDENTITY` is for a known complete entry still present in context: an unchanged response omits its body and cannot restore lost instructions. After compaction, host transfer or uncertain retention, load complete entries again. The composite identity binds entry bytes, capability metadata, activation state, contract rules, checks and extensions. Required references have their own identities and must be rechecked separately; no entry marker attests them.
+Continue from reliable current context without rereading unchanged instructions on every message. A phase change needs only newly relevant capabilities and obligations. Batch exact compatible selections with --deduplicate; resolve each body_ref from the complete bodies map while preserving per-capability obligations. `--if-changed IDENTITY` is for a known complete entry still present in context: an unchanged response omits its body and cannot restore lost instructions. After compaction, host transfer or uncertain retention, load complete entries again. The composite identity binds entry bytes, capability metadata, activation state, contract rules, checks and extensions. Required references have their own identities and must be rechecked separately; no entry marker attests them.
+
+Recovered instruction presence does not restore an expired request control.
+Resolve current selection/mode/scope from actual user instructions and explicit
+wider defaults. Without a known repair association, do not hunt another workspace;
+with corrupt known state, stop mutations until recovery. Status facts are readable
+without creating checkpoint, capsule or delivery state.

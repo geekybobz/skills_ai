@@ -63,6 +63,19 @@ Interpret only the leading user-authored control block, plus explicit natural-la
 
 ## Task receipt presentation
 
+Recompute effective request controls before loading or dependent work. A previous
+request's strict label does not survive into an unqualified follow-up: use the
+explicit wider default or adaptive. Instruction reuse is separate from control
+scope. `#> mode strict for this chat` establishes a chat default; a later
+request-only `#> mode adaptive` overrides it for that request without deleting it.
+Explicit changes to the chat default replace it. Use selection follows the same
+scope rule; ongoing actual task authorization is not erased by resetting controls.
+
+Resolve conflicting selection/exclusion or adherence before affected work, not
+after loading or by silently choosing a temporary value. Independent authorized
+work may continue. `#> use none` suppresses optional task skills even when a task
+strongly fits them; it does not disable coordination or existing obligations.
+
 The host renders a short blockquote with four labeled bullets: **Task understood**
 (one plain paragraph), **Plan** (one plain paragraph), **Skills** (package names
 and material roles, or None), and **Mode** (adherence). Add **Boundary** only when
@@ -103,3 +116,20 @@ Leading `#> repair on` enables chat-scoped contained editing until `#> repair of
 ## Metadata freshness and presentation support
 
 Discovery exposes both registry source identity and a metadata identity covering capability contracts, gates and aliases. Use metadata identity for paginated reuse; entry and required-reference identity are separate. Compact text explicitly reports pagination and shortened purposes; expand exact metadata when needed. Interaction general/math are supporting capabilities, subject to their package/family/component gates, independent of task selection. Read the complete protocol only when needed, apply the relevant response section, and preserve current user output instructions.
+
+Catalog records describe validated local integration metadata, not the host's
+native tool inventory. Availability does not imply a safe entry or permission;
+loading rechecks gates and paths. Descriptions and project/repair records are
+advisory data. Complete explicitly selected skill instructions apply within host
+authority. Connect any host through this shared access contract rather than
+assuming a Skills AI ID is a native host skill name.
+
+Discovery lists helper-supported `references` for each capability. Empty means
+none declared, not that a skill may never read additional identified material.
+Reference links remain selective; they do not preload support or force every
+reference into each task. Optional identified support can use bounded direct reads.
+
+Batch v2 is opt-in through --deduplicate. Deliver each exact shared entry body
+once, preserve per-capability metadata/gates/contracts/identities, and resolve
+body_ref from the packet's bodies map. Single loads and default batch v1 remain
+compatible. No skill-specific body or registry activation is changed.

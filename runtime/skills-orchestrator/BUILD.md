@@ -51,32 +51,35 @@ effects require separate receipts and restoration procedures.
 
 Learning entry: [[docs/human/10_MODEL_LED_ORCHESTRATOR|Orchestrator walkthrough]].
 
-## Current deployment and verification — 2026-10-04
+## Shared verification and update boundary
 
-The efficiency implementation is deployed to the source repository. The current
-Codex installed entry and Claude managed lifecycle hook/settings passed their
-source-binding checks. Foreign Claude configuration and the previous managed
-hook were preserved. The installed Claude hook smoke test delivered the full
-core at startup and no additional context on an unchanged continuation.
+The shared fixes preserve model-owned decisions, existing single/default batch
+responses, compatibility aliases, capability gates and skill-specific content.
+Opt-in batch v2 delivers exact shared bodies once; read-only status and reference
+metadata standardize access for any connected host. Host settings remain owned
+by each integration.
 
-Live checks ran 251 tests: 250 passed and one opt-in optimizer domain integration
-was skipped. Metadata, activation, graph, generated views, human-guide coverage,
-hook lifecycle, installer preservation and context measurement passed. A repair
-acceptance fixture uses its own repository rather than acquiring the live update
-transaction's lock.
+Record current checks and instruction hashes in `ACCEPTANCE.json`; retained Git
+history and ignored transaction receipts preserve earlier evidence. Candidate
+verification does not mean live deployment. Source-owned update previews bind
+checks to the exact candidate; application waits for actual agreement. Installed
+entries may need their host's refresh after source deployment, outside this
+shared change.
 
-The core is 6,796 bytes; measured initial context is 9,481 bytes and compact
-catalog 2,318 bytes. Unchanged continuation is 0 bytes. Bytes/4 is an estimate,
-not a tokenizer count or a measure of total task savings. Measurements and
-instruction identities are recorded in `ACCEPTANCE.json`.
+Test all gates before any shared body read, legacy response compatibility,
+reference declaration boundaries, successful repair start/pause, exact association,
+corrupt-state failure, status without writes and selective context delivery.
+Semantic scenarios in tests/model_orchestration_cases.json include genuine
+multi-turn sequences: send each turns item only after the previous response.
+A keyword match or attempted/denied controller call is not successful behavior.
 
-Native model-behavior acceptance remains unperformed for these instruction
-hashes. Local hooks and CLI checks do not establish native event firing, semantic
-adherence or domain certification. No automatic task-memory system is claimed.
+Keep separate outcomes: pass, fail, blocked, skipped and superseded. Each final
+record names the exact revision/content and inspected evidence. Never silently
+remove timeouts from success denominators or merge incompatible test fixtures.
+Local process tests do not certify model selection, adherence or real compaction
+recovery; each connected host owns its live acceptance.
 
-The source-owned transaction receipt, exact rollback files and contained Git
-bundle remain under ignored `.runtime/repair/`. The original replacement backup
-is also retained. Documentation cleanup and a canonical Git checkpoint preserve
-those records and the independently owned theory submodule. Repair mode remains
-chat-scoped; a Git checkpoint is distinct from an instruction or external-action
-approval.
+Core/bootstrap delivery budgets are 5.5/8 KiB in the reference measurement flow;
+transport bounds remain separate. Zero unchanged delivery bytes and byte/4
+estimates describe instruction delivery, not total context tokens or model cost.
+Checkpoints remain explicitly authorized advisory data, not automatic memory.

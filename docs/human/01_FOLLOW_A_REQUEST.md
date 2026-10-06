@@ -91,6 +91,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-The current request flow reuses reliable delivered metadata, loads exact selected entries together when useful, performs scoped work and checks its outputs. Unknown context after compaction restores complete instructions before consequential work. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Resolve controls before task loading. Preserve compatible named targets and check gates; batch shared entries can deliver their complete body once without merging capabilities. Helper-supported references are listed in metadata; additional identified support uses bounded reads. Restore missing instructions after compaction, rather than trusting loaded flags.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

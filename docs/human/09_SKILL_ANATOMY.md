@@ -114,6 +114,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-A package may declare several capabilities in `registry/contracts/`. Each has an exact complete entry and optional dependencies. The loader returns composite identities and separate reference bindings; it does not automatically choose or load dependencies. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Capabilities retain separate identities, gates and contract obligations even when they share an entry body. Discovery lists declared helper references; it does not preload or require every optional phase/template. Identified additional support stays selectively readable. Package freedom remains intact while access metadata is standardized.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

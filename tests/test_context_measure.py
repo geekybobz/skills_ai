@@ -10,3 +10,6 @@ class ContextMeasureTests(unittest.TestCase):
   self.assertEqual(0,result['bytes']['unchanged_continuation'])
   self.assertEqual(0,result['candidate_bodies_loaded'])
   self.assertEqual('not-measured',result['semantic_acceptance'])
+  self.assertLessEqual(result['bytes']['core'],result['budgets']['core'])
+  self.assertLessEqual(result['bytes']['bootstrap'],result['budgets']['bootstrap'])
+  self.assertIn('not tokenizer output or total task savings',result['token_measurement'])

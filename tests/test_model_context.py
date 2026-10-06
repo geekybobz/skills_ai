@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class SpecificationTests(unittest.TestCase):
  def test_case_set_is_unique_and_covers_boundary_scenarios(self):
   data=json.loads((ROOT/'tests/model_orchestration_cases.json').read_text())
-  cases=data['cases'];self.assertEqual(64,len(cases));self.assertEqual(64,len({c['id'] for c in cases}))
+  cases=data['cases'];self.assertEqual(70,len(cases));self.assertEqual(70,len({c['id'] for c in cases}))
   self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume'} <= {c['id'] for c in cases})
   for c in cases:
    self.assertTrue(c['request']);self.assertTrue(c['rubric']);self.assertEqual(['codex','claude'],c['hosts'])
@@ -23,6 +23,7 @@ class SpecificationTests(unittest.TestCase):
 
 import copy
 import hashlib
+import importlib.util
 import os
 import sys
 import tempfile
@@ -210,6 +211,15 @@ class ContextDeliveryTests(unittest.TestCase):
  def test_changed_catalog_only(self):
   self.packet();self.manifest['command_aliases']=[{'command':'#> named','skill_id':'absent','mode':'new'}]
   out=self.packet(delivery='continuation');self.assertEqual(['catalog'],out['changed']);self.assertNotIn('Complete core',out['additional_context'])
+ def test_large_catalog_startup_is_bounded_with_explicit_expansion(self):
+  from model_context import STARTUP_CATALOG_BYTES
+  for i in range(50):
+   name=f'package-{i:03}';self.manifest['packages'][name]={'state':'active'}
+   self.manifest['routes'].append({'package':name,'id':name,'path':'entry.md','description':'Meaningful purpose '*8,'state':'active'})
+  out=self.packet();text=out['additional_context'];catalog=json.loads(text.split('permission:\n',1)[1])['catalog']
+  self.assertLessEqual(len(catalog.encode()),STARTUP_CATALOG_BYTES)
+  self.assertIn('of 50 capabilities',catalog);self.assertIn('discover --offset',catalog)
+  self.assertFalse((self.root/'entry.md').exists())
  def test_invalid_marker_and_hash_only_private_storage(self):
   self.packet();marker=next((self.root/'.runtime/context-delivery').glob('*.json'))
   data=json.loads(marker.read_text());self.assertEqual({'core','catalog','project','repair'},set(data))
@@ -358,6 +368,110 @@ class ManifestFreshnessTests(unittest.TestCase):
    self.assertEqual(manifest,load_manifest(path))
    activation=root/'registry/activation.md';activation.write_text(activation.read_text()+'\nChanged gate source.\n')
    with self.assertRaisesRegex(RegistryRuntimeError,'STALE_MANIFEST'):load_manifest(path)
+
+class SharedLoadingTests(unittest.TestCase):
+ setUp = ExplicitAccessTests.setUp
+ def shared(self,state='active',path='entries/a.md'):
+  self.manifest['routes'].append({'package':'a','id':'b','path':path,'description':'Support','state':state})
+ def test_opt_in_dedup_reads_shared_entry_once_and_keeps_identity(self):
+  from model_context import load_capabilities
+  self.shared()
+  legacy=load_capabilities(self.root,self.manifest,['a','b'])
+  with patch('model_context.read_relative',wraps=read_relative) as read:
+   out=load_capabilities(self.root,self.manifest,['a','b'],deduplicate=True)
+  self.assertEqual(1,sum(c.args[1]=='entries/a.md' for c in read.call_args_list))
+  self.assertEqual('skills-ai/load-batch/2',out['schema']);self.assertEqual(1,len(out['bodies']))
+  for old,new in zip(legacy['items'],out['items']):
+   self.assertEqual(old['identity'],new['identity']);self.assertNotIn('body',new)
+   self.assertEqual(old['body'],out['bodies'][new['body_ref']]['body'])
+  self.assertNotEqual(out['items'][0]['identity'],out['items'][1]['identity'])
+ def test_dedup_checks_all_gates_before_entry_read(self):
+  from model_context import load_capabilities
+  self.shared('manual')
+  with patch('model_context.read_relative',side_effect=AssertionError('body read')):
+   with self.assertRaisesRegex(ContextError,'EXPLICIT'):load_capabilities(self.root,self.manifest,['a','b'],deduplicate=True)
+  out=load_capabilities(self.root,self.manifest,['a','b'],explicit_capabilities=['b'],deduplicate=True)
+  self.assertFalse(out['items'][0]['explicit_invocation_attested']);self.assertTrue(out['items'][1]['explicit_invocation_attested'])
+  self.manifest['routes'][1]['state']='off'
+  with patch('model_context.read_relative',side_effect=AssertionError('body read')):
+   with self.assertRaisesRegex(ContextError,'DISABLED'):load_capabilities(self.root,self.manifest,['a','b'],explicit_capabilities=['b'],deduplicate=True)
+ def test_equal_bytes_at_different_paths_do_not_merge_artifacts(self):
+  from model_context import load_capabilities
+  (self.root/'entries/b.md').write_text('A complete instruction body');self.shared(path='entries/b.md')
+  out=load_capabilities(self.root,self.manifest,['a','b'],deduplicate=True)
+  self.assertEqual(2,len(out['bodies']))
+  self.assertNotEqual(out['items'][0]['body_ref'],out['items'][1]['body_ref'])
+ def test_discovery_exposes_references_without_reading_them(self):
+  (self.root/'registry/contracts').mkdir(parents=True)
+  c=ContractShapeTests().contract();c['package']['id']='a';c['capabilities'][0].update(id='a',entry='entries/a.md')
+  c['capabilities'][0]['dependencies']=[{'kind':'reference','target':'entries/optional.md'}]
+  c['rules']=[{'class':'invariant','source':'entries/rules.md'}]
+  (self.root/'registry/contracts/a.json').write_text(json.dumps(c))
+  out=discover(self.root,self.manifest)
+  self.assertEqual(['entries/optional.md','entries/rules.md'],out['items'][0]['references'])
+  self.assertFalse((self.root/'entries/optional.md').exists())
+ def test_cli_dedup_is_opt_in_and_single_use_is_rejected(self):
+  cli=[sys.executable,'-B',str(ROOT/'scripts/orchestrate.py'),'load']
+  args=['--capability','interaction.general','--capability','interaction.math']
+  legacy=subprocess.run(cli+args,capture_output=True,text=True,timeout=4)
+  new=subprocess.run(cli+args+['--deduplicate'],capture_output=True,text=True,timeout=4)
+  self.assertEqual(0,new.returncode,new.stderr)
+  self.assertEqual('skills-ai/load-batch/1',json.loads(legacy.stdout)['schema'])
+  packet=json.loads(new.stdout);self.assertEqual(1,len(packet['bodies']))
+  self.assertEqual(load_capability(ROOT,build_manifest(ROOT),'interaction.general')['body'],next(iter(packet['bodies'].values()))['body'])
+  bad=subprocess.run(cli+['--capability','interaction.general','--deduplicate'],capture_output=True,text=True,timeout=4)
+  self.assertEqual(2,bad.returncode);self.assertIn('BATCH_REQUIRED',bad.stdout)
+
+class SharedStatusTests(unittest.TestCase):
+ setUp = ContextDeliveryTests.setUp
+ def test_status_loads_no_body_creates_no_state_and_does_not_infer_controls(self):
+  from model_context import status_packet
+  def bounded(root,path,**kwargs):
+   self.assertNotEqual('runtime/skills-orchestrator/SKILL.md',path)
+   self.assertFalse(path.startswith('entries/'))
+   return read_relative(root,path,**kwargs)
+  with patch('model_context.read_relative',side_effect=bounded):
+   out=status_packet(self.root,self.manifest,session='fresh-chat')
+  self.assertEqual('off',out['repair']['repair']);self.assertFalse((self.root/'.runtime').exists())
+  self.assertEqual(str(self.root.resolve()),out['repository_root'])
+  self.assertEqual('none',out['authority']);self.assertNotIn('mode',out)
+  self.assertIn('effective_controls_and_scope',out['host_fields'])
+  self.assertEqual('unknown',status_packet(self.root,self.manifest)['repair']['repair'])
+ def test_corrupt_known_association_stays_unresolved_without_guessing(self):
+  from model_context import status_packet
+  folder=self.root/'.runtime/repair/sessions';folder.mkdir(parents=True)
+  spec=importlib.util.spec_from_file_location('status_fixture_repair',self.root/'runtime/repair_workspace.py')
+  controller=importlib.util.module_from_spec(spec);spec.loader.exec_module(controller)
+  marker=folder/(controller.session_key('fresh-chat')+'.json');marker.write_text('broken')
+  out=status_packet(self.root,self.manifest,session='fresh-chat')
+  self.assertEqual('unresolved',out['repair']['repair']);self.assertIn('never fall back',out['repair']['next'])
+  self.assertEqual('broken',marker.read_text())
+ def test_status_after_successful_containment_and_pause_uses_exact_association(self):
+  from model_context import status_packet
+  spec=importlib.util.spec_from_file_location('status_lifecycle_repair',self.root/'runtime/repair_workspace.py')
+  controller=importlib.util.module_from_spec(spec);spec.loader.exec_module(controller)
+  folder=self.root/'protocols/repository';folder.mkdir(parents=True)
+  (folder/'CONTRACT.json').write_text('{"allowed_external_symlinks":[]}')
+  (self.root/'.gitignore').write_text('.runtime/\n')
+  controller.git(self.root,'init','-q')
+  controller.git(self.root,'config','user.name','test');controller.git(self.root,'config','user.email','test@invalid')
+  controller.git(self.root,'add','--all');controller.git(self.root,'commit','-qm','fixture')
+  started=controller.start(self.root,'known-chat',write=True)
+  out=status_packet(self.root,self.manifest,session='known-chat')
+  self.assertEqual('on',out['repair']['repair']);self.assertEqual(started['working_root'],out['repair']['working_root'])
+  controller.pause(self.root,'known-chat',write=True)
+  paused=status_packet(self.root,self.manifest,session='known-chat')
+  self.assertEqual('off',paused['repair']['repair']);self.assertEqual(started['workspace'],paused['repair']['workspace'])
+  self.assertEqual('off',status_packet(self.root,self.manifest,session='other-chat')['repair']['repair'])
+ def test_status_keeps_pagination_explicit_and_rejects_relative_project(self):
+  from model_context import status_packet
+  for i in range(40):
+   name=f'p{i:02}';self.manifest['packages'][name]={'state':'active'}
+   self.manifest['routes'].append({'package':name,'id':name,'path':'entry.md','description':'Purpose','state':'active'})
+  out=status_packet(self.root,self.manifest)
+  self.assertEqual(40,out['catalog']['total']);self.assertIsNotNone(out['catalog']['next_offset'])
+  with self.assertRaisesRegex(ContextError,'ABSOLUTE_PROJECT'):status_packet(self.root,self.manifest,project_root=Path('relative'))
+  with self.assertRaisesRegex(ContextError,'INVALID_SESSION'):status_packet(self.root,self.manifest,session='../invalid')
  def test_manifest_cannot_bind_arbitrary_files_or_omit_activation(self):
   import shutil
   from registry_runtime import load_manifest, RegistryRuntimeError

@@ -173,6 +173,6 @@ Discovery can use compact text with explicit continuation and complete-metadata 
 
 ## Current context flow
 
-`#> mode inspire` means advisory. Interaction general/math are separately gated response capabilities; manual targets require actual invocation. Exact package requests avoid broad discovery while preserving capability ambiguity and required support checks. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Each request uses adaptive and automatic selection unless explicitly overridden or covered by a wider default. A request-only override does not erase a chat default. Equivalent aliases are harmless; conflicting selections/modes require clarification. `#> orchestrator status` shows effective scope, skills, catalog freshness, repair state and verification limits.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

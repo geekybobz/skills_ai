@@ -93,6 +93,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-Start with `#> use auto` or a named list and `#> mode adaptive`. The host reuses current metadata and complete instructions; only relevant changes are loaded on follow-up requests. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+Use `#> use none` to prevent optional task skills even when one fits. Controls apply to this request by default; say `#> mode strict for this chat` for a persistent default. Retained instructions can be reused without retaining a previous request’s mode. Conflicting controls are clarified before affected work.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

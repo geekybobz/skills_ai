@@ -91,6 +91,6 @@ Contained submodule references use independent Git metadata so package wrappers 
 
 ## Current context flow
 
-`runtime/manifest.json` is generated metadata. `scripts/orchestrate.py` supplies context, discovery and exact access; `scripts/measure_context.py` measures delivery. `adapters/claude/skills-ai-context.js` owns hook lifecycle; shared management detail is in `runtime/skills-orchestrator/MANAGEMENT.md`. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+`runtime/model_context.py` exposes bounded discovery, declared reference metadata, read-only status tied to its repository root and opt-in shared-body batch delivery. `scripts/orchestrate.py` is the access CLI. Effective controls and semantic decisions stay with the host; `MANAGEMENT.md` defines readable status and bounded repair/update discovery.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.

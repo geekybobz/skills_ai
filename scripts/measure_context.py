@@ -11,13 +11,17 @@ import tempfile
 import time
 from pathlib import Path
 from registry_runtime import ROOT, load_manifest
-from model_context import context_packet, compact_catalog, discover
+from model_context import context_packet, compact_catalog, discover, STARTUP_CATALOG_BYTES
+
+# Delivery regression budgets, distinct from transport/security hard bounds.
+CORE_BUDGET = 5632
+BOOTSTRAP_BUDGET = 8192
 
 
 def measure(*, repeat=3):
     manifest=load_manifest();core=(ROOT/'runtime/skills-orchestrator/SKILL.md').read_bytes()
     initial=context_packet(ROOT,manifest)
-    catalog=compact_catalog(discover(ROOT,manifest,limit=32))
+    catalog=compact_catalog(discover(ROOT,manifest,limit=32),maximum=STARTUP_CATALOG_BYTES)
     latencies=[]
     for _ in range(repeat):
         started=time.perf_counter()
@@ -37,11 +41,14 @@ def measure(*, repeat=3):
     sizes={'core':len(core),'catalog':len(catalog.encode()),'bootstrap':len(initial['additional_context'].encode()),
            'unchanged_continuation':len(unchanged['additional_context'].encode()),'changed_core':len(changed['additional_context'].encode())}
     failures=[]
-    if sizes['core']>8192:failures.append('core exceeds reviewed 8 KiB maintenance budget')
+    if sizes['core']>CORE_BUDGET:failures.append('core exceeds 5.5 KiB delivery budget')
+    if sizes['bootstrap']>BOOTSTRAP_BUDGET:failures.append('bootstrap exceeds 8 KiB delivery budget')
     if sizes['catalog']>8192 or sizes['bootstrap']>65536:failures.append('context hard bounds exceeded')
     if sizes['unchanged_continuation']!=0:failures.append('unchanged continuation repeated context')
     if changed['changed']!=['core']:failures.append('changed core repeated other sections')
-    return {'schema':'skills-ai/measure/1','bytes':sizes,'estimated_bootstrap_tokens':math.ceil(sizes['bootstrap']/4),
+    return {'schema':'skills-ai/measure/1','bytes':sizes,
+            'budgets':{'core':CORE_BUDGET,'bootstrap':BOOTSTRAP_BUDGET},
+            'estimated_bootstrap_tokens':math.ceil(sizes['bootstrap']/4),
             'token_measurement':'bytes/4 estimate, not tokenizer output or total task savings',
             'process_latency_ms':{'median':round(statistics.median(latencies),3),'maximum':round(max(latencies),3)},
             'failures':failures,'candidate_bodies_loaded':0,'semantic_acceptance':'not-measured','repeat':repeat,'authority':'none'}
