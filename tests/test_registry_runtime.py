@@ -268,3 +268,75 @@ class HookMigrationTests(unittest.TestCase):
     commands=[h['command'] for e in out['hooks'][event] for h in e['hooks']]
     self.assertNotIn(previous['command'],commands);self.assertEqual(1,commands.count(claude_hook_command(new)))
    self.assertIn(foreign,out['hooks']['SessionStart'][0]['hooks'])
+
+
+class ClaudeAdapterHygieneTests(unittest.TestCase):
+    """Claude-owned install hygiene: retired managed hooks and native shadow skills."""
+
+    def _old_install(self, config_dir: Path, *, marker: str = "// skills-ai-managed: claude-router\n",
+                     foreign_reference: bool = False) -> Path:
+        old = config_dir / "hooks" / "skills-ai-router.js"
+        old.parent.mkdir(parents=True)
+        old.write_text(marker, encoding="utf-8")
+        hooks = [{"type": "command", "command": f"node {old} --root /previous/source"}]
+        if foreign_reference:
+            hooks.append({"type": "command", "command": f"echo {old}"})
+        settings = {"hooks": {"SessionStart": [{"hooks": hooks}], "UserPromptSubmit": [{"hooks": hooks[:1]}]}}
+        (config_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        return old
+
+    def test_retired_hook_is_reported_and_removed_only_on_request(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            old = self._old_install(config_dir)
+            results = install_adapter("claude", config_dir)
+            self.assertEqual("present", results["retired_hook"])
+            self.assertTrue(old.exists())
+            self.assertNotIn(str(old), (config_dir / "settings.json").read_text(encoding="utf-8"))
+            self.assertFalse(check_adapter("claude", config_dir))
+            preview = install_adapter("claude", config_dir, dry_run=True, remove_retired=True)
+            self.assertEqual("would-remove", preview["retired_hook"])
+            self.assertTrue(old.exists())
+            self.assertEqual("removed", install_adapter("claude", config_dir, remove_retired=True)["retired_hook"])
+            self.assertFalse(old.exists())
+            self.assertTrue(check_adapter("claude", config_dir))
+            self.assertEqual("absent", install_adapter("claude", config_dir, remove_retired=True)["retired_hook"])
+
+    def test_retired_name_without_marker_is_foreign_and_kept(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            old = self._old_install(config_dir, marker="// user hook\n")
+            results = install_adapter("claude", config_dir, remove_retired=True)
+            self.assertEqual("absent", results["retired_hook"])
+            self.assertEqual("// user hook\n", old.read_text(encoding="utf-8"))
+
+    def test_retired_hook_still_referenced_by_foreign_entry_is_kept(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            old = self._old_install(config_dir, foreign_reference=True)
+            results = install_adapter("claude", config_dir, remove_retired=True)
+            self.assertEqual("preserved-referenced", results["retired_hook"])
+            self.assertTrue(old.exists())
+
+    def test_native_skill_named_like_a_package_makes_check_stale(self) -> None:
+        from install_runtime_adapter import claude_check_problems, registry_packages
+        self.assertIn("theory-reference", registry_packages())
+        with tempfile.TemporaryDirectory() as directory:
+            config_dir = Path(directory)
+            install_adapter("claude", config_dir)
+            self.assertTrue(check_adapter("claude", config_dir))
+            shadow = config_dir / "skills" / "theory-reference"
+            shadow.mkdir(parents=True)
+            (shadow / "SKILL.md").write_text("---\nname: theory-reference\n---\n", encoding="utf-8")
+            self.assertFalse(check_adapter("claude", config_dir))
+            self.assertEqual("theory-reference", install_adapter("claude", config_dir)["native_shadow_skills"])
+            self.assertTrue(any("theory-reference" in problem for problem in claude_check_problems(config_dir)))
+            self.assertTrue(shadow.exists())  # user content is reported, never removed by the installer
+            (config_dir / "skills" / "unrelated-skill").mkdir()
+            (shadow / "SKILL.md").unlink(); shadow.rmdir()
+            self.assertTrue(check_adapter("claude", config_dir))
+            synced = config_dir / "skills" / "synced" / "account-bucket" / "research-context-scout"
+            synced.mkdir(parents=True)
+            self.assertFalse(check_adapter("claude", config_dir))
+            synced.rmdir()
+            self.assertTrue(check_adapter("claude", config_dir))

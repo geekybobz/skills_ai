@@ -26,6 +26,9 @@ CODEX_MANAGED_MARKERS = (
     b"name: skills-ai-registry",
     b"# Skills AI Shared Runtime Entry",
 )
+# Hook files written by earlier Claude adapter versions. They are removed only
+# on explicit request (--remove-retired) and only with a managed marker.
+RETIRED_CLAUDE_HOOKS = ("skills-ai-router.js",)
 
 
 class InstallError(RuntimeError):
@@ -111,6 +114,63 @@ def claude_hook_command(hook_path: Path) -> str:
     return f"node {shlex.quote(str(hook_path))} --root {shlex.quote(str(ROOT))}"
 
 
+def registry_packages() -> list[str]:
+    """Package ids from the generated manifest; empty when it cannot be read."""
+    try:
+        packages = json.loads((ROOT / "runtime" / "manifest.json").read_text(encoding="utf-8"))["packages"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+    return sorted(name for name in packages if isinstance(name, str))
+
+
+def claude_shadow_skills(config_dir: Path) -> list[str]:
+    """Native Claude skills named like a Skills AI package.
+
+    Claude Code lists such a copy as its own skill, so a model can load it with
+    the native Skill tool and bypass the orchestrator's gates and identities.
+    """
+    skills = config_dir / "skills"
+    # Account-synced skills live one bucket deeper under skills/synced/.
+    roots = [skills, *sorted(path for path in (skills / "synced").glob("*") if path.is_dir())]
+    return [name for name in registry_packages()
+            if any((root / name).exists() or (root / name).is_symlink() for root in roots)]
+
+
+def retired_claude_hooks(config_dir: Path) -> list[Path]:
+    """Earlier adapter hook files that still carry an installer ownership marker."""
+    found = []
+    for name in RETIRED_CLAUDE_HOOKS:
+        path = config_dir / "hooks" / name
+        if path.is_file() and not path.is_symlink() and any(marker in path.read_bytes() for marker in CLAUDE_MANAGED_MARKERS):
+            found.append(path)
+    return found
+
+
+def retire_claude_hooks(config_dir: Path, settings: dict[str, Any], *, remove: bool, dry_run: bool) -> str:
+    """Report retired managed hooks; delete them only when explicitly requested."""
+    retired = retired_claude_hooks(config_dir)
+    if not retired:
+        return "absent"
+    hooks_text = json.dumps(settings.get("hooks", {}), ensure_ascii=False)
+    if any(str(path) in hooks_text for path in retired):
+        return "preserved-referenced"
+    if not remove:
+        return "present"
+    if dry_run:
+        return "would-remove"
+    for path in retired:
+        path.unlink()
+    return "removed"
+
+
+def claude_check_problems(config_dir: Path) -> list[str]:
+    problems = [f"retired managed hook present: {path} (remove with --remove-retired)"
+                for path in retired_claude_hooks(config_dir)]
+    problems += [f"native Claude skill shadows Skills AI package: {config_dir / 'skills' / name}"
+                 for name in claude_shadow_skills(config_dir)]
+    return problems
+
+
 def merged_claude_settings(settings: dict[str, Any], hook_path: Path) -> dict[str, Any]:
     hooks = settings.setdefault("hooks", {})
     if not isinstance(hooks, dict): raise InstallError("Claude hooks must be an object")
@@ -152,7 +212,8 @@ def _load_settings(path: Path) -> tuple[dict[str, Any], bytes | None]:
     return value, raw
 
 
-def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) -> dict[str, str]:
+def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False,
+                    remove_retired: bool = False) -> dict[str, str]:
     if adapter == "codex":
         target = config_dir / "skills" / "skills-ai-registry" / "SKILL.md"
         return {
@@ -196,6 +257,9 @@ def install_adapter(adapter: str, config_dir: Path, *, dry_run: bool = False) ->
         if original_settings is not None:
             backup_settings(config_dir, original_settings)
         atomic_write(settings_path, settings_content)
+    # Retire earlier hook files only after settings stop referencing them.
+    results["retired_hook"] = retire_claude_hooks(config_dir, updated_settings, remove=remove_retired, dry_run=dry_run)
+    results["native_shadow_skills"] = ", ".join(claude_shadow_skills(config_dir)) or "none"
     return results
 
 
@@ -211,10 +275,11 @@ def check_adapter(adapter: str, config_dir: Path) -> bool:
         return False
     settings, _ = _load_settings(config_dir / "settings.json")
     expected = claude_hook_command(hook_target)
-    return all(sum(hook.get("command") == expected
-                   for entry in settings.get("hooks", {}).get(event, []) if isinstance(entry, dict)
-                   for hook in entry.get("hooks", []) if isinstance(hook, dict)) == 1
-               for event in ("SessionStart", "UserPromptSubmit"))
+    registered = all(sum(hook.get("command") == expected
+                         for entry in settings.get("hooks", {}).get(event, []) if isinstance(entry, dict)
+                         for hook in entry.get("hooks", []) if isinstance(hook, dict)) == 1
+                     for event in ("SessionStart", "UserPromptSubmit"))
+    return registered and not claude_check_problems(config_dir)
 
 
 def default_config_dir(adapter: str) -> Path:
@@ -230,16 +295,26 @@ def main() -> int:
     parser.add_argument("--config-dir", type=Path)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--remove-retired", action="store_true",
+                        help="Claude only: delete earlier installer-owned hook files no longer referenced by settings")
     args = parser.parse_args()
     config_dir = args.config_dir or default_config_dir(args.adapter)
+    if args.remove_retired and args.adapter != "claude":
+        parser.error("--remove-retired applies only to the Claude adapter")
     try:
         if args.check:
             if not check_adapter(args.adapter, config_dir):
                 print(f"stale: {args.adapter} adapter in {config_dir}")
+                if args.adapter == "claude":
+                    for problem in claude_check_problems(config_dir):
+                        print(f"  {problem}")
                 return 1
             print(f"ok: {args.adapter} adapter in {config_dir}")
             return 0
-        results = install_adapter(args.adapter, config_dir, dry_run=args.dry_run)
+        if args.adapter == "claude":
+            results = install_adapter(args.adapter, config_dir, dry_run=args.dry_run, remove_retired=args.remove_retired)
+        else:
+            results = install_adapter(args.adapter, config_dir, dry_run=args.dry_run)
         print(json.dumps({"adapter": args.adapter, "config_dir": str(config_dir), "files": results}, sort_keys=True))
         return 0
     except (OSError, InstallError) as exc:

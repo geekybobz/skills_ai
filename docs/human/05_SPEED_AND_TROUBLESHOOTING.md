@@ -96,6 +96,8 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | maintenance selects a task package | let the host interpret exact management scope; the transport never scores tasks |
 | `MANIFEST_UNAVAILABLE` | compile and validate; the original task should continue normally |
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
+| Claude check names a retired managed hook | an earlier adapter file is no longer used; preview, then remove it with `install_runtime_adapter.py --adapter claude --remove-retired` |
+| Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 

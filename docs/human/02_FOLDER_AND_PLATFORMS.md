@@ -56,6 +56,9 @@ flowchart LR
 
 Codex owns Codex invocation and session cleanup. Claude owns hook input,
 timeouts, child-process cleanup, installation, and Claude live acceptance.
+Skills AI packages are not installed as native Claude skills: a copy under
+`~/.claude/skills/` would be loaded by Claude Code itself and skip the
+orchestrator, so the Claude installer check reports it.
 Neither platform duplicates package triggers, capability selection, project
 context validation, or interaction rules.
 
