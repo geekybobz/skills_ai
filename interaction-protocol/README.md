@@ -6,7 +6,7 @@ tags:
   - interaction
   - response-contract
   - mathematics
-  - routing
+  - orchestration
 ---
 
 # Interaction Protocol
@@ -15,14 +15,13 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · Controls:
 [[registry/activation|Activation]] · Registry:
 [[registry/interaction|Interaction Registry]] · Runtime:
 [[runtime/PROTOCOL|Runtime Protocol]] · API:
-[[runtime/API_CONTRACT|API Contract]] · Migration:
-[[docs/INTERACTION_PROTOCOL_MIGRATION|Migration Record]]
+[[runtime/API_CONTRACT|API Contract]]
 
 This is one public interaction skill package and its visible Obsidian hub. The canonical
 machine-readable wording lives in [protocol.json](protocol.json). The registry
-controls whether general and math behavior is active; the runtime decides the
-current response mode and independently selects at most one task package
-capability. The interaction package consumes no task-package slot.
+controls whether general and math behavior is active. The host applies the
+response mode independently of task-skill selection; the interaction package
+never counts as a task skill.
 
 ## Authority map
 
@@ -33,8 +32,7 @@ flowchart LR
     REG --> IP["Interaction Protocol hub"]
     IP --> JSON["protocol.json<br/>canonical wording"]
     IP --> RUN["Runtime protocol"]
-    RUN --> API["JSON-line API"]
-    IP --> MIG["Migration and rollback record"]
+    RUN --> API["orchestrate.py access API"]
 ```
 
 ## General request flow
@@ -44,15 +42,9 @@ flowchart LR
     U["User request"] --> G["interaction.general"]
     G --> M{"Mathematical reasoning?"}
     M -- "Yes" --> X["Add interaction.math"]
-    M -- "No" --> R["Route task package"]
-    X --> R
-    R --> S{"Routing Fit?"}
-    S -- "Yes" --> L["Load one capability"]
-    S -- "No match" --> N["NORMAL"]
-    S -- "Material ambiguity" --> C["Ask one short choice"]
-    C --> L
-    L --> A["Focused response"]
-    N --> A
+    M -- "No" --> T["Host selects task skills, if any help"]
+    X --> T
+    T --> A["Focused response"]
 ```
 
 ## Mathematical response flow
@@ -73,27 +65,18 @@ flowchart LR
 
 - `interaction.general`: active or off.
 - `interaction.math`: active, manual, or off.
-- `#> skill auto`: select at most one relevant active task package capability.
-- `#> skill normal` or “do not use any local skill”: use no local task package.
-- `#> skill <exact-package> [capability]`: explicitly request one enabled
-  package and optional internal capability; required for a manual package.
-- `#> skill interaction-protocol general|math`: select this public package's mode.
-- `#> interaction math`: explicit math response for the current request.
-- `#> interaction general`: explicit general response for the current request.
+- `#> interaction math` or `#> interaction general`: explicit response mode for
+  the current request.
+- `#> use auto|none|<package IDs>`: task-skill selection; it never changes the
+  interaction mode.
 - `#> format mermaid+summary`: request known output forms.
-- `#> depth brief|standard|detailed`: request explanation depth.
-- `#> receipt auto|on|off`: show the task/skill/Fit/style/access receipt
-  automatically, always, or never.
-- Prompt fixtures: [interaction_cases.json](../tests/interaction_cases.json).
+- `#> depth compact|standard|deep` (`brief` and `detailed` are aliases):
+  request explanation depth.
+- `#> receipt auto|on|off`: show the task receipt (Task understood, Plan,
+  Skills, Mode) automatically, on every request, or never.
+- Access tests: [test_model_context.py](../tests/test_model_context.py).
 - Runtime tests: [test_registry_runtime.py](../tests/test_registry_runtime.py).
 - Graph tests: [test_graph_layers.py](../tests/test_graph_layers.py).
 
 The interaction protocol changes response structure only. It grants no file,
 network, credential, account, or destructive-action authority.
-
-Fit is route suitability, not factual confidence: `3` is an exact explicit
-route, `2` is one clear contextual route, `1` is unresolved equal candidates,
-and `0` means no skill. At Fit 1 the host asks one numbered last-resort choice
-only when the alternatives materially change the task; otherwise it continues
-normally. The router may record prompt-free candidate metadata under ignored
-`.runtime/` state for later local analysis, never the prompt or answer.

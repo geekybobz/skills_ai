@@ -15,7 +15,7 @@
     {
       "path": "cards",
       "title": "Graph cards",
-      "purpose": "Human and Obsidian context for parked or legacy items; never a runtime routing source."
+      "purpose": "Human and Obsidian context cards for parked items; never a runtime selection source."
     },
     {
       "path": "docs",
@@ -40,7 +40,7 @@
     {
       "path": "interaction-protocol",
       "title": "Interaction protocol",
-      "purpose": "One public interaction skill package whose general and equation-led modes compose with task routing without consuming the task-package slot."
+      "purpose": "One public interaction skill package whose general and equation-led response modes apply independently of task-skill selection."
     },
     {
       "path": "optimizer",
@@ -134,7 +134,7 @@
       "graph_entry": "graph/skills/interaction-protocol.md",
       "kind": "interaction-package",
       "traversal": "repository",
-      "purpose": "Public interaction skill package with general and mathematical modes that consume no task-package slot."
+      "purpose": "Public interaction skill package with general and mathematical response modes, independent of task-skill selection."
     },
     {
       "id": "theory-reference",

@@ -327,7 +327,7 @@ def wikilink_errors(root: Path = ROOT) -> list[str]:
 
 
 def interaction_link_errors(root: Path = ROOT) -> list[str]:
-    """Compatibility wrapper for the interaction-specific test/API."""
+    """Graph-link errors for the interaction-protocol contract."""
     return graph_link_errors(root, contract_id="interaction-protocol")
 
 

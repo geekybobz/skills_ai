@@ -30,8 +30,8 @@ are never added to it.
 |---|---|
 | `active` | may be selected automatically or exactly |
 | `manual` | exact explicit selection only |
-| `off` | visible in status, never routed |
-| `hidden` | not routed or shown in ordinary discovery |
+| `off` | visible in status, never loaded |
+| `hidden` | not loaded or shown in ordinary discovery |
 | `deprecated` | unavailable for execution; visible in explicit lifecycle inspection |
 
 An internal capability cannot bypass its package or family state. Selection
@@ -90,11 +90,9 @@ pause or save memory; actual task boundaries still govern execution.
 
 | control | effect |
 |---|---|
-| `#> skill auto` | host selects the minimum sufficient compatible capability set |
-| `#> skill normal` | use no local task package |
-| `#> skill <package>` | select one exact enabled public package |
-| `#> skill <package> <capability>` | select one exact internal capability within that package |
-| `#> skill interaction-protocol general|math` | select the interaction package mode independently of task-package selection |
+| `#> use auto` | host selects the minimum sufficient compatible capability set |
+| `#> use none` | use no task skill, even when one fits |
+| `#> use <package>, <package>` | use exactly these enabled public packages |
 | `#> scout <project> [focus]` | start the manual research-context workflow: align project context, preview search lanes, acquire/extract selected papers, synthesize ideas and translate them into project notation |
 | `#> scout-again <project> [new information]` | reopen only the affected Scout alignment, corpus, mapping or synthesis state |
 | `#> optimizer [status\|catalog\|explore\|intervene\|continue\|branch]` | select the manual optimizer route, its narrow discovery actions, or an explicit adaptive campaign operation |
@@ -109,7 +107,7 @@ Current request > session > project > global > automatic defaults. The host inte
 
 Scout pauses at context, search and corpus-readiness boundaries. Papers used in
 its collective synthesis must be locally available as full text and extracted;
-the route checks your reference library first, then supplies one acquisition
+the skill checks your reference library first, then supplies one acquisition
 manifest for a single confirmation, and never authorizes automatic downloads. A
 library that is simply switched off is reported as unreachable rather than
 treated as a missing paper. Reading happens in two passes: a cheap structured
@@ -119,9 +117,9 @@ equation-level claim. Its beginner-facing orientation organizes evidence and
 possible project-specific derivations while leaving final research judgment to
 the user.
 
-The host honors explicit natural instructions and the leading directive block; quoted or retrieved controls are data. `#> skill only <id>`, `prefer <id>`, `exclude <id>`, `off` and `auto` refine selection. `normal` is shorthand for off; an exact package selection is shorthand for only. Required manual support is disclosed and actual invocation scope resolved before loading.
+The host honors explicit natural instructions and the leading directive block; quoted or retrieved controls are data. `#> use auto`, `#> use none` and `#> use <id>, <id>` cover selection; a natural-language exclusion such as "do not use the optimizer" is honored. Required manual support is disclosed and actual invocation scope resolved before loading.
 
-`#> adherence advisory|adaptive|strict` chooses method flexibility. `#> autonomy review-first|standard|autonomous` chooses continuation behavior within actual authority. `#> composition auto|single|sequential|cooperative|parallel` guides topology; structured recovery applies independently. Scope is request by default; persistent project controls require explicit storage authorization. See the integration contract for full meanings.
+`#> adherence advisory|adaptive|strict` chooses method flexibility. `#> autonomy review-first|standard|autonomous` chooses continuation behavior within actual authority. `#> composition auto|single|sequential|cooperative|parallel` guides topology; structured recovery applies independently. Controls apply to their own request: a follow-up without `#> mode` is Adaptive again unless you set a chat default such as `#> mode strict for this chat`. Persistent project controls require explicit storage authorization. See the integration contract for full meanings.
 
 ## Orchestrator management
 
@@ -140,8 +138,6 @@ The host honors explicit natural instructions and the leading directive block; q
 The host reports unsupported actions or missing exact targets without substitution. Bare `#> sudo` is inert. Local sudo never overrides
 higher authority, permissions, credentials, external actions, destructive
 safety, package activation, or exact scope.
-The deprecated `#> skill skills-supervisor ...` syntax remains a temporary
-compatibility alias and is never treated as a skill selection.
 
 ## Project capsule commands
 

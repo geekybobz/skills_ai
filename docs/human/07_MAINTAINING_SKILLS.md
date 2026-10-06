@@ -37,8 +37,8 @@ approval or absorbs unrelated dirty files.
 
 | operation | meaning |
 |---|---|
-| add public package | add one Activation package row, entry boundary, routing metadata, documentation model, tests, and generated named graph node |
-| add capability | add an internal route under an existing package; public skill count stays unchanged |
+| add public package | add one Activation package row, entry boundary, registry metadata, documentation model, tests, and generated named graph node |
+| add capability | add an internal capability under an existing package; public skill count stays unchanged |
 | edit capability | preserve package identity while changing focused behavior and tests |
 | migrate package | change a public contract, schema, path model, platform behavior, or compatibility boundary |
 | activate/deactivate | change availability while preserving content and permission boundaries |

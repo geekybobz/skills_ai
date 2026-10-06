@@ -70,9 +70,9 @@ class ResearchContextScoutTests(unittest.TestCase):
         wrapper = self.read("claude/CLAUDE.md")
         self.assertIn("late state-recovery", wrapper)
         self.assertIn("Never read `../README.md`", wrapper)
-        self.assertIn("injected `mode=` line", wrapper)
-        self.assertIn("validated mode", wrapper)
-        self.assertIn("mode-fallback.md", wrapper)
+        self.assertIn("`#> scout-again` is `deepen`", " ".join(wrapper.split()))
+        self.assertIn("mode-resolution.md", wrapper)
+        self.assertNotIn("inject", wrapper.lower())
 
     # Evidence policy is host-neutral and lives in the shared rule. A wrapper may
     # only name its host's tools. Keeping policy in one wrapper is what left
@@ -173,16 +173,17 @@ class ResearchContextScoutTests(unittest.TestCase):
                 self.assertNotIn("only writable", wrapper)
                 self.assertNotIn("physics_objective", wrapper)
 
-    def test_mode_resolution_covers_injected_and_bare_directives(self) -> None:
-        fallback = " ".join(self.read("shared/rules/mode-fallback.md").split())
+    def test_mode_resolution_covers_aliases_and_bare_requests(self) -> None:
+        fallback = " ".join(self.read("shared/rules/mode-resolution.md").split())
         entry = " ".join(self.read("SKILL.md").split())
         for form in ("#> scout ...", "#> scout-again ..."):
             with self.subTest(form=form):
                 self.assertIn(form, fallback)
         self.assertIn("no existing record means `initial`", fallback)
-        self.assertIn("Only when no injected line is present", entry)
-        # The fallback must stay off the injected path.
-        self.assertIn("Read only when no validated `mode=` line was injected", fallback)
+        self.assertIn("For any other invocation, read", entry)
+        # Aliases fix the mode; the rule file is only for other invocations.
+        self.assertIn("Read only when the invocation is not `#> scout` or `#> scout-again`", fallback)
+        self.assertNotIn("inject", (fallback + entry).lower())
 
     def test_answered_intake_without_a_map_completes_initial_cycle_b(self) -> None:
         entry = " ".join(self.read("shared/SKILL.md").split())
@@ -340,7 +341,7 @@ class ResearchContextScoutTests(unittest.TestCase):
             "shared/rules/relation-taxonomy.md": 6000,
             "shared/rules/record-and-brief.md": 4000,
             "shared/rules/source-status.md": 3000,
-            "shared/rules/mode-fallback.md": 2500,
+            "shared/rules/mode-resolution.md": 2500,
             "codex/SKILL.md": 4000,
             "codex/CODEX.md": 4000,
             "claude/CLAUDE.md": 3200,

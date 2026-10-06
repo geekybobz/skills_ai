@@ -151,7 +151,7 @@ Run `python3 scripts/orchestrate.py measure` to inspect context bytes and subpro
 #> repair on
 ```
 
-This creates or resumes a contained workspace for this chat. Subsequent edits, tests, generated outputs and Git tracking stay there. `repair off` ends contained routing but keeps pending work. Explicit live exceptions apply only to their action.
+This creates or resumes a contained workspace for this chat. Subsequent edits, tests, generated outputs and Git tracking stay there. `repair off` ends contained editing but keeps pending work. Explicit live exceptions apply only to their action.
 
 ```text
 #> update

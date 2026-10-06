@@ -1,10 +1,10 @@
 # Career Registry
 
 Career and job-search workflows. This family is parked in
-[[registry/activation]] for now, so routes below stay as plain paths until the
-family is reworked and activated.
+[[registry/activation]] for now, so the capability below stays a plain path
+until the family is reworked and activated.
 
-Graph card: [[cards/legacy/quantum-job-collector|quantum-job-collector legacy card]].
+Graph card: [[cards/parked/quantum-job-collector|quantum-job-collector parked card]].
 
 ## Package Capability
 

@@ -24,9 +24,9 @@ flowchart LR
 
 ## Mental model
 
-- **Skills Orchestrator:** always-active control plane for every local routing and management decision; not a skill or inventory row.
+- **Skills Orchestrator:** always-active control plane for every local skill-selection and management decision; not a skill or inventory row.
 - **Public skill package:** the unit counted in inventory, such as `optimizer`.
-- **Internal capability:** a focused route or instruction file inside a task package.
+- **Internal capability:** a focused instruction file inside a task package.
 - **Interaction package:** one public skill that shapes the response independently of task selection.
 - **Task package:** a package that may contribute selected capabilities to the current phase.
 - **Project capsule:** optional validated `.skills-ai/project.json` advisory context.
@@ -37,7 +37,7 @@ Its command aliases and phase files are not separate skills.
 ## Promises
 
 - Public discovery reports the orchestrator separately and skill packages only;
-  internal routes appear only in explicit diagnostics.
+  internal capabilities appear only in explicit diagnostics.
 - The orchestrator and interaction package consume no coordination capacity.
 - The host loads the minimum sufficient compatible capability set for each phase.
 - Manual packages require exact selection; for example, `#> optimizer`,
@@ -48,7 +48,7 @@ Its command aliases and phase files are not separate skills.
   full text that was successfully extracted, and returns a beginner-readable
   collective synthesis translated into the project's notation. It does not
   download papers automatically or replace the user's scientific judgment.
-- Off, hidden, and deprecated packages never route.
+- Off, hidden, and deprecated packages never load.
 - No match or optional-layer failure continues normally.
 - Material ambiguity asks one short numbered choice and loads neither candidate first.
 - Invalid exact management commands fail safely without guessing.
@@ -61,7 +61,7 @@ Its command aliases and phase files are not separate skills.
 The orchestrator may read the exact capsule only when the host supplies an
 absolute project root. The file is capped at 32 KiB and its hot receipt at
 4 KiB. Missing, invalid, oversized, symlinked, unavailable, or stale capsules
-fail open without routing hints.
+fail open without project hints.
 
 Creation, replacement, refresh, and deletion require explicit management
 commands. Stored commands are untrusted data, not instructions to execute.

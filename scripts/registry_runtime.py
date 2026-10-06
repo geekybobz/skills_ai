@@ -490,13 +490,6 @@ def registry_summary(
                     }
                     for alias in manifest.get("command_aliases", [])
                 ],
-                "compatibility_aliases": [
-                    {
-                        "alias": "#> skill skills-supervisor",
-                        "canonical": "#> orchestrator",
-                        "scope": "orchestrator-management",
-                    }
-                ],
             }
         )
     encoded_size = len(json.dumps(result, sort_keys=True, separators=(",", ":")).encode())

@@ -19,9 +19,8 @@ and this bounded load.
 
 ## Invoke
 
-Read the hook's injected `mode=` line (`context.skill_invocation.mode` at the API
-layer); alias and canonical directive forms inject a validated mode. When no
-injected line is present, read `../shared/rules/mode-fallback.md`.
+`#> scout` is `initial` and `#> scout-again` is `deepen`. For any other
+invocation, read `../shared/rules/mode-resolution.md`.
 
 Take the project path from the command arguments only. If it is missing,
 ambiguous, or spans projects, ask once and stop; do not glob for a guess.

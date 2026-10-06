@@ -1,6 +1,6 @@
 # Skills AI runtime protocol
 
-The model-led responsibility and control contract lives in [[runtime/skills-orchestrator/CONTRACT]]. Exact process and access boundaries live in [[runtime/API_CONTRACT]]. Keep those facts there rather than duplicating a semantic router here.
+The model-led responsibility and control contract lives in [[runtime/skills-orchestrator/CONTRACT]]. Exact process and access boundaries live in [[runtime/API_CONTRACT]]. Keep those facts there rather than duplicating them here.
 
 The host reads the coordination core, resolves user intent and leading controls, discovers bounded metadata, selects the minimum sufficient compatible capability set, loads complete selected entries and required support, performs authorized work, and assesses artifact-bound evidence. The host selects a phase-specific compatible set without a fixed package-count limit. Public counts remain package counts; interaction modes and capability files are internal details.
 
@@ -17,7 +17,7 @@ Shared Python owns bounded metadata compilation, prompt-free context assembly, e
 
 A single Claude run budget bounds input, Python child execution, core reading and output. The child deadline is shorter than the remaining hook budget; timeout terminates and reaps its process group, including interpreter shims. Host cancellation during input returns a prompt-free reason. The hook does not forward task input to the child. No background watcher, indexer, updater or new ambiguity logger is started.
 
-Local governance scanners inspect repository artifacts; they do not determine the meaning of a user task. External maintenance tasks retain the request-only packet boundary. Generated entries and human guides are projections, not runtime routing or permission authority.
+Local governance scanners inspect repository artifacts; they do not determine the meaning of a user task. External maintenance tasks retain the request-only packet boundary. Generated entries and human guides are projections, not runtime selection or permission authority.
 
 Interaction package: [[interaction-protocol/README]].
 

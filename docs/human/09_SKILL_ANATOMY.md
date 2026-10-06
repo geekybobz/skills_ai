@@ -23,10 +23,10 @@ flowchart TD
 ```
 
 The package is the public skill and inventory unit. A capability is an internal
-route used to select focused instructions. Files, phases, modes, components,
-family rows, and route leaves never increase the public skill count.
+entry used to select focused instructions. Files, phases, modes, components,
+family rows, and capability entries never increase the public skill count.
 
-The Skills Orchestrator sits above this anatomy. It routes and manages skills
+The Skills Orchestrator sits above this anatomy. It selects and manages skills
 but is not a package, capability, or inventory row.
 
 ## Package forms

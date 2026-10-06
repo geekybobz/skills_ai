@@ -47,8 +47,8 @@ flowchart LR
 |---|---|
 | L0 | Human and agent entry notes |
 | L1 | Skills Orchestrator, Skills Hub, Activation, protocol/documentation hubs, risk, color, combination, and change-control maps |
-| L2 | Family route tables for interaction, theory, research, optimizer, and the disabled career workflow |
-| L3 | Human-visible context cards |
+| L2 | Family registry tables for interaction, theory, research, optimizer, and the disabled career workflow |
+| L3 | Human-visible context cards, such as the parked quantum-job-collector card in `cards/parked/` |
 | L4 | Generated public skill entries, internal capabilities, external pointers, and phases |
 | L5 | Human guide, protocols, runtime, adapters, scripts, tests, and requests |
 
@@ -105,7 +105,7 @@ missing Activation/orchestrator link.
 The shared documentation model is another declared graph concept. Its L1
 architecture record links the change-control authority, repository atlas, skill
 anatomy chapter, common agent-entry source, and platform overlays. Generated
-live indexes remain human L5 support and do not become routing nodes.
+live indexes remain human L5 support and do not become selection nodes.
 
 Validate both the documented policy and the live Obsidian graph:
 

@@ -11,7 +11,7 @@ role: interaction
 
 # Interaction Protocol
 
-Public interaction skill package with general and mathematical modes that consume no task-package slot.
+Public interaction skill package with general and mathematical response modes, independent of task-skill selection.
 
 **State:** `active`
 

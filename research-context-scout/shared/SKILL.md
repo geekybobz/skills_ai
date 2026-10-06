@@ -25,7 +25,8 @@ gap predicate and next test; placeholders do not count.
 
 Before the first write in any phase, read `rules/record-and-brief.md`. Create a
 new record from `templates/research-orientation.md`. Read
-`rules/mode-fallback.md` only when no validated `mode=` line was injected.
+`rules/mode-resolution.md` only when the invocation is not `#> scout` or
+`#> scout-again`.
 
 At the start of Cycle B or a deepen cycle, read `gates.md` once. It owns the
 gate order, every stop condition and the rule-loading table. A Cycle A run, an

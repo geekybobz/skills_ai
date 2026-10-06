@@ -26,13 +26,13 @@ entry's token estimate does not include all references the skill may require;
 measure the complete loading path before claiming savings.
 
 Manual command aliases such as `#> optimizer` enter the explicitly named primary package;
-they do not load every package or turn operation tokens into additional routes.
+they do not load every package or turn operation tokens into additional capabilities.
 
 Repository discovery follows the same cold-path principle. If a path is known,
 the agent reads only that path or a bounded line range. Otherwise it narrows
 with `rg --files`, searches a literal identifier with `rg -n`, and inspects
 exact references, diffs, and mapped tests. No background index, file watcher,
-telemetry process, or network update checker is part of ordinary routing.
+telemetry process, or network update checker is part of ordinary work.
 
 ## Measure context and latency
 
@@ -84,7 +84,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 
 | symptom | check |
 |---|---|
-| public list contains route leaves | regenerate the package-first catalog; public rows must equal Activation packages |
+| public list contains capability entries | regenerate the package-first catalog; public rows must equal Activation packages |
 | unsupported management action | use one supported exact action and include a target when required |
 | bare `#> sudo` has no effect | use the full `#> orchestrator sudo <operation> <exact-target>` form |
 | `CAPSULE_MISSING` | normal fail-open status; initialize only when explicitly wanted |
@@ -96,13 +96,12 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | maintenance selects a task package | let the host interpret exact management scope; the transport never scores tasks |
 | `MANIFEST_UNAVAILABLE` | compile and validate; the original task should continue normally |
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
-| Claude check names a retired managed hook | an earlier adapter file is no longer used; preview, then remove it with `install_runtime_adapter.py --adapter claude --remove-retired` |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 
 Maintenance scans and generated-view compilation are cold-path operations. They
-do not add reads or token cost to ordinary routing.
+do not add reads or token cost to ordinary work.
 
 Use none avoids unnecessary optional discovery and task bodies. Show one compact bullet receipt for a substantive task, reuse conversation context on ordinary continuations and update changed fields only. Do not scan files or persist state merely to fill or deduplicate a receipt.
 

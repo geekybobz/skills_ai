@@ -372,7 +372,6 @@
         "cards/**",
         "docs/*.md",
         "docs/CLAUDE_VERIFICATION_PROMPT.md",
-        "docs/INTERACTION_PROTOCOL_MIGRATION.md",
         "docs/SKILLS.md",
         "theory-reference"
       ],
@@ -403,7 +402,7 @@
       "registry/activation.md": "L1",
       "graph/orchestration/skills-orchestrator.md": "L1",
       "registry/theory.md": "L2",
-      "cards/legacy/quantum-job-collector.md": "L3",
+      "cards/parked/quantum-job-collector.md": "L3",
       "optimizer/SKILL.md": "L4",
       "graph/skills/optimizer.md": "L4",
       "graph/skills/research-context-scout.md": "L4",
@@ -466,11 +465,7 @@
           "registry/activation",
           "registry/interaction",
           "runtime/PROTOCOL",
-          "runtime/API_CONTRACT",
-          "docs/INTERACTION_PROTOCOL_MIGRATION"
-        ],
-        "docs/INTERACTION_PROTOCOL_MIGRATION.md": [
-          "interaction-protocol/README"
+          "runtime/API_CONTRACT"
         ],
         "runtime/README.md": [
           "interaction-protocol/README"

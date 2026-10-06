@@ -54,7 +54,7 @@ Learning entry: [[docs/human/10_MODEL_LED_ORCHESTRATOR|Orchestrator walkthrough]
 ## Shared verification and update boundary
 
 The shared fixes preserve model-owned decisions, existing single/default batch
-responses, compatibility aliases, capability gates and skill-specific content.
+responses, package aliases, capability gates and skill-specific content.
 Opt-in batch v2 delivers exact shared bodies once; read-only status and reference
 metadata standardize access for any connected host. Host settings remain owned
 by each integration.
@@ -66,7 +66,7 @@ checks to the exact candidate; application waits for actual agreement. Installed
 entries may need their host's refresh after source deployment, outside this
 shared change.
 
-Test all gates before any shared body read, legacy response compatibility,
+Test all gates before any shared body read, default batch responses,
 reference declaration boundaries, successful repair start/pause, exact association,
 corrupt-state failure, status without writes and selective context delivery.
 Semantic scenarios in tests/model_orchestration_cases.json include genuine

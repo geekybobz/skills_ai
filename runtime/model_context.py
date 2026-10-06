@@ -196,7 +196,7 @@ def capability_records(root: Path, manifest: dict) -> list[dict]:
                 'version':contract['package']['version'] if contract else None,
                 'contract':f'registry/contracts/{package_id}.json' if contract else None,
                 'contract_sha256':contract_digest,
-                'migration':'contract' if contract else 'legacy-entry',
+                'migration':'contract' if contract else 'entry-only',
                 'dependencies':cap['dependencies'],
                 'references':sorted({d['target'] for d in cap['dependencies'] if d['kind']=='reference'} |
                                     {r['source'] for r in contract['rules']} if contract else set())})

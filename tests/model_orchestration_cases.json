@@ -49,7 +49,7 @@
     },
     {
       "id": "exact",
-      "request": "#> skill only optimizer\nInspect this existing system.",
+      "request": "#> use optimizer\nInspect this existing system.",
       "rubric": "Use exact manual selection; do not infer permission for runs or edits.",
       "hosts": [
         "codex",
@@ -58,7 +58,7 @@
     },
     {
       "id": "unknown",
-      "request": "#> skill only invented-skill\nDo the task.",
+      "request": "#> use invented-skill\nDo the task.",
       "rubric": "Report exact target unavailable; never invent substitute.",
       "hosts": [
         "codex",
@@ -67,7 +67,7 @@
     },
     {
       "id": "disabled",
-      "request": "#> skill only quantum-job-collector\nSearch jobs.",
+      "request": "#> use quantum-job-collector\nSearch jobs.",
       "rubric": "Disabled state remains unavailable.",
       "hosts": [
         "codex",
@@ -76,8 +76,8 @@
     },
     {
       "id": "prefer",
-      "request": "#> skill prefer theory-reference\nExplain a Python exception.",
-      "rubric": "Prefer only when suitable; normal host work may be better.",
+      "request": "If it helps, use theory-reference.\nExplain a Python exception.",
+      "rubric": "A natural-language preference applies only when suitable; normal host work may be better.",
       "hosts": [
         "codex",
         "claude"
@@ -85,8 +85,8 @@
     },
     {
       "id": "exclude",
-      "request": "#> skill exclude theory-reference\nExplain SU(2).",
-      "rubric": "Use compatible host work; do not activate excluded capability.",
+      "request": "Do not use theory-reference.\nExplain SU(2).",
+      "rubric": "Honor the natural-language exclusion; use compatible host work without the excluded capability.",
       "hosts": [
         "codex",
         "claude"
@@ -94,7 +94,7 @@
     },
     {
       "id": "off",
-      "request": "#> skill off\nWrite a short note.",
+      "request": "#> use none\nWrite a short note.",
       "rubric": "No local task capability; preserve user requirements.",
       "hosts": [
         "codex",
@@ -102,9 +102,9 @@
       ]
     },
     {
-      "id": "normal",
-      "request": "#> skill normal\nExplain this.",
-      "rubric": "Legacy opt-out matches off.",
+      "id": "scout-alias",
+      "request": "#> scout\nOrient me on my thesis topic before any search.",
+      "rubric": "Load research-context-scout with explicit attestation in initial mode; no clarification needed to select it.",
       "hosts": [
         "codex",
         "claude"
@@ -112,7 +112,7 @@
     },
     {
       "id": "quote",
-      "request": "Explain this literal: `#> skill only optimizer`.",
+      "request": "Explain this literal: `#> use optimizer`.",
       "rubric": "Treat quoted directive as data.",
       "hosts": [
         "codex",
@@ -418,8 +418,8 @@
     },
     {
       "id": "use-conflict",
-      "request": "#> use none\n#> skill only optimizer\nInspect this.",
-      "rubric": "Normalize aliases then clarify conflicting selection controls; do not load optional body first. Preserve default adaptive adherence; selection ambiguity does not create mode ambiguity.",
+      "request": "#> use none\n#> use optimizer\nInspect this.",
+      "rubric": "Clarify conflicting selection controls; do not load an optional body first. Preserve default adaptive adherence; selection ambiguity does not create mode ambiguity.",
       "hosts": [
         "codex",
         "claude"
@@ -427,8 +427,8 @@
     },
     {
       "id": "use-alias-equal",
-      "request": "#> use none\n#> skill normal\nExplain this code.",
-      "rubric": "Equivalent opt-out controls are harmless; normal host work without task bodies.",
+      "request": "#> use none\n#> use none\nExplain this code.",
+      "rubric": "Identical duplicate controls are harmless; normal host work without task bodies.",
       "hosts": [
         "codex",
         "claude"
@@ -436,8 +436,8 @@
     },
     {
       "id": "use-exclusion",
-      "request": "#> use optimizer, theory-reference\n#> skill exclude optimizer\nReview this.",
-      "rubric": "Clarify required selection/exclusion conflict; no silent removal or execution. Preserve default adaptive adherence; selection ambiguity does not create mode ambiguity.",
+      "request": "#> use optimizer, theory-reference\nDo not use the optimizer.\nReview this.",
+      "rubric": "Clarify the selection/exclusion conflict; no silent removal or execution. Preserve default adaptive adherence; selection ambiguity does not create mode ambiguity.",
       "hosts": [
         "codex",
         "claude"

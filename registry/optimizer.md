@@ -10,9 +10,9 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · State:
 
 | capability | purpose | triggers | not for |
 |---|---|---|---|
-| [[optimizer/SKILL\|optimizer]] | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer`, `#> build-system`, `#> optimize`, `#> skill optimizer route`, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run |
+| [[optimizer/SKILL\|optimizer]] | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer`, `#> build-system`, `#> optimize`, `#> use optimizer`, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run |
 
-The public package and its route are `manual`. `build-system` and `optimize`
+The public package and its capability are `manual`. `build-system` and `optimize`
 are independent package workflows, not separate public skills. `explore`,
 `intervene`, `continue`, and `branch` are explicit operations under `#> optimizer`.
 

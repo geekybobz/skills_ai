@@ -26,7 +26,7 @@
     "G8-level-up": "shared/rules/journal-level-up.md"
   },
   "conditional": {
-    "no_injected_mode": "shared/rules/mode-fallback.md",
+    "mode_not_named": "shared/rules/mode-resolution.md",
     "method_lens_requested": "shared/phases/math-method-lens.md"
   },
   "paths": {

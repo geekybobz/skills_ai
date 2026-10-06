@@ -26,7 +26,7 @@ flowchart TD
     V --> R[Qualified result and optional recovery checkpoint]
 ```
 
-The compatibility process returns neutral metadata, not a semantic decision. The original request stays with the host model. Discovery is bounded and a first page is not exhaustive. Selection never grants write or external-action permission. Complete obligations must remain available when support is summarized or context is recovered.
+The orchestrator tools return metadata, not a decision. The original request stays with the host model. Discovery is bounded and a first page is not exhaustive. Selection never grants write or external-action permission. Complete obligations must remain available when support is summarized or context is recovered.
 
 ## Management request
 
@@ -55,14 +55,13 @@ The host interprets the leading user-authored control block and current natural 
 
 ## Package and capability controls
 
-`#> skill theory-reference` selects that public package.
-`#> skill theory-reference theory-reference` names its registered capability
-explicitly. An invalid capability is reported rather than silently substituted.
+`#> use theory-reference` selects that public package. An unknown or
+unavailable name is reported rather than silently substituted.
 
-`#> skill interaction-protocol math` selects the interaction package's math
-mode independently of task-package selection. `#> skill research-context-scout
-initial|deepen ...`, `#> scout`, and `#> scout-again` all select the same manual
-public package. Scout first mirrors the understood context and search direction
+`#> interaction math` selects the interaction package's math mode
+independently of task-skill selection. `#> use research-context-scout`,
+`#> scout`, and `#> scout-again` all select the same manual public package; the
+two aliases also fix its mode (`initial`, `deepen`). Scout first mirrors the understood context and search direction
 for user alignment, then works from a bounded, successfully extracted local
 paper corpus to produce collective mathematical ideas and project-notation
 translations in a beginner-readable report. It records acquisition needs but

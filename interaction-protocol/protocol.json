@@ -3,18 +3,18 @@
   "voice": "compact-professional",
   "default_depth": "standard",
   "receipt": "auto",
-  "fallback": "normal",
   "controls": {
-    "skill": ["auto", "normal", "<exact-id>"],
+    "use": ["auto", "none", "<package IDs>"],
     "interaction": ["general", "math"],
     "format": ["auto", "brief", "code", "equations", "mermaid", "steps", "summary", "table"],
-    "depth": ["brief", "standard", "detailed"],
+    "depth": ["compact", "standard", "deep"],
+    "depth_aliases": {"brief": "compact", "detailed": "deep"},
     "receipt": ["auto", "on", "off"],
     "precedence": "current request > session preference > project default > global default > automatic detection"
   },
   "project_context": {
     "mode": "bounded-host-context",
-    "rule": "Use already available project instructions and user-named or directly relevant files; never scan the whole repository merely to route a skill."
+    "rule": "Use already available project instructions and user-named or directly relevant files; never scan the whole repository merely to select a skill."
   },
   "response_contract": [
     "Give the result, answer, or main finding first.",

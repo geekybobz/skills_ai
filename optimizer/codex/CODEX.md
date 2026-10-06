@@ -11,8 +11,8 @@ Read `../SKILL.md`, then load only the workflow selected by the exact directive:
 `../situation-analysis.md` only for `explore`, `intervene`, `continue`,
 `branch`, or a named checkpoint. Do not preload every workflow.
 
-Use `context.skill_invocation.command` and `.mode` from the router result. If
-the host did not provide them, parse only the leading literal directive. Ask
+Resolve the mode from the leading literal directive only; the orchestrator
+catalog lists the same aliases. Ask
 once and stop when a required target is missing or ambiguous; never glob for a
 system, campaign, or derivation.
 

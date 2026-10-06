@@ -19,7 +19,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 | L0 | Entry notes | `#5B5BD6` indigo | `path:README.md OR path:AGENTS.md OR path:CLAUDE.md OR path:docs/SKILLS.md` |
 | L1 | Hubs, switchboards, orchestrator, and declared graph entries | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:graph/orchestration/skills-orchestrator.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
 | L2 | Family registries | `#2E7D32` green | `path:registry/` |
-| L3 | Context cards and parked legacy-package cards | `#EF6C00` orange | `path:cards/` |
+| L3 | Context cards and parked-package cards | `#EF6C00` orange | `path:cards/` |
 | L4 | Public skill entries, internal capability instructions, external pointers, and phases | `#6A1B9A` violet | `path:optimizer/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/` |
 | L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:theory-reference/` |
 
@@ -56,7 +56,7 @@ related packages or capabilities, but no copied instruction content. It is what 
 star into a network: `tag:`, backlinks, and the properties pane have something
 to index.
 
-Use L3 cards for parked or legacy skills that should be visible in Obsidian
+Use L3 cards for parked skills that should be visible in Obsidian
 while their activation routes remain `off`. These cards are not on the agent's
 critical routing path.
 

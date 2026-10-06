@@ -43,8 +43,8 @@ class OptimizerSkillTests(unittest.TestCase):
         entry = self.read("SKILL.md")
         wrapper = " ".join(self.read("claude/CLAUDE.md").split())
         self.assertIn("claude/CLAUDE.md", entry)
-        self.assertIn("injected `command=` and `mode=` lines", wrapper)
-        self.assertIn("no injected line is present", wrapper)
+        self.assertIn("Resolve the mode from the leading directive", wrapper)
+        self.assertNotIn("inject", wrapper.lower())
         self.assertIn("optimizer_api.py", wrapper)
         self.assertIn("wait for approval", wrapper)
         self.assertIn("never touch the optimizer library itself", wrapper)
@@ -56,7 +56,8 @@ class OptimizerSkillTests(unittest.TestCase):
         entry = self.read("SKILL.md")
         wrapper = " ".join(self.read("codex/CODEX.md").split())
         self.assertIn("codex/CODEX.md", entry)
-        self.assertIn("context.skill_invocation.command", wrapper)
+        self.assertIn("leading literal directive", wrapper)
+        self.assertNotIn("skill_invocation", wrapper)
         self.assertIn("optimizer_api.py", wrapper)
         self.assertIn("apply_patch", wrapper)
         self.assertIn("never a project system or numerical run", wrapper)
@@ -78,7 +79,7 @@ class OptimizerSkillTests(unittest.TestCase):
 
     def test_entry_stays_compact_and_resolves_through_one_helper(self) -> None:
         entry = self.read("SKILL.md")
-        # The Claude hook injects this body verbatim on every optimizer request.
+        # Every optimizer request loads this entry in full.
         self.assertLess((PACKAGE / "SKILL.md").stat().st_size, 3500)
         self.assertLess((PACKAGE / "claude" / "CLAUDE.md").stat().st_size, 2500)
         # The resolver path has one home, in the discovery helper.

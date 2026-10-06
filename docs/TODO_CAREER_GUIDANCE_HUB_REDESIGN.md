@@ -493,7 +493,7 @@ sources in dry-run mode and returns candidates plus a coverage receipt.
 ## Deliberately Deferred
 
 - Activating the `career` family or `quantum-job-collector`.
-- Editing the legacy skill body.
+- Editing the parked skill body.
 - Modifying Career Radar application data or its database.
 - Contacting job websites or external accounts.
 - Browser automation, paid APIs, or scheduled execution.

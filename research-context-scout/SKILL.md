@@ -1,6 +1,6 @@
 ---
 name: research-context-scout
-description: Orient a new or evolving research project through a recorded physics-objective-first workflow with user alignment checkpoints, bounded literature discovery and acquisition, mandatory extraction of every paper used, semantic relation mapping, collective mathematical synthesis, project-notation translation, evidence gates, and a concise beginner-facing report. Use when explicitly invoked with #> scout, #> scout-again, #> skill research-context-scout, or an exact request to use the research-context-scout skill. The initial mode aligns context before broad research; the deepen mode revises an existing research-orientation.md after new ideas, derivations, results, constraints, sources, or user corrections.
+description: Orient a new or evolving research project through a recorded physics-objective-first workflow with user alignment checkpoints, bounded literature discovery and acquisition, mandatory extraction of every paper used, semantic relation mapping, collective mathematical synthesis, project-notation translation, evidence gates, and a concise beginner-facing report. Use when explicitly invoked with #> scout, #> scout-again, #> use research-context-scout, or an exact request to use the research-context-scout skill. The initial mode aligns context before broad research; the deepen mode revises an existing research-orientation.md after new ideas, derivations, results, constraints, sources, or user corrections.
 ---
 
 # Research Context Scout
@@ -25,10 +25,9 @@ during task execution; it is explanatory material for humans.
 
 ## Resolve the mode
 
-Read the injected `mode=` line; it is `context.skill_invocation.mode` at the API
-layer, and alias and canonical directive forms inject a validated `initial` or
-`deepen` value. Only when no injected line is present, read
-`shared/rules/mode-fallback.md`.
+`#> scout` means `initial` and `#> scout-again` means `deepen`; the orchestrator
+catalog lists both aliases with their modes. For any other invocation, read
+`shared/rules/mode-resolution.md`.
 
 Invocation mode expresses user intent, but record completeness selects the
 next phase. If the intake answers exist while the physics objective,

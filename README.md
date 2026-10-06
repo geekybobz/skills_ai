@@ -7,7 +7,7 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 # Skills AI: Human Guide
 
 > This is the human-facing entry. Machine authority lives in `runtime/`,
-> `registry/`, and `protocols/`; ordinary routing does not load this guide.
+> `registry/`, and `protocols/`; ordinary task work does not load this guide.
 
 Skills AI is managed by one always-active Skills Orchestrator. It reads compact
 compiled metadata, optionally uses one validated project-local context capsule,
@@ -35,7 +35,7 @@ for responsibilities, package boundaries and verification criteria.
 
 ## Skills Orchestrator
 
-`skills-orchestrator` is the always-active control plane for routing,
+`skills-orchestrator` is the always-active control plane for skill selection,
 management, documentation coordination, and project context. It is not a skill
 and is never included in skill counts.
 
@@ -46,7 +46,7 @@ or network update check.
 
 ## Public skills
 
-Public inventory contains exactly these five package records. Internal routes,
+Public inventory contains exactly these five package records. Internal capabilities,
 components, modes, phases, and Markdown files are never additional skills.
 
 | package | state | role |
@@ -62,7 +62,7 @@ components, modes, phases, and Markdown files are never additional skills.
 | Read | You will understand |
 |---|---|
 | [Start here](docs/human/00_START_HERE.md) | Orchestrator, packages, capabilities, capsule, and guarantees |
-| [Follow a request](docs/human/01_FOLLOW_A_REQUEST.md) | Normal routing, management, ambiguity, and normal fallback |
+| [Follow a request](docs/human/01_FOLLOW_A_REQUEST.md) | Normal selection, management, ambiguity, and normal work |
 | [Folder and platforms](docs/human/02_FOLDER_AND_PLATFORMS.md) | Shared runtime, Codex, Claude, and external project context |
 | [Skills and controls](docs/human/03_SKILLS_AND_CONTROLS.md) | Package states, exact commands, management, and discovery |
 | [Safe changes](docs/human/04_SAFE_CHANGES.md) | Permissions, sudo boundaries, change control, and documentation sync |
@@ -113,15 +113,9 @@ pause or save memory; actual task boundaries still govern execution.
 ## Advanced controls
 
 ```text
-#> skill auto
-#> skill only <exact-package> [capability]
-#> skill prefer <exact-package>
-#> skill exclude <exact-package>
-#> skill off
 #> adherence advisory|adaptive|strict
 #> autonomy review-first|standard|autonomous
 #> composition auto|single|sequential|cooperative|parallel
-#> skill interaction-protocol general|math
 #> orchestrator <action> [exact-target]
 #> orchestrator sudo <operation> <exact-target>
 #> interaction general|math
@@ -148,7 +142,7 @@ Management work uses the orchestrator instructions rather than a task capability
 5. Invalid exact management actions fail safely without substitution.
 6. Selection and project context grant no file, network, credential, account, staging, or commit authority.
 7. `.skills-ai/project.json` is created only by an explicit request and stores no prompts, file bodies, secrets, absolute personal paths, or permission grants.
-8. Human pages explain the current system; source history and rollback stay in Git and private backups, outside routing authority.
+8. Human pages explain the current system; source history and rollback stay in Git and private backups, outside selection authority.
 
 Normal capsule receipts omit stored commands and validation commands. Explicit
 project-context inspection may show neutralized values, still as untrusted data.

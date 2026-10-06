@@ -2,7 +2,7 @@
 
 The Skills Orchestrator is the host model using [[runtime/skills-orchestrator/SKILL|coordination instructions]]. It owns semantic selection, modes, composition, methods, conflict handling and evidence judgment; it is not counted as a skill.
 
-Metadata flows from registry sources through `compile_registry.py` into the manifest. `orchestrate.py discover` exposes bounded pages without candidate bodies. The host chooses an exact capability and loads it explicitly, then reads required support. The smallest sufficient compatible set may include multiple capabilities. No keyword router chooses a body.
+Metadata flows from registry sources through `compile_registry.py` into the manifest. `orchestrate.py discover` exposes bounded pages without candidate bodies. The host chooses an exact capability and loads it explicitly, then reads required support. The smallest sufficient compatible set may include multiple capabilities.
 
 `runtime/SKILL.md` supplies the Codex install header; the installer renders it together with the complete shared core and source identity. Claude delivers context at session lifecycle events and only changed sections on continuation. `runtime/API_CONTRACT.md` documents the shared command interface.
 

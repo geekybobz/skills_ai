@@ -60,14 +60,6 @@ def render_human(summary: dict, state: str, *, routes: bool = False) -> str:
             if aliases
             else "Command aliases: none"
         )
-        compatibility = summary.get("compatibility_aliases", [])
-        if compatibility:
-            lines.append(
-                "Compatibility aliases: "
-                + ", ".join(
-                    f"{item['alias']} -> {item['canonical']}" for item in compatibility
-                )
-            )
     lines.append("This is live registry metadata; no skill body was loaded.")
     return "\n".join(lines)
 

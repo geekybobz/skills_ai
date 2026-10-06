@@ -1,6 +1,6 @@
 ---
 name: optimizer
-description: Use this manual optimizer package only with #> optimizer, #> build-system, #> optimize, or #> skill optimizer route. Build a system from a TeX derivation against the live OLGS contract, run an adaptive evidence-led campaign on an existing verified system, or inspect and branch around unexpected optimization situations without silently changing the scientific problem.
+description: Use this manual optimizer package only with #> optimizer, #> build-system, #> optimize, #> use optimizer, or an exact request to use the optimizer skill. Build a system from a TeX derivation against the live OLGS contract, run an adaptive evidence-led campaign on an existing verified system, or inspect and branch around unexpected optimization situations without silently changing the scientific problem.
 ---
 
 # Optimizer
@@ -16,8 +16,8 @@ importing the optimizer; never hard-code a stable version or environment.
 3. `situation-analysis.md` only when an operation or a checkpoint named by the
    loaded workflow requires it.
 
-Read the injected `command=` and `mode=` lines instead of re-deriving the route
-from prose; the wrapper states the fallback when nothing was injected.
+Resolve the mode from the exact leading directive (table below; the orchestrator
+catalog lists the same aliases) instead of re-deriving it from prose.
 
 | invocation | mode | load |
 |---|---|---|

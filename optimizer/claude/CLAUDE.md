@@ -7,8 +7,8 @@ adds only Claude tool names and Claude lifecycle; it never restates a shared rul
 
 ## Load
 
-1. `../SKILL.md`, already injected by the managed hook; read the file only when
-   no entry body was injected.
+1. `../SKILL.md`, loaded through `scripts/orchestrate.py load`; read the file
+   directly only when that tool is unavailable.
 2. One workflow for the resolved mode — `../build-system.md` for `build-system`,
    `../optimize.md` for `optimize`. Never load both for one request.
 3. `../situation-analysis.md` only for an `explore`, `intervene`, `continue` or
@@ -21,14 +21,11 @@ and the campaign evidence already read.
 
 ## Invoke
 
-Read the hook's injected `command=` and `mode=` lines
-(`context.skill_invocation` at the API layer); `#> build-system` and `#> optimize`
-inject a validated workflow mode and `#> optimizer` injects `route`. Take the
-operation from the first argument after `#> optimizer`, and take system,
-project, campaign and TeX targets from the command arguments only. When no
-injected line is present, resolve the mode from the literal directive. If a
-required target is missing or ambiguous, ask once and stop; never glob for a
-guess.
+Resolve the mode from the leading directive: `#> build-system` and `#> optimize`
+name their workflow, and `#> optimizer` means `route`. Take the operation from
+the first argument after `#> optimizer`, and take system, project, campaign and
+TeX targets from the command arguments only. If a required target is missing or
+ambiguous, ask once and stop; never glob for a guess.
 
 ## Tools
 

@@ -3,10 +3,9 @@ title: Quantum Job Collector
 skill_id: quantum-job-collector
 family: career
 state: off
-kind: legacy-skill-card
+kind: parked-skill-card
 tags:
   - skill-card
-  - legacy-skill
   - parked
 ---
 
@@ -14,10 +13,10 @@ tags:
 
 State: `off` in [[registry/activation|activation register]].
 Family: [[registry/career|career]].
-Source: [[external-skills/quantum-job-collector/SKILL|legacy skill source]].
+Source: [[external-skills/quantum-job-collector/SKILL|parked skill source]].
 
-This card exists so the legacy skill stays visible in the Obsidian graph while
-Codex routing remains disabled. It is not routing authority.
+This card keeps the parked skill visible in the Obsidian graph while it is
+`off`. It is not selection authority.
 
 ## Rework Focus
 

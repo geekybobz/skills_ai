@@ -36,7 +36,7 @@ flowchart TD
 | `optimizer/` | one repository-owned manual package with separate system-build review, adaptive campaign, and situation-analysis workflows |
 | `external-skills/` | controlled pointers to externally owned packages |
 | `graph/` | generated descriptive nodes for Obsidian inventory browsing |
-| `docs/human/` | explanatory pages excluded from normal routing |
+| `docs/human/` | explanatory pages excluded from normal task work |
 
 The project capsule is different from repository `.runtime/` observations.
 `.skills-ai/project.json` lives inside the project being worked on and stores

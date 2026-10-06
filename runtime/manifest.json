@@ -190,7 +190,7 @@
         "exact `#> optimizer",
         "#> build-system",
         "#> optimize",
-        "#> skill optimizer route",
+        "#> use optimizer",
         "or exact request to use the optimizer skill"
       ]
     },
@@ -227,11 +227,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "03152652f1f2561c87a3eabf4c277b869c08d1e9ec6abcb51d9b74ef82b2d4a4",
+  "source_hash": "93dd316e0aa9688ad94f408741f0d70d95acae3e201100ac1191ee868c203882",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "edd45d4afae6583ec1b0bc0afa531817b949de16daab9e7f4acd1730d92530ec"
+      "sha256": "a9152f04657f24b4113e9bc56694bac254fe27479fd8b4a0bd80e8be3127f9bf"
     },
     {
       "path": "registry/activation.md",
@@ -239,7 +239,7 @@
     },
     {
       "path": "registry/career.md",
-      "sha256": "826db080755956bd50b3dc41c23301bd6ec7cd98c6affc1fdec8c9cb9a569fed"
+      "sha256": "0cd7c91556cdf9a919c3f03cbabceeae129f3d2ef4d70d66438cb5f6cac3e179"
     },
     {
       "path": "registry/interaction.md",
@@ -247,11 +247,11 @@
     },
     {
       "path": "registry/optimizer.md",
-      "sha256": "2412f35809f3b594308691e0dcd992564b9f85622da5414668ff91385f9d96e9"
+      "sha256": "ae18a8c272b5581a7182a1b1f6d80d41e7c00f6af39b4c36b4b36548f75fad8e"
     },
     {
       "path": "registry/research.md",
-      "sha256": "14ab35f6a3623ed053fc80ed8fe01adfb7ef06f333fd6016f8e59b4370cf809a"
+      "sha256": "885a3f1cdb626a4d740c739498929cf86695cbd136feae3a2df557e333e5ab60"
     },
     {
       "path": "registry/theory.md",

@@ -14,7 +14,7 @@ Back: [maintaining skills](07_MAINTAINING_SKILLS.md). Next:
 ```mermaid
 flowchart LR
     ROOT["skills_ai/"] --> SUP["Orchestrate and manage"]
-    ROOT --> ROUTE["Expose metadata and exact access"]
+    ROOT --> ACCESS["Expose metadata and exact access"]
     ROOT --> WORK["Host coordinates selected capabilities"]
     ROOT --> SAFE["Govern and verify changes"]
     ROOT --> LEARN["Explain to humans"]
@@ -24,7 +24,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     SUP --> RUN["runtime/skills-orchestrator"]
-    ROUTE --> REG["registry + manifest"]
+    ACCESS --> REG["registry + manifest"]
     WORK --> PKG["package content"]
     SAFE --> GOV["protocols + scripts + tests"]
     LEARN --> DOC["README + docs/human"]
@@ -47,7 +47,7 @@ flowchart LR
 | `scripts/` | on-demand metadata access, compilation, context, validation, scanning, context measurement and installation tools |
 | `tests/` | mechanical evidence for runtime and documentation promises |
 | `adapters/` | thin Codex and Claude lifecycle layers |
-| `docs/human/` | progressive explanation outside the routing hot path |
+| `docs/human/` | progressive explanation outside the task hot path |
 | `requests/` | bounded intake from tasks that started outside this workspace |
 | `skill-plans/` | architecture notes and unimplemented proposals, distinct from active package entries |
 | `.runtime/` | ignored local diagnostic and recovery data; never selection authority |
@@ -68,7 +68,7 @@ human-facing inventory projection, not a code index and not a runtime service.
 |---|---|
 | canonical source | edit through the matching operation protocol |
 | generated projection | regenerate from canonical sources; never hand-edit |
-| human explanation | synchronize with behavior; never use as routing authority |
+| human explanation | synchronize with behavior; never use as selection authority |
 | package entry | defines one public package boundary or workflow |
 | capability file | focused internal instructions selected for one phase |
 | platform overlay | host-specific lifecycle only |

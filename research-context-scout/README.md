@@ -24,7 +24,7 @@ Back to the [[docs/00_SKILLS_HUB|Skills Hub]]. Runtime files:
 - [[research-context-scout/shared/rules/alignment-checkpoints|alignment checkpoints]];
 - [[research-context-scout/shared/rules/literature-corpus|literature acquisition and corpus rule]];
 - [[research-context-scout/shared/rules/collective-synthesis|collective synthesis and report rule]];
-- [[research-context-scout/shared/rules/mode-fallback|mode fallback]];
+- [[research-context-scout/shared/rules/mode-resolution|mode resolution]];
 - [[research-context-scout/shared/rules/source-status|source status]];
 - [[research-context-scout/shared/rules/anti-hallucination|anti-hallucination rule]];
 - [[research-context-scout/shared/rules/relation-taxonomy|relation taxonomy]];
@@ -141,27 +141,23 @@ shape. It does not make all Scout work use the global math interaction mode;
 the evidence gate requests equations or other formal checks only when the
 claim needs them.
 
-The Skills AI runtime recognizes these aliases as the first task directive;
-presentation controls such as `#> depth detailed` or `#> interaction math` may
-precede them. Directive keywords are case-insensitive and require at least one
-space after `#>`. A first alias argument beginning with `-` is rejected as
-malformed, so `#> scout -again ...` cannot silently become an initial run.
-Quoted examples, code blocks, later prose mentions and words such as “scouting”
-do not activate the skill. The canonical form is:
+The orchestrator catalog lists these aliases with their modes: `#> scout` means
+`initial` and `#> scout-again` means `deepen`. Presentation controls such as
+`#> depth detailed` or `#> interaction math` may precede them. Directive
+keywords are case-insensitive and require at least one space after `#>`. A
+first alias argument beginning with `-` is rejected as malformed, so
+`#> scout -again ...` cannot silently become an initial run. Quoted examples,
+code blocks, later prose mentions and words such as “scouting” do not activate
+the skill.
 
-```text
-#> skill research-context-scout initial <project-path>
-#> skill research-context-scout deepen <project-path> <new-paths>
-```
+`#> use research-context-scout` or an exact request to use this skill also
+invokes it; without an alias, `shared/rules/mode-resolution.md` picks the mode
+from record presence. In every form, record completeness wins over invocation
+intent: when the user answers exist but the physics objective,
+existing-understanding ledger, relation map or gap verdict is empty, the
+workflow runs initial Cycle B before delta-based deepening.
 
-Alias and canonical forms inject `mode=initial|deepen`; the canonical form
-requires one of those two modes and rejects a missing or unknown value. In
-either form, record completeness wins over invocation intent: when the user
-answers exist but the physics objective, existing-understanding ledger, relation
-map or gap verdict is empty, the workflow runs initial Cycle B before
-delta-based deepening.
-
-`#> skill normal` remains an explicit opt-out. `#> override <instruction>` retains its
+`#> use none` opts out of task skills. `#> override <instruction>` keeps its
 higher-priority local-protocol override and does not activate this skill.
 
 ## Overall Workflow
@@ -651,7 +647,7 @@ research-context-scout/
 │   │   ├── alignment-checkpoints.md # user-alignment states and packets
 │   │   ├── literature-corpus.md  # search, acquisition and extraction
 │   │   ├── collective-synthesis.md # normalization, translation and report
-│   │   ├── mode-fallback.md      # only when no mode= was injected
+│   │   ├── mode-resolution.md    # modes for non-alias invocations
 │   │   ├── source-status.md      # G3-G4
 │   │   ├── anti-hallucination.md # G6-G7
 │   │   ├── relation-taxonomy.md  # G5

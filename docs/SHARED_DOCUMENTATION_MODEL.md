@@ -148,6 +148,6 @@ views from the previous canonical sources. Do not hand-edit generated files,
 discard unrelated worktree changes, cross the theory submodule boundary, or
 rewrite shared Git history.
 
-The replacement core is model-led: semantic decisions belong to Codex or Claude; generated metadata and artifact checks only supply evidence. Codex installation binds the source root, while Claude injects that root with the shared core. Full contracts, composition and recovery instructions are loaded on demand. Compatibility transport emits version 2 and never chooses a candidate body.
+The core is model-led: semantic decisions belong to Codex or Claude; generated metadata and artifact checks only supply evidence. Codex installation binds the source root, while Claude injects that root with the shared core. Full contracts, composition and recovery instructions are loaded on demand.
 
 Contained repair workspaces are local operational state under ignored `.runtime/repair/`, not documentation sources or graph concepts. [[protocols/repository/REPAIR_WORKSPACE]] owns the lifecycle; human pages explain on/off/update and how to find the hidden folder. No new graph layer or public skill is introduced.

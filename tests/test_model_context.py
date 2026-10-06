@@ -91,7 +91,7 @@ class ContractShapeTests(unittest.TestCase):
   for mutate in (lambda c:c.update({'activation':'active'}),lambda c:c['package'].update({'id':'other'}),lambda c:c['capabilities'][0].update({'roles':['invented']}),lambda c:c['capabilities'][0].update({'entry':'../outside'}),lambda c:c['capabilities'].append(copy.deepcopy(c['capabilities'][0]))):
    c=copy.deepcopy(value);mutate(c)
    with self.assertRaises(ContextError):check_contract(c,expected_id='synthetic')
- def test_malformed_contract_fails_without_silent_legacy_fallback(self):
+ def test_malformed_contract_fails_without_silent_entry_fallback(self):
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);(root/'registry/contracts').mkdir(parents=True)
    (root/'registry/contracts/synthetic.json').write_text('{"schema":"bad"}')
@@ -154,7 +154,7 @@ class SyntheticCompositionTests(unittest.TestCase):
   with self.assertRaisesRegex(ContextError,'UNKNOWN'):inspect_dependency_integrity(records)
 
 class MetadataMigrationTests(unittest.TestCase):
- def test_alias_metadata_and_legacy_corpora_are_delivered_without_local_decisions(self):
+ def test_alias_metadata_is_delivered_without_local_decisions(self):
   manifest=build_manifest(ROOT)
   page=discover(ROOT,manifest)
   aliases={a['command']:(a['package'],a['mode']) for a in page['aliases']}
@@ -376,12 +376,12 @@ class SharedLoadingTests(unittest.TestCase):
  def test_opt_in_dedup_reads_shared_entry_once_and_keeps_identity(self):
   from model_context import load_capabilities
   self.shared()
-  legacy=load_capabilities(self.root,self.manifest,['a','b'])
+  default_batch=load_capabilities(self.root,self.manifest,['a','b'])
   with patch('model_context.read_relative',wraps=read_relative) as read:
    out=load_capabilities(self.root,self.manifest,['a','b'],deduplicate=True)
   self.assertEqual(1,sum(c.args[1]=='entries/a.md' for c in read.call_args_list))
   self.assertEqual('skills-ai/load-batch/2',out['schema']);self.assertEqual(1,len(out['bodies']))
-  for old,new in zip(legacy['items'],out['items']):
+  for old,new in zip(default_batch['items'],out['items']):
    self.assertEqual(old['identity'],new['identity']);self.assertNotIn('body',new)
    self.assertEqual(old['body'],out['bodies'][new['body_ref']]['body'])
   self.assertNotEqual(out['items'][0]['identity'],out['items'][1]['identity'])
@@ -413,10 +413,10 @@ class SharedLoadingTests(unittest.TestCase):
  def test_cli_dedup_is_opt_in_and_single_use_is_rejected(self):
   cli=[sys.executable,'-B',str(ROOT/'scripts/orchestrate.py'),'load']
   args=['--capability','interaction.general','--capability','interaction.math']
-  legacy=subprocess.run(cli+args,capture_output=True,text=True,timeout=4)
+  default_batch=subprocess.run(cli+args,capture_output=True,text=True,timeout=4)
   new=subprocess.run(cli+args+['--deduplicate'],capture_output=True,text=True,timeout=4)
   self.assertEqual(0,new.returncode,new.stderr)
-  self.assertEqual('skills-ai/load-batch/1',json.loads(legacy.stdout)['schema'])
+  self.assertEqual('skills-ai/load-batch/1',json.loads(default_batch.stdout)['schema'])
   packet=json.loads(new.stdout);self.assertEqual(1,len(packet['bodies']))
   self.assertEqual(load_capability(ROOT,build_manifest(ROOT),'interaction.general')['body'],next(iter(packet['bodies'].values()))['body'])
   bad=subprocess.run(cli+['--capability','interaction.general','--deduplicate'],capture_output=True,text=True,timeout=4)

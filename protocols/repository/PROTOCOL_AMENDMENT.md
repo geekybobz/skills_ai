@@ -66,6 +66,9 @@ Protocol version 16 keeps these boundaries:
   recovery. Codex uses one source-bound installed entry.
 - The shared interface is context, discovery and exact loading, with current-flow
   measurement. Native-host acceptance remains separate from local tool checks.
+- Only current controls, aliases and file layouts are documented and supported.
+  Retired syntax, compatibility aliases and migration records are deleted rather
+  than kept as history; Git retains earlier revisions.
 
 Keep this card current when amending the contract. Git history and private
 rollback receipts retain previous revisions; operational documentation explains

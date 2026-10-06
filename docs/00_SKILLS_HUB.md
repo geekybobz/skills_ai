@@ -1,6 +1,6 @@
 # Skills Hub
 
-Human-readable routing authority and maintenance hub. The always-active
+Human-readable maintenance hub. The always-active
 [[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] uses the compiled entry at
 `runtime/SKILL.md`: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
 

@@ -20,13 +20,13 @@ from create_change_request import ChangeRequestError, create_change_request  # n
 class ChangeRequestTests(unittest.TestCase):
     def payload(self) -> dict:
         return {
-            "title": "Qualify a router trigger",
-            "original_request": "Please fix the ambiguous trigger.",
-            "problem": "An ordinary sentence selects the wrong skill.",
-            "desired_behavior": "Qualified technical prompts match; ordinary prose falls back.",
+            "title": "Clarify a capability purpose",
+            "original_request": "Please make the theory-reference purpose clearer.",
+            "problem": "The catalog purpose does not say when to use the skill.",
+            "desired_behavior": "The purpose names the task and when to use it.",
             "targets": ["registry/theory.md", "tests/model_orchestration_cases.json"],
-            "evidence": ["A negative routing fixture reproduces the mismatch."],
-            "risks": ["Over-qualification may reduce recall."],
+            "evidence": ["A live scenario chose normal work for a matching task."],
+            "risks": ["A longer purpose increases startup context."],
             "rollback": ["Revert the focused registry commit."],
             "tests": ["Run the benchmark fixture."],
             "acceptance": ["Both positive and negative cases pass."],
