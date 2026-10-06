@@ -132,3 +132,7 @@ Repair is an orchestrator working mode, not another skill or graph layer. Its `.
 ## Current context flow
 
 Capability integration contracts add metadata and preserve existing package counts, graph ownership and colors. Efficient delivery does not change graph nodes into additional skills. See [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md) for working examples.
+
+## Terminal maintenance
+
+Terminal commands and `runtime/maintenance/` are L5 maintenance support under the existing repository-maintenance concept. The terminal protocol links to change control and repair; ignored receipts and workspace history do not add skill or graph inventory entries.

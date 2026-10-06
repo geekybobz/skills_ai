@@ -222,3 +222,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Repair on creates or resumes containment before edit-related work. Denied creation means pending containment, never permission to edit live. Status identifies its repository root; the candidate’s state is separate from the source association. Update uses the known source association; without one, it reports no associated update instead of searching old workspaces. Corrupt known state blocks mutations; an off association still retains reviewable work.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+Terminal updates bind the candidate review and exact installation targets to one approval. Source-check failures use repair rollback; a later refresh failure is reported as partial with backup and receipt pointers. Source deployment keeps the live index unchanged. See [the terminal walkthrough](11_TERMINAL_MAINTENANCE.md).

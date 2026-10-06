@@ -101,3 +101,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Every connected host uses the shared controls, status and exact-access contract. Catalog IDs are local integration IDs, not assumed native tool names. Settings, permissions and transport remain each host’s responsibility. Status reads facts without loading skills or creating memory; the host reports effective controls and retained context.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+`scripts/skills_ai` is the executable facade; `runtime/maintenance/` separates inspection, workspace, checks, host adapters and deployment. Explicit host bindings and private maintenance receipts live under ignored `.runtime/maintenance/`. A refresh verifies installed files; running-host context is a separate concern.

@@ -172,3 +172,7 @@ Discovery can use compact text with explicit continuation and complete-metadata 
 Each request uses adaptive and automatic selection unless explicitly overridden or covered by a wider default. A request-only override does not erase a chat default. Equivalent aliases are harmless; conflicting selections/modes require clarification. `#> orchestrator status` shows effective scope, skills, catalog freshness, repair state and verification limits.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+`skills_ai skills` lists public packages without loading bodies; `skills_ai skills optimizer` expands exact capability metadata. Neither command selects a skill for a task, changes activation, or changes request/chat adherence controls.

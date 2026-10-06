@@ -146,6 +146,21 @@
         "docs/human/06_GRAPH_AND_COLORS.md",
         "docs/human/07_MAINTAINING_SKILLS.md"
       ]
+    },
+    {
+      "name": "terminal-maintenance",
+      "sources": [
+        "runtime/maintenance/**",
+        "scripts/skills_ai",
+        "scripts/skills_ai.py",
+        "protocols/repository/TERMINAL_MAINTENANCE.md",
+        "tests/test_maintenance_cli.py"
+      ],
+      "guides": [
+        "README.md",
+        "docs/human/07_MAINTAINING_SKILLS.md",
+        "docs/human/11_TERMINAL_MAINTENANCE.md"
+      ]
     }
   ]
 }

@@ -226,3 +226,7 @@ Every connected host uses the same access contract. Exact skill lists avoid broa
 Run `python3 scripts/orchestrate.py measure` for delivery bytes and subprocess latency. The command loads no candidate bodies and writes measurement state only in disposable fixtures. Token estimates use bytes/4; they are not total task savings. No automatic task memory or background service is created.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+For terminal maintenance, use `skills_ai status`, `skills_ai skills`, `skills_ai repair on/off`, `skills_ai check`, `skills_ai update` and `skills_ai refresh`. Updates combine exact review, source verification and configured installation refresh. Start with [the terminal walkthrough](docs/human/11_TERMINAL_MAINTENANCE.md); it explains shell setup, working folders and recovery.

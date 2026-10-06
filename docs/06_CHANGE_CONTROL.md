@@ -190,3 +190,7 @@ procedures as task capabilities.
 ## Contained repair work
 
 For user-enabled `#> repair on`, use [[protocols/repository/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. Update means preview and user review before exact application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.
+
+## Terminal maintenance interface
+
+Terminal operations use [[protocols/repository/TERMINAL_MAINTENANCE]] and the same classify/plan/changed/staged and exact update-review boundaries. The command facade adds no semantic routing or permission.

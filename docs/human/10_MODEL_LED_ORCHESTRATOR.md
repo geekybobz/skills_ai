@@ -166,3 +166,7 @@ From the source checkout, use `python3 scripts/install_runtime_adapter.py --adap
 Codex installs one rendered core entry. Claude installs its lifecycle hook and merges owned settings while preserving foreign hooks and configuration backups. Runtime shared tests, disposable installer tests and actual native-host semantic acceptance are separate evidence. Read [the build record](../../runtime/skills-orchestrator/BUILD.md) for what has actually been verified.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+The [terminal walkthrough](11_TERMINAL_MAINTENANCE.md) explains mechanical maintenance through `skills_ai`. The host still interprets tasks, controls and methods; terminal operations handle contained source changes, checks, reviewed deployment and installation refresh.

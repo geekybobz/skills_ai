@@ -83,3 +83,7 @@ Adapters use `context --defer-marker` and `ack-context --session ID --revision H
 `python3 scripts/orchestrate.py measure` reports core, catalog, bootstrap, unchanged continuation and changed-core bytes, subprocess latency and byte/4 token estimates. Disposable fixtures hold measurement markers and simulated changes. No prompts or candidate bodies are read. Delivery regression budgets are 5.5 KiB core and 8 KiB bootstrap; catalog and transport hard bounds remain 8 KiB and 64 KiB. Unchanged continuation must be zero bytes. This measures delivered context, not model judgment or total task token savings.
 
 Manifest reads validate bounded declared registry-source hashes before serving discovery or access. A stale activation/family source returns `STALE_MANIFEST`; rebuild metadata through authorized maintenance instead of selecting from old gates. Binding paths are restricted to hub/family/activation metadata. Candidate bodies and the interaction protocol body are not scanned for discovery freshness; selected entries and required references retain their own identities.
+
+## Terminal maintenance interface
+
+`scripts/skills_ai` exposes the shared maintenance facade: status, public skills inventory, check, repair on/off, reviewed update and host refresh. JSON uses skills-ai/maintenance/1; ready review exits 3 without applying. [[protocols/repository/TERMINAL_MAINTENANCE]] defines options, bindings, schemas, evidence and recovery; the model retains semantic decisions.

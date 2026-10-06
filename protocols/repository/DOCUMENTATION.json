@@ -104,7 +104,10 @@
     "runtime/AGENT_ENTRY_SHARED.md": "Canonical agent rules shared by generated Codex and Claude repository entries.",
     "runtime/manifest.json": "Generated capability metadata and activation gates consumed by shared discovery/loading.",
     "docs/human/_LIVE_REPOSITORY_INDEX.md": "Generated exhaustive human reference for repository files, ownership, roles, and purposes.",
-    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents."
+    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents.",
+    "scripts/skills_ai": "Executable terminal entry for shared inspection, containment, reviewed deployment and host refresh.",
+    "scripts/skills_ai.py": "Thin Python entry for the modular maintenance command interface.",
+    "protocols/repository/TERMINAL_MAINTENANCE.md": "On-demand agent protocol for terminal maintenance commands, results, approval, host adapters and recovery."
   },
   "agent_entries": {
     "common": "runtime/AGENT_ENTRY_SHARED.md",

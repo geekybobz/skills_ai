@@ -146,3 +146,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Test successful operations and exact artifacts, not only attempted commands or answer keywords. Record passes, failures, blocked checks, skips and superseded fixtures separately. Multi-turn scope scenarios must run as separate user turns. Keep shared verification separate from each host’s integration acceptance; preserve default batch compatibility and command aliases.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+The `skills_ai` facade reuses the source repair controller and platform installers for status, public inventory, checks, repair, exact updates and refresh. Read [the terminal walkthrough](11_TERMINAL_MAINTENANCE.md) for commands, JSON output, shared terminal identity, host setup and partial failure recovery.

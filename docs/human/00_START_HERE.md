@@ -96,3 +96,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Use `#> use none` to prevent optional task skills even when one fits. Controls apply to this request by default; say `#> mode strict for this chat` for a persistent default. Retained instructions can be reused without retaining a previous request’s mode. Conflicting controls are clarified before affected work.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+For repeated repository maintenance, the `skills_ai` terminal interface exposes status, public inventory and reviewed updates. See [the terminal walkthrough](11_TERMINAL_MAINTENANCE.md) for a short setup and complete example.

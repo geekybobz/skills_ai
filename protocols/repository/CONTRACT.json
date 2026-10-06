@@ -292,7 +292,9 @@
         "scripts/create_change_request.py",
         "scripts/graph_layers.py",
         "scripts/human_docs_guard.py",
-        "scripts/scan_consistency.py"
+        "scripts/scan_consistency.py",
+        "scripts/skills_ai",
+        "scripts/skills_ai.py"
       ],
       "checks": [
         "consistency",
@@ -483,7 +485,9 @@
       "entry": "docs/06_CHANGE_CONTROL.md",
       "canonical_sources": [
         "protocols/repository/CONTRACT.json",
-        "scripts/scan_consistency.py"
+        "scripts/scan_consistency.py",
+        "protocols/repository/TERMINAL_MAINTENANCE.md",
+        "scripts/skills_ai.py"
       ],
       "required_links": {
         "docs/06_CHANGE_CONTROL.md": [
@@ -496,6 +500,10 @@
         ],
         "protocols/repository/PROTOCOL_AMENDMENT.md": [
           "docs/06_CHANGE_CONTROL"
+        ],
+        "protocols/repository/TERMINAL_MAINTENANCE.md": [
+          "docs/06_CHANGE_CONTROL",
+          "protocols/repository/REPAIR_WORKSPACE"
         ]
       }
     },

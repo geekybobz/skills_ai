@@ -27,3 +27,7 @@ Repair on creates/resumes the source-owned workspace before edit-related tests, 
 Reuse reliable metadata. For fresh facts use `scripts/orchestrate.py status`, with --session HOST_ID and --project-root ABS only when known/relevant. It reads bounded metadata and exact associations, loads no skill body, creates no delivery marker or capsule, and grants no authority. Without a session repair state is unknown. Tool output cannot determine controls, remembered instructions or approval: the host supplies those fields honestly. No repository scan is needed to fill status.
 
 Status reports its repository_root. Use the source checkout's tool for this chat's source-owned repair association; a candidate's separate .runtime state cannot establish the live association or authorize live fallback.
+
+## Terminal interface
+
+Use `scripts/skills_ai` for repeated maintenance operations. Shared command/result contracts, exact review, host bindings and recovery are in `protocols/repository/TERMINAL_MAINTENANCE.md`; read on demand, then reuse its command results. Source-owned repair, actual approval and external-task boundaries remain in force.

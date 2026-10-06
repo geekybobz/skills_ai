@@ -93,3 +93,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Resolve controls before task loading. Preserve compatible named targets and check gates; batch shared entries can deliver their complete body once without merging capabilities. Helper-supported references are listed in metadata; additional identified support uses bounded reads. Restore missing instructions after compaction, rather than trusting loaded flags.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+A terminal `skills_ai update` prepares the exact source and installation review, asks for actual agreement, then applies and verifies it. JSON callers receive a preview ID without automatic approval. This adds a maintenance client; skill selection stays model-led.

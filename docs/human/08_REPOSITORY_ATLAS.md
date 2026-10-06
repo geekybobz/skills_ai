@@ -94,3 +94,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 `runtime/model_context.py` exposes bounded discovery, declared reference metadata, read-only status tied to its repository root and opt-in shared-body batch delivery. `scripts/orchestrate.py` is the access CLI. Effective controls and semantic decisions stay with the host; `MANAGEMENT.md` defines readable status and bounded repair/update discovery.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+`runtime/maintenance/` holds modular terminal operations; `scripts/skills_ai` is their human/agent entry. `protocols/repository/TERMINAL_MAINTENANCE.md` is the on-demand agent procedure, and `.runtime/maintenance/` contains excluded local profiles, review records, receipts and backups.

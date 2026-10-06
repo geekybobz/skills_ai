@@ -64,6 +64,8 @@ family registries, generated human indexes, or skill bodies on the normal path.
 
 Use `protocols/repository/REPAIR_WORKSPACE.md` for source-owned containment and exact update review. Inspect the known chat association before maintenance mutations and after uncertainty; known missing/corrupt state blocks mutations instead of redirecting them live. Preserve dirty live changes and rollback. External tasks retain the request-only boundary.
 
+For terminal maintenance, read `protocols/repository/TERMINAL_MAINTENANCE.md` once and use `scripts/skills_ai` for structured status, metadata, checks, containment, reviewed updates and host refresh. This interface grants no authority and does not choose skills.
+
 ## Claude-specific access
 
 - Model-led coordination context and compact metadata are injected by managed `SessionStart` and selective `UserPromptSubmit` hooks. Do not keep

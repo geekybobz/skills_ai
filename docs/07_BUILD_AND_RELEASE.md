@@ -53,3 +53,7 @@ Use source-owned repair transaction inspection and recovery preview before repea
 ## Contained repair updates
 
 `#> repair on/off` sets chat-scoped containment; `#> update` previews exact changes and waits for agreement. Off preserves the copy, update preserves repair mode and a new chat does not inherit on. Full lifecycle: [[protocols/repository/REPAIR_WORKSPACE]].
+
+## Terminal maintenance interface
+
+Validate the terminal facade with `python3 -B -m unittest discover -s tests -p test_maintenance_cli.py`, then the mapped repository checks. Test host refresh in contained configuration directories. [[protocols/repository/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.

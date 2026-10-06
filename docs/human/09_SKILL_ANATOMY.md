@@ -117,3 +117,7 @@ Contained submodule references use independent Git metadata so package wrappers 
 Capabilities retain separate identities, gates and contract obligations even when they share an entry body. Discovery lists declared helper references; it does not preload or require every optional phase/template. Identified additional support stays selectively readable. Package freedom remains intact while access metadata is standardized.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
+
+## Terminal maintenance
+
+The terminal facade lists package and capability metadata without opening skill bodies. Its maintenance modules and protocols are support infrastructure, not new skills. New task skills continue using the existing package contract and explicit activation gates.
