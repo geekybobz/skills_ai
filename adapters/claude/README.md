@@ -8,6 +8,11 @@ only Claude hook and child-lifecycle differences. Edit the canonical sources and
 run `scripts/compile_repository_views.py`; do not keep a duplicate catalog or
 shared rule set in Claude memory.
 
+Install from a checkout whose package submodules are populated: clone with
+`--recurse-submodules`, or run `git submodule update --init --recursive`. With
+empty package folders the hook still lists those packages as available, but
+loading one fails with `FILE_UNAVAILABLE`.
+
 Install or verify:
 
 ```bash
@@ -24,10 +29,10 @@ The installer:
   separate `.previous` snapshot before later changed installs;
 - refuses to replace symlinks or unrecognized foreign hook files;
 - makes `--check` stale while a native Claude skill is named like a Skills AI
-  package (for example `~/.claude/skills/theory-reference`, including
-  account-synced skills). Claude Code would load that copy through its own
-  Skill tool and bypass the orchestrator's gates; the installer reports this
-  user content and never removes it; and
+  package (for example `~/.claude/skills/theory-reference`, a standalone
+  package clone, or an account-synced skill). Claude Code would load that
+  copy through its own Skill tool and bypass the orchestrator's gates; the
+  installer reports this user content and never removes it; and
 - supports `CLAUDE_CONFIG_DIR` or `--config-dir`.
 
 The hook is the Claude bootstrap. It forwards the absolute project root for exact capsule access, runs one prompt-free context command and suppresses child stderr. Core instructions are read at a fixed path under the runtime root with symlink/realpath and file-size checks. Metadata is labelled advisory data, never executable instructions or permission.

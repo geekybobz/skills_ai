@@ -103,6 +103,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
+| loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |
 | parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 

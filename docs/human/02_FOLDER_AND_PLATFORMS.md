@@ -59,7 +59,9 @@ Codex owns Codex invocation and session cleanup. Claude owns hook input,
 timeouts, child-process cleanup, installation, and Claude live acceptance.
 Skills AI packages are not installed as native Claude skills: a copy under
 `~/.claude/skills/` would be loaded by Claude Code itself and skip the
-orchestrator, so the Claude installer check reports it.
+orchestrator, so the Claude installer check reports it. That includes a
+standalone package clone. Install the Claude adapter only from a checkout whose
+package submodules are populated.
 Neither platform duplicates package triggers, capability selection, project
 context validation, or interaction rules.
 
