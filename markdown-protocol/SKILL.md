@@ -30,7 +30,8 @@ and continue only when its examples, templates, or reasoning are needed.
    [codebase.md](references/addons/codebase.md), or
    [skill-package.md](references/addons/skill-package.md).
 8. Read [structured-inventory.md](references/structured-inventory.md) only when
-   using properties, generated `INVENTORY.md`, or the package checker.
+   using properties, typed connections, generated `INVENTORY.md`, or the
+   package checker.
 
 Human browsing starts from [INDEX.md](INDEX.md); ordinary model work does not.
 Open only the relevant formatting example, never the whole gallery.

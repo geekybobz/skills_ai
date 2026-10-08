@@ -13,6 +13,9 @@ Validate the exact changed collection in proportion to its complexity.
   was reviewed for splitting; thresholds were treated as warnings.
 - Relative links, anchors, Home footers, and intentional Previous/Next pairs
   resolve.
+- Typed connections use Parent, Prerequisite, Related, Next, or Deeper;
+  Parent/Deeper pairs agree, typed Next matches the footer, and prerequisites
+  are acyclic.
 - Structured properties are present only when consumed. If enabled, the
   generated `INVENTORY.md` is current and the on-demand checker passes.
 - Essential meaning survives without diagrams, HTML, plugins, or generated

@@ -14,8 +14,12 @@ from urllib.parse import unquote
 
 ROLES = {"front-door", "map", "index", "topic", "deep", "generated"}
 REQUIRED_PROPERTIES = ("role", "summary", "read_when")
+CONNECTION_LABELS = ("parent", "prerequisite", "related", "next", "deeper")
 LINK_RE = re.compile(r"(?<!!)\[[^]]*\]\(([^)]+)\)")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
+CONNECTION_LINE_RE = re.compile(r"^-\s+([^:]+):\s*(.*?)\s*$")
+NEXT_FOOTER_RE = re.compile(r"\[Next →\]\(([^)]+)\)")
+PREVIOUS_FOOTER_RE = re.compile(r"\[← Previous\]\(([^)]+)\)")
 
 
 @dataclass(frozen=True)
@@ -23,6 +27,13 @@ class Finding:
     level: str
     path: str
     message: str
+
+
+@dataclass(frozen=True)
+class Connection:
+    label: str
+    raw_target: str
+    resolved: Path
 
 
 def markdown_files(root: Path) -> list[Path]:
@@ -114,6 +125,138 @@ def local_links(path: Path, root: Path, text: str) -> list[tuple[str, str | None
             resolved = (path.parent / unquote(file_part)).resolve()
         links.append((target, unquote(anchor) if separator else None, resolved))
     return links
+
+
+def resolve_local_target(path: Path, raw_target: str) -> Path | None:
+    target = raw_target.strip().strip("<>")
+    if target.startswith(("http://", "https://", "mailto:", "codex://")):
+        return None
+    file_part = target.partition("#")[0]
+    if not file_part:
+        return path.resolve()
+    return (path.parent / unquote(file_part)).resolve()
+
+
+def connection_section(text: str) -> list[str]:
+    cleaned = without_fenced_code(text)
+    match = re.search(r"^## Connections\s*$", cleaned, flags=re.MULTILINE)
+    if not match:
+        return []
+    remainder = cleaned[match.end() :]
+    next_heading = re.search(r"^##\s+", remainder, flags=re.MULTILINE)
+    section = remainder[: next_heading.start()] if next_heading else remainder
+    return section.splitlines()
+
+
+def parse_connections(path: Path, text: str) -> tuple[list[Connection], list[str]]:
+    connections: list[Connection] = []
+    problems: list[str] = []
+    counts: dict[str, int] = {}
+    for line in connection_section(text):
+        match = CONNECTION_LINE_RE.match(line.strip())
+        if not match:
+            continue
+        label = match.group(1).strip().lower()
+        value = match.group(2).strip()
+        if label not in CONNECTION_LABELS:
+            problems.append(f"unknown connection label: {match.group(1).strip()}")
+            continue
+        raw_targets = LINK_RE.findall(value)
+        if not raw_targets:
+            if value not in {"", "—", "-", "none", "None"}:
+                problems.append(f"{label} connection needs a local Markdown link")
+            continue
+        counts[label] = counts.get(label, 0) + len(raw_targets)
+        for raw_target in raw_targets:
+            resolved = resolve_local_target(path, raw_target)
+            if resolved is None:
+                problems.append(f"{label} connection must be local: {raw_target}")
+                continue
+            connections.append(Connection(label, raw_target, resolved))
+    for label in ("parent", "next"):
+        if counts.get(label, 0) > 1:
+            problems.append(f"{label} connection allows at most one target")
+    return connections, problems
+
+
+def prerequisite_cycle(typed: dict[Path, dict[str, set[Path]]]) -> list[Path]:
+    state: dict[Path, int] = {}
+    stack: list[Path] = []
+
+    def visit(node: Path) -> list[Path]:
+        state[node] = 1
+        stack.append(node)
+        for dependency in sorted(typed.get(node, {}).get("prerequisite", set())):
+            if state.get(dependency, 0) == 0:
+                cycle = visit(dependency)
+                if cycle:
+                    return cycle
+            elif state.get(dependency) == 1:
+                start = stack.index(dependency)
+                return stack[start:] + [dependency]
+        stack.pop()
+        state[node] = 2
+        return []
+
+    nodes = set(typed)
+    for by_label in typed.values():
+        nodes.update(by_label.get("prerequisite", set()))
+    for node in sorted(nodes):
+        if state.get(node, 0) == 0:
+            cycle = visit(node)
+            if cycle:
+                return cycle
+    return []
+
+
+def learning_order(typed: dict[Path, dict[str, set[Path]]]) -> list[Path]:
+    nodes: set[Path] = set()
+    for source, by_label in typed.items():
+        if any(by_label.values()):
+            nodes.add(source)
+        for targets in by_label.values():
+            nodes.update(targets)
+    outgoing: dict[Path, set[Path]] = {node: set() for node in nodes}
+    indegree: dict[Path, int] = {node: 0 for node in nodes}
+    for topic, by_label in typed.items():
+        for prerequisite in by_label.get("prerequisite", set()):
+            outgoing.setdefault(prerequisite, set()).add(topic)
+            indegree[topic] = indegree.get(topic, 0) + 1
+    ready = sorted(node for node, degree in indegree.items() if degree == 0)
+    order: list[Path] = []
+    while ready:
+        node = ready.pop(0)
+        order.append(node)
+        for dependent in sorted(outgoing.get(node, set())):
+            indegree[dependent] -= 1
+            if indegree[dependent] == 0:
+                ready.append(dependent)
+                ready.sort()
+    return order if len(order) == len(nodes) else []
+
+
+def transitive_prerequisites(topic: Path, typed: dict[Path, dict[str, set[Path]]]) -> set[Path]:
+    required: set[Path] = set()
+    queue: deque[Path] = deque(typed.get(topic, {}).get("prerequisite", set()))
+    while queue:
+        current = queue.popleft()
+        if current in required:
+            continue
+        required.add(current)
+        queue.extend(typed.get(current, {}).get("prerequisite", set()))
+    return required
+
+
+def reachable_files(entry: Path, adjacency: dict[Path, set[Path]]) -> set[Path]:
+    reachable: set[Path] = set()
+    queue: deque[Path] = deque([entry.resolve()])
+    while queue:
+        current = queue.popleft()
+        if current in reachable:
+            continue
+        reachable.add(current)
+        queue.extend(adjacency.get(current, ()))
+    return reachable
 
 
 def compact_line_count(text: str, role: str) -> int:
@@ -240,10 +383,15 @@ def check_collection(
     files = markdown_files(root)
     file_set = {path.resolve() for path in files}
     adjacency: dict[Path, set[Path]] = {path.resolve(): set() for path in files}
+    typed: dict[Path, dict[str, set[Path]]] = {
+        path.resolve(): {label: set() for label in CONNECTION_LABELS} for path in files
+    }
+    texts: dict[Path, str] = {}
 
     for path in files:
         relative = path.relative_to(root).as_posix()
         text = path.read_text(encoding="utf-8")
+        texts[path.resolve()] = text
         data = properties(text)
         role = str(data.get("role", ""))
         if require_properties:
@@ -291,18 +439,74 @@ def check_collection(
                     if anchor not in slugged_headings(target_text):
                         findings.append(Finding("error", relative, f"missing anchor: {raw}"))
 
+        connections, problems = parse_connections(path, text)
+        for problem in problems:
+            findings.append(Finding("error", relative, problem))
+        for connection in connections:
+            if connection.resolved not in file_set:
+                findings.append(
+                    Finding(
+                        "error",
+                        relative,
+                        f"broken {connection.label} connection: {connection.raw_target}",
+                    )
+                )
+                continue
+            if connection.resolved == path.resolve():
+                findings.append(Finding("error", relative, f"self {connection.label} connection"))
+                continue
+            typed[path.resolve()][connection.label].add(connection.resolved)
+
+    for source, by_label in typed.items():
+        relative = source.relative_to(root).as_posix()
+        for child in by_label["deeper"]:
+            if source not in typed.get(child, {}).get("parent", set()):
+                findings.append(
+                    Finding(
+                        "error",
+                        relative,
+                        f"deeper connection is not reciprocated by Parent: {child.relative_to(root)}",
+                    )
+                )
+        for parent in by_label["parent"]:
+            if source not in typed.get(parent, {}).get("deeper", set()):
+                findings.append(
+                    Finding(
+                        "error",
+                        relative,
+                        f"parent connection is not reciprocated by Deeper: {parent.relative_to(root)}",
+                    )
+                )
+        for next_path in by_label["next"]:
+            footer = [line for line in texts[source].splitlines() if line.strip()][-1]
+            next_match = NEXT_FOOTER_RE.search(footer)
+            next_resolved = resolve_local_target(source, next_match.group(1)) if next_match else None
+            if next_resolved != next_path:
+                findings.append(Finding("error", relative, "typed Next does not match the footer"))
+            target_footer = [line for line in texts[next_path].splitlines() if line.strip()][-1]
+            previous_match = PREVIOUS_FOOTER_RE.search(target_footer)
+            previous_resolved = (
+                resolve_local_target(next_path, previous_match.group(1)) if previous_match else None
+            )
+            if previous_resolved != source:
+                findings.append(
+                    Finding(
+                        "error",
+                        next_path.relative_to(root).as_posix(),
+                        f"Previous footer does not reciprocate Next from {relative}",
+                    )
+                )
+
+    cycle = prerequisite_cycle(typed)
+    if cycle:
+        route = " -> ".join(path.relative_to(root).as_posix() for path in cycle)
+        findings.append(Finding("error", ".", f"prerequisite cycle: {route}"))
+
     entry_path = choose_entry(root, entry)
     if not entry_path:
         findings.append(Finding("error", ".", "no entry found; use README.md, SKILL.md, INDEX.md, or --entry"))
     else:
-        reachable: set[Path] = set()
-        queue: deque[Path] = deque([entry_path.resolve()])
-        while queue:
-            current = queue.popleft()
-            if current in reachable:
-                continue
-            reachable.add(current)
-            queue.extend(adjacency.get(current, ()))
+        reachable = reachable_files(entry_path, adjacency)
         for orphan in sorted(file_set - reachable):
             findings.append(Finding("error", orphan.relative_to(root).as_posix(), "orphan Markdown file"))
 
@@ -316,6 +520,61 @@ def check_collection(
             if inventory_path.read_text(encoding="utf-8") != expected:
                 findings.append(Finding("error", inventory, "generated inventory is stale"))
     return findings
+
+
+def render_graph_report(root: Path, *, entry: str | None = None, topic: str | None = None) -> str:
+    files = markdown_files(root)
+    file_set = {path.resolve() for path in files}
+    adjacency: dict[Path, set[Path]] = {path.resolve(): set() for path in files}
+    typed: dict[Path, dict[str, set[Path]]] = {
+        path.resolve(): {label: set() for label in CONNECTION_LABELS} for path in files
+    }
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        for _, _, resolved in local_links(path, root, text):
+            if resolved in file_set:
+                adjacency[path.resolve()].add(resolved)
+        connections, _ = parse_connections(path, text)
+        for connection in connections:
+            if connection.resolved in file_set and connection.resolved != path.resolve():
+                typed[path.resolve()][connection.label].add(connection.resolved)
+
+    cycle = prerequisite_cycle(typed)
+    if cycle:
+        route = " -> ".join(path.relative_to(root).as_posix() for path in cycle)
+        raise ValueError(f"prerequisite cycle: {route}")
+
+    lines = ["Markdown connection graph", "", "Learning order:"]
+    order = learning_order(typed)
+    if order:
+        lines.extend(
+            f"{number}. {path.relative_to(root).as_posix()}" for number, path in enumerate(order, 1)
+        )
+    else:
+        lines.append("- No typed connections.")
+
+    if topic:
+        topic_path = (root / topic).resolve()
+        if topic_path not in file_set:
+            raise ValueError(f"unknown topic: {topic}")
+        required = transitive_prerequisites(topic_path, typed)
+        lines.extend(["", f"Required before {topic}:"])
+        ordered_required = [path for path in order if path in required]
+        if ordered_required:
+            lines.extend(f"- {path.relative_to(root).as_posix()}" for path in ordered_required)
+        else:
+            lines.append("- None.")
+
+    entry_path = choose_entry(root, entry)
+    if not entry_path:
+        raise ValueError("no entry found; use README.md, SKILL.md, INDEX.md, or --entry")
+    orphans = sorted(file_set - reachable_files(entry_path, adjacency))
+    lines.extend(["", "Orphans:"])
+    if orphans:
+        lines.extend(f"- {path.relative_to(root).as_posix()}" for path in orphans)
+    else:
+        lines.append("- None.")
+    return "\n".join(lines) + "\n"
 
 
 def print_findings(findings: list[Finding]) -> None:
@@ -344,6 +603,11 @@ def main(argv: list[str] | None = None) -> int:
     action.add_argument("--write", action="store_true")
     action.add_argument("--check", action="store_true")
 
+    graph = subparsers.add_parser("graph", help="show typed connections and learning order")
+    graph.add_argument("root", type=Path)
+    graph.add_argument("--entry")
+    graph.add_argument("--topic")
+
     args = parser.parse_args(argv)
     root = args.root.resolve()
     if not root.is_dir():
@@ -359,6 +623,19 @@ def main(argv: list[str] | None = None) -> int:
         )
         print_findings(findings)
         return 1 if any(item.level == "error" for item in findings) else 0
+
+    if args.command == "graph":
+        findings = check_collection(root, entry=args.entry)
+        errors = [finding for finding in findings if finding.level == "error"]
+        if errors:
+            print_findings(errors)
+            return 1
+        try:
+            print(render_graph_report(root, entry=args.entry, topic=args.topic), end="")
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        return 0
 
     try:
         rendered = render_inventory(root, args.output, args.entry)

@@ -51,6 +51,29 @@ property presence when requested, and inventory freshness. It ignores example
 links inside fenced code. It never starts a watcher or scans outside the
 supplied collection; external relative links are checked only for existence.
 
+## Typed connections
+
+A Topic may include a `## Connections` section using five labels:
+
+```markdown
+## Connections
+
+- Parent: [Containing topic](parent.md)
+- Prerequisite: [Read this first](foundation.md)
+- Related: [Useful comparison](alternative.md)
+- Next: [Continue here](next.md)
+- Deeper: [Optional derivation](details.md)
+```
+
+The checker validates local targets, Parent/Deeper reciprocity, Next/footer
+agreement, and prerequisite cycles. Use the graph view to inspect the learning
+order or one topic's transitive prerequisites:
+
+```bash
+python3 scripts/markdown_protocol.py graph <collection-root>
+python3 scripts/markdown_protocol.py graph <collection-root> --topic topics/example.md
+```
+
 The compactness thresholds produce warnings. Broken links, missing required
 properties, or stale generated output produce errors. Renderer behavior still
 requires the named renderer; this script does not simulate VS Code or GitHub.

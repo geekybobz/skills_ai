@@ -157,6 +157,7 @@ Authoritative knowledge, instructions, or decisions.
 - Prerequisite: [...](...)
 - Related: [...](...)
 - Next: [...](...)
+- Deeper: [...](...)
 
 ## Details
 
@@ -169,6 +170,20 @@ Optional explanation or links to deep notes. No new rule begins here.
 
 Only the title, scope, and meaningful content are required. Omit ceremonial
 sections that carry no information.
+
+Connections are typed rather than inferred from prose:
+
+| label | meaning |
+|---|---|
+| Parent | one containing or owning topic |
+| Prerequisite | content that must be understood first |
+| Related | useful association without required order |
+| Next | canonical successor in an intentional reading order |
+| Deeper | optional explanatory child |
+
+`Parent` and `Deeper` are reciprocal. `Next` is canonical and the footer mirrors
+it; the target footer points back with Previous. Omit a label when no real
+relationship exists. The checker rejects prerequisite cycles.
 
 ### Deep note template
 

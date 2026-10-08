@@ -229,6 +229,61 @@ class MarkdownProtocolTests(unittest.TestCase):
             self.assertEqual(1, missing.returncode)
             self.assertIn("missing summary", missing.stderr)
 
+    def test_typed_connections_learning_order_and_cycle_detection(self) -> None:
+        tool = PACKAGE / "scripts" / "markdown_protocol.py"
+        with tempfile.TemporaryDirectory() as temporary:
+            collection = Path(temporary)
+            readme = """# Collection\n\n- [A](a.md)\n- [B](b.md)\n- [C](c.md)\n\n---\n\n[⌂ Home](#collection)\n"""
+            a = """# A\n\n## Connections\n\n- Next: [B](b.md)\n- Deeper: [B](b.md)\n\n---\n\n[⌂ Home](README.md) · [Next →](b.md)\n"""
+            b = """# B\n\n## Connections\n\n- Parent: [A](a.md)\n- Prerequisite: [C](c.md)\n\n---\n\n[← Previous](a.md) · [⌂ Home](README.md)\n"""
+            c = """# C\n\n## Connections\n\n- Related: [A](a.md)\n\n---\n\n[⌂ Home](README.md)\n"""
+            for name, content in (("README.md", readme), ("a.md", a), ("b.md", b), ("c.md", c)):
+                (collection / name).write_text(content, encoding="utf-8")
+
+            checked = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, checked.returncode, checked.stdout + checked.stderr)
+
+            graphed = subprocess.run(
+                [sys.executable, str(tool), "graph", str(collection), "--topic", "b.md"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, graphed.returncode, graphed.stdout + graphed.stderr)
+            self.assertIn("Required before b.md:\n- c.md", graphed.stdout)
+            self.assertIn("Orphans:\n- None.", graphed.stdout)
+            order = graphed.stdout.split("Required before", 1)[0]
+            self.assertLess(order.index("c.md"), order.index("b.md"))
+
+            (collection / "a.md").write_text(a.replace("- Deeper: [B](b.md)\n", ""), encoding="utf-8")
+            unpaired = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, unpaired.returncode)
+            self.assertIn("not reciprocated by Deeper", unpaired.stdout)
+            (collection / "a.md").write_text(a, encoding="utf-8")
+
+            (collection / "c.md").write_text(
+                c.replace("- Related: [A](a.md)", "- Prerequisite: [B](b.md)"),
+                encoding="utf-8",
+            )
+            cycled = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, cycled.returncode)
+            self.assertIn("prerequisite cycle", cycled.stdout)
+
     def test_education_addon_is_selective_and_model_led(self) -> None:
         entry = self.read("SKILL.md")
         education = self.read("references/addons/education.md")
