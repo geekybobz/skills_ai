@@ -70,3 +70,7 @@ opt.path("debug_gradient")
 Never infer physics, metrics, objective direction, or control semantics from a
 class name or user prose. Those facts belong to the system and its declared
 contract.
+
+---
+
+[⌂ Home](README.md)

@@ -59,3 +59,7 @@ present, return its classification, preserved evidence, minimal reproduction,
 and the next discriminating check instead of an optimizer intervention. Keep
 manual/Codex recommendations distinct from any future deterministic policy. Do
 not introduce self-modifying, online-learning, or autonomous-control policy.
+
+---
+
+[⌂ Home](README.md)

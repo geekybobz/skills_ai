@@ -146,3 +146,7 @@ candidate | validated candidate | reproducible multi-start best |
 robustness-tested candidate | benchmark-supported result |
 global optimum only with separate proof/evidence
 ```
+
+---
+
+[⌂ Home](README.md)

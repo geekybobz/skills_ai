@@ -31,3 +31,7 @@ system, campaign, or derivation.
 
 Codex owns its local tool lifecycle and live acceptance. Report exact route and
 helper verification; do not claim Claude acceptance from Codex checks.
+
+---
+
+[⌂ Home](../README.md)

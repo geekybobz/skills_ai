@@ -43,3 +43,7 @@ ambiguous, ask once and stop; never glob for a guess.
 
 Claude-authored wrapper; live Claude forward acceptance is not certified. Report
 platform integration as unverified rather than claiming Codex parity.
+
+---
+
+[⌂ Home](../README.md)

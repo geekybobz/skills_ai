@@ -33,3 +33,7 @@ path, and memory risks.
 Prefer vectorized arrays and linear algebra where mathematically valid. Do not
 store full trajectories unless the derivative or requested diagnostic needs
 them. Do not invent missing physics.
+
+---
+
+[⌂ Home](README.md)
