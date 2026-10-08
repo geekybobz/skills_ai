@@ -200,8 +200,10 @@ Files named below, all under `markdown-protocol/`:
   consequences) linked from the topic they affect.
   - Implemented as `references/addons/decision-records.md`; a compact add-on
     router now keeps future additions out of the main skill's token budget.
-- [ ] **A5 Runbooks.** Step-by-step checklists with a verification line for
+- [x] **A5 Runbooks.** Step-by-step checklists with a verification line for
   each operational procedure.
+  - Implemented as `references/addons/runbooks.md`, including authority,
+    per-step expected results, stop conditions, and recovery checks.
 - [ ] **A6 Visual extras.** Guidance for Markmap and Foam, and editable SVG
   files for diagrams too large for Mermaid.
 - [ ] **A7 Slides.** Present a topic as slides with Marp, for teaching.

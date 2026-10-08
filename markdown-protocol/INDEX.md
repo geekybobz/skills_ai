@@ -63,6 +63,7 @@ map, focused references own the detail, and validation checks the result.
 | [codebase.md](references/addons/codebase.md) | codebase orientation, workflows, and change impact |
 | [research-notes.md](references/addons/research-notes.md) | source-backed claims, evidence status, and literature maps |
 | [decision-records.md](references/addons/decision-records.md) | durable choices, consequences, and supersession history |
+| [runbooks.md](references/addons/runbooks.md) | verified operational procedures, stop conditions, and recovery |
 | [skill-package.md](references/addons/skill-package.md) | machine-efficient and human-navigable skill packages |
 
 Add-ons may specialize presentation and validation. They do not replace the

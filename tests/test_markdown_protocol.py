@@ -395,6 +395,7 @@ tags:
             "codebase.md",
             "research-notes.md",
             "decision-records.md",
+            "runbooks.md",
             "skill-package.md",
         ):
             addon = self.read(f"references/addons/{name}")
@@ -499,6 +500,18 @@ tags:
         self.assertIn("proposed | accepted | deprecated | superseded", addon)
         self.assertIn("link both directions", compact)
         self.assertIn("copying a meeting transcript", addon)
+
+    def test_runbooks_pair_actions_with_verification_and_recovery(self) -> None:
+        routes = self.read("references/addons/routes.md")
+        addon = self.read("references/addons/runbooks.md")
+        compact = " ".join(addon.split())
+        self.assertIn("[runbooks.md](runbooks.md)", routes)
+        self.assertIn("\\text{Action} + \\text{Expected result} + \\text{Verification}", addon)
+        for label in ("**Action:**", "**Expected:**", "**Verify:**", "**Stop if:**"):
+            self.assertIn(label, addon)
+        self.assertIn("## Rollback or recovery", addon)
+        self.assertIn("does not grant permission to execute itself", compact)
+        self.assertIn("Sample output is visibly illustrative", addon)
 
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")
