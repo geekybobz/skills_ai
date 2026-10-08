@@ -16,6 +16,7 @@ package. Models performing ordinary Markdown work start from
 | Validate completed Markdown | [Validation](references/validation.md) |
 | Use structured properties or generated inventory | [Structured Inventory](references/structured-inventory.md) |
 | Check a collection or generate its inventory | [`scripts/markdown_protocol.py`](scripts/markdown_protocol.py) |
+| Design or maintain an add-on | [Add-on Contract](references/addons/add-on-contract.md) |
 | Create learning material | [Education Add-on](references/addons/education.md) |
 | Document a repository | [Codebase Add-on](references/addons/codebase.md) |
 | Structure a skill package | [Skill Package Add-on](references/addons/skill-package.md) |
@@ -54,6 +55,7 @@ map, focused references own the detail, and validation checks the result.
 
 | add-on | extends the protocol for |
 |---|---|
+| [add-on-contract.md](references/addons/add-on-contract.md) | shared extension points, declarations, ownership, and boundaries |
 | [education.md](references/addons/education.md) | learning, revision, and unfamiliar concepts |
 | [codebase.md](references/addons/codebase.md) | codebase orientation, workflows, and change impact |
 | [skill-package.md](references/addons/skill-package.md) | machine-efficient and human-navigable skill packages |

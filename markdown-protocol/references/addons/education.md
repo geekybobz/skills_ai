@@ -11,6 +11,18 @@ Create the smallest learning structure that makes the topic easier to
 understand and revisit. Keep the document useful as ordinary Markdown. Learning
 blocks are optional aids, not a second document system.
 
+## Add-on declaration
+
+| field | declaration |
+|---|---|
+| Trigger | Learning, revision, or explanation of unfamiliar material; not ordinary reference prose that needs no teaching treatment |
+| Blocks | Review cards, intuition/precision split, confusions, examples, contrasts, formulas, evidence status, connections, and further reading |
+| Layout variants | Adaptive reading flow inside one file or routed topics/deep notes |
+| Generated views | Optional review deck or learning path only when declared by the project |
+| Checks | Factual ownership, source verification, portable meaning, restrained tone, and selected-block usefulness |
+| Composition | The subject or evidence skill owns domain correctness and source discovery |
+| Boundaries | No quiz quota, invented citation, mandatory plugin, or hidden prerequisite |
+
 ## Analyze before proposing
 
 Determine what the reader needs to understand, what knowledge can be assumed,

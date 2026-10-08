@@ -370,6 +370,31 @@ tags:
         self.assertIn("not a required file layout", education)
         self.assertNotIn("Add every", education)
 
+    def test_addon_contract_keeps_extensions_optional_and_bounded(self) -> None:
+        entry = self.read("SKILL.md")
+        contract = self.read("references/addons/add-on-contract.md")
+        self.assertIn("For add-on design", entry)
+        for field in (
+            "Trigger",
+            "Blocks",
+            "Layout variants",
+            "Generated views",
+            "Checks",
+            "Composition",
+            "Boundaries",
+        ):
+            self.assertIn(field, contract)
+        compact = " ".join(contract.split())
+        self.assertIn("may not weaken the core invariants", compact)
+        self.assertIn("minimum useful combination", compact)
+        self.assertIn("Selection grants no network", compact)
+        for name in ("education.md", "codebase.md", "skill-package.md"):
+            addon = self.read(f"references/addons/{name}")
+            self.assertIn("## Add-on declaration", addon)
+            self.assertIn("| Trigger |", addon)
+            self.assertIn("| Generated views |", addon)
+            self.assertIn("| Boundaries |", addon)
+
     def test_education_addon_has_restrained_visual_and_tone_rules(self) -> None:
         education = self.read("references/addons/education.md")
         self.assertIn("Use headings and whitespace before decorative devices", education)

@@ -18,6 +18,18 @@ human -> INDEX.md -> package map -> relevant file
 The target skill remains authoritative for domain behavior. This add-on owns
 only the Markdown layers, navigation, portability, and related validation.
 
+## Add-on declaration
+
+| field | declaration |
+|---|---|
+| Trigger | Creating, documenting, or substantially restructuring a skill package with Markdown; not ordinary use of an existing skill |
+| Blocks | Machine entry, human route map, responsibility split, package profile, migration plan, and maintenance boundaries |
+| Layout variants | Minimal, Routed, Navigable, and Tool-bearing package profiles |
+| Generated views | Repository-owned manifests, graph nodes, or human indexes produced only through their canonical generators |
+| Checks | Native metadata, selective loading, links, footers, registry state, generated views, adapters, and token budget |
+| Composition | Target skill owns domain behavior; native skill guidance owns package validity; orchestrator owns lifecycle |
+| Boundaries | No duplicate governance, implicit migration, invented files, or extra public skills |
+
 ## Responsibility split
 
 | owner | responsibility |

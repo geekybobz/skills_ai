@@ -5,9 +5,8 @@ description: Use whenever requested work creates, edits, reviews, or restructure
 
 # Markdown Protocol
 
-Build one structure that is compact for models and progressively explanatory
-for humans. Keep rules and dependable facts in the compact layer; route to
-optional depth without forcing every reader to load it.
+Build a compact model entry with optional explanatory depth for humans. Keep
+rules and dependable facts in the compact layer.
 
 ## Load only what the task needs
 
@@ -26,9 +25,10 @@ and continue only when its examples, templates, or reasoning are needed.
    materially improve understanding.
 6. Read [validation.md](references/validation.md) through `## Details` before
    finishing a change.
-7. Load only the applicable add-on: [education.md](references/addons/education.md),
+7. Load one applicable add-on: [education.md](references/addons/education.md),
    [codebase.md](references/addons/codebase.md), or
-   [skill-package.md](references/addons/skill-package.md).
+   [skill-package.md](references/addons/skill-package.md). For add-on design,
+   read the [contract](references/addons/add-on-contract.md).
 8. Read [structured-inventory.md](references/structured-inventory.md) only when
    using properties, typed connections, generated `INVENTORY.md`, or the
    package checker.

@@ -18,6 +18,18 @@ Where am I?
 The result should give a new reader a reliable route into the code while
 remaining compact enough for maintenance and selective model loading.
 
+## Add-on declaration
+
+| field | declaration |
+|---|---|
+| Trigger | Markdown intended to explain, navigate, change, or verify a codebase; not source-code work that needs no documentation artifact |
+| Blocks | System map, numbered workflow, responsibility map, change-impact guide, and selected state or data views |
+| Layout variants | README-only, README plus code map, or routed subsystem/workflow notes |
+| Generated views | Optional bounded import or where-used maps with declared source, revision, and regeneration |
+| Checks | Paths, symbols, workflow order, ownership, test mappings, portability, and generated freshness |
+| Composition | Source code, tests, and the code-owning skill remain authoritative for behavior |
+| Boundaries | No every-file documentation, complete hand-maintained import graph, mandatory tool, or background indexer |
+
 ## Analyze before proposing
 
 Inspect only the repository evidence needed to identify:
