@@ -455,6 +455,18 @@ tags:
         self.assertIn("Graphviz", codebase)
         self.assertIn("No mandatory tool", codebase)
 
+    def test_codebase_addon_designs_bounded_generated_navigation(self) -> None:
+        codebase = self.read("references/addons/codebase.md")
+        compact = " ".join(codebase.split())
+        self.assertIn("## Optional generated Python import map", codebase)
+        self.assertIn("standard library `ast` module", compact)
+        self.assertIn("never present the result as a complete runtime call graph", compact)
+        self.assertIn("one small package diagram", compact)
+        self.assertIn("sortable text table", compact)
+        self.assertIn("## Entry points and where-used views", codebase)
+        self.assertIn("bounded reverse lookup", codebase)
+        self.assertIn("Source code and tests decide behavior", compact)
+
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")
         index = self.read("INDEX.md")

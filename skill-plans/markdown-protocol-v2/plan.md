@@ -186,9 +186,11 @@ Files named below, all under `markdown-protocol/`:
   (question visible, answer inside `<details>`), a review deck generated from
   the recall cards, a learning path built from G1 prerequisite links, and a
   glossary block.
-- [ ] **A2 Code docs.** Generated import maps (Python first), one diagram per
+- [x] **A2 Code docs.** Generated import maps (Python first), one diagram per
   package within the diagram threshold plus a table version, entry points,
   and where-used lists.
+  - Implemented as design guidance in `references/addons/codebase.md`; no
+    generator or mandatory project tooling was added.
 - [ ] **A3 Research notes.** A paper-note template with citation keys (Zotero
   with Better BibTeX), evidence status, and a literature map. It composes with
   `research-context-scout`, which owns evidence.

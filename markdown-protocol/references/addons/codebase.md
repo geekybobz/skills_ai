@@ -189,6 +189,66 @@ boundary:
 > relevant integration tests.
 ```
 
+## Optional generated Python import map
+
+Use an import map only when dependency direction helps answer a maintenance
+question. For Python, prefer a bounded static scan built from the standard
+library `ast` module. Resolve imports to repository packages where possible,
+record unresolved or dynamic imports separately, and never present the result
+as a complete runtime call graph.
+
+The generated artifact should declare:
+
+| field | required value |
+|---|---|
+| Scope | packages or paths included and excluded |
+| Source | files inspected and repository revision |
+| Method | parser and command used to regenerate |
+| Limits | relative, conditional, dynamic, optional, or plugin imports not resolved |
+| Freshness | generation time or source fingerprint |
+
+Generate one small package diagram only when it stays within the general
+diagram threshold. Always provide the same information as a sortable text
+table so the map remains usable when Mermaid is unavailable or too wide.
+
+```mermaid
+flowchart LR
+    CLI[cli] --> Core[core]
+    Core --> Model[model]
+    Core --> Store[storage]
+```
+
+| importer | imported package | relation | confidence |
+|---|---|---|---|
+| `cli` | `core` | direct static import | parsed |
+| `core` | `model` | direct static import | parsed |
+| `core` | `storage` | direct static import | parsed |
+
+Split diagrams by package when the combined graph would exceed the threshold.
+Do not generate one repository-wide hairball merely because the scanner can.
+
+## Entry points and where-used views
+
+List only entry points that a user, operating system, framework, or another
+package can invoke. Verify each entry against configuration or source rather
+than guessing from a filename.
+
+| entry point | kind | resolves to | main responsibility | verify with |
+|---|---|---|---|---|
+| command or route | CLI, API, job, hook, or library | file and symbol | one sentence | focused check |
+
+A where-used list is a bounded reverse lookup for one important symbol,
+configuration key, schema, or public interface. It is not a repository-wide
+cross-reference database.
+
+| owner | used by | use | evidence |
+|---|---|---|---|
+| file and symbol | caller path and symbol | constructs, calls, reads, or implements | static reference, test, or runtime evidence |
+
+Keep generated lists adjacent to their scope and regeneration note. When a
+static reference may be indirect or dead, label that uncertainty. Source code
+and tests decide behavior; the list only helps a reader choose where to look.
+
 ## Change-impact guide
 
 Use a table for direct editing guidance. It is usually more dependable than a
@@ -245,6 +305,10 @@ looks precise but no longer matches the repository.
 - Diagram and table names, numbers, and relationships agree.
 - Important meaning survives without Mermaid or another renderer.
 - Generated maps are visibly marked and reproducible.
+- Import maps declare scope, method, limits, revision or fingerprint, and a
+  table fallback; dynamic behavior is not overstated.
+- Entry points are verified against source or configuration, and where-used
+  lists remain bounded to a named owner.
 - No mandatory tool, documentation site, background indexer, or every-file
   documentation burden has been introduced.
 
