@@ -20,6 +20,7 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$", re.MULTILINE)
 CONNECTION_LINE_RE = re.compile(r"^-\s+([^:]+):\s*(.*?)\s*$")
 NEXT_FOOTER_RE = re.compile(r"\[Next →\]\(([^)]+)\)")
 PREVIOUS_FOOTER_RE = re.compile(r"\[← Previous\]\(([^)]+)\)")
+TAG_RE = re.compile(r"^(domain|use)/[a-z0-9][a-z0-9-]*(?:/[a-z0-9][a-z0-9-]*)*$")
 
 
 @dataclass(frozen=True)
@@ -76,6 +77,22 @@ def properties(text: str) -> dict[str, object]:
             result[key] = []
             current_list = key
     return result
+
+
+def validated_tags(data: dict[str, object]) -> tuple[list[str], list[str]]:
+    value = data.get("tags", [])
+    if value in (None, ""):
+        return [], []
+    if not isinstance(value, list):
+        return [], ["tags property must be an indented list"]
+    tags = [str(item) for item in value]
+    problems: list[str] = []
+    if len(tags) != len(set(tags)):
+        problems.append("duplicate tag")
+    for tag in tags:
+        if not TAG_RE.fullmatch(tag):
+            problems.append(f"invalid tag: {tag}; use domain/... or use/...")
+    return tags, problems
 
 
 def without_fenced_code(text: str) -> str:
@@ -394,6 +411,9 @@ def check_collection(
         texts[path.resolve()] = text
         data = properties(text)
         role = str(data.get("role", ""))
+        _, tag_problems = validated_tags(data)
+        for problem in tag_problems:
+            findings.append(Finding("error", relative, problem))
         if require_properties:
             for key in REQUIRED_PROPERTIES:
                 if not data.get(key):
@@ -577,6 +597,52 @@ def render_graph_report(root: Path, *, entry: str | None = None, topic: str | No
     return "\n".join(lines) + "\n"
 
 
+def render_tag_report(root: Path, requested: list[str]) -> str:
+    for tag in requested:
+        if not TAG_RE.fullmatch(tag):
+            raise ValueError(f"invalid tag: {tag}; use domain/... or use/...")
+
+    records: list[tuple[str, str, str, list[str]]] = []
+    vocabulary: dict[str, list[str]] = {}
+    for path in markdown_files(root):
+        data = properties(path.read_text(encoding="utf-8"))
+        tags, problems = validated_tags(data)
+        if problems:
+            continue
+        relative = path.relative_to(root).as_posix()
+        for tag in tags:
+            vocabulary.setdefault(tag, []).append(relative)
+        if requested and not all(tag in tags for tag in requested):
+            continue
+        records.append(
+            (
+                relative,
+                str(data.get("role", "")),
+                str(data.get("summary", "")),
+                tags,
+            )
+        )
+
+    if not requested:
+        lines = ["Markdown tag vocabulary", ""]
+        if vocabulary:
+            for tag in sorted(vocabulary):
+                lines.append(f"- {tag}: {len(vocabulary[tag])} file(s)")
+        else:
+            lines.append("- No tags.")
+        return "\n".join(lines) + "\n"
+
+    lines = [f"Files matching: {' AND '.join(requested)}", ""]
+    if records:
+        for path, role, summary, tags in sorted(records):
+            detail = f" — {summary}" if summary else ""
+            role_text = f" [{role}]" if role else ""
+            lines.append(f"- {path}{role_text}{detail} ({', '.join(tags)})")
+    else:
+        lines.append("- No matching files.")
+    return "\n".join(lines) + "\n"
+
+
 def print_findings(findings: list[Finding]) -> None:
     if not findings:
         print("PASS: Markdown Protocol check")
@@ -608,6 +674,10 @@ def main(argv: list[str] | None = None) -> int:
     graph.add_argument("--entry")
     graph.add_argument("--topic")
 
+    tags = subparsers.add_parser("tags", help="show tag vocabulary or filter files")
+    tags.add_argument("root", type=Path)
+    tags.add_argument("--tag", action="append", default=[])
+
     args = parser.parse_args(argv)
     root = args.root.resolve()
     if not root.is_dir():
@@ -635,6 +705,14 @@ def main(argv: list[str] | None = None) -> int:
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
+        return 0
+
+    if args.command == "tags":
+        try:
+            print(render_tag_report(root, args.tag), end="")
+        except ValueError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
         return 0
 
     try:

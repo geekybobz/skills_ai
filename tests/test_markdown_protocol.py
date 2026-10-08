@@ -284,6 +284,83 @@ class MarkdownProtocolTests(unittest.TestCase):
             self.assertEqual(1, cycled.returncode)
             self.assertIn("prerequisite cycle", cycled.stdout)
 
+    def test_tag_vocabulary_validation_and_and_filtering(self) -> None:
+        tool = PACKAGE / "scripts" / "markdown_protocol.py"
+        with tempfile.TemporaryDirectory() as temporary:
+            collection = Path(temporary)
+            (collection / "README.md").write_text(
+                "# Collection\n\n- [A](a.md)\n- [B](b.md)\n\n---\n\n[⌂ Home](#collection)\n",
+                encoding="utf-8",
+            )
+            a = """---
+role: topic
+parent: README.md
+summary: Control learning topic.
+read_when: Learn control.
+tags:
+  - domain/control
+  - use/learning
+---
+# A
+
+---
+
+[⌂ Home](README.md)
+"""
+            b = a.replace("Control learning topic.", "Control reference topic.").replace(
+                "use/learning", "use/reference"
+            ).replace("# A", "# B")
+            (collection / "a.md").write_text(a, encoding="utf-8")
+            (collection / "b.md").write_text(b, encoding="utf-8")
+
+            checked = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, checked.returncode, checked.stdout + checked.stderr)
+
+            vocabulary = subprocess.run(
+                [sys.executable, str(tool), "tags", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, vocabulary.returncode)
+            self.assertIn("domain/control: 2 file(s)", vocabulary.stdout)
+
+            filtered = subprocess.run(
+                [
+                    sys.executable,
+                    str(tool),
+                    "tags",
+                    str(collection),
+                    "--tag",
+                    "domain/control",
+                    "--tag",
+                    "use/learning",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, filtered.returncode)
+            self.assertIn("a.md", filtered.stdout)
+            self.assertNotIn("b.md", filtered.stdout)
+
+            (collection / "a.md").write_text(
+                a.replace("use/learning", "audience/learner"), encoding="utf-8"
+            )
+            invalid = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, invalid.returncode)
+            self.assertIn("invalid tag", invalid.stdout)
+
     def test_education_addon_is_selective_and_model_led(self) -> None:
         entry = self.read("SKILL.md")
         education = self.read("references/addons/education.md")

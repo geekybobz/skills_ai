@@ -4,7 +4,8 @@ Status: implementation handoff dated 2026-10-08. Phase 1 is implemented.
 Phase 2 has its matrix, guardrails, and gallery additions; exact VS Code visual
 observation and the GitHub hosted-render pass remain pending because native
 computer-use permission and external fixture transmission were unavailable.
-Phase 3 G1 typed connections and graph inspection are implemented; G2 remains.
+Phase 3 G1 typed connections and graph inspection and G2 controlled tag
+validation/filtering are implemented.
 Codex implements only the ticked items under repository change control.
 
 Next iteration of [`markdown-protocol`](../../markdown-protocol/SKILL.md):

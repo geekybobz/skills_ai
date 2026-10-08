@@ -24,6 +24,18 @@ Allowed roles are `front-door`, `map`, `index`, `topic`, `deep`, and
 `domain/` says what the content concerns and `use/` says what the reader does
 with it. Tags never replace explicit links.
 
+When tags are present, each value uses `domain/...` or `use/...`, lowercase
+letters, digits, and hyphens. Repeated `--tag` filters use AND semantics:
+
+```bash
+python3 scripts/markdown_protocol.py tags <collection-root>
+python3 scripts/markdown_protocol.py tags <collection-root> \
+  --tag domain/control --tag use/learning
+```
+
+The first command lists the vocabulary and counts. The second lists files that
+carry both tags.
+
 Keep values short and single-line. The bundled standard-library parser accepts
 plain scalar values and an indented list for `tags`; it is not a general YAML
 implementation.

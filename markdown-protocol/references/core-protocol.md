@@ -44,6 +44,10 @@ Structured properties and generated inventory are optional. When a collection
 opts in, follow the complete [Structured Inventory](structured-inventory.md)
 contract; the authored Front Door or human `INDEX.md` remains semantic.
 
+Optional tags use only `domain/...` for subject matter and `use/...` for reader
+intent. Tags filter files; they never replace explicit navigation or typed
+connections.
+
 ## Details
 
 ### Progressive disclosure
