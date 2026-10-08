@@ -14,6 +14,7 @@ pick the enabled family registry and load the selected package capability.
 | task looks like | if enabled in [[registry/activation]], read |
 |---|---|
 | concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
+| Markdown file creation, editing, review, restructuring, README, documentation, notes, knowledge base, or `#> md_protocol` | [[registry/markdown\|markdown]] |
 | LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
 | `#> scout`, `#> scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[registry/research]] |
 | `#> optimizer` | [[registry/optimizer\|optimizer]] |

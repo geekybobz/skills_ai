@@ -1,0 +1,7 @@
+interface:
+  display_name: "Markdown Protocol"
+  short_description: "Portable layered Markdown architecture"
+  default_prompt: "Use $markdown-protocol to design or restructure this Markdown collection with a compact entry, clear navigation, progressive depth, and portable formatting."
+
+policy:
+  allow_implicit_invocation: true

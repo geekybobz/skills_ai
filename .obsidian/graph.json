@@ -36,7 +36,7 @@
       }
     },
     {
-      "query": "path:optimizer/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/",
+      "query": "path:markdown-protocol/ OR path:optimizer/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/",
       "color": {
         "a": 1,
         "rgb": 6953882

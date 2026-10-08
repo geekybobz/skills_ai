@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class SpecificationTests(unittest.TestCase):
  def test_case_set_is_unique_and_covers_boundary_scenarios(self):
   data=json.loads((ROOT/'tests/model_orchestration_cases.json').read_text())
-  cases=data['cases'];self.assertEqual(70,len(cases));self.assertEqual(70,len({c['id'] for c in cases}))
+  cases=data['cases'];self.assertEqual(73,len(cases));self.assertEqual(73,len({c['id'] for c in cases}))
   self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume'} <= {c['id'] for c in cases})
   for c in cases:
    self.assertTrue(c['request']);self.assertTrue(c['rubric']);self.assertEqual(['codex','claude'],c['hosts'])
@@ -159,6 +159,7 @@ class MetadataMigrationTests(unittest.TestCase):
   page=discover(ROOT,manifest)
   aliases={a['command']:(a['package'],a['mode']) for a in page['aliases']}
   self.assertEqual(('optimizer','build-system'),aliases['#> build-system'])
+  self.assertEqual(('markdown-protocol','review'),aliases['#> md_protocol'])
   self.assertEqual(('research-context-scout','deepen'),aliases['#> scout-again'])
  def test_state_gate_is_capability_specific(self):
   with tempfile.TemporaryDirectory() as directory:

@@ -22,6 +22,7 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 | Public skill | Role | State | Boundary | Structure | Entry | Task capabilities |
 |---|---|---|---|---|---|---:|
 | interaction-protocol | interaction | active | response support independent of task selection | interaction-package | [interaction-protocol/README.md](../../interaction-protocol/README.md) | — |
+| markdown-protocol | task | active | automatic for requested Markdown artifacts; proportional user-reviewed design before writes; `#> md_protocol` forces review mode | repository-package | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 1 |
 | theory-reference | task | active | theory notes, LaTeX, derivation planning, and reference work | git-submodule | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 1 |
 | research-context-scout | task | manual | exact package request, `#> scout`, or `#> scout-again` only | repository-package | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 1 |
 | optimizer | task | manual | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates | repository-package | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 1 |
@@ -35,6 +36,7 @@ These technical routes select focused instructions inside a public task package.
 |---|---|---|---|---|---|---|---|---|---:|
 | interaction-protocol | interaction.general | interaction | active | Present the result first with sufficient clear context and precise terms. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
 | interaction-protocol | interaction.math | interaction | active | Explain mathematical reasoning through results, defined symbols and justified equations. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
+| markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | Markdown file creation or editing, Markdown review or restructuring, README, documentation, notes, knowledge base | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | package capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 947 |
 | optimizer | optimizer | optimizer-workflow | manual | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer, #> build-system, #> optimize, #> use optimizer, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run | package capability | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 832 |
 | quantum-job-collector | quantum-job-collector | career | off | exhaustive quantum job collection for Quantum Career Radar | quantum jobs, career radar, update review queue, pending jobs, source coverage | generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled | external pointer | `external-skills/quantum-job-collector/SKILL.md` | — |
 | research-context-scout | research-context-scout | research | manual | align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test | research context scout, initial research orientation, supervisor assessment, align research context, collect and synthesize papers, translate literature ideas into this project | claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request | package capability | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 695 |
@@ -65,6 +67,44 @@ These technical routes select focused instructions inside a public task package.
 |---|---|
 | [interaction-protocol/README.md](../../interaction-protocol/README.md) | Human orientation for the package. |
 | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | Canonical machine-readable protocol. |
+
+## markdown-protocol
+
+**Type:** `repository-package`
+
+**Purpose:** Automatic portable-first Markdown skill with proportional design review, compact routing, adaptive layouts, a selectively loaded pattern gallery, visual reliability rules, and structural validation.
+
+| Package file | Role |
+|---|---|
+| [markdown-protocol/.obsidian/app.json](../../markdown-protocol/.obsidian/app.json) | Package support file. |
+| [markdown-protocol/.obsidian/appearance.json](../../markdown-protocol/.obsidian/appearance.json) | Package support file. |
+| [markdown-protocol/.obsidian/core-plugins.json](../../markdown-protocol/.obsidian/core-plugins.json) | Package support file. |
+| [markdown-protocol/.obsidian/workspace.json](../../markdown-protocol/.obsidian/workspace.json) | Package support file. |
+| [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | Skill entry or shared workflow instructions. |
+| [markdown-protocol/agents/openai.yaml](../../markdown-protocol/agents/openai.yaml) | Package support file. |
+| [markdown-protocol/references/addons/codebase.md](../../markdown-protocol/references/addons/codebase.md) | Package support file. |
+| [markdown-protocol/references/addons/education.md](../../markdown-protocol/references/addons/education.md) | Package support file. |
+| [markdown-protocol/references/core-protocol.md](../../markdown-protocol/references/core-protocol.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/01-headings-and-sections.md](../../markdown-protocol/references/formatting-examples/01-headings-and-sections.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/02-relative-and-section-links.md](../../markdown-protocol/references/formatting-examples/02-relative-and-section-links.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/03-lists-and-checklists.md](../../markdown-protocol/references/formatting-examples/03-lists-and-checklists.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/04-tables.md](../../markdown-protocol/references/formatting-examples/04-tables.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/05-collapsible-details.md](../../markdown-protocol/references/formatting-examples/05-collapsible-details.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/06-footnotes.md](../../markdown-protocol/references/formatting-examples/06-footnotes.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/07-quotes-notes-and-callouts.md](../../markdown-protocol/references/formatting-examples/07-quotes-notes-and-callouts.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/08-inline-and-block-code.md](../../markdown-protocol/references/formatting-examples/08-inline-and-block-code.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/09-file-trees.md](../../markdown-protocol/references/formatting-examples/09-file-trees.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/10-comments-and-generated-banners.md](../../markdown-protocol/references/formatting-examples/10-comments-and-generated-banners.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/11-images-and-alt-text.md](../../markdown-protocol/references/formatting-examples/11-images-and-alt-text.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/12-mermaid-diagrams.md](../../markdown-protocol/references/formatting-examples/12-mermaid-diagrams.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/13-mathematical-expressions.md](../../markdown-protocol/references/formatting-examples/13-mathematical-expressions.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/14-yaml-properties-and-tags.md](../../markdown-protocol/references/formatting-examples/14-yaml-properties-and-tags.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/15-obsidian-links-and-embeds.md](../../markdown-protocol/references/formatting-examples/15-obsidian-links-and-embeds.md) | Package support file. |
+| [markdown-protocol/references/layouts.md](../../markdown-protocol/references/layouts.md) | Package support file. |
+| [markdown-protocol/references/markdown-patterns.md](../../markdown-protocol/references/markdown-patterns.md) | Package support file. |
+| [markdown-protocol/references/review-workflow.md](../../markdown-protocol/references/review-workflow.md) | Package support file. |
+| [markdown-protocol/references/validation.md](../../markdown-protocol/references/validation.md) | Package support file. |
+| [markdown-protocol/references/visual-patterns.md](../../markdown-protocol/references/visual-patterns.md) | Package support file. |
 
 ## theory-reference
 

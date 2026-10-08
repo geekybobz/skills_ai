@@ -45,6 +45,7 @@
         "external-skills/**",
         "graph/**",
         "interaction-protocol/**",
+        "markdown-protocol/**",
         "optimizer/**",
         "protocols/**",
         "research-context-scout/**",
@@ -62,6 +63,7 @@
         "docs/00_SKILLS_HUB.md",
         "registry/**",
         "interaction-protocol/**",
+        "markdown-protocol/**",
         "theory-reference",
         "external-skills/**",
         "optimizer/**",
@@ -89,6 +91,14 @@
       "check": "views"
     },
     "graph/skills/interaction-protocol.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/markdown-protocol.md": {
       "source_patterns": [
         "registry/activation.md",
         "protocols/repository/DOCUMENTATION.json",
@@ -206,6 +216,7 @@
       "id": "skill-source",
       "patterns": [
         "external-skills/**/SKILL.md",
+        "markdown-protocol/SKILL.md",
         "optimizer/SKILL.md",
         "research-context-scout/SKILL.md",
         "theory-reference/SKILL.md",
@@ -230,6 +241,7 @@
       "id": "skill-support",
       "patterns": [
         "external-skills/**",
+        "markdown-protocol/**",
         "optimizer/**",
         "research-context-scout/**",
         "theory-reference/shared/phases/**"
@@ -406,6 +418,8 @@
       "registry/theory.md": "L2",
       "cards/parked/quantum-job-collector.md": "L3",
       "optimizer/SKILL.md": "L4",
+      "markdown-protocol/SKILL.md": "L4",
+      "graph/skills/markdown-protocol.md": "L4",
       "graph/skills/optimizer.md": "L4",
       "graph/skills/research-context-scout.md": "L4",
       "runtime/PROTOCOL.md": "L5"
@@ -438,6 +452,7 @@
           "registry/activation",
           "runtime/skills-orchestrator/SKILL",
           "graph/skills/interaction-protocol",
+          "graph/skills/markdown-protocol",
           "graph/skills/theory-reference",
           "graph/skills/research-context-scout",
           "graph/skills/optimizer",

@@ -8,6 +8,13 @@
       "skill_id": "optimizer"
     },
     {
+      "boundary": "first task directive; presentation controls may precede",
+      "command": "#> md_protocol",
+      "family": "markdown",
+      "mode": "review",
+      "skill_id": "markdown-protocol"
+    },
+    {
       "boundary": "first task directive; requires an existing system/project and stated goal",
       "command": "#> optimize",
       "family": "optimizer-workflow",
@@ -101,6 +108,12 @@
       "path": "registry/interaction.md",
       "state": "active"
     },
+    "markdown": {
+      "boundary": "Markdown creation, editing, review, layered architecture, formatting patterns, visual fallbacks, and validation",
+      "package": "markdown-protocol",
+      "path": "registry/markdown.md",
+      "state": "active"
+    },
     "optimizer-workflow": {
       "boundary": "exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates",
       "package": "optimizer",
@@ -132,6 +145,12 @@
       "boundary": "response support independent of task selection",
       "path": "interaction-protocol/README.md",
       "role": "interaction",
+      "state": "active"
+    },
+    "markdown-protocol": {
+      "boundary": "automatic for requested Markdown artifacts; proportional user-reviewed design before writes; `#> md_protocol` forces review mode",
+      "path": "markdown-protocol/SKILL.md",
+      "role": "task",
       "state": "active"
     },
     "optimizer": {
@@ -175,6 +194,24 @@
         "update review queue",
         "pending jobs",
         "source coverage"
+      ]
+    },
+    {
+      "description": "creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation",
+      "family": "markdown",
+      "family_state": "active",
+      "id": "markdown-protocol",
+      "not_for": "merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims",
+      "package": "markdown-protocol",
+      "path": "markdown-protocol/SKILL.md",
+      "state": "active",
+      "triggers": [
+        "Markdown file creation or editing",
+        "Markdown review or restructuring",
+        "README",
+        "documentation",
+        "notes",
+        "knowledge base"
       ]
     },
     {
@@ -227,15 +264,15 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "93dd316e0aa9688ad94f408741f0d70d95acae3e201100ac1191ee868c203882",
+  "source_hash": "3e78521fba025d40a02980a87fcd0b4930c01ca39e4507bafbdaafd679e65a00",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "a9152f04657f24b4113e9bc56694bac254fe27479fd8b4a0bd80e8be3127f9bf"
+      "sha256": "846bb05c75d15a1c5f2ae08cce3806d0580b879b9c84b06ea5aca21e995e7680"
     },
     {
       "path": "registry/activation.md",
-      "sha256": "59025ee9f372aa3d3f3aa6a918dbecb5b2b2cbb4e2ea4535c32dbf7752152edd"
+      "sha256": "9f5149be0a1316c25fce94b616c402ca341ab9025661d6fc514f163b2a3d732d"
     },
     {
       "path": "registry/career.md",
@@ -244,6 +281,10 @@
     {
       "path": "registry/interaction.md",
       "sha256": "d37453ba55ecd764d7c53aef7dfb9713ba53f14a66e4a74496cb82391f9855b0"
+    },
+    {
+      "path": "registry/markdown.md",
+      "sha256": "26b847873d6c6e4705516d89ca18b30f6b0b3023688ac36c9bfd1428a2b59830"
     },
     {
       "path": "registry/optimizer.md",
@@ -259,15 +300,15 @@
     }
   ],
   "stats": {
-    "active_packages": 2,
-    "active_routes": 1,
-    "families": 5,
+    "active_packages": 3,
+    "active_routes": 2,
+    "families": 6,
     "inactive_packages": 1,
     "inactive_routes": 1,
     "manual_packages": 2,
     "manual_routes": 2,
-    "packages": 5,
-    "routes": 4
+    "packages": 6,
+    "routes": 5
   },
   "warnings": []
 }

@@ -39,6 +39,33 @@
       ]
     },
     {
+      "id": "markdown-auto-write-review",
+      "request": "Create a README and topic notes for this project.",
+      "rubric": "Select markdown-protocol automatically, announce it, inspect only the relevant structure, present a proportional Markdown design, and wait for agreement before writing.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "markdown-explicit-alias",
+      "request": "#> md_protocol\nReorganize these notes into a navigable Markdown collection.",
+      "rubric": "Resolve the declared alias to markdown-protocol review mode; propose the layout, ownership, navigation, portability, and validation plan before writing.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "markdown-incidental-instruction",
+      "request": "Read AGENTS.md, then fix the reported Python exception without changing documentation.",
+      "rubric": "Do not select markdown-protocol merely because a Markdown instruction file is read as operational input; use the capability appropriate to the requested Python work.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
       "id": "manual",
       "request": "Optimize this control problem.",
       "rubric": "Manual package is not implicitly invoked.",

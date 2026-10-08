@@ -47,7 +47,7 @@ flowchart LR
 |---|---|
 | L0 | Human and agent entry notes |
 | L1 | Skills Orchestrator, Skills Hub, Activation, protocol/documentation hubs, risk, color, combination, and change-control maps |
-| L2 | Family registry tables for interaction, theory, research, optimizer, and the disabled career workflow |
+| L2 | Family registry tables for interaction, markdown, theory, research, optimizer, and the disabled career workflow |
 | L3 | Human-visible context cards, such as the parked quantum-job-collector card in `cards/parked/` |
 | L4 | Generated public skill entries, internal capabilities, external pointers, and phases |
 | L5 | Human guide, protocols, runtime, adapters, scripts, tests, and requests |
@@ -65,6 +65,11 @@ Quick Switcher to open `Optimizer`, or filter the graph with
 The `research-context-scout/` package is a normal repository-owned L4
 skill collection. Its human README, root entry, shared phases and platform
 wrappers stay linked as one package.
+
+The `markdown-protocol/` package is another L4 violet collection. Its small
+formatting examples are support notes within the same public package, not
+additional skills or graph inventory rows. The generated `Markdown Protocol`
+node remains visible while the technical package path is hidden by default.
 
 `registry/interaction.md` is an L2 green family registry. The visible
 [Interaction Protocol hub](../../interaction-protocol/README.md) is L1 teal and

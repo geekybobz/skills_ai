@@ -48,6 +48,7 @@ class RepositoryViewTests(unittest.TestCase):
                 "docs/human/_LIVE_SKILL_CATALOG.md",
                 "graph/orchestration/skills-orchestrator.md",
                 "graph/skills/interaction-protocol.md",
+                "graph/skills/markdown-protocol.md",
                 "graph/skills/optimizer.md",
                 "graph/skills/quantum-job-collector.md",
                 "graph/skills/research-context-scout.md",
@@ -86,7 +87,7 @@ class RepositoryViewTests(unittest.TestCase):
             )
             self.assertIn(marker, repository_index)
 
-    def test_skill_catalog_separates_orchestrator_from_five_skills(self) -> None:
+    def test_skill_catalog_separates_orchestrator_from_six_skills(self) -> None:
         catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
         orchestrator_section = catalog.split("# Skills Orchestrator", 1)[1].split(
             "# Public Skills", 1
@@ -100,6 +101,7 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("| skills-orchestrator |", orchestrator_section)
         for package_id in (
             "interaction-protocol",
+            "markdown-protocol",
             "theory-reference",
             "research-context-scout",
             "optimizer",
@@ -111,7 +113,7 @@ class RepositoryViewTests(unittest.TestCase):
             for line in public_section.splitlines()
             if line.startswith("| ") and not line.startswith("| Public skill |")
         ]
-        self.assertEqual(5, len(public_rows))
+        self.assertEqual(6, len(public_rows))
         self.assertNotIn("skills-orchestrator", public_section)
         self.assertNotIn("| code-explainer |", public_section)
         self.assertIn("| theory-reference | theory-reference |", internal_section)
@@ -126,6 +128,7 @@ class RepositoryViewTests(unittest.TestCase):
         package_contents = catalog.split("# Skill Contents", 1)[1]
         for package_id in (
             "interaction-protocol",
+            "markdown-protocol",
             "theory-reference",
             "research-context-scout",
             "optimizer",
@@ -178,6 +181,7 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("graph_kind: orchestrator", orchestrator)
         for skill_id in (
             "interaction-protocol",
+            "markdown-protocol",
             "theory-reference",
             "research-context-scout",
             "optimizer",

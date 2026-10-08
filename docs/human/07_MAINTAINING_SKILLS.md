@@ -118,6 +118,13 @@ capability appendix is technical detail, not another inventory. Generated
 `AGENTS.md`, `CLAUDE.md`, `_LIVE_` pages, and `graph/` inventory nodes must be
 rebuilt with `scripts/compile_repository_views.py`, never hand-edited.
 
+The active `markdown-protocol` package demonstrates the same rule internally:
+its compact entry routes to focused architecture, proportional review, layout,
+pattern, visual, and validation references, while small formatting examples
+remain selectively loaded package support. Automatic selection applies only
+when Markdown is the requested artifact; `#> md_protocol` is its explicit
+review-mode alias.
+
 ## Verification levels
 
 1. Structural: paths, roles, package mapping, unique graph labels, default visibility, links, schema, and generated freshness.

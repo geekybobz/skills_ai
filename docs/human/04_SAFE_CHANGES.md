@@ -135,6 +135,14 @@ composite packages may use another declared canonical entry. Conventional
 nested `shared/SKILL.md`, `codex/SKILL.md`, or `claude/SKILL.md` files remain
 support wrappers, not extra public skills.
 
+The active `markdown-protocol` package applies when Markdown is the requested
+artifact, but automatic selection does not authorize a write. It announces the
+protocol, inspects the relevant structure, and presents a proportional proposal
+for user agreement before changing Markdown. It may restructure user-owned
+Markdown only inside that reviewed scope, preserves useful conventions and
+user edits, keeps portable text authoritative, and treats diagram or equation
+rendering as unverified until checked in the named viewer.
+
 Graph roles are explicit: declared hubs are L1 teal, family registries L2 green,
 and skill or phase files L4 violet. The validator checks these meanings and
 their links. Graph file counts are never public skill counts.

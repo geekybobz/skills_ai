@@ -43,6 +43,10 @@ Its command aliases and phase files are not separate skills.
 - Manual packages require exact selection; for example, `#> optimizer`,
   `#> build-system`, and `#> optimize` select the manual Optimizer workflows
   and never activate from ordinary prose. Their scope comes from the explicit request and selected workflow.
+- `markdown-protocol` activates when Markdown is the requested artifact and can
+  be forced with `#> md_protocol`. It announces itself, inspects the relevant
+  structure, and asks for a proportional design review before writing: a short
+  preview for a local edit or an architecture proposal for structural work.
 - `#> scout` and `#> scout-again` select the manual Research Context Scout.
   It pauses for context and search alignment, uses only locally available
   full text that was successfully extracted, and returns a beginner-readable

@@ -186,7 +186,7 @@ def parse_command_aliases(path: Path) -> list[dict[str, str]]:
         skill_id = cells[1].strip("`")
         mode = cells[2].strip("`").lower()
         boundary = cells[3]
-        if not re.fullmatch(r"#>\s+[a-z0-9][a-z0-9-]{0,79}", command):
+        if not re.fullmatch(r"#>\s+[a-z0-9][a-z0-9_-]{0,79}", command):
             raise RegistryRuntimeError(f"invalid command alias {command} in {path.name}")
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", skill_id):
             raise RegistryRuntimeError(f"invalid command alias target {skill_id} in {path.name}")

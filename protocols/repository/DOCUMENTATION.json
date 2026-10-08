@@ -43,6 +43,11 @@
       "purpose": "One public interaction skill package whose general and equation-led response modes apply independently of task-skill selection."
     },
     {
+      "path": "markdown-protocol",
+      "title": "Markdown Protocol package",
+      "purpose": "Active portable-first task package for Markdown creation, editing, review, layered architecture, proportional design approval, formatting examples, visual fallbacks, and validation."
+    },
+    {
       "path": "optimizer",
       "title": "Optimizer package",
       "purpose": "Manual generic optimizer workflow for stable-version resolution, OLGS build planning and review, adaptive evidence-led campaigns, situation analysis, and contained update proposals."
@@ -138,6 +143,15 @@
       "kind": "interaction-package",
       "traversal": "repository",
       "purpose": "Public interaction skill package with general and mathematical response modes, independent of task-skill selection."
+    },
+    {
+      "id": "markdown-protocol",
+      "display_name": "Markdown Protocol",
+      "path": "markdown-protocol",
+      "graph_entry": "graph/skills/markdown-protocol.md",
+      "kind": "repository-package",
+      "traversal": "repository",
+      "purpose": "Automatic portable-first Markdown skill with proportional design review, compact routing, adaptive layouts, a selectively loaded pattern gallery, visual reliability rules, and structural validation."
     },
     {
       "id": "theory-reference",

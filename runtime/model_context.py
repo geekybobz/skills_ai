@@ -498,13 +498,14 @@ def compact_catalog(page: dict, *, maximum=8192) -> str:
             for key in ('package','entry','purpose','roles','dependencies','references','package_role','not_for','inputs','outputs'):
                 if key not in record:continue
                 value = record[key]
-                if key in ('not_for','inputs','outputs') and not value:continue
+                if key in ('references','not_for','inputs','outputs') and not value:continue
                 if key == 'package' and value == record['capability']:continue
                 if key == 'roles' and value == ['primary']:continue
                 if key == 'dependencies' and not value:continue
                 if key == 'package_role' and value == 'task':continue
-                if key in ('purpose','not_for') and len(value)>180:
-                    value=value[:180]+'…';view[key+'_shortened']=True;shortened=True
+                preview_limit = 80 if key == 'purpose' else 50 if key == 'not_for' else None
+                if preview_limit is not None and len(value)>preview_limit:
+                    value=value[:preview_limit]+'…';view[key+'_shortened']=True;shortened=True
                 view[key]=value
             aliases=[{'command':a['command'],'mode':a['mode']} for a in page['aliases'] if a['package']==record['package']]
             if aliases:view['aliases']=aliases

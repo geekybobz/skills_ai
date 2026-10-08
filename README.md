@@ -46,12 +46,13 @@ or network update check.
 
 ## Public skills
 
-Public inventory contains exactly these five package records. Internal capabilities,
+Public inventory contains exactly these six package records. Internal capabilities,
 components, modes, phases, and Markdown files are never additional skills.
 
 | package | state | role |
 |---|---|---|
 | `interaction-protocol` | active | interaction skill; no skill-count contribution |
+| `markdown-protocol` | active | automatic Markdown creation/editing/review with proportional design approval, portable layered architecture, formatting examples, visual fallbacks, and validation |
 | `theory-reference` | active | theory and LaTeX task package |
 | `research-context-scout` | manual | user-aligned physics research orientation from an extracted paper corpus to collective mathematical ideas and project-notation translations |
 | `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |

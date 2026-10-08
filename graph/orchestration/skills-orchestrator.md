@@ -17,6 +17,7 @@ Canonical control plane: [[runtime/skills-orchestrator/SKILL|runtime instruction
 ## Skills
 
 - [[graph/skills/interaction-protocol|Interaction Protocol]]
+- [[graph/skills/markdown-protocol|Markdown Protocol]]
 - [[graph/skills/theory-reference|Theory Reference]]
 - [[graph/skills/research-context-scout|Research Context Scout]]
 - [[graph/skills/optimizer|Optimizer]]

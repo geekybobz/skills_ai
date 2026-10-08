@@ -31,6 +31,7 @@ flowchart TD
 | `registry/activation.md` | separate orchestrator record, public skill states, and internal gates |
 | `registry/*.md` | family-level capability metadata |
 | `interaction-protocol/` | one public interaction package and its modes |
+| `markdown-protocol/` | one repository-owned active package for automatic Markdown handling, proportional design review, portable layered structure, formatting examples, visuals, and validation |
 | `theory-reference/` | one separately owned submodule package |
 | `research-context-scout/` | one repository-owned manual package |
 | `optimizer/` | one repository-owned manual package with separate system-build review, adaptive campaign, and situation-analysis workflows |
