@@ -88,6 +88,8 @@ The index owns:
 It is a semantic map, not a raw filesystem dump. Link to a subordinate gallery
 or local index instead of repeating its complete inventory.
 
+## Details
+
 ## Reference organization
 
 Keep established clear paths unless moving them solves a real navigation or

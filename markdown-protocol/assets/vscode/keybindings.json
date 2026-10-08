@@ -1,13 +1,10 @@
 [
-  // Merge this entry into User keybindings.json after making a backup.
   {
     "key": "ctrl+alt+v",
     "mac": "cmd+alt+v",
     "command": "markdown-preview-enhanced.openPreviewToTheSide",
     "when": "editorLangId =~ /^(markdown|quarto|prompt|instructions|chatagent|skill)$/"
   },
-
-  // Optional companion entries when LaTeX Workshop is already installed.
   {
     "key": "ctrl+alt+v",
     "mac": "cmd+alt+v",

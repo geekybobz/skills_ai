@@ -791,17 +791,20 @@ reviewed: 2025-06-01
         self.assertEqual(["details", "summary"], lint["MD033"]["allowed_elements"])
         self.assertNotIn("MD013", lint)
 
-        bindings = (PACKAGE / "assets" / "vscode" / "keybindings.jsonc").read_text(
-            encoding="utf-8"
+        bindings = json.loads(
+            (PACKAGE / "assets" / "vscode" / "keybindings.json").read_text(
+                encoding="utf-8"
+            )
         )
-        self.assertIn('"mac": "cmd+alt+v"', bindings)
-        self.assertIn("markdown-preview-enhanced.openPreviewToTheSide", bindings)
-        self.assertIn("latex-workshop.view", bindings)
+        self.assertTrue(any(item.get("mac") == "cmd+alt+v" for item in bindings))
+        commands = {item["command"] for item in bindings}
+        self.assertIn("markdown-preview-enhanced.openPreviewToTheSide", commands)
+        self.assertIn("latex-workshop.view", commands)
 
     def test_vscode_setup_is_backup_first_and_does_not_claim_rmd_execution(self) -> None:
         guide = self.read("references/vscode-setup.md")
         self.assertIn("back up User `keybindings.json`", guide)
-        self.assertIn("Recommendations do not", guide)
+        self.assertIn("recommendations do not", guide)
         self.assertIn("Command-Option-V", guide)
         self.assertIn("true rendering also executes R code", guide)
 

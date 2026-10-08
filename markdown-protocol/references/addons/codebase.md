@@ -50,6 +50,8 @@ Include the proposed views, files, ownership, and validation in the normal
 Markdown Protocol review. A new document or materially different visual system
 is structural work and needs agreement before writing.
 
+## Details
+
 ## Adaptive profiles
 
 Choose by information need rather than repository size alone.

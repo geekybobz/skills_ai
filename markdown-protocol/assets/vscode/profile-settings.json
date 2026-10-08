@@ -1,0 +1,18 @@
+{
+  "markdown.validate.enabled": true,
+  "markdown.updateLinksOnFileMove.enabled": "prompt",
+  "markdown-preview-enhanced.codeBlockTheme": "vscode.css",
+  "markdown-preview-enhanced.previewTheme": "vscode.css",
+  "markdown-preview-enhanced.revealjsTheme": "vscode.css",
+  "markdown-preview-enhanced.scrollSync": true,
+  "markdown-preview-enhanced.liveUpdate": true,
+  "markdown-preview-enhanced.mathRenderingOption": "KaTeX",
+  "markdown-preview-enhanced.enableWikiLinkSyntax": false,
+  "markdown-preview-enhanced.enableScriptExecution": false,
+  "markdown-preview-enhanced.enablePreviewScripts": false,
+  "latex-workshop.latex.outDir": "%DIR%",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.message.log.show": false,
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click"
+}

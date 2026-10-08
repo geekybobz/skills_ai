@@ -25,7 +25,7 @@ Validate the exact changed collection in proportion to its complexity.
 Use the package checker for a bounded collection when its checks apply:
 
 ```bash
-python3 scripts/markdown_protocol.py check <collection-root>
+mdp verify <collection-root>
 ```
 
 Report changed files, checks, renderer evidence, generated outputs, warnings,

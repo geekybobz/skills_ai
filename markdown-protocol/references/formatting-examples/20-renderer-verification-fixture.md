@@ -97,7 +97,6 @@ and inline code `rendered`.
 | VS Code built-in preview | 1.141 | built-in Mermaid and KaTeX confirmed; visual observation blocked by computer-use permission | 2026-10-08 |
 | Markdown Preview Enhanced | 0.8.39 | local configuration, Mermaid support, math delimiters, and side-preview command confirmed; visual observation blocked by computer-use permission | 2026-10-08 |
 | GitHub Markdown | current hosted renderer | official documentation checked; hosted render/API observation pending | 2026-10-08 |
-| Obsidian | untested | not in baseline | — |
 
 ---
 

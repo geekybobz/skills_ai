@@ -23,6 +23,10 @@ Read-only explanation or review needs no write approval. Before a write:
 6. Pause again before new files, changed ownership or profile, a new generated
    view/plugin, or materially broader content or validation.
 
+A review-gate waiver changes only this proposal pause. It never waives project
+instructions, permissions, destructive-action safeguards, or another skill's
+authority.
+
 When a proposal introduces a non-core or renderer-dependent technique, include
 an optional `Patterns used` line linking its gallery example. Omit the line for
 ordinary headings, prose, lists, and relative links.
@@ -71,8 +75,8 @@ longer be maintained.
 - `#> md_check` selects read-only `check` mode and runs the package checker on
   the unambiguous or user-named collection; repairs remain separate writes.
 - `#> use none` keeps the repository-wide optional-skill opt-out.
-- “Skip the Markdown review for this task” waives only this proposal pause. It
-  does not waive permissions, project instructions, or destructive safeguards.
+- “Skip the Markdown review for this task” invokes the compact waiver rule
+  above; it grants no additional authority.
 
 ---
 

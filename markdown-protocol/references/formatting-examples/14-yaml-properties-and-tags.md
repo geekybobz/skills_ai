@@ -25,7 +25,7 @@ The Markdown Protocol tool can build an exhaustive inventory from `role`,
 tags. Plain-text readers can still understand the metadata.
 
 ```bash
-python3 scripts/markdown_protocol.py tags . --tag domain/example --tag use/learning
+mdp tags . --tag domain/example --tag use/learning
 ```
 
 Repeated tag filters use AND semantics. Use lowercase letters, digits, and
@@ -47,4 +47,4 @@ Use a short visible `## Status` or `## Context` section.
 
 ---
 
-[← Previous](13-mathematical-expressions.md) · [⌂ Home](../markdown-patterns.md) · [Next →](15-obsidian-links-and-embeds.md)
+[← Previous](13-mathematical-expressions.md) · [⌂ Home](../markdown-patterns.md) · [Next →](15-portable-links.md)

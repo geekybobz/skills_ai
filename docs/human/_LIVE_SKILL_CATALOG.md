@@ -36,7 +36,7 @@ These technical routes select focused instructions inside a public task package.
 |---|---|---|---|---|---|---|---|---|---:|
 | interaction-protocol | interaction.general | interaction | active | Present the result first with sufficient clear context and precise terms. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
 | interaction-protocol | interaction.math | interaction | active | Explain mathematical reasoning through results, defined symbols and justified equations. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
-| markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | any requested Markdown creation, edit, review, or restructuring, including README, documentation, notes, knowledge bases, or Markdown changed inside another task | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | package capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 884 |
+| markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | any requested Markdown creation, edit, review, or restructuring, including README, documentation, notes, knowledge bases, or Markdown changed inside another task | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | package capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 791 |
 | optimizer | optimizer | optimizer-workflow | manual | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer, #> build-system, #> optimize, #> use optimizer, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run | package capability | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 832 |
 | quantum-job-collector | quantum-job-collector | career | off | exhaustive quantum job collection for Quantum Career Radar | quantum jobs, career radar, update review queue, pending jobs, source coverage | generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled | external pointer | `external-skills/quantum-job-collector/SKILL.md` | — |
 | research-context-scout | research-context-scout | research | manual | align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test | research context scout, initial research orientation, supervisor assessment, align research context, collect and synthesize papers, translate literature ideas into this project | claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request | package capability | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 695 |
@@ -76,17 +76,20 @@ These technical routes select focused instructions inside a public task package.
 
 | Package file | Role |
 |---|---|
+| [markdown-protocol/.gitignore](../../markdown-protocol/.gitignore) | Package support file. |
 | [markdown-protocol/.markdownlint.jsonc](../../markdown-protocol/.markdownlint.jsonc) | Package support file. |
-| [markdown-protocol/.obsidian/app.json](../../markdown-protocol/.obsidian/app.json) | Package support file. |
-| [markdown-protocol/.obsidian/appearance.json](../../markdown-protocol/.obsidian/appearance.json) | Package support file. |
-| [markdown-protocol/.obsidian/core-plugins.json](../../markdown-protocol/.obsidian/core-plugins.json) | Package support file. |
-| [markdown-protocol/.obsidian/workspace.json](../../markdown-protocol/.obsidian/workspace.json) | Package support file. |
 | [markdown-protocol/.vscode/extensions.json](../../markdown-protocol/.vscode/extensions.json) | Package support file. |
 | [markdown-protocol/.vscode/settings.json](../../markdown-protocol/.vscode/settings.json) | Package support file. |
+| [markdown-protocol/.vscode/tasks.json](../../markdown-protocol/.vscode/tasks.json) | Package support file. |
 | [markdown-protocol/INDEX.md](../../markdown-protocol/INDEX.md) | Package support file. |
+| [markdown-protocol/README.md](../../markdown-protocol/README.md) | Human orientation for the package. |
 | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | Skill entry or shared workflow instructions. |
 | [markdown-protocol/agents/openai.yaml](../../markdown-protocol/agents/openai.yaml) | Package support file. |
-| [markdown-protocol/assets/vscode/keybindings.jsonc](../../markdown-protocol/assets/vscode/keybindings.jsonc) | Package support file. |
+| [markdown-protocol/assets/vscode/extensions.json](../../markdown-protocol/assets/vscode/extensions.json) | Package support file. |
+| [markdown-protocol/assets/vscode/keybindings.json](../../markdown-protocol/assets/vscode/keybindings.json) | Package support file. |
+| [markdown-protocol/assets/vscode/markdown-protocol-macos.code-profile](../../markdown-protocol/assets/vscode/markdown-protocol-macos.code-profile) | Package support file. |
+| [markdown-protocol/assets/vscode/profile-settings.json](../../markdown-protocol/assets/vscode/profile-settings.json) | Package support file. |
+| [markdown-protocol/pyproject.toml](../../markdown-protocol/pyproject.toml) | Package support file. |
 | [markdown-protocol/references/addons/add-on-contract.md](../../markdown-protocol/references/addons/add-on-contract.md) | Package support file. |
 | [markdown-protocol/references/addons/codebase.md](../../markdown-protocol/references/addons/codebase.md) | Package support file. |
 | [markdown-protocol/references/addons/decision-records.md](../../markdown-protocol/references/addons/decision-records.md) | Package support file. |
@@ -112,7 +115,7 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/references/formatting-examples/12-mermaid-diagrams.md](../../markdown-protocol/references/formatting-examples/12-mermaid-diagrams.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/13-mathematical-expressions.md](../../markdown-protocol/references/formatting-examples/13-mathematical-expressions.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/14-yaml-properties-and-tags.md](../../markdown-protocol/references/formatting-examples/14-yaml-properties-and-tags.md) | Package support file. |
-| [markdown-protocol/references/formatting-examples/15-obsidian-links-and-embeds.md](../../markdown-protocol/references/formatting-examples/15-obsidian-links-and-embeds.md) | Package support file. |
+| [markdown-protocol/references/formatting-examples/15-portable-links.md](../../markdown-protocol/references/formatting-examples/15-portable-links.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/16-page-footer-navigation.md](../../markdown-protocol/references/formatting-examples/16-page-footer-navigation.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/17-editor-folding.md](../../markdown-protocol/references/formatting-examples/17-editor-folding.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/18-markmap-view.md](../../markdown-protocol/references/formatting-examples/18-markmap-view.md) | Package support file. |
@@ -127,7 +130,10 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/references/validation.md](../../markdown-protocol/references/validation.md) | Package support file. |
 | [markdown-protocol/references/visual-patterns.md](../../markdown-protocol/references/visual-patterns.md) | Package support file. |
 | [markdown-protocol/references/vscode-setup.md](../../markdown-protocol/references/vscode-setup.md) | Package support file. |
+| [markdown-protocol/scripts/build_vscode_profile.py](../../markdown-protocol/scripts/build_vscode_profile.py) | Deterministic support, installation, synchronization, or validation script. |
 | [markdown-protocol/scripts/markdown_protocol.py](../../markdown-protocol/scripts/markdown_protocol.py) | Deterministic support, installation, synchronization, or validation script. |
+| [markdown-protocol/tests/test_checker_regressions.py](../../markdown-protocol/tests/test_checker_regressions.py) | Package support file. |
+| [markdown-protocol/tests/test_cli.py](../../markdown-protocol/tests/test_cli.py) | Package support file. |
 
 ## theory-reference
 

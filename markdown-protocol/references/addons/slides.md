@@ -21,6 +21,8 @@ to its source topics, and can still be read as ordinary Markdown.
 | Composition | Topic notes own facts; Marp and the target renderer own presentation and export behavior |
 | Boundaries | No copied source corpus, slide-only rule, hidden qualification, untrusted HTML enablement, mandatory extension, or unverified export claim |
 
+## Details
+
 ## Source relationship
 
 Record the source topics near the top of the deck. Summarize rather than copy,

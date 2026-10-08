@@ -34,6 +34,8 @@ preserve a dependable text route when the visual is unavailable.
 Do not select a tool because it looks richer. Select it only when its interaction
 or layout answers the named question better than the baseline.
 
+## Details
+
 ## Markmap hierarchy view
 
 Markmap derives an interactive mind map from Markdown hierarchy and renders it

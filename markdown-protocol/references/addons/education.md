@@ -34,6 +34,8 @@ Do not ask the user to choose from a catalogue unless a missing audience or
 learning objective would materially change the result. Do not add every
 available block merely because it exists.
 
+## Details
+
 ## Adaptive reading flow
 
 Use this conceptual order when it fits:
@@ -130,7 +132,7 @@ that graph rather than manually maintaining a second order. The path is valid
 only when prerequisites are acyclic. Use the package tool to inspect it:
 
 ```bash
-python3 scripts/markdown_protocol.py graph <collection-root> --topic topics/example.md
+mdp graph <collection-root> --topic topics/example.md
 ```
 
 The graph supplies required-before relationships. The author still decides

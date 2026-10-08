@@ -10,27 +10,19 @@ and facts compact.
 
 ## Load only what the task needs
 
-For `## Details` references, read the operational head first. Continue only
-when examples, templates, or reasoning are needed.
+Read only the operational head above `## Details`; continue for examples or
+reasoning only when needed.
 
-1. Read [core-protocol.md](references/core-protocol.md) through `## Details`
-   for every task.
-2. Read [review-workflow.md](references/review-workflow.md) through `## Details`
-   before a Markdown write.
-3. Read [layouts.md](references/layouts.md) when creating or reorganizing files;
-   continue into Details only when a template is useful.
-4. Read [markdown-patterns.md](references/markdown-patterns.md) when choosing or
-   teaching a formatting pattern.
-5. Read [visual-patterns.md](references/visual-patterns.md) when a visual may
-   materially improve understanding.
-6. Read [validation.md](references/validation.md) through `## Details` before
-   finishing a change.
-7. Choose one add-on from [add-on routes](references/addons/routes.md).
-8. Read [structured-inventory.md](references/structured-inventory.md) only when
-   using properties, typed connections, generated `INVENTORY.md`, or the
-   package checker.
-9. In `deepen` or `check` mode, read
-   [named-commands.md](references/named-commands.md).
+- Every task: [core](references/core-protocol.md); before a write:
+  [review-workflow.md](references/review-workflow.md); before completion:
+  [validation](references/validation.md).
+- Creating or reorganizing: [layouts](references/layouts.md). Formatting or
+  teaching: [patterns](references/markdown-patterns.md). Materially useful
+  visual: [visuals](references/visual-patterns.md).
+- Matching use case only: one [add-on routes](references/addons/routes.md). Properties,
+  typed connections, inventory, or checker only:
+  [structured inventory](references/structured-inventory.md). `deepen` or
+  `check` mode: [named commands](references/named-commands.md).
 
 Human browsing starts from [INDEX.md](INDEX.md); ordinary model work does not.
 Open only the relevant formatting example, never the whole gallery.

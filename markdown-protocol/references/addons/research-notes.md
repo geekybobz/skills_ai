@@ -21,6 +21,8 @@ important claims, and see how the source relates to the surrounding literature.
 | Composition | The source and the evidence-owning research skill remain authoritative; `research-context-scout`, when selected, owns discovery and evidence assessment |
 | Boundaries | No invented citation, unsupported certainty, hidden source status, automatic paper acquisition, or claim that formatting proves correctness |
 
+## Details
+
 ## Paper-note template
 
 Use a stable citation key as the note identifier when a citation manager is

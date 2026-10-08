@@ -41,7 +41,7 @@ checks without maintaining separate human and machine copies.
 |---|---|
 | Package structure and links | pass: package checker and focused suite |
 | Home and reciprocal sequence navigation | pass: focused suite |
-| Compactness thresholds | pass: compact loading budget and package checker |
+| Compactness thresholds | pass: compact loading budget plus entry/topic inference in the package checker |
 | Portable editor configuration parses | pass: focused suite |
 | Permissive lint baseline | pass: 0 issues across 42 Markdown files with markdownlint-cli2 0.23.2 |
 | VS Code visual renderer pass | pending macOS Computer Use permission or manual observation |

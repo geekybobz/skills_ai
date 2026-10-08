@@ -5,33 +5,38 @@ making the skill depend on one editor.
 
 ## In brief
 
-Open `markdown-protocol/` as the VS Code workspace. Its `.vscode/` directory
-recommends Markdown Preview Enhanced and markdownlint, then applies local
-validation, link-update prompting, live synchronized preview, KaTeX, portable
-relative links, and disabled preview-script execution.
+Import the committed macOS profile for the closest replica of the reference
+setup. It contains Markdown Preview Enhanced, markdownlint, LaTeX Workshop,
+the agreed shortcuts, synchronized preview, KaTeX, safe preview settings, and
+the LaTeX side-by-side settings. The repository also retains auditable source
+JSON and workspace recommendations.
 
-VS Code does not accept repository-owned keybindings. Before changing personal
-shortcuts, back up User `keybindings.json`, then merge only the entries needed
-from [`assets/vscode/keybindings.jsonc`](../assets/vscode/keybindings.jsonc).
-Never replace an existing keybinding file wholesale.
+The one-step path is **Profiles: Import Profile** with
+[`markdown-protocol-macos.code-profile`](../assets/vscode/markdown-protocol-macos.code-profile).
+VS Code previews the imported categories before creating the profile. The
+manual path remains backup-first: merge only the entries needed from
+[`keybindings.json`](../assets/vscode/keybindings.json), never replace an
+existing user file wholesale.
+
+Before the manual path, back up User `keybindings.json` and `settings.json`.
+Workspace recommendations do not install extensions automatically.
 
 ## Installation
 
 1. Clone or download the package.
-2. Open the `markdown-protocol/` folder directly in VS Code. If it is nested in
-   a larger repository, the parent workspace does not inherit this folder's
-   `.vscode/` settings.
-3. Review and accept the two extension recommendations. Recommendations do not
-   install anything automatically.
-4. Open **Preferences: Open Keyboard Shortcuts (JSON)** from the Command
-   Palette, make a backup, and merge the template entries.
-5. Run **Developer: Reload Window**.
-6. Open the [renderer fixture](formatting-examples/20-renderer-verification-fixture.md)
+2. In VS Code, run **Profiles: Import Profile**, select the committed
+   `.code-profile`, review Settings, Keyboard Shortcuts, and Extensions, then
+   create the `Markdown Protocol macOS` profile.
+3. Open the `markdown-protocol/` folder with that profile. VS Code remembers
+   the folder association.
+4. Install the `mdp` command and run the default **Markdown Protocol: Verify
+   workspace** task once.
+5. Open the [renderer fixture](formatting-examples/20-renderer-verification-fixture.md)
    and check the preview before claiming that diagrams or equations render.
 
-The unwanted recommendations prevent this package from suggesting the three
-overlapping extensions removed from the reference setup. They do not uninstall
-or disable software already chosen by the reader.
+The workspace's unwanted recommendations prevent this package from suggesting
+three overlapping Markdown preview extensions. They never uninstall or disable
+software already chosen by the reader.
 
 ## Essential shortcuts
 
@@ -71,14 +76,19 @@ Quarto workflow. Do not present a static preview as a rendered analysis.
 
 ### Ownership and portability
 
-The package settings own the reference workspace behavior. User keybindings
-remain personal state, so the package supplies a mergeable template rather
-than an automatic installer. Markdown content remains readable without either
-extension; the extensions improve editing and verification only.
+The readable JSON files own the profile inputs. Regenerate the `.code-profile`
+with `python3 scripts/build_vscode_profile.py --write` and verify it with
+`--check`; do not hand-edit the escaped export. Markdown content remains
+readable without the extensions; they improve editing and verification only.
 
 When this package is copied into its own repository, keep `.vscode/` at that
 repository root. When it remains inside a larger repository, either open the
 package folder directly or copy the reviewed settings to the parent workspace.
+
+VS Code Settings Sync can copy profiles between machines signed into the same
+account. For friends or separate accounts, share this repository and import the
+committed profile. Use GitHub's release-only Watch setting for notifications;
+the package starts no updater, watcher, or telemetry process.
 
 ---
 

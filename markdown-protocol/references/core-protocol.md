@@ -26,6 +26,11 @@ human explanations share owners; never maintain parallel copies.
 9. Markdown writes follow a user-reviewed design proportional to the change.
 10. Every authored page ends with Home navigation; Previous and Next appear only
    for an intentional reading order.
+11. Keep prerequisites, safety constraints, conclusions, and limitations in
+   portable visible text, never only inside collapsed or tool-specific content.
+12. The final nonblank footer pair is a horizontal rule (`---`) followed by a
+   line containing `[⌂ Home](...)`; generated pages receive it from their
+   generator.
 
 ## Information roles
 
@@ -61,8 +66,8 @@ Use this reading order:
 4. Relationships and next links.
 5. Optional examples, evidence, derivations, or implementation detail.
 
-Do not hide prerequisites, safety constraints, conclusions, or limitations in
-collapsed or tool-specific content.
+The visible-text rule above is authoritative. Collapsible explanations and
+tool-specific views may repeat or expand optional detail only.
 
 ### Ownership maintenance
 

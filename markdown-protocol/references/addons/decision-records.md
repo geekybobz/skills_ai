@@ -21,6 +21,8 @@ later record superseded it without reconstructing the discussion history.
 | Composition | The domain owner decides correctness; this add-on owns the record shape and navigation |
 | Boundaries | No transcript, hidden approval, retroactive rewriting of accepted history, or substitute for code and policy authority |
 
+## Details
+
 ## Record template
 
 ```markdown

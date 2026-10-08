@@ -86,7 +86,7 @@ Open only the example needed for the current question.
 ```text
 agents/openai.yaml    -> native UI metadata and invocation policy
 scripts/markdown_protocol.py -> on-demand bounded check and inventory generator
-.obsidian/            -> optional local viewing state; not routing authority
+assets/vscode/        -> auditable editor-profile sources and generated profile
 .vscode/              -> portable recommendations and package-local settings
 .markdownlint.jsonc   -> permissive portability and correctness checks
 assets/vscode/        -> backup-first user keybinding template

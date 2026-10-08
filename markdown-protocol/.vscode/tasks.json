@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Markdown Protocol: Verify workspace",
+      "type": "shell",
+      "command": "mdp",
+      "args": ["verify", "${workspaceFolder}"],
+      "problemMatcher": {
+        "owner": "markdown-protocol",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(ERROR|WARNING): ([^:]+): (.*)$",
+          "severity": 1,
+          "file": 2,
+          "message": 3
+        }
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}

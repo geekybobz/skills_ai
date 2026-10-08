@@ -29,12 +29,17 @@ not certify correctness or replace evidence. Tags are optional filters:
 `domain/` says what the content concerns and `use/` says what the reader does
 with it. Tags never replace explicit links.
 
+A file opts into protocol property validation by declaring `role`. A caller can
+instead require every file in the bounded collection to opt in with
+`mdp verify <root> --require-properties`. Unmanaged front matter keeps its
+local meaning and is not validated as Markdown Protocol metadata.
+
 When tags are present, each value uses `domain/...` or `use/...`, lowercase
 letters, digits, and hyphens. Repeated `--tag` filters use AND semantics:
 
 ```bash
-python3 scripts/markdown_protocol.py tags <collection-root>
-python3 scripts/markdown_protocol.py tags <collection-root> \
+mdp tags <collection-root>
+mdp tags <collection-root> \
   --tag domain/control --tag use/learning
 ```
 
@@ -54,21 +59,28 @@ output.
 
 ## On-demand tool
 
-Run the tool explicitly from the skill package:
+Install the package once, then use the same command from any collection:
 
 ```bash
-python3 scripts/markdown_protocol.py inventory <collection-root> --write
-python3 scripts/markdown_protocol.py inventory <collection-root> --check
-python3 scripts/markdown_protocol.py check <collection-root> --require-properties
-python3 scripts/markdown_protocol.py check <collection-root> \
-  --reviewed-since 2026-01-01
+mdp status <collection-root>
+mdp adopt <collection-root>
+mdp verify <collection-root> --require-properties
+mdp verify <collection-root> --reviewed-since 2026-01-01
+mdp inventory <collection-root> --write
+mdp inventory <collection-root> --check
 ```
 
-`check` validates the bounded collection's local links and anchors, reachable
+`verify` validates the bounded collection's local links and anchors, reachable
 Markdown files, generated banners, compactness warnings, portable Home footers,
 property presence when requested, and inventory freshness. It ignores example
 links inside fenced code. It never starts a watcher or scans outside the
 supplied collection; external relative links are checked only for existence.
+
+`adopt` runs the same structural analysis but downgrades missing footers and
+orphan pages to warnings. It is the first pass for an existing collection, not
+a weaker permanent verification mode. `--format json` returns stable finding
+objects for editors and automation. `mdp fix` is a dry run by default and only
+adds deterministic Home footers; `--apply` is required to write them.
 
 `--reviewed-since` emits warnings for `topic` and `deep` notes whose valid
 `reviewed` date is missing or older than the chosen date. It skips `deprecated`
@@ -95,8 +107,9 @@ agreement, and prerequisite cycles. Use the graph view to inspect the learning
 order or one topic's transitive prerequisites:
 
 ```bash
-python3 scripts/markdown_protocol.py graph <collection-root>
-python3 scripts/markdown_protocol.py graph <collection-root> --topic topics/example.md
+mdp graph <collection-root>
+mdp graph <collection-root> --topic topics/example.md
+mdp graph <collection-root> --format mermaid
 ```
 
 The compactness thresholds produce warnings. Broken links, missing required

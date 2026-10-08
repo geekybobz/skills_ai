@@ -26,13 +26,16 @@ Run the package checker against the user-named Markdown collection, or the
 current collection when the target is already unambiguous:
 
 ```bash
-python3 markdown-protocol/scripts/markdown_protocol.py check <COLLECTION>
+mdp verify <COLLECTION>
 ```
 
 Report the target, pass or failure, and actionable diagnostics. This is a
 read-only structural check. It does not prove factual correctness, renderer
 quality, or compliance with another domain's rules. Do not repair failures
 unless the user also asks for edits or an approved write is already in progress.
+For a collection that has not adopted the protocol, start with
+`mdp adopt <COLLECTION>` so missing footers and unreachable pages are reported
+as migration warnings.
 
 ## Argument boundary
 

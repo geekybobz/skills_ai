@@ -21,6 +21,8 @@ procedure without guessing what success looks like.
 | Composition | The operating system, service owner, and applicable safety or repository policy own permissions and technical authority |
 | Boundaries | No implied authorization, destructive placeholder, secret capture, fabricated output, or claim that a checklist makes an unsafe action safe |
 
+## Details
+
 ## Step model
 
 Each material step has three parts:

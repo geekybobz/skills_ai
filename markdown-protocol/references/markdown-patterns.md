@@ -23,10 +23,8 @@ was opened in that target, and **fallback** means the meaning remains readable
 without the enhancement. Never promote documented support to observed support.
 
 The current inspection baseline is VS Code 1.141, Markdown Preview Enhanced
-0.8.39, and GitHub Markdown as checked on 2026-10-08. Obsidian remains
-compatible through portable links but is not part of the tested baseline.
-Visual observation in VS Code remains pending because computer-use permission
-was unavailable during this pass.
+0.8.39, and GitHub Markdown as checked on 2026-10-08. Visual observation in VS
+Code remains pending; documented support is not treated as observed behavior.
 
 ## Details
 
@@ -55,7 +53,7 @@ was unavailable during this pass.
 - [Mermaid diagrams](formatting-examples/12-mermaid-diagrams.md)
 - [Mathematical expressions](formatting-examples/13-mathematical-expressions.md)
 - [YAML properties and tags](formatting-examples/14-yaml-properties-and-tags.md)
-- [Obsidian links and embeds](formatting-examples/15-obsidian-links-and-embeds.md)
+- [Portable links instead of app-specific links](formatting-examples/15-portable-links.md)
 - [Page footer navigation](formatting-examples/16-page-footer-navigation.md)
 - [Editor folding](formatting-examples/17-editor-folding.md)
 - [Markmap view](formatting-examples/18-markmap-view.md)
@@ -71,13 +69,12 @@ was unavailable during this pass.
 | `<details>` / `<summary>` | visual pass pending | documented; visual pass pending | documented | replace with a heading when unsupported |
 | GitHub alerts | readable as a block quote; special styling needs an extension | readable fallback; styling not claimed | documented | keep the alert text explicit |
 | Mermaid fenced blocks | documented; renderer present; visual pass pending | documented; bundled renderer; visual pass pending | documented | include a text mapping |
-| inline math `$...$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
-| display math `$$...$$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
+| inline math `$...$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | provisional syntax; preserve prose meaning |
+| display math `$$...$$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | provisional syntax; preserve prose meaning |
 | `\\label`, `\\ref`, broad macro sets | not established | renderer-dependent | renderer-dependent | state labels and references in prose |
 | Markdown region markers | documented for the source editor | source-editor feature only | comments are hidden | editor convenience only |
 | Markmap | optional extension; not installed by the protocol | not native | not native | headings remain authoritative |
 | linked SVG | documented; visual pass pending | documented; visual pass pending | documented | provide alt text and source link |
-| Obsidian wikilinks, embeds, callouts | untested | disabled in the reference workspace | not portable | use relative Markdown links |
 
 Use `20-renderer-verification-fixture.md` for the visual pass. Re-run it after a
 renderer upgrade before changing this matrix.

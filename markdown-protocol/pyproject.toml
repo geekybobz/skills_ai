@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markdown-protocol"
+version = "0.1.0"
+description = "Portable layered Markdown architecture and deterministic checks"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+mdp = "markdown_protocol:main"
+
+[tool.setuptools]
+py-modules = ["markdown_protocol"]
+package-dir = {"" = "scripts"}

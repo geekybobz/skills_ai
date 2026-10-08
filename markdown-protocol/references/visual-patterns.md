@@ -98,10 +98,11 @@ warning, or conclusion.
 
 ### Mathematics
 
-Equation syntax is renderer-dependent. Test inline and display forms in the
-actual target before selecting a house style. Until then, keep copyable LaTeX
-in a fenced block and state its meaning in text. See
+The single syntax owner is
 [Mathematical expressions](formatting-examples/13-mathematical-expressions.md).
+Its provisional house style uses `$...$` inline and `$$...$$` on separate
+lines, while stating every important equation's meaning in text. The named
+renderer pass remains required before claiming dependable rendering.
 
 ---
 
