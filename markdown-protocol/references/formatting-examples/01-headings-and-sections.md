@@ -28,3 +28,7 @@ section that a reader might navigate to.
 
 Use `**bold**` for limited emphasis, `*italic*` when introducing a term, and
 `---` for a thematic break only when a heading would be unnecessary.
+
+---
+
+[⌂ Home](../markdown-patterns.md) · [Next →](02-relative-and-section-links.md)

@@ -76,6 +76,10 @@ The smallest useful explanation of the whole collection.
 
 - [Route map](MAP.md)
 - [Complete index](INDEX.md)
+
+---
+
+[⌂ Home](#collection-name)
 ```
 
 Omit sections that add no information. Add one small conceptual diagram only
@@ -98,6 +102,10 @@ when it improves orientation.
 ## If you want to understand the architecture
 
 - Begin with [...](...).
+
+---
+
+[← Previous](README.md) · [⌂ Home](README.md) · [Next →](INDEX.md)
 ```
 
 The Map is curated and intention-oriented; it is not exhaustive.
@@ -116,6 +124,10 @@ The Map is curated and intention-oriented; it is not exhaustive.
 ## Workflows
 
 - [Workflow A](topics/workflow-a.md)
+
+---
+
+[← Previous](MAP.md) · [⌂ Home](README.md) · [Next →](topics/topic-a.md)
 ```
 
 The Index is complete but textually light.
@@ -145,6 +157,10 @@ The authoritative knowledge, instructions, or decisions.
 ## Details
 
 Optional explanation or links to deep notes.
+
+---
+
+[← Previous](previous-topic.md) · [⌂ Home](../README.md) · [Next →](next-topic.md)
 ```
 
 Only the title, scope, and meaningful content are required. Use the other
@@ -168,7 +184,16 @@ This note expands [...](...).
 ## Return
 
 [Return to the parent topic](../topic.md)
+
+---
+
+[⌂ Home](../../README.md)
 ```
+
+The footer is required even when optional template sections are omitted. Home
+always exists. Previous and Next express a curated sequence, not alphabetical
+or filesystem order. The first and last pages omit whichever direction does
+not exist; a single-document profile links Home to its own title or contents.
 
 ## Split or merge
 
@@ -179,3 +204,7 @@ only inside the parent, or likely to become an orphan.
 
 Merge notes when their boundaries cannot be explained without repeating each
 other. Split a directory only when its contents form a stable, named group.
+
+---
+
+[← Previous](review-workflow.md) · [⌂ Home](../SKILL.md) · [Next →](markdown-patterns.md)

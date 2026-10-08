@@ -34,7 +34,7 @@ but is not a package, capability, or inventory row.
 | public package | anatomy |
 |---|---|
 | `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |
-| `markdown-protocol` | compact active entry, proportional review workflow, selectively loaded architecture/layout/pattern/visual/validation references, and small human learning examples |
+| `markdown-protocol` | compact active entry, proportional review workflow, selectively loaded architecture/layout/pattern/visual/validation references, education and codebase add-ons, and small human learning examples |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
 | `research-context-scout` | repository package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
 | `optimizer` | repository package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |

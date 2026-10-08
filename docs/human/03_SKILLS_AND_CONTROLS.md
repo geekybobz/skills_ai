@@ -25,6 +25,10 @@ does not appear in the table or count below.
 These six rows are the complete public skill count. Internal capability routes
 are never added to it.
 
+The Markdown package selectively adds education guidance for learning material
+and codebase guidance for repository structure and workflows. These are
+supporting references inside one package, not additional skills.
+
 ## Activation states
 
 | state | behavior |

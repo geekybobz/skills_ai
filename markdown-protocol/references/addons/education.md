@@ -144,3 +144,7 @@ maintain than the explanation it supports.
 - The result is direct, restrained, and consistent with the user's tone.
 - No project-specific content, fixed paper list, quiz requirement, plugin, or
   card quota has been introduced by this protocol.
+
+---
+
+[⌂ Home](../../SKILL.md)

@@ -71,3 +71,7 @@ Equation syntax is renderer-dependent. The protocol must test inline and
 display forms in the actual renderer before selecting a house style. Until
 that test is complete, keep LaTeX source in a fenced block and state the
 equation's meaning in text. See [Mathematical expressions](formatting-examples/13-mathematical-expressions.md).
+
+---
+
+[← Previous](markdown-patterns.md) · [⌂ Home](../SKILL.md) · [Next →](validation.md)

@@ -49,6 +49,10 @@ the whole gallery during ordinary work.
 - Give every important fact one authoritative owner.
 - Summarize and link from outer layers instead of duplicating deep content.
 - Prefer relative Markdown links and portable source syntax.
+- End every authored Markdown page handled by the protocol with the compact
+  navigation footer defined in [core-protocol.md](references/core-protocol.md):
+  Home is mandatory; Previous and Next are required when a real reading order
+  exists. Put the footer into the canonical generator for generated pages.
 - Keep essential meaning outside renderer-specific diagrams, callouts, embeds,
   databases, or plugins.
 - Mark generated material and never hand-maintain it as canonical prose.
@@ -62,3 +66,7 @@ navigation, portability, review, and Markdown-specific validation.
 This protocol does not grant permission to rewrite unrelated documentation,
 install plugins, introduce a documentation site, or generate background
 indexes. Specialized research and operations add-ons remain deferred.
+
+---
+
+[⌂ Home](#markdown-protocol)

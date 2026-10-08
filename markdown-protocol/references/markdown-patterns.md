@@ -43,7 +43,12 @@ source syntax, expected result, fallback, and maintenance risk.
 - [Mathematical expressions](formatting-examples/13-mathematical-expressions.md)
 - [YAML properties and tags](formatting-examples/14-yaml-properties-and-tags.md)
 - [Obsidian links and embeds](formatting-examples/15-obsidian-links-and-embeds.md)
+- [Page footer navigation](formatting-examples/16-page-footer-navigation.md)
 
 Mathematical display syntax remains pending cross-renderer verification. Do not
 copy an equation delimiter into authoritative documentation merely because it
 appears in the learning example.
+
+---
+
+[← Previous](layouts.md) · [⌂ Home](../SKILL.md) · [Next →](visual-patterns.md)

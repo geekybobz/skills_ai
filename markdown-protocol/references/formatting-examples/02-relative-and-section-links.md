@@ -26,3 +26,7 @@ the relevant section in the surrounding sentence.
 
 Prefer relative repository paths. Recheck links after renaming a file or
 heading.
+
+---
+
+[← Previous](01-headings-and-sections.md) · [⌂ Home](../markdown-patterns.md) · [Next →](03-lists-and-checklists.md)

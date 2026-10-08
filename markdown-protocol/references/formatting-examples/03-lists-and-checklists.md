@@ -27,3 +27,7 @@ temporary work.
 
 Do not turn permanent knowledge into an endless task list. Use a normal section
 for facts and decisions.
+
+---
+
+[← Previous](02-relative-and-section-links.md) · [⌂ Home](../markdown-patterns.md) · [Next →](04-tables.md)

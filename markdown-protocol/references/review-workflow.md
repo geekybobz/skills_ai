@@ -33,6 +33,7 @@ Include only applicable fields:
 - Layout or local change:
 - Files affected:
 - Information ownership and navigation:
+- Footer route (Previous · Home · Next):
 - Optional or renderer-specific features:
 - Validation:
 - Deferred or unverified items:
@@ -74,3 +75,7 @@ approved design can no longer be maintained.
 - A direct instruction such as "skip the Markdown review for this task" waives
   only this package's local proposal pause; it does not waive permissions,
   project instructions, or destructive-action safeguards.
+
+---
+
+[← Previous](core-protocol.md) · [⌂ Home](../SKILL.md) · [Next →](layouts.md)

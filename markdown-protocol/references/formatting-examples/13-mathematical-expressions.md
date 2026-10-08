@@ -45,3 +45,7 @@ speed of light.
 Test at least inline and display equations, subscripts, superscripts, fractions,
 aligned multi-line equations, labels, and references in each intended viewer.
 Record the exact application, version, syntax, and observed result.
+
+---
+
+[← Previous](12-mermaid-diagrams.md) · [⌂ Home](../markdown-patterns.md) · [Next →](14-yaml-properties-and-tags.md)

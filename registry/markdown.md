@@ -6,7 +6,8 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · Package:
 
 This is one active public task package. It applies automatically when Markdown
 is the requested artifact and may be force-selected with `#> md_protocol`.
-Specialized use-case add-ons remain deferred.
+Education and codebase add-ons are available. Specialized research and
+operations add-ons remain deferred.
 
 ## Skills
 

@@ -24,6 +24,9 @@ Validate the exact changed collection in proportion to its complexity.
 - Relative links resolve from their source files.
 - Section anchors exist.
 - Parent and return links are useful rather than ceremonial.
+- Every authored page ends with a resolving Home footer link.
+- Previous and Next links match the declared reading order and resolve when
+  present; first and last pages omit unavailable directions.
 - Platform-specific links have a portable route or fallback.
 
 ## Formatting
@@ -63,3 +66,7 @@ Report which files changed, which links and renderers were checked, which
 generated views were rebuilt, and which optional features remain unverified.
 Also state whether the work stayed inside the approved design or required a
 reviewed expansion.
+
+---
+
+[← Previous](visual-patterns.md) · [⌂ Home](../SKILL.md)

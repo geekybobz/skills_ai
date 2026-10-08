@@ -38,3 +38,7 @@ flowchart LR
 ```text
 Overview -> Topic -> Optional detail
 ```
+
+---
+
+[← Previous](11-images-and-alt-text.md) · [⌂ Home](../markdown-patterns.md) · [Next →](13-mathematical-expressions.md)

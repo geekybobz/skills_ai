@@ -24,3 +24,7 @@ facts only inside the image.
 ## Fallback
 
 Follow the image with a short textual description or relationship list.
+
+---
+
+[← Previous](10-comments-and-generated-banners.md) · [⌂ Home](../markdown-patterns.md) · [Next →](12-mermaid-diagrams.md)

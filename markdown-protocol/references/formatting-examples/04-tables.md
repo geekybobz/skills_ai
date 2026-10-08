@@ -27,3 +27,7 @@ screens.
 ## Fallback
 
 Use one heading or bullet per item followed by its fields.
+
+---
+
+[← Previous](03-lists-and-checklists.md) · [⌂ Home](../markdown-patterns.md) · [Next →](05-collapsible-details.md)

@@ -30,3 +30,7 @@ Do not encode paragraphs or essential explanations as properties.
 ## Fallback
 
 Use a short visible `## Status` or `## Context` section.
+
+---
+
+[← Previous](13-mathematical-expressions.md) · [⌂ Home](../markdown-patterns.md) · [Next →](15-obsidian-links-and-embeds.md)

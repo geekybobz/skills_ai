@@ -39,3 +39,7 @@ the reader must see.
 
 The detailed explanation goes here.
 ```
+
+---
+
+[← Previous](04-tables.md) · [⌂ Home](../markdown-patterns.md) · [Next →](06-footnotes.md)

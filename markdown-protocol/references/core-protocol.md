@@ -20,6 +20,8 @@ relevant topic, and descends into optional detail when needed.
 10. The structure may collapse or expand as the material changes.
 11. Markdown writes follow a user-reviewed design whose detail is proportional
     to the change.
+12. Every authored page ends with a compact navigation footer containing Home;
+    Previous and Next appear when the collection defines a real reading order.
 
 ## Information roles
 
@@ -73,6 +75,29 @@ code are the default. Common extensions, renderer-dependent syntax, and
 platform-specific features require the classification and fallback described
 in [markdown-patterns.md](markdown-patterns.md).
 
+## Page footer navigation
+
+End every authored Markdown page created or edited under this protocol with a
+horizontal rule and one compact navigation line:
+
+```markdown
+---
+
+[← Previous](previous.md) · [⌂ Home](../README.md) · [Next →](next.md)
+```
+
+Home is mandatory and points to the nearest Front Door, contents hub, or route
+map that can reorient the reader. On a standalone document, Home points to its
+top heading or contents section. Previous and Next are mandatory only when an
+intentional reading order exists; omit unavailable directions rather than
+creating dead links or guessing from filename order.
+
+Use relative Markdown links and keep the footer as the final visible content.
+Do not use JavaScript history, image buttons, or renderer-specific navigation.
+For generated Markdown, change the canonical template or generator so the
+footer remains reproducible. For an externally fixed format that cannot accept
+a footer, disclose the exception in the proposal and completion report.
+
 ## Authored and generated material
 
 Generated files must identify their source and regeneration method. Use a
@@ -97,3 +122,7 @@ must not claim otherwise.
 - Tags standing in for explicit relationships.
 - A visual graph with no defined reader question.
 - A generated file that people must edit by hand.
+
+---
+
+[⌂ Home](../SKILL.md) · [Next →](review-workflow.md)

@@ -34,3 +34,7 @@ mix link styles unpredictably within one collection.
 ## Fallback
 
 Use a normal relative link and a one-sentence summary.
+
+---
+
+[← Previous](14-yaml-properties-and-tags.md) · [⌂ Home](../markdown-patterns.md) · [Next →](16-page-footer-navigation.md)

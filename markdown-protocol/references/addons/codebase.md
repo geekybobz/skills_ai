@@ -235,3 +235,7 @@ looks precise but no longer matches the repository.
 - Generated maps are visibly marked and reproducible.
 - No mandatory tool, documentation site, background indexer, or every-file
   documentation burden has been introduced.
+
+---
+
+[⌂ Home](../../SKILL.md)

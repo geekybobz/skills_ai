@@ -25,3 +25,7 @@ Regenerate with: python3 scripts/build_index.py
 
 Do not hide user-facing requirements, permissions, or unresolved decisions in
 comments. A generated banner must name a real source and regeneration method.
+
+---
+
+[← Previous](09-file-trees.md) · [⌂ Home](../markdown-patterns.md) · [Next →](11-images-and-alt-text.md)

@@ -25,3 +25,7 @@ the language name enables syntax highlighting where supported.
 
 Do not use screenshots for copyable code. Do not add a language name that does
 not match the content.
+
+---
+
+[← Previous](07-quotes-notes-and-callouts.md) · [⌂ Home](../markdown-patterns.md) · [Next →](09-file-trees.md)

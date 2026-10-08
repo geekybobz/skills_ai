@@ -109,6 +109,67 @@ class MarkdownProtocolTests(unittest.TestCase):
         self.assertIn("Graphviz", codebase)
         self.assertIn("No mandatory tool", codebase)
 
+    def test_navigation_footer_is_a_required_portable_structure(self) -> None:
+        entry = self.read("SKILL.md")
+        core = self.read("references/core-protocol.md")
+        layouts = self.read("references/layouts.md")
+        validation = self.read("references/validation.md")
+        self.assertIn("End every authored Markdown page", entry)
+        self.assertIn("Home is mandatory", core)
+        self.assertIn(
+            "[← Previous](previous.md) · [⌂ Home](../README.md) · [Next →](next.md)",
+            core,
+        )
+        self.assertIn("curated sequence", layouts)
+        self.assertIn("Every authored page ends with a resolving Home footer link", validation)
+
+    def test_every_package_markdown_file_ends_with_a_home_footer(self) -> None:
+        for path in PACKAGE.rglob("*.md"):
+            with self.subTest(path=path.relative_to(PACKAGE)):
+                lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+                self.assertRegex(lines[-1], r"\[⌂ Home\]\([^)]+\)")
+                self.assertEqual(1, lines[-1].count("[⌂ Home]"))
+                self.assertEqual("---", lines[-2])
+
+    def test_package_footer_file_links_resolve(self) -> None:
+        footer_link = re.compile(r"\[[^]]+\]\(([^)#]+\.md)(?:#[^)]+)?\)")
+        for path in PACKAGE.rglob("*.md"):
+            lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+            for target in footer_link.findall(lines[-1]):
+                with self.subTest(path=path.relative_to(PACKAGE), target=target):
+                    self.assertTrue((path.parent / target).resolve().is_file())
+
+    def test_package_footer_local_anchors_resolve(self) -> None:
+        local_anchor = re.compile(r"\[[^]]+\]\(#([^)]+)\)")
+        for path in PACKAGE.rglob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            footer = [line for line in text.splitlines() if line.strip()][-1]
+            headings = {
+                re.sub(r"[^a-z0-9 -]", "", heading.lower()).strip().replace(" ", "-")
+                for heading in re.findall(r"^#{1,6}\s+(.+)$", text, flags=re.MULTILINE)
+            }
+            for anchor in local_anchor.findall(footer):
+                with self.subTest(path=path.relative_to(PACKAGE), anchor=anchor):
+                    self.assertIn(anchor, headings)
+
+    def test_package_previous_and_next_footer_links_are_reciprocal(self) -> None:
+        relation = re.compile(r"\[(← Previous|Next →)\]\(([^)#]+\.md)(?:#[^)]+)?\)")
+        inverse = {"← Previous": "Next →", "Next →": "← Previous"}
+        for path in PACKAGE.rglob("*.md"):
+            footer = [
+                line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+            ][-1]
+            for label, target in relation.findall(footer):
+                target_path = (path.parent / target).resolve()
+                target_footer = [
+                    line
+                    for line in target_path.read_text(encoding="utf-8").splitlines()
+                    if line.strip()
+                ][-1]
+                expected = path.relative_to(target_path.parent).as_posix()
+                with self.subTest(path=path.relative_to(PACKAGE), target=target):
+                    self.assertIn(f"[{inverse[label]}]({expected})", target_footer)
+
     def test_entry_reference_links_resolve(self) -> None:
         entry = PACKAGE / "SKILL.md"
         for target in re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", entry.read_text(encoding="utf-8")):

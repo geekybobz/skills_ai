@@ -25,3 +25,7 @@ or icon to communicate severity.
 ## Fallback
 
 Use a normal heading such as `### Warning` followed by plain text.
+
+---
+
+[← Previous](06-footnotes.md) · [⌂ Home](../markdown-patterns.md) · [Next →](08-inline-and-block-code.md)

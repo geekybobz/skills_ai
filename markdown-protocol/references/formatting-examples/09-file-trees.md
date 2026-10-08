@@ -24,3 +24,7 @@ diagram renderer.
 
 Do not reproduce a very large filesystem. Show only the paths needed to explain
 the structure, and mark omitted branches when necessary.
+
+---
+
+[← Previous](08-inline-and-block-code.md) · [⌂ Home](../markdown-patterns.md) · [Next →](10-comments-and-generated-banners.md)

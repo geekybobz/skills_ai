@@ -24,3 +24,7 @@ Do not hide essential reasoning or long explanations in footnotes.
 ## Fallback
 
 Add a short `## Assumptions` section or link to a focused note.
+
+---
+
+[← Previous](05-collapsible-details.md) · [⌂ Home](../markdown-patterns.md) · [Next →](07-quotes-notes-and-callouts.md)

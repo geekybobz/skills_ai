@@ -264,7 +264,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "3e78521fba025d40a02980a87fcd0b4930c01ca39e4507bafbdaafd679e65a00",
+  "source_hash": "e481ac7cdb80256f9f2f060c6d32965753abf0467dd330a0c5d669e110aabec4",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -284,7 +284,7 @@
     },
     {
       "path": "registry/markdown.md",
-      "sha256": "26b847873d6c6e4705516d89ca18b30f6b0b3023688ac36c9bfd1428a2b59830"
+      "sha256": "0ff74781a9769505dda785bd780d56fffbb6f46ba34ea9470778be964c15df7e"
     },
     {
       "path": "registry/optimizer.md",
