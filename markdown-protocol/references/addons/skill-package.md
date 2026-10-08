@@ -127,10 +127,11 @@ operation that creates or edits Markdown, the Skills Orchestrator composes:
 3. this add-on and the Markdown Protocol core;
 4. repository change control and mapped verification.
 
-The canonical integration hook lives in the
-[Orchestrator build workflow](../../../runtime/skills-orchestrator/BUILD.md).
-This requirement does not authorize a repository-wide migration. Existing
-skills change one at a time only when the user names and approves their scope.
+When the package is mounted in Skills AI, the canonical integration hook lives
+in its [Orchestrator build workflow](https://github.com/geekybobz/skills_ai/blob/main/runtime/skills-orchestrator/BUILD.md).
+That host-specific link is optional context, not a package dependency. This
+requirement does not authorize a repository-wide migration. Existing skills
+change one at a time only when the user names and approves their scope.
 
 ## Per-skill migration
 
