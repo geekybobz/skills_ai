@@ -66,6 +66,10 @@ longer be maintained.
 ### Explicit controls
 
 - `#> md_protocol` force-selects this package in `guided` mode.
+- `#> md_deepen <term>` selects `deepen` mode; the term is task input and the
+  new note plus reciprocal links still require the proportional write review.
+- `#> md_check` selects read-only `check` mode and runs the package checker on
+  the unambiguous or user-named collection; repairs remain separate writes.
 - `#> use none` keeps the repository-wide optional-skill opt-out.
 - “Skip the Markdown review for this task” waives only this proposal pause. It
   does not waive permissions, project instructions, or destructive safeguards.

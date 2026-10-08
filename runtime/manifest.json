@@ -8,6 +8,20 @@
       "skill_id": "optimizer"
     },
     {
+      "boundary": "first task directive; optional target text may follow; read-only unless a separate write is requested",
+      "command": "#> md_check",
+      "family": "markdown",
+      "mode": "check",
+      "skill_id": "markdown-protocol"
+    },
+    {
+      "boundary": "first task directive; required term text follows; proportional review still applies",
+      "command": "#> md_deepen",
+      "family": "markdown",
+      "mode": "deepen",
+      "skill_id": "markdown-protocol"
+    },
+    {
       "boundary": "first task directive; presentation controls may precede",
       "command": "#> md_protocol",
       "family": "markdown",
@@ -267,7 +281,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "d9427c1c20e68422e6038b7dc511d575e973e892042d5076f089c382a9669b51",
+  "source_hash": "0c2ae3351a3e487d95af4402a651be9cb7cfce84f4ddd1c3d769032b92811a4e",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -287,7 +301,7 @@
     },
     {
       "path": "registry/markdown.md",
-      "sha256": "6a4eef748874cce12914dfccbb780cbd1b4bafb391250c7322ed9e5139079e0c"
+      "sha256": "e19bd7a64875dd9b13211c67c81808b71b94867369233009c7efdf9c571666f3"
     },
     {
       "path": "registry/optimizer.md",

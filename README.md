@@ -58,9 +58,10 @@ components, modes, phases, and Markdown files are never additional skills.
 | `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |
 | `quantum-job-collector` | off | disabled external career task package |
 
-Markdown Protocol composes with the skill that owns the subject matter. Its
-`#> md_protocol` alias selects guided mode; merely reading Markdown as an
-instruction or source does not activate it.
+Markdown Protocol composes with the skill that owns the subject matter.
+`#> md_protocol` selects guided mode, `#> md_deepen <term>` proposes one linked
+plain-language deep note, and `#> md_check` performs a read-only structural
+check. Merely reading Markdown as an instruction or source does not activate it.
 
 ## Learn it smoothly
 

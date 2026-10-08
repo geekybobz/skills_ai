@@ -57,6 +57,24 @@
       ]
     },
     {
+      "id": "markdown-deepen-alias",
+      "request": "#> md_deepen contract testing\nParent: docs/testing.md",
+      "rubric": "Resolve markdown-protocol deepen mode; treat the term and parent as task input; inspect the parent, propose one plain-language child note plus reciprocal Deeper and Parent links, and wait for review before writing.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "markdown-check-alias",
+      "request": "#> md_check\nCheck docs/ without changing files.",
+      "rubric": "Resolve markdown-protocol check mode; run the structural checker on docs, report diagnostics, and do not repair files without a separate write request.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
       "id": "markdown-incidental-instruction",
       "request": "Read AGENTS.md, then fix the reported Python exception without changing documentation.",
       "rubric": "Do not select markdown-protocol merely because a Markdown instruction file is read as operational input; use the capability appropriate to the requested Python work.",

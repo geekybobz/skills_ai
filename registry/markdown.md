@@ -7,8 +7,9 @@ Back to [[docs/00_SKILLS_HUB|Skills Hub]] · Package:
 This is one active public task package. It applies whenever requested work
 creates, edits, reviews, or restructures Markdown, including Markdown changed
 inside another task, and may be force-selected with `#> md_protocol`.
-Education, codebase, and skill-package add-ons are available. Specialized
-research and operations add-ons remain deferred.
+Focused aliases can deepen one term or check one collection. Add-ons cover
+learning, codebases, research notes, decisions, runbooks, visual extras, slides,
+and skill packages.
 
 ## Skills
 
@@ -20,6 +21,8 @@ research and operations add-ons remain deferred.
 
 | command | package | mode | boundary |
 |---|---|---|---|
+| `#> md_check` | `markdown-protocol` | `check` | first task directive; optional target text may follow; read-only unless a separate write is requested |
+| `#> md_deepen` | `markdown-protocol` | `deepen` | first task directive; required term text follows; proportional review still applies |
 | `#> md_protocol` | `markdown-protocol` | `guided` | first task directive; presentation controls may precede |
 
 ## Rules

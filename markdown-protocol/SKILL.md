@@ -29,6 +29,8 @@ when examples, templates, or reasoning are needed.
 8. Read [structured-inventory.md](references/structured-inventory.md) only when
    using properties, typed connections, generated `INVENTORY.md`, or the
    package checker.
+9. In `deepen` or `check` mode, read
+   [named-commands.md](references/named-commands.md).
 
 Human browsing starts from [INDEX.md](INDEX.md); ordinary model work does not.
 Open only the relevant formatting example, never the whole gallery.
@@ -36,8 +38,8 @@ Open only the relevant formatting example, never the whole gallery.
 ## Core behavior
 
 - Activate for any requested Markdown write, including one inside another task;
-  `#> md_protocol` force-selects the package in `guided` mode. Reading Markdown
-  as input alone is not activation.
+  `#> md_protocol`, `#> md_deepen`, and `#> md_check` select declared modes.
+  Reading Markdown as input alone is not activation.
 - Announce the protocol. Read-only review needs no invented write gate.
 - Before writing, inspect the relevant structure, propose in proportion to the
   impact, and wait for agreement. Continue inside the approved design; pause

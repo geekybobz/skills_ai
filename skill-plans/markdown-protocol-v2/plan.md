@@ -214,10 +214,12 @@ Files named below, all under `markdown-protocol/`:
 
 ## New suggestions
 
-- [ ] **N1 Named commands.** `#> md_deepen <term>` writes a plain-language
+- [x] **N1 Named commands.** `#> md_deepen <term>` writes a plain-language
   deep note and adds its link to the parent's `deeper` connection.
   `#> md_check` runs the C6 tool. This follows the existing alias pattern of
   `#> scout` and `#> scout-again`.
+  - Implemented as declared `deepen` and read-only `check` modes, with detailed
+    boundaries in `references/named-commands.md`.
 - [ ] **N2 Freshness.** Optional `status` and `reviewed` properties, so
   `check` lists topics not reviewed since a chosen date.
 - [ ] **N3 Pilot.** Apply v2 to one small real collection chosen by the user,

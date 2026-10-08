@@ -53,6 +53,11 @@ add-on with the native skill workflow. The add-on chooses among minimal,
 routed, navigable, and tool-bearing profiles. Existing packages move to this
 shape only when individually named and reviewed.
 
+The package's named modes remain operations within the same public skill:
+`#> md_protocol` selects guided work, `#> md_deepen <term>` proposes one linked
+deep note, and `#> md_check` runs a read-only structural check. They are not
+additional skills and do not broaden authority.
+
 ## Capability record
 
 An internal task capability has a family, package id, activation state, purpose,

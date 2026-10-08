@@ -46,12 +46,28 @@ class MarkdownProtocolTests(unittest.TestCase):
         self.assertEqual("markdown-protocol", alias["skill_id"])
         self.assertEqual("guided", alias["mode"])
 
+    def test_named_commands_select_bounded_deepen_and_check_modes(self) -> None:
+        manifest = build_manifest(ROOT)
+        aliases = {
+            item["command"]: item
+            for item in manifest["command_aliases"]
+            if item["skill_id"] == "markdown-protocol"
+        }
+        self.assertEqual("deepen", aliases["#> md_deepen"]["mode"])
+        self.assertEqual("check", aliases["#> md_check"]["mode"])
+        commands = self.read("references/named-commands.md")
+        compact = " ".join(commands.split())
+        self.assertIn("typed `Deeper` relative link", commands)
+        self.assertIn("typed\n   `Parent` relative link", commands)
+        self.assertIn("read-only structural check", compact)
+        self.assertIn("do not bypass the review gate", compact)
+
     def test_activation_includes_markdown_inside_another_task(self) -> None:
         entry = self.read("SKILL.md")
         registry = (ROOT / "registry" / "markdown.md").read_text(encoding="utf-8")
         self.assertIn("including Markdown changed inside another task", entry)
         self.assertIn("including Markdown changed inside another task", " ".join(registry.split()))
-        self.assertIn("Reading Markdown\n  as input alone is not activation", entry)
+        self.assertIn("Reading Markdown as input alone is not activation", " ".join(entry.split()))
 
     def test_entry_routes_writes_through_proportional_review(self) -> None:
         entry = self.read("SKILL.md")

@@ -25,11 +25,11 @@ does not appear in the table or count below.
 These six rows are the complete public skill count. Internal capability routes
 are never added to it.
 
-The Markdown package selectively adds education guidance for learning material,
-codebase guidance for repository structure and workflows, and skill-package
-guidance for future skill documentation. The orchestrator composes the last of
-these with native skill creation and maintenance rules; it does not retrofit
-unnamed packages. A human `INDEX.md` may map a navigable multi-file package but
+The Markdown package selectively adds guidance for learning, codebases,
+research notes, decisions, runbooks, optional visuals, slides, and skill
+packages. The orchestrator composes the last of these with native skill
+creation and maintenance rules; it does not retrofit unnamed packages. A human
+`INDEX.md` may map a navigable multi-file package but
 is not loaded during ordinary execution. These are supporting references inside
 one package, not additional skills.
 
@@ -103,6 +103,8 @@ pause or save memory; actual task boundaries still govern execution.
 | `#> use none` | use no task skill, even when one fits |
 | `#> use <package>, <package>` | use exactly these enabled public packages |
 | `#> md_protocol` | force Markdown Protocol guided mode for the current request |
+| `#> md_deepen <term>` | propose one plain-language deeper note with reciprocal parent/deeper links; normal write review still applies |
+| `#> md_check [collection]` | run the Markdown structural checker without editing failures |
 | `#> scout <project> [focus]` | start the manual research-context workflow: align project context, preview search lanes, acquire/extract selected papers, synthesize ideas and translate them into project notation |
 | `#> scout-again <project> [new information]` | reopen only the affected Scout alignment, corpus, mapping or synthesis state |
 | `#> optimizer [status\|catalog\|explore\|intervene\|continue\|branch]` | select the manual optimizer route, its narrow discovery actions, or an explicit adaptive campaign operation |
