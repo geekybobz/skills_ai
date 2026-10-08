@@ -18,6 +18,11 @@ CORE_BUDGET = 5632
 BOOTSTRAP_BUDGET = 8192
 
 
+def budgeted_bootstrap_bytes(context, root):
+    """Bootstrap bytes without the checkout path, which differs per clone and repair workspace."""
+    return len(context.encode())-len(json.dumps(str(Path(root).resolve())).encode())
+
+
 def measure(*, repeat=3):
     manifest=load_manifest();core=(ROOT/'runtime/skills-orchestrator/SKILL.md').read_bytes()
     initial=context_packet(ROOT,manifest)
@@ -38,8 +43,9 @@ def measure(*, repeat=3):
         unchanged=context_packet(root,manifest,session='measure-fixture',delivery='continuation')
         (root/'runtime/skills-orchestrator/SKILL.md').write_bytes(core+b'\nChanged measurement fixture.\n')
         changed=context_packet(root,manifest,session='measure-fixture',delivery='continuation')
-    sizes={'core':len(core),'catalog':len(catalog.encode()),'bootstrap':len(initial['additional_context'].encode()),
-           'unchanged_continuation':len(unchanged['additional_context'].encode()),'changed_core':len(changed['additional_context'].encode())}
+    sizes={'core':len(core),'catalog':len(catalog.encode()),'bootstrap':budgeted_bootstrap_bytes(initial['additional_context'],ROOT),
+           'unchanged_continuation':len(unchanged['additional_context'].encode()),'changed_core':len(changed['additional_context'].encode()),
+           'root_path_excluded':len(json.dumps(str(ROOT.resolve())).encode())}
     failures=[]
     if sizes['core']>CORE_BUDGET:failures.append('core exceeds 5.5 KiB delivery budget')
     if sizes['bootstrap']>BOOTSTRAP_BUDGET:failures.append('bootstrap exceeds 8 KiB delivery budget')

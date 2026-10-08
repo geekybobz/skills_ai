@@ -125,7 +125,7 @@ excluded, and reference snapshots are never deployed as skill edits.
 
 ## Current context flow
 
-Reference-flow delivery budgets are 5.5 KiB core and 8 KiB bootstrap, separate from transport limits. Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill collection. Shared batch bodies can be delivered once while keeping each capability’s gates and identity. Zero additional bytes on unchanged turns measures delivery, not total model usage. Recovery restores missing context; status creates no checkpoint or delivery marker.
+Reference-flow delivery budgets are 5.5 KiB core and 8 KiB bootstrap, separate from transport limits. The bootstrap figure excludes the checkout path, so a clone or repair workspace in a longer folder measures the same as the live one. Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill collection. Shared batch bodies can be delivered once while keeping each capability’s gates and identity. Zero additional bytes on unchanged turns measures delivery, not total model usage. Recovery restores missing context; status creates no checkpoint or delivery marker.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
 

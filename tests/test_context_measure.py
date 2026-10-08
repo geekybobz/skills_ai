@@ -1,9 +1,16 @@
-import sys, unittest
+import json, sys, unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'));sys.path.insert(0,str(ROOT/'runtime'))
-from measure_context import measure
+from measure_context import budgeted_bootstrap_bytes, measure
 class ContextMeasureTests(unittest.TestCase):
+ def test_bootstrap_budget_does_not_depend_on_the_checkout_path(self):
+  body='\nResolve tool and instruction paths from this root.\ncore and catalog'
+  sizes=set()
+  for root in ('/a','/Users/someone/skills_ai','/Users/billabobz/skills_ai/.runtime/repair/workspaces/repair-0123456789abcdef/repo'):
+   context='Skills AI repository tools root: '+json.dumps(str(Path(root).resolve()))+body
+   sizes.add(budgeted_bootstrap_bytes(context,root))
+  self.assertEqual(1,len(sizes))
  def test_actual_flow_budgets_and_selective_refresh(self):
   result=measure(repeat=1)
   self.assertEqual([],result['failures'])
