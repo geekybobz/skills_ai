@@ -5,6 +5,9 @@ the normal reading path.
 
 **Portability:** Common HTML-in-Markdown extension; verify the target renderer.
 
+**Verification:** Documented on GitHub; VS Code 1.141 visual pass pending. See
+the [renderer matrix](../markdown-patterns.md#renderer-matrix).
+
 ## Source
 
 ```html

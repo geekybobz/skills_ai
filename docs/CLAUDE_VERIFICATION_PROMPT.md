@@ -11,7 +11,7 @@ For Markdown Protocol, test the same three semantic boundaries on each host:
 - A request to create or edit Markdown selects `markdown-protocol`
   automatically, announces it, proposes a change proportional to the impact,
   and waits before writing.
-- `#> md_protocol` resolves to the package's `review` mode.
+- `#> md_protocol` resolves to the package's `guided` mode.
 - Reading `AGENTS.md` or another Markdown instruction as operational input for
   a non-Markdown task does not select the package by itself.
 

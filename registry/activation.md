@@ -34,7 +34,7 @@ additional skills.
 | id | state | route | role | boundary |
 |---|---|---|---|---|
 | interaction-protocol | active | [[interaction-protocol/README\|interaction-protocol]] | interaction | response support independent of task selection |
-| markdown-protocol | active | [[markdown-protocol/SKILL\|markdown-protocol]] | task | automatic for requested Markdown artifacts; proportional user-reviewed design before writes; `#> md_protocol` forces review mode |
+| markdown-protocol | active | [[markdown-protocol/SKILL\|markdown-protocol]] | task | automatic for any requested Markdown creation, edit, review, or restructuring, including inside another task; proportional user-reviewed design before writes; `#> md_protocol` forces guided mode |
 | theory-reference | active | [[theory-reference/SKILL\|theory-reference]] | task | theory notes, LaTeX, derivation planning, and reference work |
 | research-context-scout | manual | [[research-context-scout/SKILL\|research-context-scout]] | task | exact package request, `#> scout`, or `#> scout-again` only |
 | optimizer | manual | [[optimizer/SKILL\|optimizer]] | task | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates |

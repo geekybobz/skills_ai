@@ -14,6 +14,8 @@ package. Models performing ordinary Markdown work start from
 | Learn a formatting technique | [Markdown Pattern Gallery](references/markdown-patterns.md) |
 | Design a useful visual | [Visual Patterns](references/visual-patterns.md) |
 | Validate completed Markdown | [Validation](references/validation.md) |
+| Use structured properties or generated inventory | [Structured Inventory](references/structured-inventory.md) |
+| Check a collection or generate its inventory | [`scripts/markdown_protocol.py`](scripts/markdown_protocol.py) |
 | Create learning material | [Education Add-on](references/addons/education.md) |
 | Document a repository | [Codebase Add-on](references/addons/codebase.md) |
 | Structure a skill package | [Skill Package Add-on](references/addons/skill-package.md) |
@@ -46,6 +48,7 @@ map, focused references own the detail, and validation checks the result.
 | [markdown-patterns.md](references/markdown-patterns.md) | human formatting catalogue | choosing or learning a pattern |
 | [visual-patterns.md](references/visual-patterns.md) | diagram selection and fallbacks | when a visual materially helps |
 | [validation.md](references/validation.md) | structural and renderer-aware completion checks | before finishing |
+| [structured-inventory.md](references/structured-inventory.md) | optional property schema, inventory generation, and checker contract | when a collection opts into tooling |
 
 ## Add-ons
 
@@ -68,6 +71,7 @@ Open only the example needed for the current question.
 
 ```text
 agents/openai.yaml    -> native UI metadata and invocation policy
+scripts/markdown_protocol.py -> on-demand bounded check and inventory generator
 .obsidian/            -> optional local viewing state; not routing authority
 ```
 

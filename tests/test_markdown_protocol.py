@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
+import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -37,22 +40,194 @@ class MarkdownProtocolTests(unittest.TestCase):
         metadata = self.read("agents/openai.yaml")
         self.assertIn("allow_implicit_invocation: true", metadata)
 
-    def test_explicit_alias_forces_review_mode(self) -> None:
+    def test_explicit_alias_forces_guided_mode(self) -> None:
         manifest = build_manifest(ROOT)
         alias = next(item for item in manifest["command_aliases"] if item["command"] == "#> md_protocol")
         self.assertEqual("markdown-protocol", alias["skill_id"])
-        self.assertEqual("review", alias["mode"])
+        self.assertEqual("guided", alias["mode"])
+
+    def test_activation_includes_markdown_inside_another_task(self) -> None:
+        entry = self.read("SKILL.md")
+        registry = (ROOT / "registry" / "markdown.md").read_text(encoding="utf-8")
+        self.assertIn("including Markdown changed inside another task", entry)
+        self.assertIn("including Markdown changed inside another task", " ".join(registry.split()))
+        self.assertIn("Reading Markdown\n  as input alone is not activation", entry)
 
     def test_entry_routes_writes_through_proportional_review(self) -> None:
         entry = self.read("SKILL.md")
         workflow = self.read("references/review-workflow.md")
         self.assertIn("[review-workflow.md]", entry)
-        self.assertIn("Before any Markdown write", entry)
-        self.assertIn("wait for the user's agreement", entry)
+        self.assertIn("Before writing", entry)
+        self.assertIn("wait for agreement", entry)
         self.assertIn("Local edit", workflow)
         self.assertIn("Collection change", workflow)
-        self.assertIn("Continue without another pause", workflow)
-        self.assertIn("user's direct edits are new source state", workflow)
+        self.assertIn("Implement only the agreed design", workflow)
+        self.assertIn("user's direct edit is new source state", workflow)
+
+    def test_compact_local_edit_loading_path_has_a_measured_budget(self) -> None:
+        parts = [self.read("SKILL.md")]
+        for relative in (
+            "references/core-protocol.md",
+            "references/review-workflow.md",
+            "references/validation.md",
+        ):
+            parts.append(self.read(relative).split("\n## Details", 1)[0])
+        compact = "".join(parts)
+        self.assertLessEqual(len(compact.encode("utf-8")), 8_500)
+        self.assertLessEqual(len(compact.splitlines()), 180)
+
+    def test_details_boundary_keeps_authority_in_the_compact_layer(self) -> None:
+        core = self.read("references/core-protocol.md")
+        layouts = self.read("references/layouts.md")
+        validation = self.read("references/validation.md")
+        self.assertIn("Everything a reader must obey or rely on appears above", core)
+        self.assertIn("they never add,\n   weaken, or replace a rule", core)
+        self.assertIn("No new rule begins here", layouts)
+        self.assertIn("appear above\n  the first `## Details`", validation)
+
+    def test_compactness_thresholds_are_review_warnings(self) -> None:
+        layouts = self.read("references/layouts.md")
+        self.assertIn("roughly 30 non-empty", layouts)
+        self.assertIn("roughly 60", layouts)
+        self.assertIn("warnings, not failures", layouts)
+
+    def test_orientation_view_and_teaching_hook_remain_proportional(self) -> None:
+        layouts = self.read("references/layouts.md")
+        workflow = self.read("references/review-workflow.md")
+        compact_layouts = " ".join(layouts.split())
+        self.assertIn("A diagram is not mandatory", layouts)
+        self.assertIn("nontrivial Compact profile", compact_layouts)
+        self.assertIn("Patterns used", workflow)
+        self.assertIn("Omit the line for\nordinary headings", workflow)
+
+    def test_structured_inventory_tool_builds_checks_and_detects_errors(self) -> None:
+        tool = PACKAGE / "scripts" / "markdown_protocol.py"
+        with tempfile.TemporaryDirectory() as temporary:
+            collection = Path(temporary)
+            (collection / "topics").mkdir()
+            readme = textwrap.dedent(
+                """\
+                ---
+                role: front-door
+                summary: Fixture collection.
+                read_when: Start here.
+                ---
+                # Collection
+
+                [Index](INDEX.md) · [Inventory](INVENTORY.md)
+
+                ---
+
+                [⌂ Home](#collection)
+                """
+            )
+            index = textwrap.dedent(
+                """\
+                ---
+                role: index
+                parent: README.md
+                summary: Human topic map.
+                read_when: Browse the fixture.
+                ---
+                # Index
+
+                - [Topic](topics/topic.md)
+
+                ---
+
+                [⌂ Home](README.md)
+                """
+            )
+            topic = textwrap.dedent(
+                """\
+                ---
+                role: topic
+                parent: ../INDEX.md
+                summary: One fixture topic.
+                read_when: Test the checker.
+                tags:
+                  - domain/testing
+                  - use/validation
+                ---
+                # Topic
+
+                ## In brief
+
+                Compact fixture.
+
+                ## Core
+
+                Authoritative fixture content.
+
+                ---
+
+                [⌂ Home](../README.md)
+                """
+            )
+            (collection / "README.md").write_text(readme, encoding="utf-8")
+            (collection / "INDEX.md").write_text(index, encoding="utf-8")
+            topic_path = collection / "topics" / "topic.md"
+            topic_path.write_text(topic, encoding="utf-8")
+
+            before_index = (collection / "INDEX.md").read_text(encoding="utf-8")
+            built = subprocess.run(
+                [sys.executable, str(tool), "inventory", str(collection), "--write"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, built.returncode, built.stderr)
+            self.assertEqual(before_index, (collection / "INDEX.md").read_text(encoding="utf-8"))
+            inventory = (collection / "INVENTORY.md").read_text(encoding="utf-8")
+            self.assertIn("Generated file. Do not edit directly.", inventory)
+            self.assertIn("## Optional", inventory)
+
+            checked = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection), "--require-properties"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, checked.returncode, checked.stdout + checked.stderr)
+            self.assertIn("PASS", checked.stdout)
+
+            long_core = "\n".join(f"Line {number}." for number in range(31))
+            topic_path.write_text(
+                topic.replace("Authoritative fixture content.", long_core),
+                encoding="utf-8",
+            )
+            warned = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection), "--require-properties"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, warned.returncode, warned.stdout + warned.stderr)
+            self.assertIn("WARNING", warned.stdout)
+            self.assertIn("review threshold is 30", warned.stdout)
+
+            topic_path.write_text(
+                topic.replace("Authoritative fixture content.", "[Broken](missing.md)"),
+                encoding="utf-8",
+            )
+            broken = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection), "--require-properties"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, broken.returncode)
+            self.assertIn("broken link", broken.stdout)
+
+            topic_path.write_text(topic.replace("summary:", "note:"), encoding="utf-8")
+            missing = subprocess.run(
+                [sys.executable, str(tool), "inventory", str(collection), "--check"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, missing.returncode)
+            self.assertIn("missing summary", missing.stderr)
 
     def test_education_addon_is_selective_and_model_led(self) -> None:
         entry = self.read("SKILL.md")
@@ -114,7 +289,7 @@ class MarkdownProtocolTests(unittest.TestCase):
         index = self.read("INDEX.md")
         compact_entry = " ".join(entry.split())
         self.assertIn("[INDEX.md](INDEX.md)", entry)
-        self.assertIn("Do not load the index during ordinary task execution", compact_entry)
+        self.assertIn("ordinary model work does not", compact_entry)
         for heading in ("Choose a route", "Package map", "Core references", "Add-ons"):
             self.assertIn(f"## {heading}", index)
         self.assertIn("compact machine entry", index)
@@ -148,14 +323,14 @@ class MarkdownProtocolTests(unittest.TestCase):
         core = self.read("references/core-protocol.md")
         layouts = self.read("references/layouts.md")
         validation = self.read("references/validation.md")
-        self.assertIn("End every authored Markdown page", entry)
-        self.assertIn("Home is mandatory", core)
+        self.assertIn("Every authored page ends with the", entry)
+        self.assertIn("Home points to the nearest Front Door", core)
         self.assertIn(
             "[← Previous](previous.md) · [⌂ Home](../README.md) · [Next →](next.md)",
             core,
         )
         self.assertIn("curated sequence", layouts)
-        self.assertIn("Every authored page ends with a resolving Home footer link", validation)
+        self.assertIn("Home footers", validation)
 
     def test_every_package_markdown_file_ends_with_a_home_footer(self) -> None:
         for path in PACKAGE.rglob("*.md"):
@@ -224,6 +399,33 @@ class MarkdownProtocolTests(unittest.TestCase):
             self.assertTrue(path.is_file(), target)
             self.assertLess(path.stat().st_size, 8_000, target)
 
+    def test_phase_two_gallery_and_renderer_matrix_are_explicit(self) -> None:
+        gallery = self.read("references/markdown-patterns.md")
+        visual = self.read("references/visual-patterns.md")
+        for name in (
+            "17-editor-folding.md",
+            "18-markmap-view.md",
+            "19-editable-svg-diagrams.md",
+            "20-renderer-verification-fixture.md",
+        ):
+            self.assertIn(name, gallery)
+            self.assertTrue((PACKAGE / "references" / "formatting-examples" / name).is_file())
+        self.assertIn("### Renderer matrix", gallery)
+        self.assertIn("visual pass pending", gallery)
+        self.assertIn("P = max(N / 12, E / 12, L / 8)", visual)
+        self.assertIn("A = width / height", visual)
+
+    def test_renderer_fixture_covers_visual_and_math_risks(self) -> None:
+        fixture = self.read(
+            "references/formatting-examples/20-renderer-verification-fixture.md"
+        )
+        self.assertGreaterEqual(fixture.count("```mermaid"), 3)
+        self.assertIn("$E = mc^2$", fixture)
+        self.assertIn("\\begin{aligned}", fixture)
+        self.assertIn("<details>", fixture)
+        self.assertIn("> [!WARNING]", fixture)
+        self.assertIn("Text fallback", fixture)
+
     def test_core_documents_use_portable_links(self) -> None:
         for name in (
             "core-protocol.md",
@@ -236,10 +438,12 @@ class MarkdownProtocolTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertNotIn("[[", self.read(f"references/{name}"))
 
-    def test_math_guidance_is_explicitly_unverified(self) -> None:
+    def test_math_guidance_has_a_bounded_verified_house_style(self) -> None:
         math_example = self.read("references/formatting-examples/13-mathematical-expressions.md")
-        self.assertIn("**Verification status:** Pending", math_example)
-        self.assertIn("Do not select a house style", math_example)
+        self.assertIn("## Provisional house style", math_example)
+        self.assertIn("VS Code uses KaTeX", math_example)
+        self.assertIn("GitHub uses MathJax", math_example)
+        self.assertIn("Do not depend on `\\label`, `\\ref`", math_example)
 
 
 if __name__ == "__main__":

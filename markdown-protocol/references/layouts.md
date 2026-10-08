@@ -1,62 +1,71 @@
 # Layouts
 
-Choose a layout by navigation need, not by an arbitrary file or line count.
+Choose a layout by navigation need, not symmetry or an arbitrary file count.
 
 ## Collection profiles
 
-### Single document
+| profile | usual structure | use when |
+|---|---|---|
+| Single document | one `README.md` | one file remains easy to scan and maintain |
+| Compact collection | Front Door plus focused topics | the Front Door can also own routes and inventory |
+| Standard collection | Front Door, Map, Index, and topics | intention routes and exhaustive inventory are distinct jobs |
+| Modular collection | Standard plus stable groups, views, or assets | several independently maintained areas justify them |
+
+Use the smallest profile that keeps orientation, ownership, and navigation
+clear. Split only when a section is independently useful, reused, separately
+maintained, or disruptive to its parent. Merge files whose boundaries require
+repetition to explain.
+
+## Compactness review thresholds
+
+- Review a Topic when `In brief` plus `Core` grows beyond roughly 30 non-empty
+  lines.
+- Review a Front Door when material above `## Details` grows beyond roughly 60
+  non-empty lines.
+- Treat these as warnings, not failures. Also inspect bytes, approximate tokens,
+  unrelated jobs, repeated explanations, and conditional branches.
+
+Move optional explanation below `## Details` or into a focused reference. Never
+move a rule, prerequisite, limitation, or dependable conclusion below it.
+
+## Orientation view
+
+From a nontrivial Compact profile upward, provide one small orientation view.
+Choose the least complex form that answers the reader's question: a route list,
+table, file tree, text flow, or diagram. A diagram is not mandatory. When used,
+include a text fallback and keep it within the visual reliability budget.
+
+Structured properties and generated `INVENTORY.md` are optional tooling for a
+collection that needs an exhaustive machine-checkable listing. They never
+replace the authored Front Door, Map, or human `INDEX.md`.
+
+## Details
+
+### Example structures
 
 ```text
+# Single
 README.md
-```
 
-Use sections for the overview, route, contents, topics, and detail. Do not
-split while the document remains easy to scan and maintain.
-
-### Compact collection
-
-```text
+# Compact
 README.md
 topics/
     topic-a.md
     topic-b.md
-```
 
-The Front Door also owns the Map and Index roles.
-
-### Standard collection
-
-```text
+# Standard
 README.md
 MAP.md
 INDEX.md
 topics/
-    topic-a.md
-    topic-b.md
-```
 
-Use this when recommended routes and exhaustive inventory have become
-meaningfully different jobs.
-
-### Modular collection
-
-```text
-README.md
-MAP.md
-INDEX.md
-topics/
-    foundations/
-    workflows/
-    architecture/
+# Modular additions when justified
 views/
 generated/
 assets/
 ```
 
-Create only directories that own real content. `views/`, `generated/`, and
-`assets/` are optional.
-
-## Front Door
+### Front Door template
 
 ```markdown
 # Collection name
@@ -65,27 +74,27 @@ One sentence explaining the purpose.
 
 ## In brief
 
-The smallest useful explanation of the whole collection.
+The smallest useful explanation.
 
 ## Main routes
 
 - To understand ..., read [...](...).
 - To perform ..., read [...](...).
 
-## Navigation
+## Orientation
 
-- [Route map](MAP.md)
-- [Complete index](INDEX.md)
+A compact route table, text flow, file tree, or useful diagram with fallback.
+
+## Details
+
+Optional explanation. No new rule begins here.
 
 ---
 
 [⌂ Home](#collection-name)
 ```
 
-Omit sections that add no information. Add one small conceptual diagram only
-when it improves orientation.
-
-## Route Map
+### Route Map template
 
 ```markdown
 # Route Map
@@ -99,40 +108,35 @@ when it improves orientation.
 
 - For ..., read [...](...).
 
-## If you want to understand the architecture
-
-- Begin with [...](...).
-
 ---
 
 [← Previous](README.md) · [⌂ Home](README.md) · [Next →](INDEX.md)
 ```
 
-The Map is curated and intention-oriented; it is not exhaustive.
+The Map is curated by intention; it is not exhaustive.
 
-## Index
+### Human Index template
 
 ```markdown
 # Topic Index
 
 ## Foundations
 
-- [Topic A](topics/topic-a.md)
-  - Main concept
-  - Related subtopic
+- [Topic A](topics/topic-a.md) — one-line human orientation.
 
 ## Workflows
 
-- [Workflow A](topics/workflow-a.md)
+- [Workflow A](topics/workflow-a.md) — when to use it.
 
 ---
 
 [← Previous](MAP.md) · [⌂ Home](README.md) · [Next →](topics/topic-a.md)
 ```
 
-The Index is complete but textually light.
+The human Index is complete but semantically grouped and textually light. An
+optional generated `INVENTORY.md` is a separate exhaustive projection.
 
-## Topic
+### Topic template
 
 ```markdown
 # Topic name
@@ -141,11 +145,11 @@ One sentence defining the scope.
 
 ## In brief
 
-A compact explanation sufficient for orientation.
+Compact orientation.
 
 ## Core
 
-The authoritative knowledge, instructions, or decisions.
+Authoritative knowledge, instructions, or decisions.
 
 ## Connections
 
@@ -156,17 +160,17 @@ The authoritative knowledge, instructions, or decisions.
 
 ## Details
 
-Optional explanation or links to deep notes.
+Optional explanation or links to deep notes. No new rule begins here.
 
 ---
 
 [← Previous](previous-topic.md) · [⌂ Home](../README.md) · [Next →](next-topic.md)
 ```
 
-Only the title, scope, and meaningful content are required. Use the other
-sections when they improve reading or navigation.
+Only the title, scope, and meaningful content are required. Omit ceremonial
+sections that carry no information.
 
-## Deep note
+### Deep note template
 
 ```markdown
 # Detailed subject
@@ -181,29 +185,13 @@ This note expands [...](...).
 
 ## Limitations
 
-## Return
-
-[Return to the parent topic](../topic.md)
-
 ---
 
 [⌂ Home](../../README.md)
 ```
 
-The footer is required even when optional template sections are omitted. Home
-always exists. Previous and Next express a curated sequence, not alphabetical
-or filesystem order. The first and last pages omit whichever direction does
-not exist; a single-document profile links Home to its own title or contents.
-
-## Split or merge
-
-Create a separate note when the material is independently useful, reused from
-several places, maintained separately, or disruptive to the parent's main
-flow. Keep it as a section when it is short supporting context, meaningful
-only inside the parent, or likely to become an orphan.
-
-Merge notes when their boundaries cannot be explained without repeating each
-other. Split a directory only when its contents form a stable, named group.
+Deep notes are already optional depth and do not need another `## Details`
+boundary. Previous and Next express a curated sequence, never filename order.
 
 ---
 

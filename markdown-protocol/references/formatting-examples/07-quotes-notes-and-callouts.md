@@ -10,12 +10,17 @@
 > This is a quotation or visually separated note.
 ```
 
-## Obsidian enhancement
+## GitHub alert enhancement
 
 ```markdown
-> [!warning] Important limitation
-> This feature depends on the Obsidian renderer.
+> [!WARNING]
+> Important limitation stated explicitly in the text.
 ```
+
+GitHub documents special alert styling. VS Code 1.141 built-in preview keeps
+the source readable as a block quote but does not provide the same dependable
+styling without an extension. Treat the wording, not its color or icon, as the
+authoritative warning.
 
 ## Avoid
 

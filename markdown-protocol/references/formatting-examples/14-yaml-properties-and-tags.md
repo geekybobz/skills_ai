@@ -8,9 +8,10 @@
 
 ```yaml
 ---
-type: concept
-status: draft
-level: foundation
+role: topic
+parent: ../README.md
+summary: Explains one focused concept.
+read_when: Read when this concept is needed.
 tags:
   - domain/example
   - use/learning
@@ -19,13 +20,16 @@ tags:
 
 ## Result
 
-Supporting tools can filter notes by type, status, level, or tag. Plain-text
-readers still see understandable metadata.
+The Markdown Protocol tool can build an exhaustive inventory from `role`,
+`parent`, `summary`, and `read_when`. Supporting tools can filter the optional
+tags. Plain-text readers can still understand the metadata.
 
 ## Avoid
 
-Do not add a field without a real filtering, generation, or maintenance use.
-Do not encode paragraphs or essential explanations as properties.
+Use this schema only when a real checker, inventory, or graph consumes it. Do
+not add fields without a filtering, generation, or maintenance use, and do not
+encode paragraphs or essential explanations as properties. The root Front Door
+may omit `parent`; other managed files include it.
 
 ## Fallback
 

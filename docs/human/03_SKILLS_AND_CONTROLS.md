@@ -102,7 +102,7 @@ pause or save memory; actual task boundaries still govern execution.
 | `#> use auto` | host selects the minimum sufficient compatible capability set |
 | `#> use none` | use no task skill, even when one fits |
 | `#> use <package>, <package>` | use exactly these enabled public packages |
-| `#> md_protocol` | force Markdown Protocol review mode for the current request |
+| `#> md_protocol` | force Markdown Protocol guided mode for the current request |
 | `#> scout <project> [focus]` | start the manual research-context workflow: align project context, preview search lanes, acquire/extract selected papers, synthesize ideas and translate them into project notation |
 | `#> scout-again <project> [new information]` | reopen only the affected Scout alignment, corpus, mapping or synthesis state |
 | `#> optimizer [status\|catalog\|explore\|intervene\|continue\|branch]` | select the manual optimizer route, its narrow discovery actions, or an explicit adaptive campaign operation |

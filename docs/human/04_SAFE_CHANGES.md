@@ -135,8 +135,9 @@ composite packages may use another declared canonical entry. Conventional
 nested `shared/SKILL.md`, `codex/SKILL.md`, or `claude/SKILL.md` files remain
 support wrappers, not extra public skills.
 
-The active `markdown-protocol` package applies when Markdown is the requested
-artifact, but automatic selection does not authorize a write. It announces the
+The active `markdown-protocol` package applies whenever requested work creates,
+edits, reviews, or restructures Markdown, including inside another task, but
+automatic selection does not authorize a write. It announces the
 protocol, inspects the relevant structure, and presents a proportional proposal
 for user agreement before changing Markdown. It may restructure user-owned
 Markdown only inside that reviewed scope, preserves useful conventions and

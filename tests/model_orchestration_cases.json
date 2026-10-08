@@ -50,7 +50,7 @@
     {
       "id": "markdown-explicit-alias",
       "request": "#> md_protocol\nReorganize these notes into a navigable Markdown collection.",
-      "rubric": "Resolve the declared alias to markdown-protocol review mode; propose the layout, ownership, navigation, portability, and validation plan before writing.",
+      "rubric": "Resolve the declared alias to markdown-protocol guided mode; propose the layout, ownership, navigation, portability, and validation plan before writing.",
       "hosts": [
         "codex",
         "claude"

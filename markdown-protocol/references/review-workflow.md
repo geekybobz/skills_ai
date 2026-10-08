@@ -3,27 +3,33 @@
 Use this workflow for Markdown writes. Scale the proposal to the impact; do not
 turn a small correction into an architecture exercise.
 
-## 1. Identify the operation
+## Compact workflow
 
-| operation | required response before writing |
+| operation | response required before writing |
 |---|---|
-| Local edit | One short preview naming the file, intended correction, and preserved structure |
-| Section change | Section purpose, information owner, and proposed content change |
-| New file | Purpose, parent route, authoritative ownership, and links |
-| Collection change | Layout profile, file impact, ownership, navigation, portability, and validation |
-| Generated Markdown | Canonical source, generated target, regeneration method, and validation |
+| Local edit | file, intended correction, and preserved structure |
+| Section change | purpose, information owner, and content change |
+| New file | purpose, parent route, owner, and links |
+| Collection change | profile, files, ownership, navigation, portability, and checks |
+| Generated Markdown | canonical source, target, regeneration, and checks |
 
-Read-only explanation or review does not require approval to inspect or report.
-It still follows the protocol's ownership, portability, and validation concepts.
+Read-only explanation or review needs no write approval. Before a write:
 
-## 2. Announce and propose
+1. Announce that Markdown Protocol applies.
+2. Inspect the relevant existing structure.
+3. Present the smallest proposal that exposes the real effect.
+4. Wait for agreement unless the user explicitly waives this local gate.
+5. Implement only the agreed design and preserve later user edits.
+6. Pause again before new files, changed ownership or profile, a new generated
+   view/plugin, or materially broader content or validation.
 
-Start with a compact notice:
+When a proposal introduces a non-core or renderer-dependent technique, include
+an optional `Patterns used` line linking its gallery example. Omit the line for
+ordinary headings, prose, lists, and relative links.
 
-> Markdown Protocol applies to this task. I inspected the relevant structure
-> and prepared the following proportional design for review.
+## Details
 
-Include only applicable fields:
+### Expanded proposal
 
 ```markdown
 ### Markdown proposal
@@ -34,6 +40,7 @@ Include only applicable fields:
 - Files affected:
 - Information ownership and navigation:
 - Footer route (Previous · Home · Next):
+- Patterns used: [Pattern](relevant-gallery-example.md)
 - Optional or renderer-specific features:
 - Validation:
 - Deferred or unverified items:
@@ -41,40 +48,27 @@ Include only applicable fields:
 
 For a local correction, compress this to one or two sentences. For structural
 work, make file creation, movement, generated boundaries, and authoritative
-owners explicit. Do not perform the write until the user agrees, unless the
-user explicitly asks to bypass this review for that task.
+owners explicit.
 
-## 3. Implement the agreed design
+### Implementation boundaries
 
 - Preserve user edits and useful local conventions.
-- Do not broaden the approved file set or architecture silently.
 - Keep essential meaning in portable text.
-- Edit the canonical source rather than a generated Markdown projection.
-- When another skill owns the subject matter, preserve its domain rules and use
-  this protocol only for Markdown structure and presentation.
+- Edit a canonical source instead of its generated Markdown projection.
+- Do not broaden the approved files or architecture silently.
+- When another skill owns the subject, preserve its domain rules and use this
+  protocol only for Markdown structure and presentation.
 
-## 4. Decide whether renewed review is needed
+A user's direct edit is new source state, not an error to undo. Reinspect that
+area and flag a conflict only when an invariant or the approved design can no
+longer be maintained.
 
-Continue without another pause while the work stays within the agreed design.
-Pause again before:
+### Explicit controls
 
-- adding, moving, or removing files not covered by the proposal;
-- changing the selected collection profile;
-- transferring authoritative ownership between files;
-- introducing a plugin, generated view, or renderer-specific dependency;
-- materially expanding the requested content or validation surface.
-
-A user's direct edits are new source state, not mistakes to undo. Reinspect the
-affected area, preserve the edits, and flag a conflict only when an invariant or
-approved design can no longer be maintained.
-
-## Explicit controls
-
-- `#> md_protocol` force-selects this package in review mode.
+- `#> md_protocol` force-selects this package in `guided` mode.
 - `#> use none` keeps the repository-wide optional-skill opt-out.
-- A direct instruction such as "skip the Markdown review for this task" waives
-  only this package's local proposal pause; it does not waive permissions,
-  project instructions, or destructive-action safeguards.
+- “Skip the Markdown review for this task” waives only this proposal pause. It
+  does not waive permissions, project instructions, or destructive safeguards.
 
 ---
 

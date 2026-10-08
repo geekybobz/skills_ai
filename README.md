@@ -52,11 +52,15 @@ components, modes, phases, and Markdown files are never additional skills.
 | package | state | role |
 |---|---|---|
 | `interaction-protocol` | active | interaction skill; no skill-count contribution |
-| `markdown-protocol` | active | automatic Markdown creation/editing/review with proportional design approval, portable layered architecture, optional human package indexes, focused add-ons, formatting examples, visual fallbacks, and validation |
+| `markdown-protocol` | active | automatic handling of any requested Markdown creation/edit/review, including inside another task, with proportional design approval, compact/deep boundaries, optional human and generated inventories, focused add-ons, visual fallbacks, and validation |
 | `theory-reference` | active | theory and LaTeX task package |
 | `research-context-scout` | manual | user-aligned physics research orientation from an extracted paper corpus to collective mathematical ideas and project-notation translations |
 | `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |
 | `quantum-job-collector` | off | disabled external career task package |
+
+Markdown Protocol composes with the skill that owns the subject matter. Its
+`#> md_protocol` alias selects guided mode; merely reading Markdown as an
+instruction or source does not activate it.
 
 ## Learn it smoothly
 

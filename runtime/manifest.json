@@ -11,7 +11,7 @@
       "boundary": "first task directive; presentation controls may precede",
       "command": "#> md_protocol",
       "family": "markdown",
-      "mode": "review",
+      "mode": "guided",
       "skill_id": "markdown-protocol"
     },
     {
@@ -148,7 +148,7 @@
       "state": "active"
     },
     "markdown-protocol": {
-      "boundary": "automatic for requested Markdown artifacts; proportional user-reviewed design before writes; `#> md_protocol` forces review mode",
+      "boundary": "automatic for any requested Markdown creation, edit, review, or restructuring, including inside another task; proportional user-reviewed design before writes; `#> md_protocol` forces guided mode",
       "path": "markdown-protocol/SKILL.md",
       "role": "task",
       "state": "active"
@@ -206,12 +206,15 @@
       "path": "markdown-protocol/SKILL.md",
       "state": "active",
       "triggers": [
-        "Markdown file creation or editing",
-        "Markdown review or restructuring",
-        "README",
+        "any requested Markdown creation",
+        "edit",
+        "review",
+        "or restructuring",
+        "including README",
         "documentation",
         "notes",
-        "knowledge base"
+        "knowledge bases",
+        "or Markdown changed inside another task"
       ]
     },
     {
@@ -264,7 +267,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "60cede19ff13ee73ac385f52fec3e8ddccc6d507d13a5ab79e68c7b264c385e7",
+  "source_hash": "d9427c1c20e68422e6038b7dc511d575e973e892042d5076f089c382a9669b51",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -272,7 +275,7 @@
     },
     {
       "path": "registry/activation.md",
-      "sha256": "9f5149be0a1316c25fce94b616c402ca341ab9025661d6fc514f163b2a3d732d"
+      "sha256": "d8742ee5f66b835e0b3cedad340c0c188d97f54d500a24d07f2831c185fa64d7"
     },
     {
       "path": "registry/career.md",
@@ -284,7 +287,7 @@
     },
     {
       "path": "registry/markdown.md",
-      "sha256": "52a7a894b6ef41deaffbd05550150ac7d6ab59e6383b3e89842dbbc45b803e4e"
+      "sha256": "6a4eef748874cce12914dfccbb780cbd1b4bafb391250c7322ed9e5139079e0c"
     },
     {
       "path": "registry/optimizer.md",

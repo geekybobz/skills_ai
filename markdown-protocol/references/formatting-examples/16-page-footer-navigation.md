@@ -43,4 +43,4 @@ above it.
 
 ---
 
-[← Previous](15-obsidian-links-and-embeds.md) · [⌂ Home](../markdown-patterns.md)
+[← Previous](15-obsidian-links-and-embeds.md) · [⌂ Home](../markdown-patterns.md) · [Next →](17-editor-folding.md)

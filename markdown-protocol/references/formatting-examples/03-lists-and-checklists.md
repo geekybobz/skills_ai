@@ -15,13 +15,17 @@
 3. Validate the result.
 
 - [x] Architecture reviewed.
-- [ ] Renderer verification pending.
+- [x] Renderer fixture checked.
+- [ ] Optional workspace settings reviewed.
 ```
 
 ## Result
 
 Bullets show an unordered set, numbers show sequence, and checkboxes track
 temporary work.
+
+The checkbox state is literal source data. A renderer may add interactive
+styling, but the bracket marker remains understandable in plain text.
 
 ## Avoid
 

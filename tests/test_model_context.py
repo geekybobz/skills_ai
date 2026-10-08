@@ -159,7 +159,7 @@ class MetadataMigrationTests(unittest.TestCase):
   page=discover(ROOT,manifest)
   aliases={a['command']:(a['package'],a['mode']) for a in page['aliases']}
   self.assertEqual(('optimizer','build-system'),aliases['#> build-system'])
-  self.assertEqual(('markdown-protocol','review'),aliases['#> md_protocol'])
+  self.assertEqual(('markdown-protocol','guided'),aliases['#> md_protocol'])
   self.assertEqual(('research-context-scout','deepen'),aliases['#> scout-again'])
  def test_state_gate_is_capability_specific(self):
   with tempfile.TemporaryDirectory() as directory:

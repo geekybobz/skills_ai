@@ -122,8 +122,8 @@ The active `markdown-protocol` package demonstrates the same rule internally:
 its compact entry routes to focused architecture, proportional review, layout,
 pattern, visual, and validation references, while small formatting examples
 remain selectively loaded package support. Automatic selection applies only
-when Markdown is the requested artifact; `#> md_protocol` is its explicit
-review-mode alias. Future add, edit, migrate, or documentation work that changes
+whenever requested work creates or edits Markdown; `#> md_protocol` is its
+explicit guided-mode alias. Future add, edit, migrate, or documentation work that changes
 skill Markdown composes the skill-package add-on with the native skill workflow.
 A navigable multi-file package may gain a human `INDEX.md`, but ordinary task
 execution does not load it. Existing packages are migrated only one at a time

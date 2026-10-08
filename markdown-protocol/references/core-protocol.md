@@ -2,43 +2,51 @@
 
 ## In brief
 
-Build one navigable knowledge structure for both humans and models. A reader
-starts with a compact orientation, follows an explicit route, opens only the
-relevant topic, and descends into optional detail when needed.
+Use one navigable knowledge structure at several depths. A reader starts from a
+compact orientation, follows an explicit route, and opens optional detail only
+when it is useful.
 
 ## Invariants
 
-1. Every collection has an identifiable entry point.
-2. A reader can locate a relevant topic without scanning the whole collection.
-3. Every important statement has one authoritative owner.
-4. Outer layers summarize and link; they do not reproduce deep content.
-5. Essential meaning remains available in portable text.
-6. Diagrams and interactive features supplement rather than replace prose.
-7. A topic becomes a separate file only when it is independently useful.
-8. Generated views are marked, reproducible, and replaceable.
-9. Existing useful conventions survive unless they obstruct these invariants.
-10. The structure may collapse or expand as the material changes.
-11. Markdown writes follow a user-reviewed design whose detail is proportional
-    to the change.
-12. Every authored page ends with a compact navigation footer containing Home;
-    Previous and Next appear when the collection defines a real reading order.
+1. Every collection has an identifiable entry point and a route to relevant
+   topics without a full scan.
+2. Every important statement has one authoritative owner; outer layers
+   summarize and link instead of duplicating it.
+3. Essential meaning remains in portable text. Visuals and interactive features
+   supplement it.
+4. A file exists only when it has an independently useful job. The structure
+   may expand or collapse as that job changes.
+5. Everything a reader must obey or rely on appears above the first
+   `## Details`. Details may explain, exemplify, derive, or cite; they never add,
+   weaken, or replace a rule.
+6. Generated views are marked, reproducible, and non-authoritative.
+7. Useful existing conventions and user edits survive unless they obstruct
+   these invariants.
+8. Markdown writes follow a user-reviewed design proportional to the change.
+9. Every authored page ends with Home navigation; Previous and Next appear only
+   for an intentional reading order.
 
 ## Information roles
 
-| role | question answered | usual form |
-|---|---|---|
-| Front Door | What is this and where do I begin? | `README.md` or the package entry |
-| Map | Where do I go for my intention? | `MAP.md` or a short route section |
-| Index | What material exists? | `INDEX.md` or a compact contents section |
-| Topic | What is authoritative for this subject? | one focused Markdown note |
-| Deep note | Why, how, or with what evidence? | section or linked child note |
-| Generated view | What projection can tooling derive? | clearly marked replaceable artifact |
+| role | owns |
+|---|---|
+| Front Door | purpose, boundaries, and primary routes |
+| Map | recommended paths by reader intention |
+| Index | complete authored structural map |
+| Topic | authoritative subject content |
+| Deep note | optional explanation named by its scope |
+| Generated view | replaceable projection, never a canonical fact |
 
-These roles do not imply six files. In a small collection, one file may own the
-Front Door, Map, and Index roles. Separate them only when each has a distinct
-job.
+These roles do not require separate files. Combine them while their jobs remain
+easy to understand and maintain.
 
-## Progressive disclosure
+Structured properties and generated inventory are optional. When a collection
+opts in, follow the complete [Structured Inventory](structured-inventory.md)
+contract; the authored Front Door or human `INDEX.md` remains semantic.
+
+## Details
+
+### Progressive disclosure
 
 Use this reading order:
 
@@ -51,34 +59,26 @@ Use this reading order:
 Do not hide prerequisites, safety constraints, conclusions, or limitations in
 collapsed or tool-specific content.
 
-## Information ownership
+### Ownership maintenance
 
-- The Front Door owns purpose, boundaries, and primary routes.
-- The Map owns recommended paths by intention.
-- The Index owns the complete structural listing.
-- A topic owns its subject matter.
-- A deep note owns only the detail named by its scope.
-- A generated view owns no manually maintained fact.
+Update the authoritative topic first. Update the Map only when a route changes,
+the Index only when the authored inventory changes, and the Front Door only
+when purpose, boundaries, or primary routes change. A generated inventory is
+rebuilt from its properties rather than edited manually.
 
-When content changes, update its owner first. Update the Map only if a route
-changes, the Index only if inventory changes, and the Front Door only if the
-collection's purpose, boundaries, or primary routes change.
+If another task skill owns technical content, it remains authoritative for that
+content. Markdown Protocol owns only structure, navigation, progressive depth,
+portability, and Markdown-specific checks.
 
-If another task skill owns the technical or domain content, it remains the
-authority for that content. Markdown Protocol owns only the document structure,
-navigation, progressive depth, portability, and Markdown-specific checks.
+### Portability
 
-## Portability
-
-Relative Markdown links, headings, paragraphs, lists, block quotes, and fenced
-code are the default. Common extensions, renderer-dependent syntax, and
-platform-specific features require the classification and fallback described
+Relative links, headings, paragraphs, lists, block quotes, and fenced code are
+the baseline. Renderer-specific syntax requires the classification and fallback
 in [markdown-patterns.md](markdown-patterns.md).
 
-## Page footer navigation
+### Page footer navigation
 
-End every authored Markdown page created or edited under this protocol with a
-horizontal rule and one compact navigation line:
+End every authored page with a horizontal rule and one compact line:
 
 ```markdown
 ---
@@ -86,22 +86,14 @@ horizontal rule and one compact navigation line:
 [← Previous](previous.md) · [⌂ Home](../README.md) · [Next →](next.md)
 ```
 
-Home is mandatory and points to the nearest Front Door, contents hub, or route
-map that can reorient the reader. On a standalone document, Home points to its
-top heading or contents section. Previous and Next are mandatory only when an
-intentional reading order exists; omit unavailable directions rather than
-creating dead links or guessing from filename order.
+Home points to the nearest Front Door or semantic hub. A standalone document
+links Home to its own title or contents. Omit unavailable directions rather
+than guessing from filename order. Keep the footer as the final visible
+content. Generated pages receive it through their generator.
 
-Use relative Markdown links and keep the footer as the final visible content.
-Do not use JavaScript history, image buttons, or renderer-specific navigation.
-For generated Markdown, change the canonical template or generator so the
-footer remains reproducible. For an externally fixed format that cannot accept
-a footer, disclose the exception in the proposal and completion report.
+### Generated material
 
-## Authored and generated material
-
-Generated files must identify their source and regeneration method. Use a
-banner such as:
+Generated files identify their source and regeneration method:
 
 ```markdown
 <!-- Generated file. Do not edit directly.
@@ -110,17 +102,17 @@ Regenerate with: <command>
 -->
 ```
 
-If no reliable regeneration path exists, the file is authored content and
-must not claim otherwise.
+If no reliable regeneration path exists, the file is authored and must not
+claim otherwise.
 
-## Common failure patterns
+### Failure patterns
 
-- A large README that tries to own every detail.
+- A large README that owns every detail.
 - A separate file for every short subsection.
-- A Map and Index containing duplicate explanations.
+- A Map, Index, and generated inventory duplicating explanations.
 - Tool-specific syntax carrying the only copy of essential information.
 - Tags standing in for explicit relationships.
-- A visual graph with no defined reader question.
+- A visual graph with no reader question.
 - A generated file that people must edit by hand.
 
 ---

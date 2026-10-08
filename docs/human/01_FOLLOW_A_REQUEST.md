@@ -71,7 +71,7 @@ and `#> optimize <system/project> <goal>` select the separate manual Optimizer
 package. `build-system` plans a new OLGS system and pauses for review before
 implementation; the other optimizer operations remain within that same package.
 Markdown creation, editing, review, or restructuring selects the active
-`markdown-protocol` package; `#> md_protocol` force-selects its review mode.
+`markdown-protocol` package; `#> md_protocol` force-selects its guided mode.
 Reading a Markdown instruction as operational input does not select it. Before
 a write, the package announces itself and presents a proportional proposal for
 agreement. Work inside the agreed design continues without repeated approval;
