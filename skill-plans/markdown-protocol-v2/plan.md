@@ -196,8 +196,10 @@ Files named below, all under `markdown-protocol/`:
   `research-context-scout`, which owns evidence.
   - Implemented as the routed `references/addons/research-notes.md` design;
     external citation tools remain optional.
-- [ ] **A4 Decision records.** Short records (context, decision,
+- [x] **A4 Decision records.** Short records (context, decision,
   consequences) linked from the topic they affect.
+  - Implemented as `references/addons/decision-records.md`; a compact add-on
+    router now keeps future additions out of the main skill's token budget.
 - [ ] **A5 Runbooks.** Step-by-step checklists with a verification line for
   each operational procedure.
 - [ ] **A6 Visual extras.** Guidance for Markmap and Foam, and editable SVG

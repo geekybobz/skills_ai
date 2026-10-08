@@ -25,11 +25,7 @@ when examples, templates, or reasoning are needed.
    materially improve understanding.
 6. Read [validation.md](references/validation.md) through `## Details` before
    finishing a change.
-7. Load one applicable add-on: [education.md](references/addons/education.md),
-   [codebase.md](references/addons/codebase.md),
-   [research-notes.md](references/addons/research-notes.md), or
-   [skill-package.md](references/addons/skill-package.md). For add-on design,
-   read the [contract](references/addons/add-on-contract.md).
+7. Choose one add-on from [add-on routes](references/addons/routes.md).
 8. Read [structured-inventory.md](references/structured-inventory.md) only when
    using properties, typed connections, generated `INVENTORY.md`, or the
    package checker.

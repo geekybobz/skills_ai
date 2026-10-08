@@ -362,9 +362,9 @@ tags:
             self.assertIn("invalid tag", invalid.stdout)
 
     def test_education_addon_is_selective_and_model_led(self) -> None:
-        entry = self.read("SKILL.md")
+        routes = self.read("references/addons/routes.md")
         education = self.read("references/addons/education.md")
-        self.assertIn("[education.md](references/addons/education.md)", entry)
+        self.assertIn("[education.md](education.md)", routes)
         self.assertIn("the user does not have to choose", education)
         self.assertIn("Choose the minimum useful combination", education)
         self.assertIn("not a required file layout", education)
@@ -372,8 +372,10 @@ tags:
 
     def test_addon_contract_keeps_extensions_optional_and_bounded(self) -> None:
         entry = self.read("SKILL.md")
+        routes = self.read("references/addons/routes.md")
         contract = self.read("references/addons/add-on-contract.md")
-        self.assertIn("For add-on design", entry)
+        self.assertIn("[add-on routes](references/addons/routes.md)", entry)
+        self.assertIn("[add-on-contract.md](add-on-contract.md)", routes)
         for field in (
             "Trigger",
             "Blocks",
@@ -392,6 +394,7 @@ tags:
             "education.md",
             "codebase.md",
             "research-notes.md",
+            "decision-records.md",
             "skill-package.md",
         ):
             addon = self.read(f"references/addons/{name}")
@@ -432,10 +435,10 @@ tags:
         self.assertIn("hide no prerequisite", education)
 
     def test_codebase_addon_is_selective_and_routes_real_code_questions(self) -> None:
-        entry = self.read("SKILL.md")
+        routes = self.read("references/addons/routes.md")
         codebase = self.read("references/addons/codebase.md")
         compact = " ".join(codebase.split())
-        self.assertIn("[codebase.md](references/addons/codebase.md)", entry)
+        self.assertIn("[codebase.md](codebase.md)", routes)
         self.assertIn("select the smallest useful combination of views", compact)
         self.assertIn("Do not require every zoom level", codebase)
         self.assertIn("Small", codebase)
@@ -473,11 +476,11 @@ tags:
         self.assertIn("Source code and tests decide behavior", compact)
 
     def test_research_notes_addon_separates_evidence_and_interpretation(self) -> None:
-        entry = self.read("SKILL.md")
+        routes = self.read("references/addons/routes.md")
         index = self.read("INDEX.md")
         addon = self.read("references/addons/research-notes.md")
         compact = " ".join(addon.split())
-        self.assertIn("[research-notes.md](references/addons/research-notes.md)", entry)
+        self.assertIn("[research-notes.md](research-notes.md)", routes)
         self.assertIn("Research Notes Add-on", index)
         self.assertIn("citation_key", addon)
         for status in ("exact", "empirical", "numerical", "proposed", "uncertain"):
@@ -485,6 +488,17 @@ tags:
         self.assertIn("`research-context-scout`", addon)
         self.assertIn("does not establish influence, priority, or consensus", compact)
         self.assertIn("No citation, quotation, result, or access status is invented", addon)
+
+    def test_decision_records_preserve_rationale_and_supersession(self) -> None:
+        routes = self.read("references/addons/routes.md")
+        addon = self.read("references/addons/decision-records.md")
+        compact = " ".join(addon.split())
+        self.assertIn("[decision-records.md](decision-records.md)", routes)
+        for heading in ("Context", "Decision", "Consequences", "Alternatives considered"):
+            self.assertIn(f"## {heading}", addon)
+        self.assertIn("proposed | accepted | deprecated | superseded", addon)
+        self.assertIn("link both directions", compact)
+        self.assertIn("copying a meeting transcript", addon)
 
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")
@@ -497,9 +511,9 @@ tags:
         self.assertIn("compact machine entry", index)
 
     def test_skill_package_addon_has_adaptive_profiles_and_clear_owners(self) -> None:
-        entry = self.read("SKILL.md")
+        routes = self.read("references/addons/routes.md")
         addon = self.read("references/addons/skill-package.md")
-        self.assertIn("[skill-package.md](references/addons/skill-package.md)", entry)
+        self.assertIn("[skill-package.md](skill-package.md)", routes)
         for profile in ("Minimal", "Routed", "Navigable", "Tool-bearing"):
             self.assertIn(profile, addon)
         self.assertIn("Target skill", addon)

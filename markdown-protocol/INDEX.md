@@ -16,6 +16,7 @@ package. Models performing ordinary Markdown work start from
 | Validate completed Markdown | [Validation](references/validation.md) |
 | Use structured properties or generated inventory | [Structured Inventory](references/structured-inventory.md) |
 | Check a collection or generate its inventory | [`scripts/markdown_protocol.py`](scripts/markdown_protocol.py) |
+| Choose a use-case add-on | [Add-on Routes](references/addons/routes.md) |
 | Design or maintain an add-on | [Add-on Contract](references/addons/add-on-contract.md) |
 | Create learning material | [Education Add-on](references/addons/education.md) |
 | Document a repository | [Codebase Add-on](references/addons/codebase.md) |
@@ -56,10 +57,12 @@ map, focused references own the detail, and validation checks the result.
 
 | add-on | extends the protocol for |
 |---|---|
+| [routes.md](references/addons/routes.md) | compact selection of one applicable add-on |
 | [add-on-contract.md](references/addons/add-on-contract.md) | shared extension points, declarations, ownership, and boundaries |
 | [education.md](references/addons/education.md) | learning, revision, and unfamiliar concepts |
 | [codebase.md](references/addons/codebase.md) | codebase orientation, workflows, and change impact |
 | [research-notes.md](references/addons/research-notes.md) | source-backed claims, evidence status, and literature maps |
+| [decision-records.md](references/addons/decision-records.md) | durable choices, consequences, and supersession history |
 | [skill-package.md](references/addons/skill-package.md) | machine-efficient and human-navigable skill packages |
 
 Add-ons may specialize presentation and validation. They do not replace the
