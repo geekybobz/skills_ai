@@ -25,9 +25,13 @@ does not appear in the table or count below.
 These six rows are the complete public skill count. Internal capability routes
 are never added to it.
 
-The Markdown package selectively adds education guidance for learning material
-and codebase guidance for repository structure and workflows. These are
-supporting references inside one package, not additional skills.
+The Markdown package selectively adds education guidance for learning material,
+codebase guidance for repository structure and workflows, and skill-package
+guidance for future skill documentation. The orchestrator composes the last of
+these with native skill creation and maintenance rules; it does not retrofit
+unnamed packages. A human `INDEX.md` may map a navigable multi-file package but
+is not loaded during ordinary execution. These are supporting references inside
+one package, not additional skills.
 
 ## Activation states
 

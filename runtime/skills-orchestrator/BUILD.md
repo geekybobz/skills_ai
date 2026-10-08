@@ -35,6 +35,23 @@ Use relevant existing checks for documentation-only edits. For runtime work,
 test the shared interface first and the affected platform lifecycle separately.
 Do not turn an unperformed, skipped or blocked check into a passing result.
 
+## Future skill-package documentation
+
+For every future skill creation, documentation, or substantial restructuring
+operation that creates or edits Markdown, compose native skill-creation
+guidance with the Markdown Protocol and its
+[skill-package add-on](../../markdown-protocol/references/addons/skill-package.md)
+before writing. The target skill owns domain behavior, the add-on owns Markdown
+layers and navigation, and the Orchestrator owns lifecycle, change control, and
+verification.
+
+Select the smallest justified package profile. A multi-file package receives a
+human `INDEX.md` when navigation is a distinct job; a genuinely minimal package
+does not receive one for symmetry. Keep `SKILL.md` sufficient for selection and
+initial routing, and do not load the human index during ordinary execution.
+Existing packages migrate one at a time only when the user names and approves
+their scope. This rule does not authorize a repository-wide normalization.
+
 ## Bounded replacement and restoration
 
 A replacement packet contains exact before/after identities for the declared
@@ -83,3 +100,7 @@ Core/bootstrap delivery budgets are 5.5/8 KiB in the reference measurement flow;
 transport bounds remain separate. Zero unchanged delivery bytes and byte/4
 estimates describe instruction delivery, not total context tokens or model cost.
 Checkpoints remain explicitly authorized advisory data, not automatic memory.
+
+---
+
+[⌂ Home](SKILL.md)

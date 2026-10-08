@@ -52,7 +52,7 @@ components, modes, phases, and Markdown files are never additional skills.
 | package | state | role |
 |---|---|---|
 | `interaction-protocol` | active | interaction skill; no skill-count contribution |
-| `markdown-protocol` | active | automatic Markdown creation/editing/review with proportional design approval, portable layered architecture, formatting examples, visual fallbacks, and validation |
+| `markdown-protocol` | active | automatic Markdown creation/editing/review with proportional design approval, portable layered architecture, optional human package indexes, focused add-ons, formatting examples, visual fallbacks, and validation |
 | `theory-reference` | active | theory and LaTeX task package |
 | `research-context-scout` | manual | user-aligned physics research orientation from an extracted paper corpus to collective mathematical ideas and project-notation translations |
 | `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |
@@ -73,6 +73,11 @@ components, modes, phases, and Markdown files are never additional skills.
 | [Repository atlas](docs/human/08_REPOSITORY_ATLAS.md) | Where orchestrator, registry, packages, context, and tests live |
 | [Skill anatomy](docs/human/09_SKILL_ANATOMY.md) | Public package anatomy and internal capability anatomy |
 | [Model-led walkthrough](docs/human/10_MODEL_LED_ORCHESTRATOR.md) | Architecture, vocabulary, controls, working methods and recovery |
+
+Future skill-package operations that create or substantially restructure
+Markdown compose the Markdown Protocol's skill-package add-on with the native
+skill workflow. Existing packages are migrated only when they are individually
+named and reviewed; this is not a repository-wide normalization rule.
 
 ## Everyday request
 

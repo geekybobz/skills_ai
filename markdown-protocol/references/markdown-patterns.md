@@ -51,4 +51,4 @@ appears in the learning example.
 
 ---
 
-[← Previous](layouts.md) · [⌂ Home](../SKILL.md) · [Next →](visual-patterns.md)
+[← Previous](layouts.md) · [⌂ Home](../INDEX.md) · [Next →](visual-patterns.md)

@@ -78,4 +78,4 @@ approved design can no longer be maintained.
 
 ---
 
-[← Previous](core-protocol.md) · [⌂ Home](../SKILL.md) · [Next →](layouts.md)
+[← Previous](core-protocol.md) · [⌂ Home](../INDEX.md) · [Next →](layouts.md)

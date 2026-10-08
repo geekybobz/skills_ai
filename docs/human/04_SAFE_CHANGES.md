@@ -143,6 +143,11 @@ Markdown only inside that reviewed scope, preserves useful conventions and
 user edits, keeps portable text authoritative, and treats diagram or equation
 rendering as unverified until checked in the named viewer.
 
+Future skill-package Markdown work uses the protocol's skill-package add-on
+inside the same reviewed change boundary. The smallest useful profile wins,
+and existing packages are never normalized in bulk: each migration requires an
+individually named, reviewed scope.
+
 Graph roles are explicit: declared hubs are L1 teal, family registries L2 green,
 and skill or phase files L4 violet. The validator checks these meanings and
 their links. Graph file counts are never public skill counts.

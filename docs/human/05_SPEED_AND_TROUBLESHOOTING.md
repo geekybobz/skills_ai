@@ -34,6 +34,10 @@ with `rg --files`, searches a literal identifier with `rg -n`, and inspects
 exact references, diffs, and mapped tests. No background index, file watcher,
 telemetry process, or network update checker is part of ordinary work.
 
+An optional package `INDEX.md` is a human navigation surface, not a hot-path
+instruction source. Ordinary execution starts from the compact `SKILL.md` and
+loads only the focused references required for the task.
+
 ## Measure context and latency
 
 Measure metadata delivery, selected instructions, required references and repeated

@@ -238,4 +238,4 @@ looks precise but no longer matches the repository.
 
 ---
 
-[⌂ Home](../../SKILL.md)
+[⌂ Home](../../INDEX.md)

@@ -69,4 +69,4 @@ reviewed expansion.
 
 ---
 
-[← Previous](visual-patterns.md) · [⌂ Home](../SKILL.md)
+[← Previous](visual-patterns.md) · [⌂ Home](../INDEX.md)

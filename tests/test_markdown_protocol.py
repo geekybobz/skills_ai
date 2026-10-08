@@ -109,6 +109,40 @@ class MarkdownProtocolTests(unittest.TestCase):
         self.assertIn("Graphviz", codebase)
         self.assertIn("No mandatory tool", codebase)
 
+    def test_human_index_maps_the_package_without_default_loading(self) -> None:
+        entry = self.read("SKILL.md")
+        index = self.read("INDEX.md")
+        compact_entry = " ".join(entry.split())
+        self.assertIn("[INDEX.md](INDEX.md)", entry)
+        self.assertIn("Do not load the index during ordinary task execution", compact_entry)
+        for heading in ("Choose a route", "Package map", "Core references", "Add-ons"):
+            self.assertIn(f"## {heading}", index)
+        self.assertIn("compact machine entry", index)
+
+    def test_skill_package_addon_has_adaptive_profiles_and_clear_owners(self) -> None:
+        entry = self.read("SKILL.md")
+        addon = self.read("references/addons/skill-package.md")
+        self.assertIn("[skill-package.md](references/addons/skill-package.md)", entry)
+        for profile in ("Minimal", "Routed", "Navigable", "Tool-bearing"):
+            self.assertIn(profile, addon)
+        self.assertIn("Target skill", addon)
+        self.assertIn("Native skill-creation guidance", addon)
+        self.assertIn("Markdown Protocol", addon)
+        self.assertIn("Skills Orchestrator", addon)
+        self.assertIn("does not authorize a repository-wide migration", addon)
+
+    def test_orchestrator_requires_markdown_protocol_for_future_skill_packages(self) -> None:
+        build = (ROOT / "runtime" / "skills-orchestrator" / "BUILD.md").read_text(encoding="utf-8")
+        management = (ROOT / "runtime" / "skills-orchestrator" / "MANAGEMENT.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("For every future skill creation", build)
+        self.assertIn("skill-package add-on", build)
+        self.assertIn("smallest justified package profile", build)
+        self.assertIn("Existing packages migrate one at a time", build)
+        self.assertIn("For every future `add`, `edit`, `migrate`, or `document` operation", management)
+        self.assertIn("Do not retrofit unnamed packages", management)
+
     def test_navigation_footer_is_a_required_portable_structure(self) -> None:
         entry = self.read("SKILL.md")
         core = self.read("references/core-protocol.md")
@@ -174,6 +208,11 @@ class MarkdownProtocolTests(unittest.TestCase):
         entry = PACKAGE / "SKILL.md"
         for target in re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", entry.read_text(encoding="utf-8")):
             self.assertTrue((entry.parent / target).resolve().is_file(), target)
+
+    def test_human_index_reference_links_resolve(self) -> None:
+        index = PACKAGE / "INDEX.md"
+        for target in re.findall(r"\[[^]]+\]\(([^)#]+\.md)(?:#[^)]+)?\)", index.read_text(encoding="utf-8")):
+            self.assertTrue((index.parent / target).resolve().is_file(), target)
 
     def test_pattern_gallery_links_to_small_examples(self) -> None:
         gallery = PACKAGE / "references" / "markdown-patterns.md"

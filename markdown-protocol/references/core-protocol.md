@@ -125,4 +125,4 @@ must not claim otherwise.
 
 ---
 
-[⌂ Home](../SKILL.md) · [Next →](review-workflow.md)
+[⌂ Home](../INDEX.md) · [Next →](review-workflow.md)

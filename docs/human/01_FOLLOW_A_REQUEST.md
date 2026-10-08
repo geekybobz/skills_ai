@@ -78,6 +78,12 @@ agreement. Work inside the agreed design continues without repeated approval;
 material expansion pauses for renewed review. Renderer-specific add-ons remain
 separate and must be verified before being claimed as dependable.
 
+For future skill creation, documentation, or substantial Markdown
+restructuring, the orchestrator combines the native skill workflow with the
+Markdown Protocol's skill-package add-on. It chooses the smallest useful
+profile and adds a human `INDEX.md` only when navigation is a separate need;
+existing skills are adapted one at a time when explicitly named.
+
 ## Requests without a suitable local capability
 
 The host uses its ordinary tools when no available local capability suits the

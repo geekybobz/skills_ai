@@ -74,4 +74,4 @@ equation's meaning in text. See [Mathematical expressions](formatting-examples/1
 
 ---
 
-[← Previous](markdown-patterns.md) · [⌂ Home](../SKILL.md) · [Next →](validation.md)
+[← Previous](markdown-patterns.md) · [⌂ Home](../INDEX.md) · [Next →](validation.md)

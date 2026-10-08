@@ -207,4 +207,4 @@ other. Split a directory only when its contents form a stable, named group.
 
 ---
 
-[← Previous](review-workflow.md) · [⌂ Home](../SKILL.md) · [Next →](markdown-patterns.md)
+[← Previous](review-workflow.md) · [⌂ Home](../INDEX.md) · [Next →](markdown-patterns.md)

@@ -25,10 +25,15 @@ depth without requiring every reader or model to load it.
    intended for learning, teaching, revision, or explaining unfamiliar ideas.
 8. Read [codebase.md](references/addons/codebase.md) when documenting a codebase,
    repository structure, runtime workflow, or change impact.
+9. Read [skill-package.md](references/addons/skill-package.md) when creating,
+   documenting, or substantially restructuring a skill package.
 
 The small files under `references/formatting-examples/` are human learning
 examples. Open only the example relevant to the current question; do not load
 the whole gallery during ordinary work.
+
+For human browsing or package maintenance, use [INDEX.md](INDEX.md). Do not
+load the index during ordinary task execution.
 
 ## Core behavior
 
@@ -69,4 +74,4 @@ indexes. Specialized research and operations add-ons remain deferred.
 
 ---
 
-[⌂ Home](#markdown-protocol)
+[⌂ Home](INDEX.md)

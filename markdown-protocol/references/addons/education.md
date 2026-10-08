@@ -147,4 +147,4 @@ maintain than the explanation it supports.
 
 ---
 
-[⌂ Home](../../SKILL.md)
+[⌂ Home](../../INDEX.md)

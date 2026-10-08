@@ -34,11 +34,24 @@ but is not a package, capability, or inventory row.
 | public package | anatomy |
 |---|---|
 | `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |
-| `markdown-protocol` | compact active entry, proportional review workflow, selectively loaded architecture/layout/pattern/visual/validation references, education and codebase add-ons, and small human learning examples |
+| `markdown-protocol` | compact active entry, optional human index, proportional review workflow, selectively loaded architecture/layout/pattern/visual/validation references, education/codebase/skill-package add-ons, and small human learning examples |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
 | `research-context-scout` | repository package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
 | `optimizer` | repository package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
 | `quantum-job-collector` | externally owned pointer whose package state is currently off |
+
+## Machine and human entries
+
+`SKILL.md` is the compact machine entry and router. A navigable multi-file
+package may also expose `INDEX.md` as a human map of its layers, references, and
+maintenance routes. The index is neither a public skill nor an internal
+capability, and ordinary task execution does not load it.
+
+For future skill creation, documentation, or substantial Markdown
+restructuring, the orchestrator composes the Markdown Protocol's skill-package
+add-on with the native skill workflow. The add-on chooses among minimal,
+routed, navigable, and tool-bearing profiles. Existing packages move to this
+shape only when individually named and reviewed.
 
 ## Capability record
 

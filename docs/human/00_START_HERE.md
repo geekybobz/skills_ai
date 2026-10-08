@@ -47,6 +47,9 @@ Its command aliases and phase files are not separate skills.
   be forced with `#> md_protocol`. It announces itself, inspects the relevant
   structure, and asks for a proportional design review before writing: a short
   preview for a local edit or an architecture proposal for structural work.
+  Future skill-package Markdown work also composes its skill-package add-on;
+  navigable multi-file packages may receive a human `INDEX.md`, which ordinary
+  task execution does not load.
 - `#> scout` and `#> scout-again` select the manual Research Context Scout.
   It pauses for context and search alignment, uses only locally available
   full text that was successfully extracted, and returns a beginner-readable

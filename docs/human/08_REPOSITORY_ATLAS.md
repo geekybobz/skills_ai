@@ -39,7 +39,7 @@ flowchart LR
 | `registry/` | public package states plus internal family/capability metadata |
 | `graph/` | generated, uniquely named Obsidian entries for the orchestrator and six public skills |
 | `interaction-protocol/` | one public interaction package with general and math modes |
-| `markdown-protocol/` | one repository-owned active package for automatic Markdown handling, proportional design review, layered architecture, formatting examples, visual fallbacks, and validation |
+| `markdown-protocol/` | one repository-owned active package with a compact machine entry, optional human index, proportional design review, layered architecture, focused add-ons including skill-package guidance, formatting examples, visual fallbacks, and validation |
 | `theory-reference/` | one public task package owned as a Git submodule |
 | `research-context-scout/` | one repository-owned manual task package |
 | `optimizer/` | one repository-owned manual task package for version-resolved OLGS build review, adaptive campaigns, and explicit situation analysis |
