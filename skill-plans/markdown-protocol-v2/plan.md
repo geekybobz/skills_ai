@@ -191,9 +191,11 @@ Files named below, all under `markdown-protocol/`:
   and where-used lists.
   - Implemented as design guidance in `references/addons/codebase.md`; no
     generator or mandatory project tooling was added.
-- [ ] **A3 Research notes.** A paper-note template with citation keys (Zotero
+- [x] **A3 Research notes.** A paper-note template with citation keys (Zotero
   with Better BibTeX), evidence status, and a literature map. It composes with
   `research-context-scout`, which owns evidence.
+  - Implemented as the routed `references/addons/research-notes.md` design;
+    external citation tools remain optional.
 - [ ] **A4 Decision records.** Short records (context, decision,
   consequences) linked from the topic they affect.
 - [ ] **A5 Runbooks.** Step-by-step checklists with a verification line for

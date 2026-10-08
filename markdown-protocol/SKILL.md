@@ -5,13 +5,13 @@ description: Use whenever requested work creates, edits, reviews, or restructure
 
 # Markdown Protocol
 
-Build a compact model entry with optional explanatory depth for humans. Keep
-rules and dependable facts in the compact layer.
+Build a compact model entry with optional human depth. Keep dependable rules
+and facts compact.
 
 ## Load only what the task needs
 
-For references containing `## Details`, read through the operational head first
-and continue only when its examples, templates, or reasoning are needed.
+For `## Details` references, read the operational head first. Continue only
+when examples, templates, or reasoning are needed.
 
 1. Read [core-protocol.md](references/core-protocol.md) through `## Details`
    for every task.
@@ -26,7 +26,8 @@ and continue only when its examples, templates, or reasoning are needed.
 6. Read [validation.md](references/validation.md) through `## Details` before
    finishing a change.
 7. Load one applicable add-on: [education.md](references/addons/education.md),
-   [codebase.md](references/addons/codebase.md), or
+   [codebase.md](references/addons/codebase.md),
+   [research-notes.md](references/addons/research-notes.md), or
    [skill-package.md](references/addons/skill-package.md). For add-on design,
    read the [contract](references/addons/add-on-contract.md).
 8. Read [structured-inventory.md](references/structured-inventory.md) only when

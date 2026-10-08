@@ -388,7 +388,12 @@ tags:
         self.assertIn("may not weaken the core invariants", compact)
         self.assertIn("minimum useful combination", compact)
         self.assertIn("Selection grants no network", compact)
-        for name in ("education.md", "codebase.md", "skill-package.md"):
+        for name in (
+            "education.md",
+            "codebase.md",
+            "research-notes.md",
+            "skill-package.md",
+        ):
             addon = self.read(f"references/addons/{name}")
             self.assertIn("## Add-on declaration", addon)
             self.assertIn("| Trigger |", addon)
@@ -466,6 +471,20 @@ tags:
         self.assertIn("## Entry points and where-used views", codebase)
         self.assertIn("bounded reverse lookup", codebase)
         self.assertIn("Source code and tests decide behavior", compact)
+
+    def test_research_notes_addon_separates_evidence_and_interpretation(self) -> None:
+        entry = self.read("SKILL.md")
+        index = self.read("INDEX.md")
+        addon = self.read("references/addons/research-notes.md")
+        compact = " ".join(addon.split())
+        self.assertIn("[research-notes.md](references/addons/research-notes.md)", entry)
+        self.assertIn("Research Notes Add-on", index)
+        self.assertIn("citation_key", addon)
+        for status in ("exact", "empirical", "numerical", "proposed", "uncertain"):
+            self.assertIn(f"| {status} |", addon)
+        self.assertIn("`research-context-scout`", addon)
+        self.assertIn("does not establish influence, priority, or consensus", compact)
+        self.assertIn("No citation, quotation, result, or access status is invented", addon)
 
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")

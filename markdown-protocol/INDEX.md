@@ -19,6 +19,7 @@ package. Models performing ordinary Markdown work start from
 | Design or maintain an add-on | [Add-on Contract](references/addons/add-on-contract.md) |
 | Create learning material | [Education Add-on](references/addons/education.md) |
 | Document a repository | [Codebase Add-on](references/addons/codebase.md) |
+| Structure source-backed research notes | [Research Notes Add-on](references/addons/research-notes.md) |
 | Structure a skill package | [Skill Package Add-on](references/addons/skill-package.md) |
 
 ## Package map
@@ -58,6 +59,7 @@ map, focused references own the detail, and validation checks the result.
 | [add-on-contract.md](references/addons/add-on-contract.md) | shared extension points, declarations, ownership, and boundaries |
 | [education.md](references/addons/education.md) | learning, revision, and unfamiliar concepts |
 | [codebase.md](references/addons/codebase.md) | codebase orientation, workflows, and change impact |
+| [research-notes.md](references/addons/research-notes.md) | source-backed claims, evidence status, and literature maps |
 | [skill-package.md](references/addons/skill-package.md) | machine-efficient and human-navigable skill packages |
 
 Add-ons may specialize presentation and validation. They do not replace the
