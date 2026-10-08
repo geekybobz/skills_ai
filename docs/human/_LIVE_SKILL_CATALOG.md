@@ -211,6 +211,7 @@ These technical routes select focused instructions inside a public task package.
 
 | Package file | Role |
 |---|---|
+| [optimizer/.gitignore](../../optimizer/.gitignore) | Package support file. |
 | [optimizer/README.md](../../optimizer/README.md) | Human orientation for the package. |
 | [optimizer/SKILL.md](../../optimizer/SKILL.md) | Skill entry or shared workflow instructions. |
 | [optimizer/agents/openai.yaml](../../optimizer/agents/openai.yaml) | Package support file. |
