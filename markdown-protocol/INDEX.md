@@ -22,6 +22,8 @@ package. Models performing ordinary Markdown work start from
 | Document a repository | [Codebase Add-on](references/addons/codebase.md) |
 | Structure source-backed research notes | [Research Notes Add-on](references/addons/research-notes.md) |
 | Structure a skill package | [Skill Package Add-on](references/addons/skill-package.md) |
+| Reproduce the VS Code editing setup | [VS Code Setup](references/vscode-setup.md) |
+| Review the first real-package pilot | [Markdown Protocol Pilot](references/pilot-report.md) |
 
 ## Package map
 
@@ -52,6 +54,8 @@ map, focused references own the detail, and validation checks the result.
 | [visual-patterns.md](references/visual-patterns.md) | diagram selection and fallbacks | when a visual materially helps |
 | [validation.md](references/validation.md) | structural and renderer-aware completion checks | before finishing |
 | [structured-inventory.md](references/structured-inventory.md) | optional property schema, inventory generation, and checker contract | when a collection opts into tooling |
+| [vscode-setup.md](references/vscode-setup.md) | portable editor recommendations, settings, keybindings, and verification | reproducing the reference VS Code workflow |
+| [pilot-report.md](references/pilot-report.md) | real-package usability findings and remaining renderer evidence | reviewing protocol adoption |
 
 ## Add-ons
 
@@ -83,6 +87,9 @@ Open only the example needed for the current question.
 agents/openai.yaml    -> native UI metadata and invocation policy
 scripts/markdown_protocol.py -> on-demand bounded check and inventory generator
 .obsidian/            -> optional local viewing state; not routing authority
+.vscode/              -> portable recommendations and package-local settings
+.markdownlint.jsonc   -> permissive portability and correctness checks
+assets/vscode/        -> backup-first user keybinding template
 ```
 
 ## Maintenance boundaries

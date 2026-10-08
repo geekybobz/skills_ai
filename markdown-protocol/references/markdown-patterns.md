@@ -22,11 +22,11 @@ current documentation supports the syntax, **observed** means the exact fixture
 was opened in that target, and **fallback** means the meaning remains readable
 without the enhancement. Never promote documented support to observed support.
 
-The current inspection baseline is VS Code 1.141 built-in Markdown preview and
-GitHub Markdown as checked on 2026-10-08. Obsidian remains compatible through
-portable links but is not part of the tested baseline. Visual observation in
-VS Code remains pending because computer-use permission was unavailable during
-this pass.
+The current inspection baseline is VS Code 1.141, Markdown Preview Enhanced
+0.8.39, and GitHub Markdown as checked on 2026-10-08. Obsidian remains
+compatible through portable links but is not part of the tested baseline.
+Visual observation in VS Code remains pending because computer-use permission
+was unavailable during this pass.
 
 ## Details
 
@@ -64,23 +64,27 @@ this pass.
 
 ### Renderer matrix
 
-| pattern | VS Code 1.141 built-in | GitHub Markdown | dependable baseline |
-|---|---|---|---|
-| headings, lists, tables, relative links | documented; visual pass pending | documented | use directly |
-| task lists | documented; visual pass pending | documented | source remains a readable list |
-| `<details>` / `<summary>` | visual pass pending | documented | replace with a heading when unsupported |
-| GitHub alerts | readable as a block quote; special styling needs an extension | documented | keep the alert text explicit |
-| Mermaid fenced blocks | documented; built-in renderer present; visual pass pending | documented | include a text mapping |
-| inline math `$...$` | documented with KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
-| display math `$$...$$` | documented with KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
-| `\\label`, `\\ref`, broad macro sets | not established | renderer-dependent | state labels and references in prose |
-| Markdown region markers | documented for the VS Code source editor | comments are hidden | editor convenience only |
-| Markmap | optional extension; not installed by the protocol | not native | headings remain authoritative |
-| linked SVG | documented; visual pass pending | documented | provide alt text and source link |
-| Obsidian wikilinks, embeds, callouts | untested | not portable | do not use in governed collections |
+| pattern | VS Code 1.141 built-in | MPE 0.8.39 | GitHub Markdown | dependable baseline |
+|---|---|---|---|---|
+| headings, lists, tables, relative links | documented; visual pass pending | documented; visual pass pending | documented | use directly |
+| task lists | documented; visual pass pending | documented; visual pass pending | documented | source remains a readable list |
+| `<details>` / `<summary>` | visual pass pending | documented; visual pass pending | documented | replace with a heading when unsupported |
+| GitHub alerts | readable as a block quote; special styling needs an extension | readable fallback; styling not claimed | documented | keep the alert text explicit |
+| Mermaid fenced blocks | documented; renderer present; visual pass pending | documented; bundled renderer; visual pass pending | documented | include a text mapping |
+| inline math `$...$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
+| display math `$$...$$` | documented with KaTeX; visual pass pending | configured for KaTeX; visual pass pending | documented with MathJax | use only after the target pass |
+| `\\label`, `\\ref`, broad macro sets | not established | renderer-dependent | renderer-dependent | state labels and references in prose |
+| Markdown region markers | documented for the source editor | source-editor feature only | comments are hidden | editor convenience only |
+| Markmap | optional extension; not installed by the protocol | not native | not native | headings remain authoritative |
+| linked SVG | documented; visual pass pending | documented; visual pass pending | documented | provide alt text and source link |
+| Obsidian wikilinks, embeds, callouts | untested | disabled in the reference workspace | not portable | use relative Markdown links |
 
 Use `20-renderer-verification-fixture.md` for the visual pass. Re-run it after a
 renderer upgrade before changing this matrix.
+
+The package-local editor configuration and shortcut guide live in
+[VS Code Setup](vscode-setup.md). They improve authoring but never become a
+content dependency.
 
 ### Verification sources
 

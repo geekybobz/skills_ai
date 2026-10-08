@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import subprocess
 import sys
@@ -756,8 +757,60 @@ reviewed: 2025-06-01
             self.assertTrue((PACKAGE / "references" / "formatting-examples" / name).is_file())
         self.assertIn("### Renderer matrix", gallery)
         self.assertIn("visual pass pending", gallery)
+        self.assertIn("MPE 0.8.39", gallery)
         self.assertIn("P = max(N / 12, E / 12, L / 8)", visual)
         self.assertIn("A = width / height", visual)
+
+    def test_portable_vscode_pack_is_small_safe_and_reproducible(self) -> None:
+        extensions = json.loads(
+            (PACKAGE / ".vscode" / "extensions.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            [
+                "shd101wyy.markdown-preview-enhanced",
+                "davidanson.vscode-markdownlint",
+            ],
+            extensions["recommendations"],
+        )
+        self.assertIn("nettrash.md-vscode", extensions["unwantedRecommendations"])
+
+        settings = json.loads(
+            (PACKAGE / ".vscode" / "settings.json").read_text(encoding="utf-8")
+        )
+        self.assertTrue(settings["markdown.validate.enabled"])
+        self.assertEqual("prompt", settings["markdown.updateLinksOnFileMove.enabled"])
+        self.assertTrue(settings["markdown-preview-enhanced.scrollSync"])
+        self.assertFalse(settings["markdown-preview-enhanced.enableWikiLinkSyntax"])
+        self.assertFalse(settings["markdown-preview-enhanced.enableScriptExecution"])
+        self.assertFalse(settings["markdown-preview-enhanced.enablePreviewScripts"])
+
+        lint = json.loads(
+            (PACKAGE / ".markdownlint.jsonc").read_text(encoding="utf-8")
+        )
+        self.assertFalse(lint["default"])
+        self.assertEqual(["details", "summary"], lint["MD033"]["allowed_elements"])
+        self.assertNotIn("MD013", lint)
+
+        bindings = (PACKAGE / "assets" / "vscode" / "keybindings.jsonc").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"mac": "cmd+alt+v"', bindings)
+        self.assertIn("markdown-preview-enhanced.openPreviewToTheSide", bindings)
+        self.assertIn("latex-workshop.view", bindings)
+
+    def test_vscode_setup_is_backup_first_and_does_not_claim_rmd_execution(self) -> None:
+        guide = self.read("references/vscode-setup.md")
+        self.assertIn("back up User `keybindings.json`", guide)
+        self.assertIn("Recommendations do not", guide)
+        self.assertIn("Command-Option-V", guide)
+        self.assertIn("true rendering also executes R code", guide)
+
+    def test_real_package_pilot_records_layering_and_residual_renderer_work(self) -> None:
+        pilot = self.read("references/pilot-report.md")
+        self.assertIn("its own first real pilot", pilot)
+        self.assertIn("without maintaining separate human and machine copies", pilot)
+        self.assertIn("Snippets are intentionally deferred", pilot)
+        self.assertIn("pending macOS Computer Use permission", pilot)
 
     def test_renderer_fixture_covers_visual_and_math_risks(self) -> None:
         fixture = self.read(

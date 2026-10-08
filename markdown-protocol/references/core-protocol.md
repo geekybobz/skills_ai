@@ -2,9 +2,8 @@
 
 ## In brief
 
-Use one navigable knowledge structure at several depths. A reader starts from a
-compact orientation, follows an explicit route, and opens optional detail only
-when it is useful.
+Use one linked structure at several depths. Compact model routes and optional
+human explanations share owners; never maintain parallel copies.
 
 ## Invariants
 
@@ -12,18 +11,20 @@ when it is useful.
    topics without a full scan.
 2. Every important statement has one authoritative owner; outer layers
    summarize and link instead of duplicating it.
-3. Essential meaning remains in portable text. Visuals and interactive features
+3. Model routes and human depth share owners and links; central or generated
+   views only point to them.
+4. Essential meaning remains in portable text. Visuals and interactive features
    supplement it.
-4. A file exists only when it has an independently useful job. The structure
+5. A file exists only when it has an independently useful job. The structure
    may expand or collapse as that job changes.
-5. Everything a reader must obey or rely on appears above the first
+6. Everything a reader must obey or rely on appears above the first
    `## Details`. Details may explain, exemplify, derive, or cite; they never add,
    weaken, or replace a rule.
-6. Generated views are marked, reproducible, and non-authoritative.
-7. Useful existing conventions and user edits survive unless they obstruct
+7. Generated views are marked, reproducible, and non-authoritative.
+8. Useful existing conventions and user edits survive unless they obstruct
    these invariants.
-8. Markdown writes follow a user-reviewed design proportional to the change.
-9. Every authored page ends with Home navigation; Previous and Next appear only
+9. Markdown writes follow a user-reviewed design proportional to the change.
+10. Every authored page ends with Home navigation; Previous and Next appear only
    for an intentional reading order.
 
 ## Information roles

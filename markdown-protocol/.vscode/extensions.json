@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "shd101wyy.markdown-preview-enhanced",
+    "davidanson.vscode-markdownlint"
+  ],
+  "unwantedRecommendations": [
+    "mrdhat.glow-vscode",
+    "nettrash.md-vscode",
+    "yzhang.markdown-all-in-one"
+  ]
+}

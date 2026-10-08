@@ -1,0 +1,28 @@
+{
+  "default": false,
+  "MD001": true,
+  "MD012": {
+    "maximum": 2
+  },
+  "MD018": true,
+  "MD019": true,
+  "MD023": true,
+  "MD031": true,
+  "MD032": true,
+  "MD033": {
+    "allowed_elements": [
+      "details",
+      "summary"
+    ]
+  },
+  "MD037": true,
+  "MD038": true,
+  "MD039": true,
+  "MD040": true,
+  "MD042": true,
+  "MD045": true,
+  "MD047": true,
+  "MD051": true,
+  "MD052": true,
+  "MD053": true
+}

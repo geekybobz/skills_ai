@@ -76,13 +76,17 @@ These technical routes select focused instructions inside a public task package.
 
 | Package file | Role |
 |---|---|
+| [markdown-protocol/.markdownlint.jsonc](../../markdown-protocol/.markdownlint.jsonc) | Package support file. |
 | [markdown-protocol/.obsidian/app.json](../../markdown-protocol/.obsidian/app.json) | Package support file. |
 | [markdown-protocol/.obsidian/appearance.json](../../markdown-protocol/.obsidian/appearance.json) | Package support file. |
 | [markdown-protocol/.obsidian/core-plugins.json](../../markdown-protocol/.obsidian/core-plugins.json) | Package support file. |
 | [markdown-protocol/.obsidian/workspace.json](../../markdown-protocol/.obsidian/workspace.json) | Package support file. |
+| [markdown-protocol/.vscode/extensions.json](../../markdown-protocol/.vscode/extensions.json) | Package support file. |
+| [markdown-protocol/.vscode/settings.json](../../markdown-protocol/.vscode/settings.json) | Package support file. |
 | [markdown-protocol/INDEX.md](../../markdown-protocol/INDEX.md) | Package support file. |
 | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | Skill entry or shared workflow instructions. |
 | [markdown-protocol/agents/openai.yaml](../../markdown-protocol/agents/openai.yaml) | Package support file. |
+| [markdown-protocol/assets/vscode/keybindings.jsonc](../../markdown-protocol/assets/vscode/keybindings.jsonc) | Package support file. |
 | [markdown-protocol/references/addons/add-on-contract.md](../../markdown-protocol/references/addons/add-on-contract.md) | Package support file. |
 | [markdown-protocol/references/addons/codebase.md](../../markdown-protocol/references/addons/codebase.md) | Package support file. |
 | [markdown-protocol/references/addons/decision-records.md](../../markdown-protocol/references/addons/decision-records.md) | Package support file. |
@@ -117,10 +121,12 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/references/layouts.md](../../markdown-protocol/references/layouts.md) | Package support file. |
 | [markdown-protocol/references/markdown-patterns.md](../../markdown-protocol/references/markdown-patterns.md) | Package support file. |
 | [markdown-protocol/references/named-commands.md](../../markdown-protocol/references/named-commands.md) | Package support file. |
+| [markdown-protocol/references/pilot-report.md](../../markdown-protocol/references/pilot-report.md) | Package support file. |
 | [markdown-protocol/references/review-workflow.md](../../markdown-protocol/references/review-workflow.md) | Package support file. |
 | [markdown-protocol/references/structured-inventory.md](../../markdown-protocol/references/structured-inventory.md) | Package support file. |
 | [markdown-protocol/references/validation.md](../../markdown-protocol/references/validation.md) | Package support file. |
 | [markdown-protocol/references/visual-patterns.md](../../markdown-protocol/references/visual-patterns.md) | Package support file. |
+| [markdown-protocol/references/vscode-setup.md](../../markdown-protocol/references/vscode-setup.md) | Package support file. |
 | [markdown-protocol/scripts/markdown_protocol.py](../../markdown-protocol/scripts/markdown_protocol.py) | Deterministic support, installation, synchronization, or validation script. |
 
 ## theory-reference
