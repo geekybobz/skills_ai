@@ -79,3 +79,7 @@ with research question \(Q\), central claim \(C\), novelty hypothesis \(N\),
 evidence package \(E\), generality \(G\), importance \(A\) and falsifier
 \(F\). Treat novelty and venue potential as hypotheses until the relevant
 literature and evidence have been checked.
+
+---
+
+[⌂ Home](../../README.md)

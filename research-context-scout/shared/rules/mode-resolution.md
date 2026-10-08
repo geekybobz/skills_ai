@@ -19,3 +19,7 @@ blocks, later prose mentions and words such as "scouting" do not invoke.
 
 Mode is intent, not permission to skip unfinished work. Record completeness
 still selects the phase.
+
+---
+
+[⌂ Home](../../README.md)

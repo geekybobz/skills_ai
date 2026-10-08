@@ -12,31 +12,34 @@ This plan has been promoted into a routable skill and retained as its
 human-facing guide. It explains the design but does not control routing,
 permissions or execution.
 
-Back to the [[docs/00_SKILLS_HUB|Skills Hub]]. Runtime files:
+Runtime files:
 
-- [[research-context-scout/SKILL|skill entry]];
-- [[research-context-scout/shared/SKILL|shared workflow]];
-- [[research-context-scout/shared/gates|gate order and rule loading]];
-- [[research-context-scout/shared/phases/initial-scout|initial phase]];
-- [[research-context-scout/shared/phases/deepen-scout|deepening phase]];
-- [[research-context-scout/shared/phases/math-method-lens|math-method lens]];
-- [[research-context-scout/shared/rules/record-and-brief|record and brief contract]];
-- [[research-context-scout/shared/rules/alignment-checkpoints|alignment checkpoints]];
-- [[research-context-scout/shared/rules/literature-corpus|literature acquisition and corpus rule]];
-- [[research-context-scout/shared/rules/collective-synthesis|collective synthesis and report rule]];
-- [[research-context-scout/shared/rules/mode-resolution|mode resolution]];
-- [[research-context-scout/shared/rules/source-status|source status]];
-- [[research-context-scout/shared/rules/anti-hallucination|anti-hallucination rule]];
-- [[research-context-scout/shared/rules/relation-taxonomy|relation taxonomy]];
-- [[research-context-scout/shared/rules/evidence-gate|evidence gate]];
-- [[research-context-scout/shared/rules/journal-thresholds|journal thresholds]];
-- [[research-context-scout/shared/rules/journal-level-up|journal level-up tests]];
-- [[research-context-scout/shared/templates/research-orientation|record template]];
-- [[research-context-scout/codex/SKILL|Codex wrapper]]; and
-- [[research-context-scout/claude/CLAUDE|Claude integration boundary]].
+- [skill entry](SKILL.md);
+- [shared workflow](shared/SKILL.md);
+- [gate order and rule loading](shared/gates.md);
+- [initial phase](shared/phases/initial-scout.md);
+- [deepening phase](shared/phases/deepen-scout.md);
+- [math-method lens](shared/phases/math-method-lens.md);
+- [record and brief contract](shared/rules/record-and-brief.md);
+- [alignment checkpoints](shared/rules/alignment-checkpoints.md);
+- [literature acquisition and corpus rule](shared/rules/literature-corpus.md);
+- [collective synthesis and report rule](shared/rules/collective-synthesis.md);
+- [mode resolution](shared/rules/mode-resolution.md);
+- [source status](shared/rules/source-status.md);
+- [anti-hallucination rule](shared/rules/anti-hallucination.md);
+- [relation taxonomy](shared/rules/relation-taxonomy.md);
+- [evidence gate](shared/rules/evidence-gate.md);
+- [journal thresholds](shared/rules/journal-thresholds.md);
+- [journal level-up tests](shared/rules/journal-level-up.md);
+- [record template](shared/templates/research-orientation.md);
+- [Codex wrapper](codex/SKILL.md) and
+  [Codex record/tool rules](codex/CODEX.md); and
+- [Claude integration boundary](claude/CLAUDE.md).
 
 The human page explains the skill. The LLM-facing files execute it. Human prose
 never becomes routing or permission authority.
+
+## Details
 
 ## Purpose
 
@@ -619,7 +622,7 @@ Do not initially produce:
 - many weakly differentiated suggestions;
 - a complete mathematical solution;
 - an unnecessary simulation campaign;
-- an Obsidian context pack or research database;
+- a tool-specific context pack or research database;
 - edits to supplied research artifacts; or
 - implementation before the project is understood.
 
@@ -719,6 +722,10 @@ The implementation must continue to verify:
 - initial versus deepening depth;
 - compact token loading, per file and across the whole initial path;
 - shared/Codex/Claude ownership;
-- Obsidian and human-guide links;
+- portable human-guide links;
 - failure behavior for missing, ambiguous or cross-project paths; and
 - realistic forward tests using raw project artifacts.
+
+---
+
+[⌂ Home](README.md)

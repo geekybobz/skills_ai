@@ -47,3 +47,7 @@ creation or update of that file in the resolved project root. Treat every
 other supplied research file as read-only. It does not authorize edits to
 derivations, code, papers, figures, data or configuration. Ask before any
 broader write.
+
+---
+
+[⌂ Home](README.md)

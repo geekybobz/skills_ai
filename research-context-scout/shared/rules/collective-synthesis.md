@@ -89,3 +89,7 @@ Keep the default result concise. Define every displayed symbol locally. Expand
 paper-by-paper evidence or long derivations only on request. A simple statement
 must be traceable to the rigorous record; simplification never removes an
 assumption, evidence boundary or failed mapping.
+
+---
+
+[⌂ Home](../../README.md)

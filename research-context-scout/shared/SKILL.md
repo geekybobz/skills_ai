@@ -54,3 +54,7 @@ unresolved input lock and an ambiguity stop never load it.
 The platform response presents the result, supporting formulation and decision
 boundary — not the search process. `rules/record-and-brief.md` owns the packet
 keys and the brief contract.
+
+---
+
+[⌂ Home](../README.md)

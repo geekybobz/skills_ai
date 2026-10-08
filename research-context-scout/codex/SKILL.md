@@ -32,3 +32,7 @@ substitute for a health probe.
 Use `apply_patch` to create or update only the authorized
 `research-orientation.md`. Before that write, or when resolving unusual
 path/state cases, read `CODEX.md`.
+
+---
+
+[⌂ Home](../README.md)

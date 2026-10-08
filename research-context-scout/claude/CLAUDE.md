@@ -59,3 +59,7 @@ library as `unknown`, never as `absent`.
 
 Claude-authored wrapper; live Claude forward acceptance is not yet certified.
 Report platform integration as unverified rather than claiming Codex parity.
+
+---
+
+[⌂ Home](../README.md)

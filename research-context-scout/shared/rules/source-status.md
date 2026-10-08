@@ -28,3 +28,7 @@ Rules:
 
 This table has one home. Rules, phases, templates and wrappers reference it
 rather than restating the tokens.
+
+---
+
+[⌂ Home](../../README.md)

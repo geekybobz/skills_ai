@@ -187,3 +187,7 @@ For each later cycle, append `## Interaction cycle N`, where `N` is one more
 than the highest existing cycle number, and repeat the cycle subsections. Add a
 fresh `USER RESPONSES START` / `USER RESPONSES END` marker pair when the cycle
 asks the user another question; never alter text inside any completed pair.
+
+---
+
+[⌂ Home](../../README.md)

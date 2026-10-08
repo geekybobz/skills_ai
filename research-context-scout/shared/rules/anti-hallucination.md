@@ -69,3 +69,7 @@ An answer counts only if it names an inspected artifact.
 Source status tokens and their allowed use are defined in `source-status.md`.
 Never exceed the allowed use of the recorded status, and never leave a cited
 source without one.
+
+---
+
+[⌂ Home](../../README.md)

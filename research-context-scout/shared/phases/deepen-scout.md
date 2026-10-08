@@ -98,3 +98,7 @@ what evidence changed; whether the delta moved a claim from existing
 understanding to new direction or the reverse; how applications or importance
 changed; whether the paper threshold strengthened; and which next test has the
 highest information value.
+
+---
+
+[⌂ Home](../../README.md)

@@ -63,3 +63,7 @@ next check:
 Reject vocabulary-only matches. A relation changes the project only when it
 changes reproduce/adapt/extend/stop, the gap predicate, or the next decisive
 test.
+
+---
+
+[⌂ Home](../../README.md)

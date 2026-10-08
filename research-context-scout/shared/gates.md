@@ -46,3 +46,7 @@ stopped.
 
 Everything else a gate needs is stated once, in that gate's rule file. Do not
 restate a rule here, in a phase, or in a wrapper.
+
+---
+
+[⌂ Home](../README.md)

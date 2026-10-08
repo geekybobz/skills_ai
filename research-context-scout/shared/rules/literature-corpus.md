@@ -151,3 +151,7 @@ the main report.
 
 Write each extraction once and reuse it. A later cycle re-reads a source only
 when the delta changes what that source must answer.
+
+---
+
+[⌂ Home](../../README.md)

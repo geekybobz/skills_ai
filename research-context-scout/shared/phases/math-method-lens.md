@@ -44,3 +44,7 @@ counterexamples.
 - Do not use mathematical elegance as evidence of physical importance.
 - Do not claim unrestricted optimality from a restricted-family calculation.
 - Do not claim physical realizability from mathematical reachability alone.
+
+---
+
+[⌂ Home](../../README.md)

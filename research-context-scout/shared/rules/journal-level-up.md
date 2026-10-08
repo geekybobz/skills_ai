@@ -30,3 +30,7 @@ From J3 to J4:
 
 A level-up argument never creates a gap. It only re-grades a gap the evidence
 gate has already established.
+
+---
+
+[⌂ Home](../../README.md)

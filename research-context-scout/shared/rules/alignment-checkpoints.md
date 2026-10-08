@@ -56,3 +56,7 @@ silently leaves an old search lane, mapping or conclusion active.
 Do not repeat a confirmed checkpoint unless a delta changes one of its inputs.
 Do not ask the user to find literature, invent applications or make choices
 that inspected evidence can settle.
+
+---
+
+[⌂ Home](../../README.md)

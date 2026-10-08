@@ -733,14 +733,14 @@ class ResearchContextScoutTests(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, guide)
 
-    def test_human_guide_links_to_live_skill_files_and_hub(self) -> None:
+    def test_human_guide_links_to_live_skill_files_portably(self) -> None:
         guide = self.read("README.md")
         required = (
-            "docs/00_SKILLS_HUB",
-            "research-context-scout/SKILL",
-            "research-context-scout/shared/SKILL",
-            "research-context-scout/codex/SKILL",
-            "research-context-scout/claude/CLAUDE",
+            "(SKILL.md)",
+            "(shared/SKILL.md)",
+            "(codex/SKILL.md)",
+            "(codex/CODEX.md)",
+            "(claude/CLAUDE.md)",
         )
         for target in required:
             self.assertIn(target, guide)
