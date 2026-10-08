@@ -34,16 +34,16 @@ but is not a package, capability, or inventory row.
 | public package | anatomy |
 |---|---|
 | `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |
-| `markdown-protocol` | submodule package with compact active entry, optional human index and generated inventory, proportional review workflow, selectively loaded references, on-demand checker, add-ons, and small human learning examples |
+| `markdown-protocol` | submodule package with compact operational entry, optional navigation index and generated inventory, proportional review workflow, selectively loaded references, on-demand checker, add-ons, and small learning examples |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
 | `research-context-scout` | submodule package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
 | `optimizer` | submodule package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
 | `quantum-job-collector` | externally owned pointer whose package state is currently off |
 
-## Machine and human entries
+## Operational and navigation entries
 
-`SKILL.md` is the compact machine entry and router. A navigable multi-file
-package may also expose `INDEX.md` as a human map of its layers, references, and
+`SKILL.md` is the compact operational entry and router. A navigable multi-file
+package may also expose `INDEX.md` as a navigation map of its layers, references, and
 maintenance routes. The index is neither a public skill nor an internal
 capability, and ordinary task execution does not load it.
 

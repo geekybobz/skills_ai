@@ -629,15 +629,39 @@ reviewed: 2025-06-01
         self.assertIn("reported separately as `unverified`", compact)
         self.assertIn("Do not enable unrestricted HTML for an untrusted deck", addon)
 
-    def test_human_index_maps_the_package_without_default_loading(self) -> None:
+    def test_navigation_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")
         index = self.read("INDEX.md")
         compact_entry = " ".join(entry.split())
         self.assertIn("[INDEX.md](INDEX.md)", entry)
-        self.assertIn("ordinary model work does not", compact_entry)
+        self.assertIn("ordinary tasks do not require it", compact_entry)
         for heading in ("Choose a route", "Package map", "Core references", "Add-ons"):
             self.assertIn(f"## {heading}", index)
-        self.assertIn("compact machine entry", index)
+        self.assertIn("compact operational entry", index)
+
+    def test_layer_names_describe_depth_and_role_not_audience(self) -> None:
+        paths = (
+            "SKILL.md",
+            "INDEX.md",
+            "references/core-protocol.md",
+            "references/layouts.md",
+            "references/validation.md",
+            "references/pilot-report.md",
+            "references/addons/skill-package.md",
+        )
+        text = "\n".join(self.read(path) for path in paths).lower()
+        for phrase in (
+            "compact machine entry",
+            "machine entry:",
+            "human entry:",
+            "human depth",
+            "human route map",
+            "model routes",
+        ):
+            self.assertNotIn(phrase, text)
+        self.assertIn("compact operational entry", text)
+        self.assertIn("navigation map", text)
+        self.assertIn("optional depth", text)
 
     def test_skill_package_addon_has_adaptive_profiles_and_clear_owners(self) -> None:
         routes = self.read("references/addons/routes.md")
@@ -811,7 +835,7 @@ reviewed: 2025-06-01
     def test_real_package_pilot_records_layering_and_residual_renderer_work(self) -> None:
         pilot = self.read("references/pilot-report.md")
         self.assertIn("its own first real pilot", pilot)
-        self.assertIn("without maintaining separate human and machine copies", pilot)
+        self.assertIn("without maintaining parallel audience-specific copies", pilot)
         self.assertIn("Snippets are intentionally deferred", pilot)
         self.assertIn("pending macOS Computer Use permission", pilot)
 
