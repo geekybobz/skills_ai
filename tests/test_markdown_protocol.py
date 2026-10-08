@@ -412,6 +412,20 @@ tags:
         self.assertIn("Do not invent a citation", education)
         self.assertIn("grants no network or acquisition authority", compact)
 
+    def test_education_addon_designs_optional_recall_deck_path_and_glossary(self) -> None:
+        education = self.read("references/addons/education.md")
+        compact = " ".join(education.split())
+        self.assertIn("## Optional recall card", education)
+        self.assertIn("**Question:**", education)
+        self.assertIn("<details>", education)
+        self.assertIn("Prefer the\nQuick Review / Fact Card", education)
+        self.assertIn("## Glossary block", education)
+        self.assertIn("typed `Prerequisite` connections", education)
+        self.assertIn("## Optional generated review deck", education)
+        self.assertIn("links every card back to its owning topic", education)
+        self.assertIn("does not itself authorize or provide a generator", compact)
+        self.assertIn("hide no prerequisite", education)
+
     def test_codebase_addon_is_selective_and_routes_real_code_questions(self) -> None:
         entry = self.read("SKILL.md")
         codebase = self.read("references/addons/codebase.md")

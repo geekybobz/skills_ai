@@ -6,7 +6,8 @@ observation and the GitHub hosted-render pass remain pending because native
 computer-use permission and external fixture transmission were unavailable.
 Phase 3 G1 typed connections and graph inspection and G2 controlled tag
 validation/filtering are implemented.
-Phase 4 A0 add-on contract is implemented as design guidance; A1 remains.
+Phase 4 A0 add-on contract and A1 learning add-on are implemented as design
+guidance. No review-deck generator was built.
 Codex implements only the ticked items under repository change control.
 
 Next iteration of [`markdown-protocol`](../../markdown-protocol/SKILL.md):

@@ -86,6 +86,72 @@ Prefer a portable blockquote and include only fields that carry information:
 Do not force question-and-answer wording. Keep prerequisites, conclusions,
 safety constraints, and important limitations outside collapsed content.
 
+## Optional recall card
+
+Use a recall card only when active retrieval is genuinely useful. Keep the
+question visible and the answer optional:
+
+```markdown
+### Recall — Stable short name
+
+**Question:** What is the decisive distinction?
+
+<details>
+<summary>Show answer</summary>
+
+The compact answer, including its important limitation.
+
+</details>
+```
+
+The answer must repeat no hidden prerequisite or safety condition. Prefer the
+Quick Review / Fact Card when a direct summary is more natural than a question.
+Do not turn every heading, definition, or paragraph into a recall card.
+
+## Glossary block
+
+Use a glossary only when several unavoidable terms recur:
+
+```markdown
+### Glossary
+
+| term | plain meaning | precise meaning or owner |
+|---|---|---|
+| Example term | Short accessible meaning | Formal distinction or link |
+```
+
+Define a term once and link to its owning topic. Do not copy a full explanation
+into the glossary.
+
+## Learning path from prerequisites
+
+When topics use typed `Prerequisite` connections, derive the learning path from
+that graph rather than manually maintaining a second order. The path is valid
+only when prerequisites are acyclic. Use the package tool to inspect it:
+
+```bash
+python3 scripts/markdown_protocol.py graph <collection-root> --topic topics/example.md
+```
+
+The graph supplies required-before relationships. The author still decides
+whether optional Related or Deeper material belongs in a suggested route.
+
+## Optional generated review deck
+
+`REVIEW_DECK.md` may be generated when a collection has enough stable recall
+cards to justify one. Its canonical sources are the local cards beside their
+owning topics. The generated deck:
+
+- identifies its sources and regeneration command;
+- links every card back to its owning topic;
+- copies only the question and collapsible answer;
+- preserves source order or a declared prerequisite-derived order;
+- is replaced as a whole and checked for freshness;
+- remains optional and non-authoritative.
+
+Do not create or hand-maintain a deck for a small collection. This design does
+not itself authorize or provide a generator.
+
 ## Further reading
 
 Add a source only when it materially extends the exact concept. Prefer an
@@ -156,6 +222,9 @@ maintain than the explanation it supports.
 - The result is direct, restrained, and consistent with the user's tone.
 - No project-specific content, fixed paper list, quiz requirement, plugin, or
   card quota has been introduced by this protocol.
+- Recall answers hide no prerequisite, safety condition, or main conclusion.
+- A generated review deck names its sources, links to owners, and is current.
+- A generated learning path agrees with acyclic Prerequisite connections.
 
 ---
 
