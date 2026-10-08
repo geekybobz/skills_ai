@@ -396,6 +396,7 @@ tags:
             "research-notes.md",
             "decision-records.md",
             "runbooks.md",
+            "visual-extras.md",
             "skill-package.md",
         ):
             addon = self.read(f"references/addons/{name}")
@@ -512,6 +513,22 @@ tags:
         self.assertIn("## Rollback or recovery", addon)
         self.assertIn("does not grant permission to execute itself", compact)
         self.assertIn("Sample output is visibly illustrative", addon)
+
+    def test_visual_extras_keep_tools_optional_and_text_authoritative(self) -> None:
+        routes = self.read("references/addons/routes.md")
+        addon = self.read("references/addons/visual-extras.md")
+        compact = " ".join(addon.split())
+        self.assertIn("[visual-extras.md](visual-extras.md)", routes)
+        for heading in (
+            "Markmap hierarchy view",
+            "Foam navigation graph",
+            "Editable SVG for large diagrams",
+        ):
+            self.assertIn(f"## {heading}", addon)
+        self.assertIn("portable labelled relative links remain the default", compact)
+        self.assertIn("not as semantic or evidentiary authority", compact)
+        self.assertIn("do not keep only a PNG export", compact)
+        self.assertIn("status is `unverified`", addon)
 
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")

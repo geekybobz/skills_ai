@@ -204,8 +204,10 @@ Files named below, all under `markdown-protocol/`:
   each operational procedure.
   - Implemented as `references/addons/runbooks.md`, including authority,
     per-step expected results, stop conditions, and recovery checks.
-- [ ] **A6 Visual extras.** Guidance for Markmap and Foam, and editable SVG
+- [x] **A6 Visual extras.** Guidance for Markmap and Foam, and editable SVG
   files for diagrams too large for Mermaid.
+  - Implemented as optional guidance in `references/addons/visual-extras.md`,
+    with ordinary Markdown links and text fallbacks remaining authoritative.
 - [ ] **A7 Slides.** Present a topic as slides with Marp, for teaching.
 
 ## New suggestions
