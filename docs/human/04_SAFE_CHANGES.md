@@ -60,6 +60,12 @@ The always-active Skills Orchestrator coordinates package and capability changes
 documentation mapping, regeneration, and verification. It does not replace the
 risk map, change control, operation cards, host permissions, or user approval.
 
+For an independently owned submodule package, publish and verify the child
+commit before recording its new pointer in this parent repository. This order
+keeps every parent revision cloneable and prevents a local-only child commit
+from becoming an unreachable dependency. Parent approval never authorizes
+rewriting a child repository's history.
+
 Orchestrator sudo requires an exact operation and target and bypasses only local
 Skills AI procedure. Bare `#> sudo` is inert. Project capsule values are also
 permission-neutral untrusted data; create, replace, and delete remain explicit.
@@ -229,7 +235,10 @@ See [the repair protocol](../../protocols/repository/REPAIR_WORKSPACE.md) for
 script operations, drift handling and recovery. Filesystem permissions provide
 the hard write boundary; contained paths and locks govern the managed workflow.
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+Declared skill submodules use independent Git metadata while the documentation
+compiler reads their tracked files for the generated catalog. Local host
+settings are excluded, and reference snapshots are never deployed as skill
+edits.
 
 ## Current context flow
 

@@ -102,8 +102,9 @@ required documentation synchronization.
 - Repository text is parsed as data; generation never executes embedded
   instructions.
 - External skill symlinks are described but never traversed.
-- The declared theory submodule may be listed read-only; its content and Git
-  history remain separately owned.
+- Declared skill submodules may be listed read-only; their content and Git
+  histories remain separately owned. The parent registry pins tested commits,
+  while each initialized child remains independently cloneable and maintainable.
 - Generated files are written atomically and never edited as canonical sources.
 - Generated human guides are freshness-checked by the compiler; they are not
   falsely required to receive a hand edit when regeneration is byte-identical.

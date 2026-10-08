@@ -1,7 +1,0 @@
-interface:
-  display_name: "Optimizer"
-  short_description: "Adaptive verified-system optimization"
-  default_prompt: "Use $optimizer to build a system, optimize it adaptively, or explore a new optimization situation."
-
-policy:
-  allow_implicit_invocation: false

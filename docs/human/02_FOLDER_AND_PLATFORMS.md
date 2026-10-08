@@ -31,10 +31,10 @@ flowchart TD
 | `registry/activation.md` | separate orchestrator record, public skill states, and internal gates |
 | `registry/*.md` | family-level capability metadata |
 | `interaction-protocol/` | one public interaction package and its modes |
-| `markdown-protocol/` | one repository-owned active package for automatic Markdown handling, proportional design review, portable layered structure, an optional human index, focused add-ons including skill-package architecture, formatting examples, visuals, and validation |
-| `theory-reference/` | one separately owned submodule package |
-| `research-context-scout/` | one repository-owned manual package |
-| `optimizer/` | one repository-owned manual package with separate system-build review, adaptive campaign, and situation-analysis workflows |
+| `markdown-protocol/` | separately owned active submodule for automatic Markdown handling, proportional design review, portable layered structure, an optional human index, focused add-ons, visuals, and validation |
+| `theory-reference/` | separately owned theory submodule package |
+| `research-context-scout/` | separately owned manual research submodule package |
+| `optimizer/` | separately owned manual optimizer submodule with system-build review, adaptive campaign, and situation-analysis workflows |
 | `external-skills/` | controlled pointers to externally owned packages |
 | `graph/` | generated descriptive nodes for Obsidian inventory browsing |
 | `docs/human/` | explanatory pages excluded from normal task work |
@@ -95,7 +95,12 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 Contained repair copies live permanently under ignored `.runtime/repair/workspaces/`. The dot hides the folder in Finder; Command-Shift-G opens its exact path. Codex and Claude use host session identities, while installation tests use separate config directories. See [Safe changes](04_SAFE_CHANGES.md).
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+The parent repository pins exact tested commits for every declared skill
+submodule. Clone with `--recurse-submodules`, or run
+`git submodule update --init --recursive` in an existing checkout. Commit and
+push a package in its own repository before updating the parent pointer. Local
+host settings are excluded, and repair snapshots are never deployed as skill
+edits.
 
 ## Current context flow
 

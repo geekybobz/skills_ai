@@ -87,6 +87,14 @@ def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
     paths.update(model["human_outputs"].values())
     paths.add(model["orchestrator"]["graph_entry"])
     paths.update(package["graph_entry"] for package in model["packages"])
+    for package in model["packages"]:
+        if package.get("traversal") != "declared-submodule":
+            continue
+        prefix = package["path"].rstrip("/")
+        submodule = root / prefix
+        if not submodule.is_dir():
+            raise ViewError(f"declared submodule is unavailable: {prefix}")
+        paths.update(f"{prefix}/{path}" for path in _git_paths(submodule, "ls-files"))
     return sorted(path for path in paths if not _excluded(path, model))
 
 
@@ -230,7 +238,8 @@ def _is_external_pointer(path: str, model: dict[str, Any]) -> bool:
 def _kind(path: str, generated: set[str], roles: list[str], model: dict[str, Any]) -> str:
     if path in generated:
         return "generated"
-    if path == "theory-reference":
+    package = _package_for_path(path, model)
+    if package and package.get("traversal") == "declared-submodule":
         return "submodule"
     if _is_external_pointer(path, model):
         return "external pointer"
@@ -317,7 +326,8 @@ def render_repository_index(
 
 
 def _capability_kind(path: str, model: dict[str, Any]) -> str:
-    if path.startswith("theory-reference/"):
+    package = _package_for_path(path, model)
+    if package and package.get("traversal") == "declared-submodule":
         return "submodule capability"
     if _is_external_pointer(path, model):
         return "external pointer"

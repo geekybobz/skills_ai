@@ -39,10 +39,10 @@ flowchart LR
 | `registry/` | public package states plus internal family/capability metadata |
 | `graph/` | generated, uniquely named Obsidian entries for the orchestrator and six public skills |
 | `interaction-protocol/` | one public interaction package with general and math modes |
-| `markdown-protocol/` | one repository-owned active package with a compact machine entry, optional human index, proportional design review, layered architecture, focused add-ons including skill-package guidance, formatting examples, visual fallbacks, and validation |
+| `markdown-protocol/` | independently cloneable active submodule with a compact machine entry, optional human index, proportional design review, layered architecture, focused add-ons, formatting examples, visual fallbacks, and validation |
 | `theory-reference/` | one public task package owned as a Git submodule |
-| `research-context-scout/` | one repository-owned manual task package |
-| `optimizer/` | one repository-owned manual task package for version-resolved OLGS build review, adaptive campaigns, and explicit situation analysis |
+| `research-context-scout/` | independently cloneable manual research task submodule |
+| `optimizer/` | independently cloneable manual task submodule for version-resolved OLGS build review, adaptive campaigns, and explicit situation analysis |
 | `external-skills/` | non-traversed pointers to externally owned packages |
 | `protocols/repository/` | operation-specific repository rules |
 | `scripts/` | on-demand metadata access, compilation, context, validation, scanning, context measurement and installation tools |
@@ -88,7 +88,10 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 `scripts/repair_workspace.py` is the maintenance CLI; `runtime/repair_workspace.py` implements snapshots and exact transactions. Their private workspace records live under `.runtime/repair/` and are excluded from this atlas’s generated inventory. See [Safe changes](04_SAFE_CHANGES.md).
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+The atlas traverses tracked files in declared skill submodules for explanation,
+but the parent owns only their pinned commit references. Each child repository
+can be cloned independently. Local host settings are excluded, and reference
+snapshots are never deployed as skill edits.
 
 ## Current context flow
 

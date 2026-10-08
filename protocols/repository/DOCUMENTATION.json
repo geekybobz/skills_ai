@@ -149,8 +149,8 @@
       "display_name": "Markdown Protocol",
       "path": "markdown-protocol",
       "graph_entry": "graph/skills/markdown-protocol.md",
-      "kind": "repository-package",
-      "traversal": "repository",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
       "purpose": "Automatic portable-first Markdown skill with proportional design review, compact routing, adaptive layouts, a selectively loaded pattern gallery, visual reliability rules, and structural validation."
     },
     {
@@ -167,8 +167,8 @@
       "display_name": "Research Context Scout",
       "path": "research-context-scout",
       "graph_entry": "graph/skills/research-context-scout.md",
-      "kind": "repository-package",
-      "traversal": "repository",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
       "purpose": "Physics-objective-first research orientation with shared initial/deepening phases, an optional math-method lens, anti-hallucination, relation, evidence and journal-threshold rules, a project record template, and thin platform wrappers."
     },
     {
@@ -176,8 +176,8 @@
       "display_name": "Optimizer",
       "path": "optimizer",
       "graph_entry": "graph/skills/optimizer.md",
-      "kind": "repository-package",
-      "traversal": "repository",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
       "purpose": "Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence."
     },
     {

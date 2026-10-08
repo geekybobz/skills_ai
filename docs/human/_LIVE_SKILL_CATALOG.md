@@ -22,10 +22,10 @@ Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from the ca
 | Public skill | Role | State | Boundary | Structure | Entry | Task capabilities |
 |---|---|---|---|---|---|---:|
 | interaction-protocol | interaction | active | response support independent of task selection | interaction-package | [interaction-protocol/README.md](../../interaction-protocol/README.md) | — |
-| markdown-protocol | task | active | automatic for any requested Markdown creation, edit, review, or restructuring, including inside another task; proportional user-reviewed design before writes; `#> md_protocol` forces guided mode | repository-package | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 1 |
+| markdown-protocol | task | active | automatic for any requested Markdown creation, edit, review, or restructuring, including inside another task; proportional user-reviewed design before writes; `#> md_protocol` forces guided mode | git-submodule | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 1 |
 | theory-reference | task | active | theory notes, LaTeX, derivation planning, and reference work | git-submodule | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 1 |
-| research-context-scout | task | manual | exact package request, `#> scout`, or `#> scout-again` only | repository-package | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 1 |
-| optimizer | task | manual | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates | repository-package | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 1 |
+| research-context-scout | task | manual | exact package request, `#> scout`, or `#> scout-again` only | git-submodule | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 1 |
+| optimizer | task | manual | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates | git-submodule | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 1 |
 | quantum-job-collector | task | off | exhaustive Quantum Career Radar job collection | external-symlink | `external-skills/quantum-job-collector/SKILL.md` | 1 |
 
 # Internal Capabilities
@@ -36,10 +36,10 @@ These technical routes select focused instructions inside a public task package.
 |---|---|---|---|---|---|---|---|---|---:|
 | interaction-protocol | interaction.general | interaction | active | Present the result first with sufficient clear context and precise terms. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
 | interaction-protocol | interaction.math | interaction | active | Explain mathematical reasoning through results, defined symbols and justified equations. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
-| markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | any requested Markdown creation, edit, review, or restructuring, including README, documentation, notes, knowledge bases, or Markdown changed inside another task | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | package capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 791 |
-| optimizer | optimizer | optimizer-workflow | manual | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer, #> build-system, #> optimize, #> use optimizer, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run | package capability | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 839 |
+| markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | any requested Markdown creation, edit, review, or restructuring, including README, documentation, notes, knowledge bases, or Markdown changed inside another task | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | submodule capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 791 |
+| optimizer | optimizer | optimizer-workflow | manual | independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence | exact `#> optimizer, #> build-system, #> optimize, #> use optimizer, or exact request to use the optimizer skill | automatic routing from ordinary prose, silently constructing physics, silently reusing results, silently changing a problem, or claiming globality from a numerical run | submodule capability | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 839 |
 | quantum-job-collector | quantum-job-collector | career | off | exhaustive quantum job collection for Quantum Career Radar | quantum jobs, career radar, update review queue, pending jobs, source coverage | generic career advice, resume writing, one-off job browsing, paid/browser fallback unless enabled | external pointer | `external-skills/quantum-job-collector/SKILL.md` | — |
-| research-context-scout | research-context-scout | research | manual | align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test | research context scout, initial research orientation, supervisor assessment, align research context, collect and synthesize papers, translate literature ideas into this project | claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request | package capability | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 702 |
+| research-context-scout | research-context-scout | research | manual | align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test | research context scout, initial research orientation, supervisor assessment, align research context, collect and synthesize papers, translate literature ideas into this project | claiming exhaustive global coverage, unconfirmed paper acquisition, editing research artifacts, replacing expert judgment, mature focused proof or implementation work without an orientation request | submodule capability | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 702 |
 | theory-reference | theory-reference | theory | active | Plan, evaluate or build a theoretical reference with phase-specific rules and templates. | theoretical references and mathematical learning documents | unrelated prose or software implementation | submodule capability | [theory-reference/shared/SKILL.md](../../theory-reference/shared/SKILL.md) | 568 |
 
 # Orchestrator Contents
@@ -70,7 +70,7 @@ These technical routes select focused instructions inside a public task package.
 
 ## markdown-protocol
 
-**Type:** `repository-package`
+**Type:** `git-submodule`
 
 **Purpose:** Automatic portable-first Markdown skill with proportional design review, compact routing, adaptive layouts, a selectively loaded pattern gallery, visual reliability rules, and structural validation.
 
@@ -172,7 +172,7 @@ These technical routes select focused instructions inside a public task package.
 
 ## research-context-scout
 
-**Type:** `repository-package`
+**Type:** `git-submodule`
 
 **Purpose:** Physics-objective-first research orientation with shared initial/deepening phases, an optional math-method lens, anti-hallucination, relation, evidence and journal-threshold rules, a project record template, and thin platform wrappers.
 
@@ -205,7 +205,7 @@ These technical routes select focused instructions inside a public task package.
 
 ## optimizer
 
-**Type:** `repository-package`
+**Type:** `git-submodule`
 
 **Purpose:** Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence.
 

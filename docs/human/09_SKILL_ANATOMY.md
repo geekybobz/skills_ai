@@ -34,10 +34,10 @@ but is not a package, capability, or inventory row.
 | public package | anatomy |
 |---|---|
 | `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |
-| `markdown-protocol` | compact active entry, optional human index and generated inventory, proportional review workflow, selectively loaded architecture/layout/pattern/visual/validation references, on-demand checker, education/codebase/skill-package add-ons, and small human learning examples |
+| `markdown-protocol` | submodule package with compact active entry, optional human index and generated inventory, proportional review workflow, selectively loaded references, on-demand checker, add-ons, and small human learning examples |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
-| `research-context-scout` | repository package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
-| `optimizer` | repository package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
+| `research-context-scout` | submodule package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
+| `optimizer` | submodule package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
 | `quantum-job-collector` | externally owned pointer whose package state is currently off |
 
 ## Machine and human entries
@@ -129,7 +129,11 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 Repair mode belongs to orchestration, not a skill package or capability. It changes the working location while existing package contracts and required evidence remain in force. See [Safe changes](04_SAFE_CHANGES.md).
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+The package's public identity is independent of storage form. Declared
+submodules keep their own Git histories and release paths while the parent pins
+the tested combination and traverses tracked child files for generated human
+catalogs. Local host settings are excluded, and repair snapshots are never
+deployed as skill edits.
 
 ## Current context flow
 

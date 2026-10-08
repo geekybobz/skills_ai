@@ -23,6 +23,19 @@ from compile_repository_views import (  # noqa: E402
 
 
 class RepositoryViewTests(unittest.TestCase):
+    @staticmethod
+    def repository_git_fixture(tracked: list[str], others: list[str]):
+        def fake_git_paths(root: Path, *args: str) -> list[str]:
+            if root != ROOT:
+                return []
+            if args == ("ls-files",):
+                return tracked
+            if args == ("ls-files", "--others", "--exclude-standard"):
+                return others
+            raise AssertionError(f"unexpected git query: {root} {args}")
+
+        return fake_git_paths
+
     def test_agent_regeneration_replaces_unsupported_external_blocks(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -149,21 +162,26 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("does not traverse or copy its files", external_section)
         self.assertNotIn("| [external-skills/quantum-job-collector/SKILL.md]", external_section)
 
-    def test_repository_owned_external_skill_package_is_linked_and_traversed(self) -> None:
-        internal_file = ROOT / "research-context-scout" / "SKILL.md"
-        self.assertNotEqual(
-            "—",
-            _token_estimate(internal_file, "research-context-scout/SKILL.md"),
-        )
+    def test_declared_skill_submodules_are_linked_and_traversed(self) -> None:
+        expected_files = {
+            "markdown-protocol": "references/core-protocol.md",
+            "theory-reference": "shared/SKILL.md",
+            "research-context-scout": "shared/SKILL.md",
+            "optimizer": "scripts/optimizer_api.py",
+        }
         catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
-        internal_section = catalog.split("# Skill Contents", 1)[1].split(
-            "## research-context-scout", 1
-        )[1]
-        self.assertIn(
-            "| [research-context-scout/shared/SKILL.md]",
-            internal_section,
-        )
         repository_index = render_outputs(ROOT)["docs/human/_LIVE_REPOSITORY_INDEX.md"]
+        for package, relative in expected_files.items():
+            package_file = ROOT / package / relative
+            self.assertNotEqual(
+                "—",
+                _token_estimate(package_file, f"{package}/{relative}"),
+            )
+            package_section = catalog.split("# Skill Contents", 1)[1].split(
+                f"## {package}", 1
+            )[1]
+            self.assertIn(f"| [{package}/{relative}]", package_section)
+            self.assertIn(f"[{package}/{relative}]", repository_index)
         self.assertIn(
             "[research-context-scout/README.md]"
             "(../../research-context-scout/README.md)",
@@ -198,7 +216,9 @@ class RepositoryViewTests(unittest.TestCase):
         model = load_model(ROOT)
         with patch(
             "compile_repository_views._git_paths",
-            side_effect=[["README.md"], ["NOTES_SCRATCH.md", "scripts/measure_context.py"]],
+            side_effect=self.repository_git_fixture(
+                ["README.md"], ["NOTES_SCRATCH.md", "scripts/measure_context.py"]
+            ),
         ):
             paths = repository_paths(ROOT, model)
         self.assertIn("README.md", paths)
@@ -209,7 +229,9 @@ class RepositoryViewTests(unittest.TestCase):
         model = load_model(ROOT)
         with patch(
             "compile_repository_views._git_paths",
-            side_effect=[["README.md", "tests/deleted-file.py"], []],
+            side_effect=self.repository_git_fixture(
+                ["README.md", "tests/deleted-file.py"], []
+            ),
         ):
             paths = repository_paths(ROOT, model)
         self.assertIn("README.md", paths)
@@ -219,10 +241,9 @@ class RepositoryViewTests(unittest.TestCase):
         model = load_model(ROOT)
         with patch(
             "compile_repository_views._git_paths",
-            side_effect=[
-                ["README.md", "skill-plans/future-scout/plan.md"],
-                [],
-            ],
+            side_effect=self.repository_git_fixture(
+                ["README.md", "skill-plans/future-scout/plan.md"], []
+            ),
         ):
             paths = repository_paths(ROOT, model)
         self.assertIn("README.md", paths)

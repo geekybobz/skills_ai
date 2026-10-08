@@ -102,6 +102,8 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
+| declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
+| parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 
 Maintenance scans and generated-view compilation are cold-path operations. They
@@ -115,7 +117,10 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 Repair copies are created once and resumed, avoiding repeated cloning and instruction loading. A missing or damaged known workspace stops mutations; it never redirects edits live. Changed preview bytes or source drift require fresh review. See [Safe changes](04_SAFE_CHANGES.md).
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+Declared skill submodules keep independent Git metadata. Generated catalogs
+inspect their tracked files only during cold-path compilation; ordinary routing
+still loads only selected entries and required support. Local host settings are
+excluded, and reference snapshots are never deployed as skill edits.
 
 ## Current context flow
 

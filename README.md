@@ -33,6 +33,29 @@ Read [the walkthrough](docs/human/10_MODEL_LED_ORCHESTRATOR.md) for vocabulary,
 controls and working examples. Read [the integration contract](runtime/skills-orchestrator/CONTRACT.md)
 for responsibilities, package boundaries and verification criteria.
 
+## Clone or share
+
+Clone the complete registry, including independently versioned skill packages:
+
+```bash
+git clone --recurse-submodules https://github.com/geekybobz/skills_ai.git
+```
+
+For an existing clone, populate or refresh the pinned packages with
+`git submodule update --init --recursive`. A single package can also be cloned
+without this registry:
+
+| Package | Standalone repository |
+|---|---|
+| Markdown Protocol | <https://github.com/geekybobz/markdown-protocol> |
+| Research Context Scout | <https://github.com/geekybobz/research-context-scout> |
+| Optimizer Skill | <https://github.com/geekybobz/optimizer-skill> |
+| Theory Reference | <https://github.com/geekybobz/theory-reference> |
+
+The parent registry pins an exact tested commit from each package. Package work
+is committed and pushed in its own repository first; the parent then records the
+new submodule commit.
+
 ## Skills Orchestrator
 
 `skills-orchestrator` is the always-active control plane for skill selection,

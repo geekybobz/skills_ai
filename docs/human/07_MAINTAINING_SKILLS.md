@@ -142,6 +142,16 @@ Tasks started outside this repository remain read-only. With explicit authority
 they may create one bounded request under `requests/pending/`; implementation
 belongs to a dedicated maintenance task rooted here.
 
+For a declared submodule package, use a two-repository transaction:
+
+1. change, test, commit, and push the child repository;
+2. verify the child commit is remotely reachable;
+3. update the parent submodule pointer and regenerate parent projections;
+4. run parent changed and staged scans before committing the pointer.
+
+This permits transferring one skill by cloning its standalone repository while
+preserving a reproducible, tested collection in Skills AI.
+
 Management stays active under use none. Maintain the shared use/mode meanings and Task understood/Plan/Skills/Mode receipt in the coordination sources; platform adapters deliver them. Verify semantic scenarios separately from instruction delivery.
 
 For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
@@ -150,7 +160,10 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 The source-owned repair controller snapshots the current dirty tree into independent Git. Keep checks and generated outputs in that copy; update waits for exact review agreement. Preserve rollback and exclude inherited live work from staging. See [Safe changes](04_SAFE_CHANGES.md).
 
-Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
+Declared skill submodules use independent Git metadata. Package changes belong
+to the child history; registry, activation, integration tests, and generated
+collection views remain parent-owned. Local host settings are excluded, and
+reference snapshots are never deployed as skill edits.
 
 ## Current context flow
 

@@ -2,3 +2,12 @@
 	path = theory-reference
 	url = https://github.com/geekybobz/theory-reference.git
 
+[submodule "markdown-protocol"]
+	path = markdown-protocol
+	url = https://github.com/geekybobz/markdown-protocol.git
+[submodule "research-context-scout"]
+	path = research-context-scout
+	url = https://github.com/geekybobz/research-context-scout.git
+[submodule "optimizer"]
+	path = optimizer
+	url = https://github.com/geekybobz/optimizer-skill.git
