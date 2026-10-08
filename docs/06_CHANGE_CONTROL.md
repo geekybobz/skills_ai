@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `16`.
+Protocol version: `17`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
 amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. Human
@@ -35,10 +35,12 @@ unmapped and therefore blocked.
 | work beyond the authorized request | [[protocols/repository/SCOPE_EXPANSION\|SCOPE_EXPANSION]] |
 | change these governance rules | [[protocols/repository/PROTOCOL_AMENDMENT\|PROTOCOL_AMENDMENT]] |
 | request a Skills AI change from a task outside this workspace | [[protocols/repository/EXTERNAL_CHANGE_REQUEST\|EXTERNAL_CHANGE_REQUEST]] |
+| commit, tag, push, clone, move a submodule pointer, roll back, or clean up plans, handoffs and runtime state | [[protocols/repository/GIT_GOVERNANCE\|GIT_GOVERNANCE]], in addition to the operation card |
 
-Do not combine several cards by default. Pick the operation with the largest
-contract or lifecycle effect. A localized edit that changes a public contract
-is an update/migration, not an edit.
+Do not combine several operation cards by default. Pick the operation with the
+largest contract or lifecycle effect. A localized edit that changes a public
+contract is an update/migration, not an edit. The Git card is a boundary card:
+read it at the Git step of whichever operation applies.
 
 ## Minimal input packet
 
@@ -153,6 +155,10 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 14. Prompt-free runtime observations belong only under ignored `.runtime/`
     state, use restrictive permissions and bounded size, and never become
     routing authority or a generated-document input.
+15. At a Git boundary follow [[protocols/repository/GIT_GOVERNANCE|Git governance]].
+    A skill under a declared submodule is changed, tested, committed and pushed
+    in its own repository before the parent pointer moves, and commits, tags,
+    pushes and deletions happen only on the user's instruction.
 
 ## External-task boundary
 
@@ -170,6 +176,9 @@ inbox; agent instructions alone are not a filesystem security boundary.
   one common source plus one platform overlay.
 - This file: operation selection.
 - `protocols/repository/`: execution procedure for one operation.
+- [[protocols/repository/GIT_GOVERNANCE|Git governance]]: repository ownership,
+  clone modes, the child-first commit order, branches, versions, releases,
+  rollback, dirty state and cleanup.
 - `protocols/repository/CONTRACT.json`: path roles, dependency checks, generated
   outputs, and generic graph-concept declarations.
 - `protocols/repository/DOCUMENTATION.json`: repository areas, file meanings,

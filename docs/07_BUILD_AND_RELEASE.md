@@ -17,7 +17,7 @@ python3 -B scripts/graph_layers.py --check
 python3 -B scripts/compile_repository_views.py --check
 ```
 
-The registry manifest and repository projections are generated from canonical sources. Keep public package counts separate from capability and graph counts. Do not edit the theory submodule or generated mirrors as part of a registry rebuild.
+The registry manifest and repository projections are generated from canonical sources. Keep public package counts separate from capability and graph counts. Do not edit any package submodule or generated mirror as part of a registry rebuild.
 
 ## Tests and measurements
 
@@ -39,16 +39,17 @@ Native-host acceptance records actual host/version/configuration, instruction ha
 1. Preserve dirty-tree state and declare exact scope; work in containment when repair is on.
 2. Run classify, plan, changed and staged for the approved operation; resolve every new/in-scope block.
 3. Synchronize mapped human pages and regenerate projections.
-4. Make a scoped candidate commit; preserve unrelated and submodule changes.
+4. Make a scoped candidate commit; preserve unrelated and submodule changes. A pointer move follows the child-first order in [[protocols/repository/GIT_GOVERNANCE]].
 5. Prepare the source-owned exact update preview with bound checks and dependencies. Explain it and obtain actual agreement before apply. Later content changes invalidate the preview.
 6. Preserve rollback and the live index. External adapter installation has its own configuration preview/backup boundary.
 7. Report local verification and unperformed or blocked native-host checks separately. Neither a saved approval field nor a passing check grants deployment authority.
+8. Tag and push only on the user's instruction. A parent release tag follows a passing full scan and records the protocol version, the manifest hash and the pinned child tags or hashes ([[protocols/repository/GIT_GOVERNANCE]]).
 
 ## Recovery and rollback
 
 Missing optional metadata/capsules allow normal authorized host work while preserving required obligations. Known corrupt repair state stops mutations instead of redirecting edits live. Compaction or uncertain retention restores complete required instructions, actual scope, artifact/evidence identities and completed external effects.
 
-Use source-owned repair transaction inspection and recovery preview before repeating a deployment. Restore only files whose current bytes match the transaction state; later user edits require reconciliation. Do not discard rollback or historical operational state during this efficiency migration.
+Use source-owned repair transaction inspection and recovery preview before repeating a deployment. Restore only files whose current bytes match the transaction state; later user edits require reconciliation. Do not discard rollback or historical operational state during this efficiency migration. Pointer and child rollbacks are new commits, never rewrites ([[protocols/repository/GIT_GOVERNANCE]]).
 
 ## Contained repair updates
 

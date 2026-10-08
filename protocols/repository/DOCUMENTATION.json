@@ -100,7 +100,7 @@
   ],
   "artifact_overrides": {
     ".gitignore": "Declares repository-local paths Git should not track.",
-    ".gitmodules": "Pins the separately owned theory-reference Git submodule.",
+    ".gitmodules": "Declares each separately owned skill submodule: path, remote URL and tracked branch.",
     "AGENTS.md": "Generated standalone Codex repository entry containing shared rules plus the Codex lifecycle overlay.",
     "CLAUDE.md": "Generated standalone Claude repository entry containing shared rules plus the Claude hook overlay.",
     "README.md": "Human-facing entry and progressive learning map; it is never runtime routing authority.",
@@ -112,7 +112,8 @@
     "docs/human/_LIVE_SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents.",
     "scripts/skills_ai": "Executable terminal entry for shared inspection, containment, reviewed deployment and host refresh.",
     "scripts/skills_ai.py": "Thin Python entry for the modular maintenance command interface.",
-    "protocols/repository/TERMINAL_MAINTENANCE.md": "On-demand agent protocol for terminal maintenance commands, results, approval, host adapters and recovery."
+    "protocols/repository/TERMINAL_MAINTENANCE.md": "On-demand agent protocol for terminal maintenance commands, results, approval, host adapters and recovery.",
+    "protocols/repository/GIT_GOVERNANCE.md": "On-demand agent protocol for repository ownership, clone modes, the child-first commit order, branches, versions, releases, rollback, dirty state and cleanup."
   },
   "agent_entries": {
     "common": "runtime/AGENT_ENTRY_SHARED.md",

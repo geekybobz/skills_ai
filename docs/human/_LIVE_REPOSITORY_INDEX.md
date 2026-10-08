@@ -14,7 +14,7 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 | File | What it means | Kind | Audience | Maintenance role |
 |---|---|---|---|---|
 | [.gitignore](../../.gitignore) | Declares repository-local paths Git should not track. | source/support | Shared | repository-support |
-| [.gitmodules](../../.gitmodules) | Pins the separately owned theory-reference Git submodule. | source/support | Shared | repository-support |
+| [.gitmodules](../../.gitmodules) | Declares each separately owned skill submodule: path, remote URL and tracked branch. | source/support | Shared | repository-support |
 | [.obsidian/app.json](../../.obsidian/app.json) | Personal graph and vault display configuration; graph colors are validated while personal view state is preserved. | source/support | Shared | repository-support |
 | [.obsidian/appearance.json](../../.obsidian/appearance.json) | Personal graph and vault display configuration; graph colors are validated while personal view state is preserved. | source/support | Shared | repository-support |
 | [.obsidian/core-plugins.json](../../.obsidian/core-plugins.json) | Personal graph and vault display configuration; graph colors are validated while personal view state is preserved. | source/support | Shared | repository-support |
@@ -144,6 +144,7 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 | [protocols/repository/DOCUMENTATION.json](../../protocols/repository/DOCUMENTATION.json) | Operation-specific rules and machine contracts for safe additions, edits, migrations, moves, deletion, installation, and amendments. | canonical contract | Shared | governance |
 | [protocols/repository/EDIT.md](../../protocols/repository/EDIT.md) | Edit Protocol — Use for a localized modification that preserves identity, schema, lifecycle, installation, and public behavior. | source/support | Shared | governance |
 | [protocols/repository/EXTERNAL_CHANGE_REQUEST.md](../../protocols/repository/EXTERNAL_CHANGE_REQUEST.md) | External Change Request Protocol — Use when a task whose initial workspace is outside /Users/billabobz/skills_ai is asked to add, edit, update, move, disable, or delete anything i… | source/support | Shared | governance |
+| [protocols/repository/GIT_GOVERNANCE.md](../../protocols/repository/GIT_GOVERNANCE.md) | On-demand agent protocol for repository ownership, clone modes, the child-first commit order, branches, versions, releases, rollback, dirty state and cleanup. | source/support | Shared | governance |
 | [protocols/repository/INSTALL_UNINSTALL.md](../../protocols/repository/INSTALL_UNINSTALL.md) | Install And Uninstall Protocol — Use for writes outside this repository, including Codex and Claude config roots. | source/support | Shared | governance |
 | [protocols/repository/MOVE_RENAME.md](../../protocols/repository/MOVE_RENAME.md) | Move And Rename Protocol — Use when a path, identifier, ownership boundary, or canonical source changes. | source/support | Shared | governance |
 | [protocols/repository/PROTOCOL_AMENDMENT.md](../../protocols/repository/PROTOCOL_AMENDMENT.md) | Protocol Amendment — Use when evidence shows that a governance rule is missing, unsafe, ambiguous, or inconsistent with implementation. | source/support | Shared | governance |

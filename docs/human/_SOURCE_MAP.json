@@ -30,9 +30,21 @@
       ]
     },
     {
-      "name": "orchestrator-and-project-context",
+      "name": "orchestrator-instructions",
       "sources": [
-        "runtime/skills-orchestrator/**",
+        "runtime/skills-orchestrator/**"
+      ],
+      "guides": [
+        "README.md",
+        "docs/human/01_FOLLOW_A_REQUEST.md",
+        "docs/human/03_SKILLS_AND_CONTROLS.md",
+        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
+        "docs/human/10_MODEL_LED_ORCHESTRATOR.md"
+      ]
+    },
+    {
+      "name": "project-context-and-repair",
+      "sources": [
         "runtime/project_context.py",
         "runtime/project-context.schema.json",
         "runtime/orchestration_state.py",

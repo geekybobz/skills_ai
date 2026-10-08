@@ -45,6 +45,22 @@ class HumanDocsTests(unittest.TestCase):
             self.assertIn("docs/human/03_SKILLS_AND_CONTROLS.md", required)
             self.assertIn("docs/human/05_SPEED_AND_TROUBLESHOOTING.md", required)
 
+    def test_orchestrator_instructions_map_to_the_pages_that_explain_them(self) -> None:
+        required = required_guides(
+            ["runtime/skills-orchestrator/SKILL.md", "runtime/skills-orchestrator/INDEX.md"],
+            self.config,
+        )
+        self.assertEqual(
+            {
+                "README.md",
+                "docs/human/01_FOLLOW_A_REQUEST.md",
+                "docs/human/03_SKILLS_AND_CONTROLS.md",
+                "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
+                "docs/human/10_MODEL_LED_ORCHESTRATOR.md",
+            },
+            set(required),
+        )
+
     def test_dot_prefixed_graph_path_keeps_its_source_mapping(self) -> None:
         required = required_guides([".obsidian/graph.json"], self.config)
         self.assertIn("docs/human/06_GRAPH_AND_COLORS.md", required)

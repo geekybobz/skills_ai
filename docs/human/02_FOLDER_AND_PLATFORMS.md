@@ -100,9 +100,12 @@ Contained repair copies live permanently under ignored `.runtime/repair/workspac
 The parent repository pins exact tested commits for every declared skill
 submodule. Clone with `--recurse-submodules`, or run
 `git submodule update --init --recursive` in an existing checkout. Commit and
-push a package in its own repository before updating the parent pointer. Local
-host settings are excluded, and repair snapshots are never deployed as skill
-edits.
+push a package in its own repository before updating the parent pointer, and
+only record a package that is clean and already published. A repair workspace
+holds frozen copies of the packages, so pointer moves, tags and pushes happen in
+the live checkout afterwards. Local host settings are excluded, and repair
+snapshots are never deployed as skill edits. The full rules are in the
+[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md).
 
 ## Current context flow
 

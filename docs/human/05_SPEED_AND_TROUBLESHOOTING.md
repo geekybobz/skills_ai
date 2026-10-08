@@ -105,6 +105,8 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
 | loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |
 | parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
+| `git status` shows a modified package folder | decide whether it is the intended pointer move or uncommitted changes inside the package; commit or discard those in the package repository, never through the parent |
+| a push is refused because a package commit is not published | push the package first; `git push --recurse-submodules=check` catches this before the parent is published |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 
 Maintenance scans and generated-view compilation are cold-path operations. They
@@ -121,7 +123,9 @@ Repair copies are created once and resumed, avoiding repeated cloning and instru
 Declared skill submodules keep independent Git metadata. Generated catalogs
 inspect their tracked files only during cold-path compilation; ordinary routing
 still loads only selected entries and required support. Local host settings are
-excluded, and reference snapshots are never deployed as skill edits.
+excluded, and reference snapshots are never deployed as skill edits. Pin, tag and
+rollback rules for the packages are in the
+[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md).
 
 ## Current context flow
 

@@ -15,7 +15,8 @@ generated representation, or persistent-state change.
 8. Update build, API, protocol, installation, troubleshooting, and every mapped
    human-facing page in the same staged change.
 9. Run the changed and staged scans. Commit migration context and measured
-   verification, not only file names.
+   verification, not only file names. A change that moves a submodule pointer
+   also follows [[GIT_GOVERNANCE]].
 
 An unexpected consumer, external path, destructive cleanup, or wider refactor
 uses [[SCOPE_EXPANSION]] before work continues.

@@ -54,7 +54,11 @@ without this registry:
 
 The parent registry pins an exact tested commit from each package. Package work
 is committed and pushed in its own repository first; the parent then records the
-new submodule commit.
+new submodule commit, and only when the package is clean and already published.
+Use a standalone clone or the complete registry for one package in a host, not
+both: a native copy named like a registry package bypasses its gates, and the
+Claude adapter check reports it. Branches, versions, releases, rollback and
+cleanup are defined in [the Git governance card](protocols/repository/GIT_GOVERNANCE.md).
 
 ## Skills Orchestrator
 

@@ -36,6 +36,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | action | rule |
 |---|---|
 | editing any package or capability file | not without an explicit request — the registry describes, it does not rewrite |
-| adding files under `theory-reference/` | it is a submodule; registry files belong in `registry/` instead |
+| adding files under a package submodule (`theory-reference/`, `markdown-protocol/`, `optimizer/`, `research-context-scout/`) | each is a separately owned repository; registry files belong in `registry/` instead |
 | editing `interaction-protocol/` | update the shared contract, access tests, API docs, and mapped human guide together |
 | staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |
+| moving a submodule pointer, tagging, pushing, or rewriting history | it publishes or pins state that others clone: follow [[protocols/repository/GIT_GOVERNANCE]] (child first, clean and published, one concern per commit, only on the user's instruction) and never rewrite published history |

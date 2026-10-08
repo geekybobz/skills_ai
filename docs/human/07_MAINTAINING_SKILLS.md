@@ -145,12 +145,20 @@ belongs to a dedicated maintenance task rooted here.
 For a declared submodule package, use a two-repository transaction:
 
 1. change, test, commit, and push the child repository;
-2. verify the child commit is remotely reachable;
-3. update the parent submodule pointer and regenerate parent projections;
-4. run parent changed and staged scans before committing the pointer.
+2. verify the child commit is remotely reachable: fetch, then confirm it is an
+   ancestor of the child's `origin/main`;
+3. confirm the child has no uncommitted changes and that the parent shows only the
+   intended pointer move;
+4. update the parent submodule pointer and regenerate parent projections;
+5. run parent changed and staged scans, stage explicit paths, and commit the
+   pointer with the old and new hashes in the message;
+6. push the parent with `--recurse-submodules=check`.
 
 This permits transferring one skill by cloning its standalone repository while
-preserving a reproducible, tested collection in Skills AI.
+preserving a reproducible, tested collection in Skills AI. Commits, tags and
+pushes happen only on your instruction, and rollback is a new commit, never a
+rewrite. Versions, branches, releases and cleanup are in the
+[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md).
 
 Management stays active under use none. Maintain the shared use/mode meanings and Task understood/Plan/Skills/Mode receipt in the coordination sources; platform adapters deliver them. Verify semantic scenarios separately from instruction delivery.
 

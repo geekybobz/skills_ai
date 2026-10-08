@@ -132,8 +132,10 @@ Repair mode belongs to orchestration, not a skill package or capability. It chan
 The package's public identity is independent of storage form. Declared
 submodules keep their own Git histories and release paths while the parent pins
 the tested combination and traverses tracked child files for generated human
-catalogs. Local host settings are excluded, and repair snapshots are never
-deployed as skill edits.
+catalogs. Each package carries its own version and release tags in its own
+repository, and the parent release records the pinned combination
+([Git governance](../../protocols/repository/GIT_GOVERNANCE.md)). Local host
+settings are excluded, and repair snapshots are never deployed as skill edits.
 
 ## Current context flow
 

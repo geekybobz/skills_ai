@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -191,6 +193,39 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("| Codex |", repository_index)
         self.assertIn("claude/CLAUDE.md]", repository_index)
         self.assertIn("| Claude |", repository_index)
+
+    def test_declared_submodules_match_gitmodules_and_track_main(self) -> None:
+        declared = {
+            package["path"]
+            for package in load_model(ROOT)["packages"]
+            if package.get("kind") == "git-submodule"
+        }
+        completed = subprocess.run(
+            ["git", "config", "-f", ".gitmodules", "--get-regexp", r"^submodule\..*\.(path|branch)$"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        entries: dict[str, dict[str, str]] = {}
+        for line in completed.stdout.splitlines():
+            match = re.fullmatch(r"submodule\.(.+)\.(path|branch) (.+)", line)
+            self.assertIsNotNone(match, line)
+            entries.setdefault(match.group(1), {})[match.group(2)] = match.group(3)
+        self.assertEqual(declared, {entry["path"] for entry in entries.values()})
+        for name, entry in entries.items():
+            self.assertEqual("main", entry.get("branch"), name)
+
+    def test_agent_entries_cover_every_submodule_and_the_git_card(self) -> None:
+        card = ROOT / "protocols/repository/GIT_GOVERNANCE.md"
+        self.assertTrue(card.is_file())
+        shared = (ROOT / load_model(ROOT)["agent_entries"]["common"]).read_text(encoding="utf-8")
+        self.assertNotIn("`theory-reference/` is a Git submodule", shared)
+        outputs = render_outputs(ROOT)
+        for entry in ("AGENTS.md", "CLAUDE.md"):
+            text = " ".join(outputs[entry].split())
+            self.assertIn("listed in `.gitmodules` is a separately owned Git repository", text)
+            self.assertIn("protocols/repository/GIT_GOVERNANCE.md", text)
 
     def test_generated_graph_nodes_are_uniquely_named_inventory_entries(self) -> None:
         outputs = render_outputs(ROOT)

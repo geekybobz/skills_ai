@@ -44,7 +44,7 @@ flowchart LR
 | `research-context-scout/` | independently cloneable manual research task submodule |
 | `optimizer/` | independently cloneable manual task submodule for version-resolved OLGS build review, adaptive campaigns, and explicit situation analysis |
 | `external-skills/` | non-traversed pointers to externally owned packages |
-| `protocols/repository/` | operation-specific repository rules |
+| `protocols/repository/` | operation-specific repository rules, plus the Git governance card for clone modes, commit order, versions, releases and rollback |
 | `scripts/` | on-demand metadata access, compilation, context, validation, scanning, context measurement and installation tools |
 | `tests/` | mechanical evidence for runtime and documentation promises |
 | `adapters/` | thin Codex and Claude lifecycle layers |
@@ -73,7 +73,7 @@ human-facing inventory projection, not a code index and not a runtime service.
 | package entry | defines one public package boundary or workflow |
 | capability file | focused internal instructions selected for one phase |
 | platform overlay | host-specific lifecycle only |
-| external/submodule | preserve ownership boundary |
+| external/submodule | preserve ownership boundary; change the package in its own repository first |
 | personal state | preserve unless explicitly requested |
 
 The [live repository index](_LIVE_REPOSITORY_INDEX.md) is the exhaustive

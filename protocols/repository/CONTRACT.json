@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 16,
+  "protocol_version": 17,
   "approval_operations": [
     "move",
     "deprecate",
@@ -502,12 +502,14 @@
         "protocols/repository/CONTRACT.json",
         "scripts/scan_consistency.py",
         "protocols/repository/TERMINAL_MAINTENANCE.md",
+        "protocols/repository/GIT_GOVERNANCE.md",
         "scripts/skills_ai.py"
       ],
       "required_links": {
         "docs/06_CHANGE_CONTROL.md": [
           "docs/07_BUILD_AND_RELEASE",
           "protocols/repository/PROTOCOL_AMENDMENT",
+          "protocols/repository/GIT_GOVERNANCE",
           "docs/human/07_MAINTAINING_SKILLS"
         ],
         "docs/07_BUILD_AND_RELEASE.md": [
@@ -517,6 +519,10 @@
           "docs/06_CHANGE_CONTROL"
         ],
         "protocols/repository/TERMINAL_MAINTENANCE.md": [
+          "docs/06_CHANGE_CONTROL",
+          "protocols/repository/REPAIR_WORKSPACE"
+        ],
+        "protocols/repository/GIT_GOVERNANCE.md": [
           "docs/06_CHANGE_CONTROL",
           "protocols/repository/REPAIR_WORKSPACE"
         ]

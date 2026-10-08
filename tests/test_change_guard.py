@@ -28,6 +28,7 @@ class ChangeGuardTests(unittest.TestCase):
             "EXTERNAL_CHANGE_REQUEST.md",
             "REPAIR_WORKSPACE.md",
             "TERMINAL_MAINTENANCE.md",
+            "GIT_GOVERNANCE.md",
         }
         actual = {path.name for path in (ROOT / "protocols" / "repository").glob("*.md")}
         self.assertEqual(cards, actual)

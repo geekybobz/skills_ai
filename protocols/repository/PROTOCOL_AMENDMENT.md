@@ -42,7 +42,7 @@ verify that ordinary routing still excludes human-facing material.
 
 ## Current contract
 
-Protocol version 16 keeps these boundaries:
+Protocol version 17 keeps these boundaries:
 
 - The host model owns intent, compatible capability selection, methods, modes,
   composition and evidence assessment. Local tools check artifacts and expose
@@ -69,6 +69,11 @@ Protocol version 16 keeps these boundaries:
 - Only current controls, aliases and file layouts are documented and supported.
   Retired syntax, compatibility aliases and migration records are deleted rather
   than kept as history; Git retains earlier revisions.
+- Skill packages stored as Git submodules are separately owned repositories. A
+  change is made, tested, committed and pushed in the child first; the parent then
+  moves its pointer to a clean, published commit. Clone modes, branches, versions,
+  releases, rollback, dirty state and cleanup follow [[GIT_GOVERNANCE]]. Commits,
+  tags, pushes and deletions need the user's instruction for the exact action.
 
 Keep this card current when amending the contract. Git history and private
 rollback receipts retain previous revisions; operational documentation explains

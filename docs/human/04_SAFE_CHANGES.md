@@ -63,8 +63,12 @@ risk map, change control, operation cards, host permissions, or user approval.
 For an independently owned submodule package, publish and verify the child
 commit before recording its new pointer in this parent repository. This order
 keeps every parent revision cloneable and prevents a local-only child commit
-from becoming an unreachable dependency. Parent approval never authorizes
-rewriting a child repository's history.
+from becoming an unreachable dependency. A child with uncommitted changes blocks
+its own pointer move, a failed parent check is fixed forward rather than by
+discarding the child commit, and commits, tags, pushes and deletions happen only
+on your instruction. Parent approval never authorizes rewriting a child
+repository's history. The rules are in the
+[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md).
 
 Orchestrator sudo requires an exact operation and target and bypasses only local
 Skills AI procedure. Bare `#> sudo` is inert. Project capsule values are also

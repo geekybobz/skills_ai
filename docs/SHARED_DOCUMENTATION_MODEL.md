@@ -105,6 +105,8 @@ required documentation synchronization.
 - Declared skill submodules may be listed read-only; their content and Git
   histories remain separately owned. The parent registry pins tested commits,
   while each initialized child remains independently cloneable and maintainable.
+  Ownership, commit order, versions, releases and rollback are defined once in
+  [[protocols/repository/GIT_GOVERNANCE]].
 - Generated files are written atomically and never edited as canonical sources.
 - Generated human guides are freshness-checked by the compiler; they are not
   falsely required to receive a hand edit when regeneration is byte-identical.
@@ -146,7 +148,7 @@ concept, or rendering rule is a protocol amendment.
 
 Revert the focused documentation-model commit, then regenerate the previous
 views from the previous canonical sources. Do not hand-edit generated files,
-discard unrelated worktree changes, cross the theory submodule boundary, or
+discard unrelated worktree changes, cross a package submodule boundary, or
 rewrite shared Git history.
 
 The core is model-led: semantic decisions belong to Codex or Claude; generated metadata and artifact checks only supply evidence. Codex installation binds the source root, while Claude injects that root with the shared core. Full contracts, composition and recovery instructions are loaded on demand.
