@@ -12,6 +12,8 @@ role: topic
 parent: ../README.md
 summary: One-line description of this file.
 read_when: One-line condition for opening it.
+status: active
+reviewed: YYYY-MM-DD
 tags:
   - domain/example
   - use/learning
@@ -20,7 +22,10 @@ tags:
 
 Allowed roles are `front-door`, `map`, `index`, `topic`, `deep`, and
 `generated`. `role`, `summary`, and `read_when` are required in managed files.
-`parent` is required except on the root Front Door. Tags are optional filters:
+`parent` is required except on the root Front Door. `status` and `reviewed` are
+optional freshness aids. Allowed statuses are `draft`, `active`, `stable`,
+`deprecated`, and `archived`; `reviewed` uses an ISO `YYYY-MM-DD` date. They do
+not certify correctness or replace evidence. Tags are optional filters:
 `domain/` says what the content concerns and `use/` says what the reader does
 with it. Tags never replace explicit links.
 
@@ -55,6 +60,8 @@ Run the tool explicitly from the skill package:
 python3 scripts/markdown_protocol.py inventory <collection-root> --write
 python3 scripts/markdown_protocol.py inventory <collection-root> --check
 python3 scripts/markdown_protocol.py check <collection-root> --require-properties
+python3 scripts/markdown_protocol.py check <collection-root> \
+  --reviewed-since 2026-01-01
 ```
 
 `check` validates the bounded collection's local links and anchors, reachable
@@ -62,6 +69,12 @@ Markdown files, generated banners, compactness warnings, portable Home footers,
 property presence when requested, and inventory freshness. It ignores example
 links inside fenced code. It never starts a watcher or scans outside the
 supplied collection; external relative links are checked only for existence.
+
+`--reviewed-since` emits warnings for `topic` and `deep` notes whose valid
+`reviewed` date is missing or older than the chosen date. It skips `deprecated`
+and `archived` notes. Invalid dates or statuses are errors whenever those
+optional properties are present. A recent date means only that a review was
+recorded; it is not a factual-quality score.
 
 ## Typed connections
 
@@ -96,6 +109,7 @@ requires the named renderer; this script does not simulate VS Code or GitHub.
 - Do not generate over the authored `INDEX.md`.
 - Do not treat the tool as a complete Markdown parser.
 - Do not use its reachability result as proof of semantic usefulness.
+- Do not treat `reviewed` as proof that content is correct or current.
 - Review generated changes before accepting them.
 
 ---

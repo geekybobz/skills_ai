@@ -8,11 +8,13 @@ import re
 import sys
 from collections import deque
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from urllib.parse import unquote
 
 
 ROLES = {"front-door", "map", "index", "topic", "deep", "generated"}
+STATUSES = {"draft", "active", "stable", "deprecated", "archived"}
 REQUIRED_PROPERTIES = ("role", "summary", "read_when")
 CONNECTION_LABELS = ("parent", "prerequisite", "related", "next", "deeper")
 LINK_RE = re.compile(r"(?<!!)\[[^]]*\]\(([^)]+)\)")
@@ -93,6 +95,29 @@ def validated_tags(data: dict[str, object]) -> tuple[list[str], list[str]]:
         if not TAG_RE.fullmatch(tag):
             problems.append(f"invalid tag: {tag}; use domain/... or use/...")
     return tags, problems
+
+
+def validated_freshness(data: dict[str, object]) -> tuple[str, date | None, list[str]]:
+    status = str(data.get("status", ""))
+    problems: list[str] = []
+    if status and status not in STATUSES:
+        problems.append(f"invalid status: {status}; use {', '.join(sorted(STATUSES))}")
+
+    raw_reviewed = str(data.get("reviewed", ""))
+    reviewed: date | None = None
+    if raw_reviewed:
+        try:
+            reviewed = date.fromisoformat(raw_reviewed)
+        except ValueError:
+            problems.append("reviewed property must use YYYY-MM-DD")
+    return status, reviewed, problems
+
+
+def iso_date(value: str) -> date:
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("expected YYYY-MM-DD") from exc
 
 
 def without_fenced_code(text: str) -> str:
@@ -395,6 +420,7 @@ def check_collection(
     entry: str | None = None,
     require_properties: bool = False,
     inventory: str = "INVENTORY.md",
+    reviewed_since: date | None = None,
 ) -> list[Finding]:
     findings: list[Finding] = []
     files = markdown_files(root)
@@ -414,6 +440,18 @@ def check_collection(
         _, tag_problems = validated_tags(data)
         for problem in tag_problems:
             findings.append(Finding("error", relative, problem))
+        status, reviewed, freshness_problems = validated_freshness(data)
+        for problem in freshness_problems:
+            findings.append(Finding("error", relative, problem))
+        if reviewed_since and role in {"topic", "deep"} and status not in {"deprecated", "archived"}:
+            if reviewed is None and not freshness_problems:
+                findings.append(
+                    Finding("warning", relative, f"not reviewed since {reviewed_since}: missing reviewed property")
+                )
+            elif reviewed and reviewed < reviewed_since:
+                findings.append(
+                    Finding("warning", relative, f"not reviewed since {reviewed_since}: last reviewed {reviewed}")
+                )
         if require_properties:
             for key in REQUIRED_PROPERTIES:
                 if not data.get(key):
@@ -660,6 +698,11 @@ def main(argv: list[str] | None = None) -> int:
     check.add_argument("--entry")
     check.add_argument("--require-properties", action="store_true")
     check.add_argument("--inventory", default="INVENTORY.md")
+    check.add_argument(
+        "--reviewed-since",
+        type=iso_date,
+        help="list topic and deep notes not reviewed since YYYY-MM-DD",
+    )
 
     inventory = subparsers.add_parser("inventory", help="render or verify INVENTORY.md")
     inventory.add_argument("root", type=Path)
@@ -690,6 +733,7 @@ def main(argv: list[str] | None = None) -> int:
             entry=args.entry,
             require_properties=args.require_properties,
             inventory=args.inventory,
+            reviewed_since=args.reviewed_since,
         )
         print_findings(findings)
         return 1 if any(item.level == "error" for item in findings) else 0

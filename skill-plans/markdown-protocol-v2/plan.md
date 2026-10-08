@@ -220,8 +220,10 @@ Files named below, all under `markdown-protocol/`:
   `#> scout` and `#> scout-again`.
   - Implemented as declared `deepen` and read-only `check` modes, with detailed
     boundaries in `references/named-commands.md`.
-- [ ] **N2 Freshness.** Optional `status` and `reviewed` properties, so
+- [x] **N2 Freshness.** Optional `status` and `reviewed` properties, so
   `check` lists topics not reviewed since a chosen date.
+  - Implemented through `check --reviewed-since YYYY-MM-DD`; retired notes are
+    excluded, and freshness remains a warning rather than a correctness claim.
 - [ ] **N3 Pilot.** Apply v2 to one small real collection chosen by the user,
   as a separate, approved task.
 - [ ] **N4 Skill explanations.** Decide whether each skill's human

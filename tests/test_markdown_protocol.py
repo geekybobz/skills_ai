@@ -377,6 +377,74 @@ tags:
             self.assertEqual(1, invalid.returncode)
             self.assertIn("invalid tag", invalid.stdout)
 
+    def test_optional_freshness_properties_and_review_cutoff(self) -> None:
+        tool = PACKAGE / "scripts" / "markdown_protocol.py"
+        with tempfile.TemporaryDirectory() as temporary:
+            collection = Path(temporary)
+            (collection / "README.md").write_text(
+                "# Collection\n\n- [Topic](topic.md)\n\n---\n\n[⌂ Home](#collection)\n",
+                encoding="utf-8",
+            )
+            topic = """---
+role: topic
+parent: README.md
+summary: Reviewed topic.
+read_when: Freshness matters.
+status: active
+reviewed: 2025-06-01
+---
+# Topic
+
+---
+
+[⌂ Home](README.md)
+"""
+            path = collection / "topic.md"
+            path.write_text(topic, encoding="utf-8")
+
+            stale = subprocess.run(
+                [
+                    sys.executable,
+                    str(tool),
+                    "check",
+                    str(collection),
+                    "--reviewed-since",
+                    "2026-01-01",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, stale.returncode, stale.stdout + stale.stderr)
+            self.assertIn("WARNING", stale.stdout)
+            self.assertIn("last reviewed 2025-06-01", stale.stdout)
+
+            current = subprocess.run(
+                [
+                    sys.executable,
+                    str(tool),
+                    "check",
+                    str(collection),
+                    "--reviewed-since",
+                    "2025-01-01",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(0, current.returncode, current.stdout + current.stderr)
+            self.assertNotIn("not reviewed since", current.stdout)
+
+            path.write_text(topic.replace("status: active", "status: uncertain"), encoding="utf-8")
+            invalid = subprocess.run(
+                [sys.executable, str(tool), "check", str(collection)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(1, invalid.returncode)
+            self.assertIn("invalid status", invalid.stdout)
+
     def test_education_addon_is_selective_and_model_led(self) -> None:
         routes = self.read("references/addons/routes.md")
         education = self.read("references/addons/education.md")
