@@ -12,6 +12,7 @@ the skill that owns subject correctness.
 | short architectural or process decisions | [decision-records.md](decision-records.md) |
 | repeatable operational procedures | [runbooks.md](runbooks.md) |
 | optional hierarchy, graph, or large editable visuals | [visual-extras.md](visual-extras.md) |
+| teach or present a topic as a slide sequence | [slides.md](slides.md) |
 | skill-package documentation | [skill-package.md](skill-package.md) |
 | create or revise an add-on | [add-on-contract.md](add-on-contract.md) |
 

@@ -397,6 +397,7 @@ tags:
             "decision-records.md",
             "runbooks.md",
             "visual-extras.md",
+            "slides.md",
             "skill-package.md",
         ):
             addon = self.read(f"references/addons/{name}")
@@ -529,6 +530,19 @@ tags:
         self.assertIn("not as semantic or evidentiary authority", compact)
         self.assertIn("do not keep only a PNG export", compact)
         self.assertIn("status is `unverified`", addon)
+
+    def test_slides_are_source_linked_and_export_verified(self) -> None:
+        routes = self.read("references/addons/routes.md")
+        addon = self.read("references/addons/slides.md")
+        compact = " ".join(addon.split())
+        self.assertIn("[slides.md](slides.md)", routes)
+        self.assertIn("marp: true", addon)
+        self.assertIn("topic note remains the owner", compact)
+        self.assertIn("one major idea per slide", addon)
+        self.assertIn("preview and each export format as separate targets", compact)
+        self.assertIn("does not prove", compact)
+        self.assertIn("reported separately as `unverified`", compact)
+        self.assertIn("Do not enable unrestricted HTML for an untrusted deck", addon)
 
     def test_human_index_maps_the_package_without_default_loading(self) -> None:
         entry = self.read("SKILL.md")

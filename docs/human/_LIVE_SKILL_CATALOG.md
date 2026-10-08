@@ -91,6 +91,7 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/references/addons/routes.md](../../markdown-protocol/references/addons/routes.md) | Package support file. |
 | [markdown-protocol/references/addons/runbooks.md](../../markdown-protocol/references/addons/runbooks.md) | Package support file. |
 | [markdown-protocol/references/addons/skill-package.md](../../markdown-protocol/references/addons/skill-package.md) | Package support file. |
+| [markdown-protocol/references/addons/slides.md](../../markdown-protocol/references/addons/slides.md) | Package support file. |
 | [markdown-protocol/references/addons/visual-extras.md](../../markdown-protocol/references/addons/visual-extras.md) | Package support file. |
 | [markdown-protocol/references/core-protocol.md](../../markdown-protocol/references/core-protocol.md) | Package support file. |
 | [markdown-protocol/references/formatting-examples/01-headings-and-sections.md](../../markdown-protocol/references/formatting-examples/01-headings-and-sections.md) | Package support file. |

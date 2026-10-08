@@ -208,7 +208,9 @@ Files named below, all under `markdown-protocol/`:
   files for diagrams too large for Mermaid.
   - Implemented as optional guidance in `references/addons/visual-extras.md`,
     with ordinary Markdown links and text fallbacks remaining authoritative.
-- [ ] **A7 Slides.** Present a topic as slides with Marp, for teaching.
+- [x] **A7 Slides.** Present a topic as slides with Marp, for teaching.
+  - Implemented as `references/addons/slides.md`; the topic remains canonical,
+    while each requested preview or export target requires its own inspection.
 
 ## New suggestions
 

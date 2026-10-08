@@ -65,6 +65,7 @@ map, focused references own the detail, and validation checks the result.
 | [decision-records.md](references/addons/decision-records.md) | durable choices, consequences, and supersession history |
 | [runbooks.md](references/addons/runbooks.md) | verified operational procedures, stop conditions, and recovery |
 | [visual-extras.md](references/addons/visual-extras.md) | optional Markmap, Foam, and editable SVG views |
+| [slides.md](references/addons/slides.md) | source-linked Marp teaching and presentation decks |
 | [skill-package.md](references/addons/skill-package.md) | machine-efficient and human-navigable skill packages |
 
 Add-ons may specialize presentation and validation. They do not replace the
