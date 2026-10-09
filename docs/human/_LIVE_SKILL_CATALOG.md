@@ -220,9 +220,12 @@ These technical routes select focused instructions inside a public task package.
 
 | Package file | Role |
 |---|---|
+| [optimizer/.github/workflows/ci.yml](../../optimizer/.github/workflows/ci.yml) | Package support file. |
 | [optimizer/.gitignore](../../optimizer/.gitignore) | Package support file. |
+| [optimizer/CHANGELOG.md](../../optimizer/CHANGELOG.md) | Package support file. |
 | [optimizer/README.md](../../optimizer/README.md) | Human orientation for the package. |
 | [optimizer/SKILL.md](../../optimizer/SKILL.md) | Skill entry or shared workflow instructions. |
+| [optimizer/VERSION](../../optimizer/VERSION) | Package support file. |
 | [optimizer/agents/openai.yaml](../../optimizer/agents/openai.yaml) | Package support file. |
 | [optimizer/build-system.md](../../optimizer/build-system.md) | Package support file. |
 | [optimizer/claude/CLAUDE.md](../../optimizer/claude/CLAUDE.md) | Platform wrapper or platform metadata. |
@@ -232,6 +235,7 @@ These technical routes select focused instructions inside a public task package.
 | [optimizer/scripts/optimizer_session.py](../../optimizer/scripts/optimizer_session.py) | Deterministic support, installation, synchronization, or validation script. |
 | [optimizer/situation-analysis.md](../../optimizer/situation-analysis.md) | Package support file. |
 | [optimizer/tests/test_optimizer_api.py](../../optimizer/tests/test_optimizer_api.py) | Package support file. |
+| [optimizer/tests/test_package_contract.py](../../optimizer/tests/test_package_contract.py) | Package support file. |
 
 ## quantum-job-collector
 
