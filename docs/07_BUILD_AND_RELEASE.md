@@ -78,10 +78,9 @@ a report. The parent needs Python 3.11 or newer; the packages alone support 3.10
 workflow runs the same command on every push, and `skills_ai.code-workspace` opens the
 parent and each package as separate folders in VS Code. Run it once before pushing a
 package change or a pointer move; a clone made without `--recurse-submodules` shows each
-empty package as `unavailable` and says how to fix it. Because `theory-reference` is a
-private repository, the CI checkout reads it with a read-only token kept in the Actions
-secret `CI_CHECKOUT_TOKEN`; renew the token before it expires, and remove the `token:`
-line if that repository becomes public.
+empty package as `unavailable` and says how to fix it. All package repositories are
+public, so the CI checkout uses the job's own default token; a private package would
+need a read-only checkout token kept as an Actions secret.
 
 For a declared submodule package the transaction has two repositories: change, test,
 commit and push the child; confirm the commit is an ancestor of the child's `origin/main`
