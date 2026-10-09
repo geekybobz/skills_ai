@@ -102,6 +102,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
+| a rule is not in the compact entry | open the topic the entry names; the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md) lists every topic and what it owns |
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
 | loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |
 | parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
@@ -129,7 +130,7 @@ rollback rules for the packages are in the
 
 ## Current context flow
 
-Reference-flow delivery budgets are 5.5 KiB core and 8 KiB bootstrap, separate from transport limits. The bootstrap figure excludes the checkout path, so a clone or repair workspace in a longer folder measures the same as the live one. Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill collection. Shared batch bodies can be delivered once while keeping each capability’s gates and identity. Zero additional bytes on unchanged turns measures delivery, not total model usage. Recovery restores missing context; status creates no checkpoint or delivery marker.
+Reference-flow delivery budgets are 5.5 KiB core and 8 KiB bootstrap, separate from transport limits. The bootstrap figure excludes the checkout path, so a clone or repair workspace in a longer folder measures the same as the live one. The core figure counts the delivered entry only; the focused topics are read on demand and count toward neither budget. Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill collection. Shared batch bodies can be delivered once while keeping each capability’s gates and identity. Zero additional bytes on unchanged turns measures delivery, not total model usage. Recovery restores missing context; status creates no checkpoint or delivery marker.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
 

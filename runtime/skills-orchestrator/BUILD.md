@@ -1,6 +1,6 @@
 # Build and verification workflow
 
-Back: [[SKILL|Skills Orchestrator]] · Specification: [[CONTRACT]].
+Entry: [SKILL.md](SKILL.md) · Specification: [CONTRACT.md](CONTRACT.md).
 
 Build in a separate checkout when changes need isolation. Declare exact paths,
 preserve existing work and verify each phase before expanding the implementation.
@@ -66,7 +66,7 @@ after state, leaves before-identical files alone and refuses conflicting content
 Inspect the recovery preview before writing. Host configuration and external
 effects require separate receipts and restoration procedures.
 
-Learning entry: [[docs/human/10_MODEL_LED_ORCHESTRATOR|Orchestrator walkthrough]].
+Learning entry: [Orchestrator walkthrough](../../docs/human/10_MODEL_LED_ORCHESTRATOR.md).
 
 ## Shared verification and update boundary
 
@@ -103,4 +103,4 @@ Checkpoints remain explicitly authorized advisory data, not automatic memory.
 
 ---
 
-[⌂ Home](SKILL.md)
+[⌂ Home](INDEX.md)

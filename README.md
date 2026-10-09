@@ -30,8 +30,13 @@ flowchart TD
 ## Learn the architecture
 
 Read [the walkthrough](docs/human/10_MODEL_LED_ORCHESTRATOR.md) for vocabulary,
-controls and working examples. Read [the integration contract](runtime/skills-orchestrator/CONTRACT.md)
-for responsibilities, package boundaries and verification criteria.
+controls and working examples. The orchestrator's own instructions are layered by
+depth: a compact entry that every session receives
+([SKILL.md](runtime/skills-orchestrator/SKILL.md)), a navigation map
+([INDEX.md](runtime/skills-orchestrator/INDEX.md)) and one focused topic per
+subject, read only when a request needs it. The
+[integration contract](runtime/skills-orchestrator/CONTRACT.md) holds
+responsibilities, package boundaries and verification criteria.
 
 ## Clone or share
 

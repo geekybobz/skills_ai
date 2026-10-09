@@ -6,13 +6,17 @@ agent_read_policy: explicit-human-guide-task-or-doc-sync-only
 
 # Skills Orchestrator: walkthrough
 
-Back: [human guide](../../README.md). Technical definitions: [integration contract](../../runtime/skills-orchestrator/CONTRACT.md), [composition](../../runtime/skills-orchestrator/COMPOSITION.md), [recovery](../../runtime/skills-orchestrator/RECOVERY.md).
+Back: [human guide](../../README.md). Technical definitions start at the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md): [controls](../../runtime/skills-orchestrator/CONTROLS.md), [loading](../../runtime/skills-orchestrator/LOADING.md), [composition](../../runtime/skills-orchestrator/COMPOSITION.md), [recovery](../../runtime/skills-orchestrator/RECOVERY.md), [management](../../runtime/skills-orchestrator/MANAGEMENT.md) and the [integration contract](../../runtime/skills-orchestrator/CONTRACT.md).
 
 ## What you are using
 
 The orchestrator is the connected host reasoning with shared coordination instructions. It understands your objective, selects useful skills, coordinates their work and checks what the evidence supports. It is always active and is not counted as a skill. Local tools provide metadata, exact file access and artifact checks. You own skill creation, editing, activation and the scope of each task.
 
 A skill keeps its own methods, tools, templates and domain rules. Its outer contract gives the orchestrator enough information to connect it to a task without prescribing the skill's internal design.
+
+## Where the instructions live
+
+The orchestrator's instructions are layered by depth, and each fact has one owner. The compact entry, `SKILL.md`, is the only part every session receives; it holds the operating rules and the safety rules that must never be missed, such as how controls reset between requests and never searching old repair folders. When a request needs more, the entry names one topic: controls and the receipt, loading and batches, composition, recovery, management, or the integration contract. The index lists them for orientation and maintenance and is not read during ordinary work. This walkthrough is the optional explanatory layer: it explains and gives examples but adds no rule.
 
 ## Start with two commands
 

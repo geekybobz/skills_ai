@@ -17,9 +17,16 @@ MAX_DISCOVERY_BYTES = 12 * 1024
 MAX_PAGE_ITEMS = 32
 STARTUP_CATALOG_BYTES = 3072
 CONTRACT_BYTES = 32 * 1024
+_FRONT_MATTER = re.compile(r'^---[\s\S]*?---\s*')
+_HOME_FOOTER = re.compile(r'\n*---\n+\[⌂ Home\]\([^)\n]*\)\s*$')
 
 class ContextError(ValueError):
     """An exact metadata or access request could not be fulfilled."""
+
+
+def core_text(raw: str) -> str:
+    """The delivered entry: the file without its front matter and its Home footer."""
+    return _HOME_FOOTER.sub('\n', _FRONT_MATTER.sub('', raw, count=1), count=1)
 
 
 def read_relative(root: Path, relative: str, *, maximum: int = MAX_FILE_BYTES) -> bytes:
@@ -393,8 +400,7 @@ def context_packet(root: Path, manifest: dict, *, project_root=None, session=Non
         raise ContextError('INVALID_DELIVERY')
     if session is not None and not re.fullmatch(r'[A-Za-z0-9_-]{1,128}', session):
         raise ContextError('INVALID_SESSION')
-    core = read_relative(root, 'runtime/skills-orchestrator/SKILL.md', maximum=32768).decode('utf-8')
-    core = re.sub(r'^---[\s\S]*?---\s*', '', core)
+    core = core_text(read_relative(root, 'runtime/skills-orchestrator/SKILL.md', maximum=32768).decode('utf-8'))
     catalog = compact_catalog(discover(root, manifest, limit=32),maximum=STARTUP_CATALOG_BYTES)
     project = _project_receipt(project_root,manifest)
     repair_state = _repair_receipt(root,session) if session is not None else None

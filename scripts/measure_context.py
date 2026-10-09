@@ -11,7 +11,7 @@ import tempfile
 import time
 from pathlib import Path
 from registry_runtime import ROOT, load_manifest
-from model_context import context_packet, compact_catalog, discover, STARTUP_CATALOG_BYTES
+from model_context import context_packet, compact_catalog, core_text, discover, STARTUP_CATALOG_BYTES
 
 # Delivery regression budgets, distinct from transport/security hard bounds.
 CORE_BUDGET = 5632
@@ -24,7 +24,7 @@ def budgeted_bootstrap_bytes(context, root):
 
 
 def measure(*, repeat=3):
-    manifest=load_manifest();core=(ROOT/'runtime/skills-orchestrator/SKILL.md').read_bytes()
+    manifest=load_manifest();raw=(ROOT/'runtime/skills-orchestrator/SKILL.md').read_bytes()
     initial=context_packet(ROOT,manifest)
     catalog=compact_catalog(discover(ROOT,manifest,limit=32),maximum=STARTUP_CATALOG_BYTES)
     latencies=[]
@@ -36,14 +36,14 @@ def measure(*, repeat=3):
         if json.loads(run.stdout)['additional_context']!=initial['additional_context']:raise ValueError('context process differed')
     with tempfile.TemporaryDirectory(prefix='skills-ai-measure-') as directory:
         root=Path(directory);(root/'runtime/skills-orchestrator').mkdir(parents=True)
-        (root/'runtime/skills-orchestrator/SKILL.md').write_bytes(core)
+        (root/'runtime/skills-orchestrator/SKILL.md').write_bytes(raw)
         shutil.copy(ROOT/'runtime/repair_workspace.py',root/'runtime/repair_workspace.py')
         if (ROOT/'registry/contracts').exists():shutil.copytree(ROOT/'registry/contracts',root/'registry/contracts')
         context_packet(root,manifest,session='measure-fixture')
         unchanged=context_packet(root,manifest,session='measure-fixture',delivery='continuation')
-        (root/'runtime/skills-orchestrator/SKILL.md').write_bytes(core+b'\nChanged measurement fixture.\n')
+        (root/'runtime/skills-orchestrator/SKILL.md').write_bytes(raw+b'\nChanged measurement fixture.\n')
         changed=context_packet(root,manifest,session='measure-fixture',delivery='continuation')
-    sizes={'core':len(core),'catalog':len(catalog.encode()),'bootstrap':budgeted_bootstrap_bytes(initial['additional_context'],ROOT),
+    sizes={'core':len(core_text(raw.decode()).encode()),'catalog':len(catalog.encode()),'bootstrap':budgeted_bootstrap_bytes(initial['additional_context'],ROOT),
            'unchanged_continuation':len(unchanged['additional_context'].encode()),'changed_core':len(changed['additional_context'].encode()),
            'root_path_excluded':len(json.dumps(str(ROOT.resolve())).encode())}
     failures=[]

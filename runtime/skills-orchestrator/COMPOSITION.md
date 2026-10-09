@@ -1,6 +1,6 @@
 # Capability composition
 
-Back: [[runtime/skills-orchestrator/SKILL|Skills Orchestrator]]. Contract: [[runtime/skills-orchestrator/CONTRACT]].
+Entry: [SKILL.md](SKILL.md). Contract: [CONTRACT.md](CONTRACT.md). Controls that choose a topology: [CONTROLS.md](CONTROLS.md).
 
 The host chooses relationships from the desired outcome and declared interfaces. No topology is imposed by a local classifier.
 
@@ -24,3 +24,7 @@ Apply higher instruction authority directly. Separate instruction conflict from 
 ## Example
 
 An evidence capability produces a source ledger. A theory capability consumes verified claims and a notation reference to write an explanation. The theory capability owns the explanation; a reviewer reports provenance findings. Local checks inspect artifact identity and required evidence. A numerical result is described as local evidence unless a stronger named certificate is established. The host decides which roles are needed and whether a handoff is adequate.
+
+---
+
+[⌂ Home](INDEX.md)

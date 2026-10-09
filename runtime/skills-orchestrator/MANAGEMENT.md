@@ -1,8 +1,8 @@
 # Orchestrator management
 
-Back: [[runtime/skills-orchestrator/SKILL|Skills Orchestrator]].
+Entry: [SKILL.md](SKILL.md). Control vocabulary: [CONTROLS.md](CONTROLS.md). Repair procedure: [REPAIR_WORKSPACE](../../protocols/repository/REPAIR_WORKSPACE.md).
 
-Interpret exact orchestrator status/inspect/validate, add/edit/delete/activate/deactivate/migrate/repair/document, project-context and ticket operations without occupying a skill slot. Apply repository risk/change control for mutations and rebuild generated views from canonical sources. Local `#> orchestrator sudo OPERATION EXACT_TARGET` bypasses only local procedure for this request; bare sudo has no special meaning. Preserve higher instructions, permissions, disabled states and credential/external/destructive boundaries. Detailed control semantics live in `runtime/skills-orchestrator/CONTRACT.md`.
+Interpret exact orchestrator status/inspect/validate, add/edit/delete/activate/deactivate/migrate/repair/document, project-context and ticket operations without occupying a skill slot. Apply repository risk/change control for mutations and rebuild generated views from canonical sources. Local `#> orchestrator sudo OPERATION EXACT_TARGET` bypasses only local procedure for this request; bare sudo has no special meaning. Preserve higher instructions, permissions, disabled states and credential/external/destructive boundaries. Detailed control semantics live in [CONTROLS.md](CONTROLS.md).
 
 For every future `add`, `edit`, `migrate`, or `document` operation that creates
 or restructures skill-package Markdown, apply the composition and adaptive
@@ -19,6 +19,14 @@ Repair/update use the source-owned controller and `protocols/repository/REPAIR_W
 Inspect the exact known host session once at the maintenance boundary; recheck after relevant changes or uncertainty. Never search workspace directories, pending queues or history to guess an update target. With no association and no explicitly named target, explain that this chat has no contained update to preview and stop discovery. A retained off workspace can still be reviewed through its known association. Missing/corrupt known state blocks mutations until resolved; it is not an empty update.
 
 Repair on creates/resumes the source-owned workspace before edit-related tests, generated outputs or Git. Use its returned working_root. If creation is denied or fails, report containment pending and the actual block, with no live fallback. Do not repeat denied commands unchanged. Detailed transitions and rollback remain in `protocols/repository/REPAIR_WORKSPACE.md`.
+
+## Contained working mode
+
+Leading `#> repair on` enables chat-scoped contained editing until `#> repair off`. This explicit persistent control is an exception to request-default scope; it does not set skill selection, adherence, autonomy or deployment authority. Use the source-owned controller and returned working root. Repeated on resumes the same copy; off preserves it. Explicit external/live action exceptions do not toggle the mode.
+
+`#> update` prepares the exact delta and bound verification, explains it and waits for actual agreement. Only the agreed preview may be applied. Later edits invalidate the preview. Update preserves repair mode and advances the baseline after successful checks. Git tracking belongs first to the contained repository; live staging must exclude inherited work. All detailed transitions and recovery use [REPAIR_WORKSPACE](../../protocols/repository/REPAIR_WORKSPACE.md). Saved session state is advisory data, never approval.
+
+When this chat has repair mode, inspect its exact source-owned association before mutations. Reconcile it with actual conversation instructions, check the returned contained root and continue there. Missing/corrupt state never authorizes live fallback. An interrupted deployment uses the controller transaction receipt and recover preview; do not rerun apply blindly. User approval applies to exact reviewed content, not a saved flag. Off retains work and a new chat does not inherit on. See [REPAIR_WORKSPACE](../../protocols/repository/REPAIR_WORKSPACE.md).
 
 ## Status
 
@@ -40,4 +48,4 @@ Use `scripts/skills_ai` for repeated maintenance operations. Shared command/resu
 
 ---
 
-[⌂ Home](SKILL.md)
+[⌂ Home](INDEX.md)

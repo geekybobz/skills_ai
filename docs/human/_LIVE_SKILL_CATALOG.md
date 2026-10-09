@@ -50,6 +50,9 @@ These technical routes select focused instructions inside a public task package.
 | [runtime/skills-orchestrator/BUILD.md](../../runtime/skills-orchestrator/BUILD.md) | Package support file. |
 | [runtime/skills-orchestrator/COMPOSITION.md](../../runtime/skills-orchestrator/COMPOSITION.md) | Package support file. |
 | [runtime/skills-orchestrator/CONTRACT.md](../../runtime/skills-orchestrator/CONTRACT.md) | Package support file. |
+| [runtime/skills-orchestrator/CONTROLS.md](../../runtime/skills-orchestrator/CONTROLS.md) | Package support file. |
+| [runtime/skills-orchestrator/INDEX.md](../../runtime/skills-orchestrator/INDEX.md) | Package support file. |
+| [runtime/skills-orchestrator/LOADING.md](../../runtime/skills-orchestrator/LOADING.md) | Package support file. |
 | [runtime/skills-orchestrator/MANAGEMENT.md](../../runtime/skills-orchestrator/MANAGEMENT.md) | Package support file. |
 | [runtime/skills-orchestrator/RECOVERY.md](../../runtime/skills-orchestrator/RECOVERY.md) | Package support file. |
 | [runtime/skills-orchestrator/SKILL.md](../../runtime/skills-orchestrator/SKILL.md) | Skill entry or shared workflow instructions. |

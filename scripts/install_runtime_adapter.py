@@ -5,16 +5,19 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import re
 import json
 import os
 import shlex
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "runtime"))
+from model_context import core_text  # noqa: E402
+
 SHARED_ENTRY = ROOT / "runtime" / "SKILL.md"
 CLAUDE_HOOK = ROOT / "adapters" / "claude" / "skills-ai-context.js"
 CLAUDE_MANAGED_MARKERS = (
@@ -53,7 +56,7 @@ def installed_content(source: Path) -> bytes:
     if source == SHARED_ENTRY:
         core_path=ROOT / 'runtime/skills-orchestrator/SKILL.md'
         raw=core_path.read_bytes()
-        core=re.sub(rb'^---[\s\S]*?---\s*',b'',raw)
+        core=core_text(raw.decode('utf-8')).encode()
         content = content.replace(b'{{SKILLS_AI_ROOT}}', str(ROOT).encode()).replace(b'{{CORE_SHA256}}',hashlib.sha256(raw).hexdigest().encode())
         content += b'\n' + core
     return content

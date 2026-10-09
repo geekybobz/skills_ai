@@ -78,7 +78,7 @@ python3 scripts/orchestrate.py discover --format text
 python3 scripts/orchestrate.py load --capability theory-reference
 ```
 
-Context assembly receives no task prose. It reads the fixed core and registry metadata, and may inspect only the exact project capsule. Discovery reads no candidate bodies; loading returns complete explicitly selected entries and content identities. Invalid access returns a structured error; optional hook failures do not erase required obligations.
+Context assembly receives no task prose. It reads the fixed core and registry metadata, and may inspect only the exact project capsule. The delivered core is the entry without its front matter and Home footer; the Claude hook, the Codex installer and the size measurement all use the same extraction. Discovery reads no candidate bodies; loading returns complete explicitly selected entries and content identities. Invalid access returns a structured error; optional hook failures do not erase required obligations.
 
 Generated `AGENTS.md` and `CLAUDE.md` come from one shared source plus one small
 platform overlay. Repository context is resolved on demand with bounded native

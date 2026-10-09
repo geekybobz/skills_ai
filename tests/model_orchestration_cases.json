@@ -685,6 +685,33 @@
         "codex",
         "claude"
       ]
+    },
+    {
+      "id": "topic-controls",
+      "request": "Which controls set adherence and the execution boundary, and what are their defaults?",
+      "rubric": "Answer from the controls topic, not from memory of the compact entry: #> mode (also #> adherence) defaults to adaptive, #> autonomy defaults to standard, and mode is never autonomy. No task skill is loaded.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "topic-loading",
+      "request": "#> use interaction-protocol, optimizer\nLoad the support and the manual skill together for a short review.",
+      "rubric": "One batch load with --deduplicate; attest only the invoked manual target with --explicit-capability; add no dependency automatically; grant no run or write authority.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "topic-ordinary",
+      "request": "Fix the off-by-one error in this loop: for i in range(1, len(xs)): total += xs[i-1]",
+      "rubric": "Ordinary task: the compact entry suffices. No discovery or skill loading and no reading of INDEX.md or orchestrator topics; answer directly.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
     }
   ]
 }

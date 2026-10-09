@@ -115,7 +115,7 @@ pause or save memory; actual task boundaries still govern execution.
 | `#> depth compact|standard|deep` | select explanation depth |
 | `#> receipt auto|on|off` | control compact receipt visibility |
 
-Current request > session > project > global > automatic defaults. The host interprets controls and assesses suitability; metadata transport does not score answer correctness.
+Current request > session > project > global > automatic defaults. The host interprets controls and assesses suitability; metadata transport does not score answer correctness. The exact vocabulary, defaults, scope and reset rules, conflict handling and receipt details are owned by [the controls topic](../../runtime/skills-orchestrator/CONTROLS.md); this page explains them in plain language.
 
 Scout pauses at context, search and corpus-readiness boundaries. Papers used in
 its collective synthesis must be locally available as full text and extracted;

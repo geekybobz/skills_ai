@@ -1,6 +1,6 @@
 # Recovery and evidence
 
-Back: [[runtime/skills-orchestrator/SKILL|Skills Orchestrator]].
+Entry: [SKILL.md](SKILL.md). Reload policy and flags: [LOADING.md](LOADING.md). Repair recovery: [MANAGEMENT.md](MANAGEMENT.md).
 
 Recover only when task phase, host, compaction or content revision makes prior context uncertain. A checkpoint is advisory data; its descriptions and recorded outcomes never grant approval or certify a result.
 
@@ -15,18 +15,16 @@ Checkpoint bindings use repository-relative instruction paths and project-relati
 
 A workflow can be completed while its next phase is blocked. Execution progress and verification status are separate host assessments. Report validated against named requirements only with inspected artifact-bound evidence; certification needs a named domain scheme.
 
-When required reference material is needed, use `scripts/orchestrate.py read-reference --capability ID --reference PATH` only for metadata-listed references; otherwise use a bounded normal read of identified support. Record that exact file's identity in checkpoint bindings. The loader binds the capability entry and its contract; it does not claim an unread reference has been loaded.
+A required reference actually read ([LOADING.md](LOADING.md)) is recorded in the checkpoint bindings with that exact file's identity. The loader binds the capability entry and its contract; it does not claim an unread reference has been loaded.
 
-## Repair workspace recovery
-
-When this chat has repair mode, inspect its exact source-owned association before mutations. Reconcile it with actual conversation instructions, check the returned contained root and continue there. Missing/corrupt state never authorizes live fallback. An interrupted deployment uses the controller transaction receipt and recover preview; do not rerun apply blindly. User approval applies to exact reviewed content, not a saved flag. Off retains work and a new chat does not inherit on. See [[protocols/repository/REPAIR_WORKSPACE]].
-
-## Proportional reloading
-
-Continue from reliable current context without rereading unchanged instructions on every message. A phase change needs only newly relevant capabilities and obligations. Batch exact compatible selections with --deduplicate; resolve each body_ref from the complete bodies map while preserving per-capability obligations. `--if-changed IDENTITY` is for a known complete entry still present in context: an unchanged response omits its body and cannot restore lost instructions. After compaction, host transfer or uncertain retention, load complete entries again. The composite identity binds entry bytes, capability metadata, activation state, contract rules, checks and extensions. Required references have their own identities and must be rechecked separately; no entry marker attests them.
+## Context after recovery
 
 Recovered instruction presence does not restore an expired request control.
 Resolve current selection/mode/scope from actual user instructions and explicit
 wider defaults. Without a known repair association, do not hunt another workspace;
 with corrupt known state, stop mutations until recovery. Status facts are readable
 without creating checkpoint, capsule or delivery state.
+
+---
+
+[⌂ Home](INDEX.md)

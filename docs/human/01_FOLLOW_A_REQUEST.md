@@ -51,7 +51,7 @@ documentation. The orchestrator owns coordination, not unlimited authority.
 Skills AI procedure. Bare `#> sudo`, quoted examples, code blocks, and later
 mentions are inert.
 
-The host interprets the leading user-authored control block and current natural instructions. The shared core is available for ordinary coordination; detailed management and recovery modules are read only when needed. No router state machine chooses phase transitions.
+The host interprets the leading user-authored control block and current natural instructions. The compact entry (`runtime/skills-orchestrator/SKILL.md`) is delivered with every session and carries the operating rules. The focused topics for controls, loading, composition, recovery and management are read only when a request needs one, and the navigation map is for orientation and maintenance, not ordinary work. No router state machine chooses phase transitions.
 
 ## Package and capability controls
 

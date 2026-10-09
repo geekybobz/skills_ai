@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class SpecificationTests(unittest.TestCase):
  def test_case_set_is_unique_and_covers_boundary_scenarios(self):
   data=json.loads((ROOT/'tests/model_orchestration_cases.json').read_text())
-  cases=data['cases'];self.assertEqual(75,len(cases));self.assertEqual(75,len({c['id'] for c in cases}))
+  cases=data['cases'];self.assertEqual(78,len(cases));self.assertEqual(78,len({c['id'] for c in cases}))
   self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume'} <= {c['id'] for c in cases})
   for c in cases:
    self.assertTrue(c['request']);self.assertTrue(c['rubric']);self.assertEqual(['codex','claude'],c['hosts'])
@@ -31,7 +31,7 @@ from unittest.mock import patch
 sys.path.insert(0,str(ROOT/'runtime'))
 sys.path.insert(0,str(ROOT/'scripts'))
 from model_context import ContextError, discover, load_capability, read_relative, check_contract
-from model_context import context_packet
+from model_context import context_packet, core_text
 from registry_runtime import build_manifest
 
 class ExplicitAccessTests(unittest.TestCase):
@@ -101,8 +101,7 @@ class ContractShapeTests(unittest.TestCase):
 import subprocess
 class DeliveryTests(unittest.TestCase):
  def test_simple_control_requests_receive_complete_shared_core_without_prompt_echo(self):
-  import re
-  core=re.sub(r'^---[\s\S]*?---\s*','',(ROOT/'runtime/skills-orchestrator/SKILL.md').read_text())
+  core=core_text((ROOT/'runtime/skills-orchestrator/SKILL.md').read_text())
   for control in ('#> use none\n#> mode adaptive','#> use optimizer, theory-reference\n#> mode strict'):
    prompt=control+'\nReview private-fixture-489; do not execute the task.'
    result=subprocess.run(['node',str(ROOT/'adapters/claude/skills-ai-context.js'),'--root',str(ROOT)],input=json.dumps({'prompt':prompt,'cwd':str(ROOT)}),capture_output=True,text=True,timeout=4)
@@ -342,12 +341,11 @@ class ContextAcknowledgementTests(unittest.TestCase):
   with self.assertRaisesRegex(ContextError,'INVALID_DELIVERY'):acknowledge_context(self.root,'delivery-fixture',{'permission':'granted'})
  def test_merged_codex_entry_matches_core_and_tracks_revision(self):
   from install_runtime_adapter import install_adapter, check_adapter
-  import re
   with tempfile.TemporaryDirectory() as directory:
    config=Path(directory);install_adapter('codex',config)
    entry=(config/'skills/skills-ai-registry/SKILL.md').read_text()
    raw=(ROOT/'runtime/skills-orchestrator/SKILL.md').read_bytes()
-   core=re.sub(r'^---[\s\S]*?---\s*','',raw.decode())
+   core=core_text(raw.decode())
    self.assertIn(core,entry);self.assertIn(hashlib.sha256(raw).hexdigest(),entry);self.assertTrue(check_adapter('codex',config))
    with patch('install_runtime_adapter.installed_content',return_value=b'New source core'):
     self.assertFalse(check_adapter('codex',config))
@@ -486,3 +484,10 @@ class SharedStatusTests(unittest.TestCase):
    path=root/'runtime/manifest.json'
    manifest['sources'][0]['path']='entries/private.md';path.write_text(json.dumps(manifest))
    with self.assertRaisesRegex(RegistryRuntimeError,'INVALID_MANIFEST_BINDINGS'):load_manifest(path)
+
+class CoreTextTests(unittest.TestCase):
+ def test_core_text_strips_only_front_matter_and_the_home_footer(self):
+  self.assertEqual('body\n',core_text('---\nname: x\n---\n\nbody\n\n---\n\n[⌂ Home](INDEX.md)\n'))
+  self.assertEqual('plain text\n',core_text('plain text\n'))
+  self.assertEqual('one\n\n---\n\ntwo\n',core_text('---\nname: x\n---\none\n\n---\n\ntwo\n'))
+  self.assertEqual('text with [⌂ Home](INDEX.md) inside\n',core_text('text with [⌂ Home](INDEX.md) inside\n'))
