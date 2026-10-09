@@ -31,6 +31,8 @@ but is not a package, capability, or inventory row.
 
 ## Package forms
 
+Every submodule package also carries what lets it verify and update on its own: its tests, one declared version, a short `CHANGELOG.md`, a `.gitignore`, CI and a standalone-use note in its README.
+
 | public package | anatomy |
 |---|---|
 | `interaction-protocol` | canonical JSON contract, human hub, general/math modes independent of task selection |

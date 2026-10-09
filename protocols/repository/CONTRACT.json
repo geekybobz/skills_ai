@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 17,
+  "protocol_version": 18,
   "approval_operations": [
     "move",
     "deprecate",
@@ -306,7 +306,8 @@
         "scripts/human_docs_guard.py",
         "scripts/scan_consistency.py",
         "scripts/skills_ai",
-        "scripts/skills_ai.py"
+        "scripts/skills_ai.py",
+        "scripts/verify_all.py"
       ],
       "checks": [
         "consistency",
@@ -380,6 +381,7 @@
     {
       "id": "repository-support",
       "patterns": [
+        ".github/workflows/**",
         ".gitignore",
         ".gitmodules",
         ".obsidian/*.json",
@@ -387,6 +389,7 @@
         "docs/*.md",
         "docs/CLAUDE_VERIFICATION_PROMPT.md",
         "docs/SKILLS.md",
+        "skills_ai.code-workspace",
         "theory-reference"
       ],
       "checks": [

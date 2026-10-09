@@ -154,6 +154,8 @@ For a declared submodule package, use a two-repository transaction:
    pointer with the old and new hashes in the message;
 6. push the parent with `--recurse-submodules=check`.
 
+To check everything at once, run `python3 scripts/verify_all.py`. It runs each package's own checks, then the parent gates (full scan, generated files, graph, guide, registry, budgets), changes nothing and runs only when you start it. `--list` shows the steps, `--only TEXT` narrows them, `--fail-fast` stops at the first failure and `--json` prints a report. The parent needs Python 3.11 or newer; the packages alone support 3.10. The CI workflow runs the same command on every push, and `skills_ai.code-workspace` opens the parent and each package as separate folders in VS Code.
+
 This permits transferring one skill by cloning its standalone repository while
 preserving a reproducible, tested collection in Skills AI. Commits, tags and
 pushes happen only on your instruction, and rollback is a new commit, never a

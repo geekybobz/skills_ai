@@ -46,7 +46,8 @@ flowchart LR
 | `external-skills/` | non-traversed pointers to externally owned packages |
 | `protocols/repository/` | operation-specific repository rules, plus the Git governance card for clone modes, commit order, versions, releases and rollback |
 | `scripts/` | on-demand metadata access, compilation, context, validation, scanning, context measurement and installation tools |
-| `tests/` | mechanical evidence for runtime and documentation promises |
+| `tests/` | mechanical evidence for runtime and documentation promises; package behavior is tested in each package |
+| `.github/` | the CI workflow that runs `scripts/verify_all.py` on every push |
 | `adapters/` | thin Codex and Claude lifecycle layers |
 | `docs/human/` | progressive explanation outside the task hot path |
 | `requests/` | bounded intake from tasks that started outside this workspace |

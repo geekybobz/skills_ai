@@ -13,6 +13,7 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 
 | File | What it means | Kind | Audience | Maintenance role |
 |---|---|---|---|---|
+| [.github/workflows/ci.yml](../../.github/workflows/ci.yml) | Repository configuration or support metadata. | source/support | Shared | repository-support |
 | [.gitignore](../../.gitignore) | Declares repository-local paths Git should not track. | source/support | Shared | repository-support |
 | [.gitmodules](../../.gitmodules) | Declares each separately owned skill submodule: path, remote URL and tracked branch. | source/support | Shared | repository-support |
 | [.obsidian/app.json](../../.obsidian/app.json) | Personal graph and vault display configuration; graph colors are validated while personal view state is preserved. | source/support | Shared | repository-support |
@@ -248,6 +249,8 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 | [scripts/ticket_hub.py](../../scripts/ticket_hub.py) | Manage local Skills Orchestrator feedback tickets without project-wide scans. | source/support | Shared | ticket-hub-cli |
 | [scripts/toggle_registry.py](../../scripts/toggle_registry.py) | Toggle rows in registry/activation.md between active/manual/off states. | source/support | Shared | shared-runtime |
 | [scripts/validate_registry.py](../../scripts/validate_registry.py) | Validate registry sources and confirm the runtime manifest is current. | source/support | Shared | shared-runtime |
+| [scripts/verify_all.py](../../scripts/verify_all.py) | Run every package's own checks, then the parent gates, once and on demand. | source/support | Shared | maintenance-runtime |
+| [skills_ai.code-workspace](../../skills_ai.code-workspace) | VS Code multi-root workspace listing the parent and each package so every package's own editor settings apply and Source Control shows each repository separately. | source/support | Shared | repository-support |
 | [tests/model_orchestration_cases.json](../../tests/model_orchestration_cases.json) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
 | [tests/test_change_guard.py](../../tests/test_change_guard.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
 | [tests/test_change_request.py](../../tests/test_change_request.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
@@ -270,6 +273,7 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 | [tests/test_repository_views.py](../../tests/test_repository_views.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
 | [tests/test_research_context_scout.py](../../tests/test_research_context_scout.py) | Parent integration of research-context-scout: route, aliases and registry text. | verification | Shared | test-source |
 | [tests/test_ticket_hub.py](../../tests/test_ticket_hub.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
+| [tests/test_verify_all.py](../../tests/test_verify_all.py) | verify_all orders each package's own checks before the parent gates; these tests never run the real gates. | verification | Shared | test-source |
 | [theory-reference](../../theory-reference) | A separately owned Git submodule with thin platform wrappers, shared phase instructions, rules, templates, and support scripts. | submodule | Shared | repository-support |
 | [theory-reference/CLAUDE.md](../../theory-reference/CLAUDE.md) | Claude Notes — Use Claude skill conventions only in this wrapper layer. | submodule | Shared | repository-contained |
 | [theory-reference/README.md](../../theory-reference/README.md) | theory-reference — Shared, token-efficient skill repo with thin wrappers for Claude and Codex. | submodule | Shared | repository-contained |

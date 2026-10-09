@@ -42,7 +42,7 @@ verify that ordinary routing still excludes human-facing material.
 
 ## Current contract
 
-Protocol version 17 keeps these boundaries:
+Protocol version 18 keeps these boundaries:
 
 - The host model owns intent, compatible capability selection, methods, modes,
   composition and evidence assessment. Local tools check artifacts and expose
@@ -74,6 +74,10 @@ Protocol version 17 keeps these boundaries:
   moves its pointer to a clean, published commit. Clone modes, branches, versions,
   releases, rollback, dirty state and cleanup follow [[GIT_GOVERNANCE]]. Commits,
   tags, pushes and deletions need the user's instruction for the exact action.
+- A declared package whose submodule folder is empty is `unavailable` in the catalog
+  and refuses loading with `PACKAGE_NOT_INITIALIZED` and its fix. `scripts/verify_all.py`
+  runs each package's own checks and the parent gates only on demand, and CI runs it on
+  push. A package declares its one SemVer in one place.
 
 Keep this card current when amending the contract. Git history and private
 rollback receipts retain previous revisions; operational documentation explains

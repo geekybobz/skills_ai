@@ -142,6 +142,10 @@ Capability integration contracts add metadata and preserve existing package coun
 
 Terminal commands and `runtime/maintenance/` are L5 maintenance support under the existing repository-maintenance concept. The terminal protocol links to change control and repair; ignored receipts and workspace history do not add skill or graph inventory entries.
 
+## Workflow and workspace files
+
+`.github/workflows/ci.yml` and `skills_ai.code-workspace` are repository support, like `.gitmodules`: they are not Markdown, so they add no graph node, layer or colour, and the repository contract only gives them a role so they are governed.
+
 ## Git governance
 
 The [Git governance card](../../protocols/repository/GIT_GOVERNANCE.md) is L5 support under `protocols/` and belongs to the existing repository-maintenance concept. The repository contract requires change control to link to it and it to link back to change control and repair, so a move or deletion cannot orphan it. It adds no color, layer or inventory entry.

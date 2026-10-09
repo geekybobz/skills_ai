@@ -13,7 +13,7 @@ user's instruction for the exact action, and no tool performs them on its own.
 
 | repository | owns | must not contain |
 |---|---|---|
-| Skills AI (parent) | orchestrator and tools, adapters, registry and activation, integration contracts, governance, generated views, integration tests, human guide, the in-tree `interaction-protocol`, `.gitmodules` and submodule pointers | a child's files, copies of a child's instructions, new tests of a child's wording or behavior |
+| Skills AI (parent) | orchestrator and tools, adapters, registry and activation, integration contracts, governance, generated views, integration tests, human guide, the in-tree `interaction-protocol`, `.gitmodules` and submodule pointers, the on-demand `scripts/verify_all.py`, its CI workflow and the VS Code workspace file | a child's files, copies of a child's instructions, new tests of a child's wording or behavior |
 | Skill repository (child) | `SKILL.md` and its references, phases, scripts, templates and assets; host wrappers; its own tests; a README with clone, install, update and rollback; `VERSION`, `CHANGELOG.md`, LICENSE, `.gitignore`, CI | registry or activation files, absolute paths into the parent, a required dependency on the parent's tools |
 
 The packages stored as Git submodules are the entries of `.gitmodules`; each is a
@@ -29,7 +29,7 @@ and generated views; a child tests its own behavior and structure.
 | goal | command | note |
 |---|---|---|
 | one skill, native use | `git clone https://github.com/geekybobz/<repository>.git` | self-contained; do not also expose the same package through Skills AI in one host, because a native skill named like a package bypasses its gates and the Claude adapter check reports it |
-| the complete system | `git clone --recurse-submodules https://github.com/geekybobz/skills_ai.git`; in an existing clone `git submodule update --init --recursive` | detached HEADs at the pinned commits; scans, views and tests need every submodule populated |
+| the complete system | `git clone --recurse-submodules https://github.com/geekybobz/skills_ai.git`; in an existing clone `git submodule update --init --recursive` | detached HEADs at the pinned commits; scans, views and tests need every submodule populated, and a clone without them lists each empty package as `unavailable` with the fix command |
 | read-only consumption | add `--depth 1 --shallow-submodules` | not for maintainers: reachability checks need history |
 | work on a skill inside the system | `git -C <path> switch main`, then edit and commit in that repository | never commit on a detached HEAD |
 
@@ -77,8 +77,9 @@ trailer the host requires.
 
 ## Versions and releases
 
-A child declares one SemVer in `VERSION` (package metadata such as
-`pyproject.toml` reads it), keeps a short `CHANGELOG.md`, and tags a verified
+A child declares one SemVer in one place: `VERSION`, or the `pyproject.toml` of a
+Python package that already owns its version with a test keeping the command's
+version equal to it. It keeps a short `CHANGELOG.md`, and tags a verified
 release with an annotated `vMAJOR.MINOR.PATCH`. PATCH is wording or a fix without
 a contract change. MINOR adds a capability, mode, alias or reference compatibly.
 MAJOR removes or renames a control, alias or entry path, or changes a gate or
@@ -143,9 +144,13 @@ with a dry run and delete only on instruction. No tool deletes them automaticall
 
 The consistency scan blocks staged paths outside the declared scope, stale
 generated views and missing human-page updates, and its views and unit checks
-need populated submodules. Child cleanliness, publication, reachability and
-fast-forward pins are verified by the host with the commands above until a
-deterministic submodule check exists.
+need populated submodules. The shared runtime marks a declared package with an
+empty submodule folder `unavailable` in the catalog, refuses to load it with
+`PACKAGE_NOT_INITIALIZED` and its fix, and the adapter `--check` warns.
+`python3 scripts/verify_all.py` runs each package's own checks and then the
+parent gates on demand, and the CI workflow runs it on push. Child cleanliness,
+publication, reachability and fast-forward pins are still verified by the host
+with the commands above until a deterministic submodule check exists.
 
 ## Details
 
@@ -188,4 +193,5 @@ Per-clone settings (local to one clone; none are applied automatically):
 git config push.recurseSubmodules check
 git config status.submoduleSummary true
 git config diff.submodule log
+git config submodule.recurse true
 ```

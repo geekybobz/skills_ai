@@ -27,6 +27,8 @@ flowchart TD
 | `runtime/skills-orchestrator/` | always-active model-led coordination and on-demand modules |
 | `runtime/README.md`, `PROTOCOL.md`, `API_CONTRACT.md` | map of the runtime, which layer owns what, and the command interface |
 | `runtime/SKILL.md` | Codex install header only; the installer renders it together with the orchestrator core |
+| `scripts/verify_all.py` | on-demand check of every package and the parent; the CI workflow `.github/workflows/ci.yml` runs it |
+| `skills_ai.code-workspace` | VS Code workspace listing the parent and each package as separate folders |
 | `runtime/project_context.py` | explicit capsule CLI and validation runtime |
 | `runtime/project-context.schema.json` | strict capsule data contract |
 | `runtime/manifest.json` | generated package and capability metadata |

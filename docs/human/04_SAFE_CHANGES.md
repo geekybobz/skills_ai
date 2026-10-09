@@ -169,6 +169,8 @@ procedure for one request while preserving user scope and higher authority.
 For a dirty worktree, an optional prompt-free baseline can preserve an identical
 pre-existing failure; new, worsened and in-scope failures still block.
 
+Before pushing a package change or a pointer move, run `python3 scripts/verify_all.py` once: it checks every package with its own tests and then runs the parent gates, and the CI workflow repeats it on GitHub. A clone made without `--recurse-submodules` shows each empty package as `unavailable` and says how to fix it.
+
 ## External tasks
 
 A task that starts outside this repository treats Skills AI as read-only. With
