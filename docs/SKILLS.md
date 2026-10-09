@@ -1,6 +1,6 @@
 # Skills Registry Entry
 
-Normal tasks enter through `runtime/SKILL.md`. The host model uses the shared coordination instructions to select the minimum sufficient compatible capability set, or continues with normal host tools. Read [[00_SKILLS_HUB]] only for bounded registry maintenance and audits.
+Normal tasks start from the always-active Skills Orchestrator core, [[runtime/skills-orchestrator/SKILL]]; its map is [[runtime/skills-orchestrator/INDEX]]. The host model uses it to select the minimum sufficient compatible capability set, or continues with normal host tools. Read [[00_SKILLS_HUB]] only for bounded registry maintenance and audits.
 
 Flow: host reasoning → compact discovery → exact selected entries and required support → authorized work and artifact-bound evidence. Tools provide metadata and identity/path checks; they never rank skills or select modes. Public inventory counts packages, not capability files.
 

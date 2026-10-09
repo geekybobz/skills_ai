@@ -1,8 +1,8 @@
 # Skills Hub
 
 Human-readable maintenance hub. The always-active
-[[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] uses the compiled entry at
-`runtime/SKILL.md`: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
+[[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] is a compact core delivered to
+the host: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
 
 Shared response behavior: [[interaction-protocol/README|Interaction Protocol]].
 

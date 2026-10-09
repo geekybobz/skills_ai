@@ -47,6 +47,8 @@ package may also expose `INDEX.md` as a navigation map of its layers, references
 maintenance routes. The index is neither a public skill nor an internal
 capability, and ordinary task execution does not load it.
 
+The Skills Orchestrator's own folder has this shape: `SKILL.md` is the delivered entry, `INDEX.md` is the map, and each topic file holds one subject. The orchestrator is a control plane rather than a skill, so it is not counted in the inventory.
+
 For future skill creation, documentation, or substantial Markdown
 restructuring, the orchestrator composes the Markdown Protocol's skill-package
 add-on with the native skill workflow. The add-on chooses among minimal,

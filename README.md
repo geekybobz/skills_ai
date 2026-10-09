@@ -36,7 +36,10 @@ depth: a compact entry that every session receives
 ([INDEX.md](runtime/skills-orchestrator/INDEX.md)) and one focused topic per
 subject, read only when a request needs it. The
 [integration contract](runtime/skills-orchestrator/CONTRACT.md) holds
-responsibilities, package boundaries and verification criteria.
+responsibilities, package boundaries and verification criteria. `AGENTS.md` and
+`CLAUDE.md` send an agent to this orchestrator; `runtime/SKILL.md` is only the
+Codex install header, and [runtime/README.md](runtime/README.md) maps the other
+runtime documents.
 
 ## Clone or share
 

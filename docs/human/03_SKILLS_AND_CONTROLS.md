@@ -58,6 +58,8 @@ The first command lists public skills, the second adds package-level purpose and
 trigger metadata, and the third intentionally lists internal technical
 capability routes. None loads instruction bodies.
 
+The skills hub (`docs/00_SKILLS_HUB.md`) is a maintenance page: it is read for registry audits, not as an entry. Ordinary requests start from the orchestrator core and never load it.
+
 ## Everyday request
 
 ```text

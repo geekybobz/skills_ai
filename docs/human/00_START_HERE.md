@@ -24,7 +24,7 @@ flowchart LR
 
 ## Mental model
 
-- **Skills Orchestrator:** always-active control plane for every local skill-selection and management decision; not a skill or inventory row. Its instructions are layered by depth: a compact entry every session receives, a navigation map, and one focused topic per subject that is read only when needed.
+- **Skills Orchestrator:** always-active control plane for every local skill-selection and management decision; not a skill or inventory row. Its instructions are layered by depth: a compact entry every session receives, a navigation map, and one focused topic per subject that is read only when needed. `AGENTS.md` and `CLAUDE.md` point agents to it; `runtime/SKILL.md` is only the Codex install header.
 - **Public skill package:** the unit counted in inventory, such as `optimizer`.
 - **Internal capability:** a focused instruction file inside a task package.
 - **Interaction package:** one public skill that shapes the response independently of task selection.

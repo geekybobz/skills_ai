@@ -1,6 +1,6 @@
 # Skills AI metadata and explicit-access API
 
-Orchestrator: [[runtime/skills-orchestrator/SKILL]]. Integration: [[runtime/skills-orchestrator/CONTRACT]].
+Orchestrator: [[runtime/skills-orchestrator/SKILL]]. Integration: [[runtime/skills-orchestrator/CONTRACT]]. When and why to call these commands: [[runtime/skills-orchestrator/LOADING]].
 
 The host interprets task intent, leading controls and presentation. Shared commands receive exact metadata/file requests, never task prose. Responses grant no authority. Visible task receipts are host-rendered summaries, independent of optional capsule data.
 
@@ -72,9 +72,9 @@ All gates run before entry reads; a shared entry is read once per batch. Default
 v1 and single loads remain compatible. Single-load --deduplicate is rejected.
 Consumers opt in without a persistent migration.
 
-A single load returns `identity`, covering the entry, metadata, state and contract obligations. `--if-changed IDENTITY` omits bodies only when that composite identity matches; gates remain enforced. `--expected-sha256` continues to check entry bytes. Both flags require a single capability. An unchanged response is evidence of current bytes, never of retained instructions or loaded references. Omit `--if-changed` after compaction or context uncertainty. No task memory is automatically created.
+A single load returns `identity`, covering the entry, metadata, state and contract obligations. `--if-changed IDENTITY` omits bodies only when that composite identity matches; gates remain enforced. `--expected-sha256` continues to check entry bytes. Both flags require a single capability. An unchanged response is evidence of current bytes, never of retained instructions or loaded references; [[runtime/skills-orchestrator/LOADING]] says when to omit the flag. No task memory is automatically created.
 
-Codex installation renders the shared header plus the complete current core, binding its source hash. `inspire` aliases advisory. Theory-reference integration loads its complete shared entry directly; namespaced host guidance preserves conditional Claude notes without editing the submodule. Required references remain selective.
+Codex installation renders the shared header plus the complete current core, binding its source hash. Theory-reference integration loads its complete shared entry directly; namespaced host guidance preserves conditional Claude notes without editing the submodule. Required references remain selective.
 
 Adapters use `context --defer-marker` and `ack-context --session ID --revision HASH_OBJECT` after successful output emission. Acknowledgment accepts exactly four section hashes, no task data or approval claims. Omitted/failed acknowledgment repeats context safely. Direct context callers may use the existing immediate marker behavior; it records assembly, never model retention.
 

@@ -227,6 +227,26 @@ class RepositoryViewTests(unittest.TestCase):
             self.assertIn("listed in `.gitmodules` is a separately owned Git repository", text)
             self.assertIn("protocols/repository/GIT_GOVERNANCE.md", text)
 
+    def test_agent_entries_point_at_the_orchestrator_core_not_the_codex_header(self) -> None:
+        outputs = render_outputs(ROOT)
+        for entry in ("AGENTS.md", "CLAUDE.md"):
+            lines = outputs[entry].splitlines()
+            first_rule = next(
+                line for line in lines[lines.index("## Shared rules") + 1 :] if line.startswith("- ")
+            )
+            text = " ".join(outputs[entry].split())
+            with self.subTest(entry=entry):
+                self.assertIn("follow the Skills Orchestrator (first rule under Shared rules)", text)
+                self.assertIn("The Skills Orchestrator is always active", first_rule)
+                self.assertIn("`runtime/skills-orchestrator/SKILL.md`", first_rule)
+                self.assertNotIn("fast runtime entry", text)
+                self.assertNotIn("`runtime/SKILL.md`", text)
+        for relative in ("docs/SKILLS.md", "docs/00_SKILLS_HUB.md", "runtime/README.md"):
+            text = (ROOT / relative).read_text(encoding="utf-8")
+            with self.subTest(path=relative):
+                self.assertNotIn("compiled entry", text)
+                self.assertNotIn("enter through `runtime/SKILL.md`", text)
+
     def test_generated_graph_nodes_are_uniquely_named_inventory_entries(self) -> None:
         outputs = render_outputs(ROOT)
         orchestrator = outputs["graph/orchestration/skills-orchestrator.md"]

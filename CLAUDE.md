@@ -6,9 +6,10 @@
 during normal routing or task work; use them only when the user explicitly asks
 about the human guide or when synchronizing it after a relevant approved change.
 
-For a request that might benefit from a local skill package, use the fast runtime entry
-in `runtime/SKILL.md`. Do not preload the Markdown hub, activation register,
-family registries, generated human indexes, or skill bodies on the normal path.
+For a request that might benefit from a local skill package, follow the Skills
+Orchestrator (first rule under Shared rules). Do not preload the Markdown hub,
+activation register, family registries, generated human indexes, or skill bodies
+on the normal path.
 
 ## On-demand repository context
 

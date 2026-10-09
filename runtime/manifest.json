@@ -281,11 +281,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "0c2ae3351a3e487d95af4402a651be9cb7cfce84f4ddd1c3d769032b92811a4e",
+  "source_hash": "b93fe5c3f8c6ab9c94f780fbaeebeef2fcb01e190251ff845c1f00da5cf74a02",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "846bb05c75d15a1c5f2ae08cce3806d0580b879b9c84b06ea5aca21e995e7680"
+      "sha256": "195c2a1b22ac812d90488c2347ef6313746ef7c8239e045e68fa3db9f0226bce"
     },
     {
       "path": "registry/activation.md",

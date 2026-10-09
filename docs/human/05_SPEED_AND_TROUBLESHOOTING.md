@@ -102,6 +102,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
+| an agent opens `runtime/SKILL.md` expecting the instructions | that file is only the Codex install header; the instructions are in `runtime/skills-orchestrator/SKILL.md` and its [index](../../runtime/skills-orchestrator/INDEX.md), which `AGENTS.md` and `CLAUDE.md` point to |
 | a rule is not in the compact entry | open the topic the entry names; the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md) lists every topic and what it owns |
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
 | loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |

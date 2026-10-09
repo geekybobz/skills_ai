@@ -28,6 +28,8 @@ flowchart TD
 
 The orchestrator tools return metadata, not a decision. The original request stays with the host model. Discovery is bounded and a first page is not exhaustive. Selection never grants write or external-action permission. Complete obligations must remain available when support is summarized or context is recovered.
 
+An agent that reads the repository starts from `AGENTS.md` or `CLAUDE.md`, which send it to the orchestrator core. The runtime documents then divide the work: [runtime/PROTOCOL.md](../../runtime/PROTOCOL.md) says which layer owns what, [runtime/API_CONTRACT.md](../../runtime/API_CONTRACT.md) lists the commands, and the orchestrator's own topics hold the instructions.
+
 ## Management request
 
 ```mermaid

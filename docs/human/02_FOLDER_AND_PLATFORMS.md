@@ -25,6 +25,8 @@ flowchart TD
 | location | role |
 |---|---|
 | `runtime/skills-orchestrator/` | always-active model-led coordination and on-demand modules |
+| `runtime/README.md`, `PROTOCOL.md`, `API_CONTRACT.md` | map of the runtime, which layer owns what, and the command interface |
+| `runtime/SKILL.md` | Codex install header only; the installer renders it together with the orchestrator core |
 | `runtime/project_context.py` | explicit capsule CLI and validation runtime |
 | `runtime/project-context.schema.json` | strict capsule data contract |
 | `runtime/manifest.json` | generated package and capability metadata |

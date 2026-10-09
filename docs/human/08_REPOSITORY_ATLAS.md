@@ -80,7 +80,7 @@ The [live repository index](_LIVE_REPOSITORY_INDEX.md) is the exhaustive
 generated file reference. The [live skill catalog](_LIVE_SKILL_CATALOG.md) is
 package-first and separates its capability appendix.
 
-The simple commands and visible receipt are defined in runtime/skills-orchestrator/SKILL.md and CONTRACT.md. Their agent-entry projection is generated from runtime/AGENT_ENTRY_SHARED.md. No separate command parser or persistent receipt store is required.
+The simple commands and visible receipt are defined in runtime/skills-orchestrator/SKILL.md and CONTROLS.md. Their agent-entry projection is generated from runtime/AGENT_ENTRY_SHARED.md. No separate command parser or persistent receipt store is required.
 
 For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
 
