@@ -51,7 +51,7 @@ git clone --recurse-submodules https://github.com/geekybobz/skills_ai.git
 
 For an existing clone, populate or refresh the pinned packages with
 `git submodule update --init --recursive`. Until then each empty package is listed
-as `unavailable`. `python3 scripts/verify_all.py` checks every package and the parent in one go, and `skills_ai.code-workspace` opens each repository as its own folder in VS Code. A single package can also be cloned without this registry:
+as `unavailable`, and `scripts/skills_ai status` names the empty folders with that fix. `python3 scripts/verify_all.py` checks every package and the parent in one go, and `skills_ai.code-workspace` opens each repository as its own folder in VS Code. A single package can also be cloned without this registry:
 
 | Package | Standalone repository |
 |---|---|

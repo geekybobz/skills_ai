@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import install_runtime_adapter as installer  # noqa: E402
 import orchestrate  # noqa: E402
+from maintenance import cli as maintenance_cli  # noqa: E402
 from model_context import (  # noqa: E402
     ContextError,
     capability_records,
@@ -100,6 +101,20 @@ class PackageAvailabilityTests(unittest.TestCase):
         listed = {c["capability"]: c for c in status_packet(self.root, self.manifest)["catalog"]["capabilities"]}
         self.assertEqual("PACKAGE_NOT_INITIALIZED", listed["pkg-empty"]["unavailable_reason"])
         self.assertNotIn("unavailable_reason", listed["pkg-full"])
+
+    def test_terminal_status_names_empty_package_folders_and_the_fix(self) -> None:
+        def rendered() -> str:
+            runtime = {"repair": {}, "catalog": status_packet(self.root, self.manifest)["catalog"]}
+            result = {"source": {"revision": "0" * 40, "clean": True}, "runtime": runtime,
+                      "installations": [], "context": "host-supplied"}
+            return maintenance_cli.render({"command": "status", "result": result})
+
+        text = rendered()
+        self.assertIn("Unavailable, empty package folders: pkg-empty\n", text)
+        self.assertIn("Fix: git submodule update --init --recursive", text)
+        (self.root / "pkg-empty" / "SKILL.md").write_text("populated", encoding="utf-8")
+        self.assertNotIn("empty package folders", rendered())
+        self.assertNotIn("submodule update", rendered())
 
     def test_catalog_without_unavailable_packages_has_no_extra_text(self) -> None:
         (self.root / "pkg-empty" / "SKILL.md").write_text("populated", encoding="utf-8")

@@ -81,6 +81,8 @@ Drift is reported for review rather than silently merged or overwritten.
 Status separates source revision, dirty Git state, repair association and installed
 file freshness. An installed copy can become stale after a later source change.
 File freshness does not prove what an existing agent conversation remembers.
+When a package submodule folder is empty, status names the unavailable packages
+and prints the fix, `git submodule update --init --recursive`.
 
 Check uses mapped tests for changed files; --full asks for full local verification.
 Local PASS means those checks passed on the named artifacts. It does not certify

@@ -56,6 +56,11 @@ def render(value):
             lines += ['Working folder: ' + repair['working_root']]
         catalog = data['runtime'].get('catalog', {})
         lines += ['Capabilities: ' + str(catalog.get('total', 'unknown')) + ' (declared packages are skills)']
+        empty = sorted({item.get('package') or item['capability'] for item in catalog.get('capabilities', [])
+                        if item.get('unavailable_reason') == 'PACKAGE_NOT_INITIALIZED'})
+        if empty:
+            lines += ['Unavailable, empty package folders: ' + ', '.join(empty),
+                      'Fix: git submodule update --init --recursive']
         for host in data['installations']:
             lines += [host['host'] + ': ' + host['status'] + ' — ' + host['config_dir']]
         if not data['installations']:
