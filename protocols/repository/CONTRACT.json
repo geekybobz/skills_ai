@@ -366,7 +366,7 @@
         "cards/**",
         "docs/*.md",
         "docs/generated/**",
-        "docs/CLAUDE_VERIFICATION_PROMPT.md",
+        "docs/NATIVE_HOST_ACCEPTANCE.md",
         "docs/SKILLS.md",
         "skills_ai.code-workspace",
         "theory-reference"

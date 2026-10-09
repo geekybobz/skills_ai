@@ -32,7 +32,7 @@ The measurement reports actual context-delivery bytes, zero unchanged continuati
 
 Use disposable configuration directories for installer checks first. Verify exact source binding, one rendered Codex entry, Claude SessionStart and selective UserPromptSubmit delivery, foreign-hook preservation, backups, idempotent installation, bounded deadlines and process-group cleanup. Test startup, resume, clear, compact and fork. Delivery markers record emitted hashes, never retained model context or authority.
 
-Native-host acceptance records actual host/version/configuration, instruction hashes, inputs, responses/tool calls, artifacts, checks and limitations. Test manual/disabled gates, exact multiple targets, conflicting controls, modes, receipts, composition ownership, context recovery and required evidence after optional failure. Codex results do not certify Claude. See [[docs/CLAUDE_VERIFICATION_PROMPT]].
+Native-host acceptance records actual host/version/configuration, instruction hashes, inputs, responses/tool calls, artifacts, checks and limitations. Test manual/disabled gates, exact multiple targets, conflicting controls, modes, receipts, composition ownership, context recovery and required evidence after optional failure. Codex results do not certify Claude. See [[docs/NATIVE_HOST_ACCEPTANCE]].
 
 ## Release boundary
 
