@@ -83,6 +83,7 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/.vscode/extensions.json](../../markdown-protocol/.vscode/extensions.json) | Package support file. |
 | [markdown-protocol/.vscode/settings.json](../../markdown-protocol/.vscode/settings.json) | Package support file. |
 | [markdown-protocol/.vscode/tasks.json](../../markdown-protocol/.vscode/tasks.json) | Package support file. |
+| [markdown-protocol/CHANGELOG.md](../../markdown-protocol/CHANGELOG.md) | Package support file. |
 | [markdown-protocol/INDEX.md](../../markdown-protocol/INDEX.md) | Package support file. |
 | [markdown-protocol/README.md](../../markdown-protocol/README.md) | Human orientation for the package. |
 | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | Skill entry or shared workflow instructions. |
@@ -137,6 +138,7 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/scripts/verify_package.py](../../markdown-protocol/scripts/verify_package.py) | Deterministic support, installation, synchronization, or validation script. |
 | [markdown-protocol/tests/test_checker_regressions.py](../../markdown-protocol/tests/test_checker_regressions.py) | Package support file. |
 | [markdown-protocol/tests/test_cli.py](../../markdown-protocol/tests/test_cli.py) | Package support file. |
+| [markdown-protocol/tests/test_collection_features.py](../../markdown-protocol/tests/test_collection_features.py) | Package support file. |
 | [markdown-protocol/tests/test_package_contract.py](../../markdown-protocol/tests/test_package_contract.py) | Package support file. |
 
 ## theory-reference
