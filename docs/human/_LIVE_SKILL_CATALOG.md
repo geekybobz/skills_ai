@@ -182,8 +182,12 @@ These technical routes select focused instructions inside a public task package.
 
 | Package file | Role |
 |---|---|
+| [research-context-scout/.github/workflows/ci.yml](../../research-context-scout/.github/workflows/ci.yml) | Package support file. |
+| [research-context-scout/.gitignore](../../research-context-scout/.gitignore) | Package support file. |
+| [research-context-scout/CHANGELOG.md](../../research-context-scout/CHANGELOG.md) | Package support file. |
 | [research-context-scout/README.md](../../research-context-scout/README.md) | Human orientation for the package. |
 | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | Skill entry or shared workflow instructions. |
+| [research-context-scout/VERSION](../../research-context-scout/VERSION) | Package support file. |
 | [research-context-scout/agents/openai.yaml](../../research-context-scout/agents/openai.yaml) | Package support file. |
 | [research-context-scout/claude/CLAUDE.md](../../research-context-scout/claude/CLAUDE.md) | Platform wrapper or platform metadata. |
 | [research-context-scout/codex/CODEX.md](../../research-context-scout/codex/CODEX.md) | Platform wrapper or platform metadata. |
@@ -206,6 +210,7 @@ These technical routes select focused instructions inside a public task package.
 | [research-context-scout/shared/rules/relation-taxonomy.md](../../research-context-scout/shared/rules/relation-taxonomy.md) | Reusable constraint shared by multiple phases. |
 | [research-context-scout/shared/rules/source-status.md](../../research-context-scout/shared/rules/source-status.md) | Reusable constraint shared by multiple phases. |
 | [research-context-scout/shared/templates/research-orientation.md](../../research-context-scout/shared/templates/research-orientation.md) | Reusable output template. |
+| [research-context-scout/tests/test_package_contract.py](../../research-context-scout/tests/test_package_contract.py) | Package support file. |
 
 ## optimizer
 
