@@ -85,6 +85,7 @@ These technical routes select focused instructions inside a public task package.
 | [markdown-protocol/.vscode/tasks.json](../../markdown-protocol/.vscode/tasks.json) | Package support file. |
 | [markdown-protocol/CHANGELOG.md](../../markdown-protocol/CHANGELOG.md) | Package support file. |
 | [markdown-protocol/INDEX.md](../../markdown-protocol/INDEX.md) | Package support file. |
+| [markdown-protocol/LICENSE](../../markdown-protocol/LICENSE) | Package support file. |
 | [markdown-protocol/README.md](../../markdown-protocol/README.md) | Orientation for the package. |
 | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | Skill entry or shared workflow instructions. |
 | [markdown-protocol/agents/openai.yaml](../../markdown-protocol/agents/openai.yaml) | Package support file. |
@@ -187,6 +188,7 @@ These technical routes select focused instructions inside a public task package.
 | [research-context-scout/.github/workflows/ci.yml](../../research-context-scout/.github/workflows/ci.yml) | Package support file. |
 | [research-context-scout/.gitignore](../../research-context-scout/.gitignore) | Package support file. |
 | [research-context-scout/CHANGELOG.md](../../research-context-scout/CHANGELOG.md) | Package support file. |
+| [research-context-scout/LICENSE](../../research-context-scout/LICENSE) | Package support file. |
 | [research-context-scout/README.md](../../research-context-scout/README.md) | Orientation for the package. |
 | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | Skill entry or shared workflow instructions. |
 | [research-context-scout/VERSION](../../research-context-scout/VERSION) | Package support file. |
@@ -225,6 +227,7 @@ These technical routes select focused instructions inside a public task package.
 | [optimizer/.github/workflows/ci.yml](../../optimizer/.github/workflows/ci.yml) | Package support file. |
 | [optimizer/.gitignore](../../optimizer/.gitignore) | Package support file. |
 | [optimizer/CHANGELOG.md](../../optimizer/CHANGELOG.md) | Package support file. |
+| [optimizer/LICENSE](../../optimizer/LICENSE) | Package support file. |
 | [optimizer/README.md](../../optimizer/README.md) | Orientation for the package. |
 | [optimizer/SKILL.md](../../optimizer/SKILL.md) | Skill entry or shared workflow instructions. |
 | [optimizer/VERSION](../../optimizer/VERSION) | Package support file. |
