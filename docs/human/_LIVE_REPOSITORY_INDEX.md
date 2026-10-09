@@ -262,6 +262,7 @@ Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive referenc
 | [tests/test_optimizer_skill.py](../../tests/test_optimizer_skill.py) | Parent integration of the optimizer package: manual route and declared aliases. | verification | Shared | test-source |
 | [tests/test_orchestration_state.py](../../tests/test_orchestration_state.py) | Actual checkpoint invalidation, read-only behavior and atomic persistence. | verification | Shared | test-source |
 | [tests/test_orchestrator_layers.py](../../tests/test_orchestrator_layers.py) | Structure of the layered Skills Orchestrator instructions; not semantic certification. | verification | Shared | test-source |
+| [tests/test_package_availability.py](../../tests/test_package_availability.py) | A declared package whose submodule folder is empty is unavailable, with a specific reason and fix. | verification | Shared | test-source |
 | [tests/test_project_context.py](../../tests/test_project_context.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
 | [tests/test_registry_runtime.py](../../tests/test_registry_runtime.py) | Prompt fixtures and unit or lifecycle tests that prove routing, safety, documentation, and maintenance behavior. | verification | Shared | test-source |
 | [tests/test_repair_workspace.py](../../tests/test_repair_workspace.py) | Repair lifecycle and failure tests against private synthetic repositories. | verification | Shared | test-source |

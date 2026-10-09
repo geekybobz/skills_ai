@@ -29,7 +29,7 @@ def core_text(raw: str) -> str:
     return _HOME_FOOTER.sub('\n', _FRONT_MATTER.sub('', raw, count=1), count=1)
 
 
-def read_relative(root: Path, relative: str, *, maximum: int = MAX_FILE_BYTES) -> bytes:
+def _read_secure(root: Path, relative: str, *, maximum: int = MAX_FILE_BYTES) -> bytes:
     """Read one regular file, refusing symlinks at every path component.
 
     Descriptor-relative traversal closes the usual check/open race. Repository
@@ -70,6 +70,11 @@ def read_relative(root: Path, relative: str, *, maximum: int = MAX_FILE_BYTES) -
         if file_fd is not None:
             os.close(file_fd)
         os.close(directory)
+
+
+def read_relative(root: Path, relative: str, *, maximum: int = MAX_FILE_BYTES) -> bytes:
+    """Read an instruction or reference body. Metadata files use _read_secure directly."""
+    return _read_secure(root, relative, maximum=maximum)
 
 
 def _unique_object(pairs):
@@ -174,10 +179,31 @@ def contract_for(root: Path, package_id: str) -> dict | None:
     return _contract_snapshot(root,package_id)[0]
 
 
+def _declared_submodules(root: Path) -> set[str]:
+    """Submodule paths declared in .gitmodules; empty when the file is absent."""
+    try:
+        text = _read_secure(root, '.gitmodules', maximum=65536).decode('utf-8')
+    except (ContextError, UnicodeDecodeError):
+        return set()
+    return {m.group(1) for m in re.finditer(r'^\s*path\s*=\s*(\S+)\s*$', text, re.MULTILINE)}
+
+
+def _package_not_initialized(root: Path, entry: str, declared: set[str]) -> bool:
+    """True for a declared submodule whose folder holds nothing but an optional .git link."""
+    owner = next((path for path in declared if entry == path or entry.startswith(path + '/')), None)
+    if owner is None:
+        return False
+    try:
+        return not any(name != '.git' for name in os.listdir(root / owner))
+    except OSError:
+        return True
+
+
 def capability_records(root: Path, manifest: dict) -> list[dict]:
     """Return metadata only. Unmigrated packages have a clearly marked bridge."""
     records = []
     ids = set()
+    declared = _declared_submodules(root)
     for package_id, package in sorted(manifest['packages'].items()):
         contract, contract_digest = _contract_snapshot(root, package_id)
         caps = contract['capabilities'] if contract else [
@@ -195,7 +221,10 @@ def capability_records(root: Path, manifest: dict) -> list[dict]:
             if component is not None: gates.append(component['state'])
             disabled = next((s for s in (package['state'], *gates) if s in ('off','hidden','deprecated')),None)
             state = disabled or ('manual' if package['state']=='manual' or 'manual' in gates else 'active')
+            empty = state in ('active','manual') and _package_not_initialized(root, cap['entry'], declared)
+            if empty:state = 'unavailable'
             records.append({'package':package_id, 'capability':cap['id'], 'state':state,
+                **({'unavailable_reason':'PACKAGE_NOT_INITIALIZED'} if empty else {}),
                 'entry':cap['entry'], 'purpose':cap['purpose'], 'roles':cap['roles'],
                 'package_role':package.get('role','task'),
                 'not_for':next((r.get('not_for','') for r in manifest['routes'] if r['id']==cap['id']),''),
@@ -247,6 +276,7 @@ def discover(root: Path, manifest: dict, *, offset: int=0, limit: int=8,
 def _available_record(records: dict, capability: str, explicit: bool) -> dict:
     if capability not in records:raise ContextError('UNKNOWN_CAPABILITY')
     record=records[capability]
+    if record['state']=='unavailable':raise ContextError(record['unavailable_reason'])
     if record['state'] not in ('active','manual'):raise ContextError('DISABLED_CAPABILITY')
     if record['state']=='manual' and not explicit:raise ContextError('EXPLICIT_INVOCATION_REQUIRED')
     return record
@@ -321,6 +351,7 @@ def load_capabilities(root: Path, manifest: dict, capabilities: list[str], *, ex
 def load_reference(root: Path, manifest: dict, capability: str, reference: str, *, explicit=False) -> dict:
     record=next((r for r in capability_records(root,manifest) if r['capability']==capability),None)
     if record is None:raise ContextError('UNKNOWN_CAPABILITY')
+    if record['state']=='unavailable':raise ContextError(record['unavailable_reason'])
     if record['state'] not in ('active','manual'):raise ContextError('DISABLED_CAPABILITY')
     if record['state']=='manual' and not explicit:raise ContextError('EXPLICIT_INVOCATION_REQUIRED')
     contract=contract_for(root,record['package'])
@@ -384,7 +415,9 @@ def status_packet(root: Path, manifest: dict, *, project_root=None, session=None
             'catalog':{'source_hash':page['source_hash'],'metadata_hash':page['metadata_hash'],
                        'total':page['total'],'next_offset':page['next_offset'],
                        'capabilities':[{'package':r['package'],'capability':r['capability'],
-                                        'state':r['state']} for r in page['items']]},
+                                        'state':r['state'],
+                                        **({'unavailable_reason':r['unavailable_reason']} if 'unavailable_reason' in r else {})}
+                                       for r in page['items']]},
             'project':_project_receipt(project_root,manifest),
             'repair':_repair_receipt(root,session),
             'host_fields':['effective_controls_and_scope','planned_and_retained_capabilities',
@@ -500,7 +533,10 @@ def compact_catalog(page: dict, *, maximum=8192) -> str:
     lines = []; next_offset = page['next_offset']; shortened = False
     for index, record in enumerate(page['items']):
         view = {k: record[k] for k in ('capability','state')}
-        if record['state'] != 'off':
+        if record['state'] == 'unavailable':
+            view['unavailable_reason'] = record['unavailable_reason']
+            if record['package'] != record['capability']:view['package'] = record['package']
+        elif record['state'] != 'off':
             for key in ('package','entry','purpose','roles','dependencies','references','package_role','not_for','inputs','outputs'):
                 if key not in record:continue
                 value = record[key]
@@ -528,6 +564,8 @@ def compact_catalog(page: dict, *, maximum=8192) -> str:
     if next_offset is not None:
         footer+='More metadata: scripts/orchestrate.py discover --offset '+str(next_offset)+' --metadata-hash '+page['metadata_hash']+' --format text\n'
     if shortened:footer+='Shortened metadata: discover --package EXACT_ID --format json for complete metadata.\n'
+    if any(r.get('unavailable_reason')=='PACKAGE_NOT_INITIALIZED' for r in page['items']):
+        footer+='Unavailable packages are declared submodules without files: git submodule update --init --recursive.\n'
     result=header+''.join(lines)+footer
     if len(result.encode())>maximum:raise ContextError('CATALOG_TOO_LARGE')
     return result

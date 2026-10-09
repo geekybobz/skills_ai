@@ -10,6 +10,15 @@ sys.path.insert(0,str(ROOT/'runtime'))
 from registry_runtime import load_manifest, RegistryRuntimeError
 from model_context import ContextError, discover, load_capability, load_capabilities, load_reference, context_packet, compact_catalog, acknowledge_context, status_packet
 
+# Fixed remediation text for a few reasons; prompt-free and never taken from user input.
+FIXES={'PACKAGE_NOT_INITIALIZED':'git submodule update --init --recursive'}
+
+def error_packet(reason):
+    packet={'schema':'skills-ai/error/1','reason':reason}
+    if reason in FIXES:packet['fix']=FIXES[reason]
+    packet['authority']='none'
+    return packet
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest='action',required=True)
@@ -69,6 +78,6 @@ def main(argv=None):
         return 0
     except (ContextError,RegistryRuntimeError,OSError,ValueError) as exc:
         reason=str(exc) if isinstance(exc,(ContextError,RegistryRuntimeError)) else type(exc).__name__
-        print(json.dumps({'schema':'skills-ai/error/1','reason':reason,'authority':'none'}))
+        print(json.dumps(error_packet(reason)))
         return 2
 if __name__=='__main__':raise SystemExit(main())

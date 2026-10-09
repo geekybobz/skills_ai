@@ -93,7 +93,9 @@ existing skills are adapted one at a time when explicitly named.
 The host uses its ordinary tools when no available local capability suits the
 request. It can still follow the requested interaction style, scope and evidence
 requirements. A missing task skill does not prevent useful authorized work.
-The interaction package can still shape an ordinary response.
+The interaction package can still shape an ordinary response. A package whose
+submodule folder is empty is listed as `unavailable`: the host reports it with the
+fix command and carries on with ordinary work instead of substituting another package.
 
 Resolve the leading `use` and `mode` controls before optional task loading. A named list explicitly requests each target; `use none` skips optional bodies. After minimal inspection, show the task receipt before consequential work and reuse it on routine continuations.
 

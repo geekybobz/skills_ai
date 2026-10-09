@@ -43,6 +43,8 @@ rather than inferred from files. Expand discovery only if remaining pages matter
 
 ## Failure boundaries
 
+A package declared in `.gitmodules` whose folder holds no files is listed with state `unavailable` and `unavailable_reason` `PACKAGE_NOT_INITIALIZED`, and loading it returns that reason with a fixed `fix` (`git submodule update --init --recursive`). Any other missing entry keeps `FILE_UNAVAILABLE`.
+
 Invalid access, malformed/oversized metadata, unsafe paths and unavailable manifests return a prompt-free `skills-ai/error/1` response and exit 2. The Claude hook catches optional-layer failures and emits no context; required evidence and known repair-state boundaries remain unresolved. Missing, invalid, symlinked, oversized or stale capsules contribute status only. Truncated summaries require full validated inspection before consequential work. Stored commands remain advisory and are omitted from ordinary receipts.
 
 Codex consumes the installed entry, whose source-root placeholder is substituted by the installer. Claude injects the shared core plus advisory catalog/capsule records through its managed hook. Both hosts use the same explicit access tools. Neither adapter selects or injects a candidate body. Process tests, live semantic decisions and end-to-end task evidence are separate acceptance layers.

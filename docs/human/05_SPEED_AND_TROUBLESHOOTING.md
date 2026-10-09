@@ -106,7 +106,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | a rule is not in the compact entry | open the topic the entry names; the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md) lists every topic and what it owns |
 | looking for `ACCEPTANCE.json` or the orchestrator's `agents/openai.yaml` | both were removed: nothing read them, and the acceptance file's hashes and test counts were stale; current checks are in each commit's Verification line and the update preview |
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
-| loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |
+| a package is listed `unavailable`, or loading it returns `PACKAGE_NOT_INITIALIZED` | its submodule folder is empty; run `git submodule update --init --recursive`. The catalog, `skills_ai status` and the adapter `--check` all say so, and nothing is substituted. Any other missing entry still returns `FILE_UNAVAILABLE` |
 | parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
 | `git status` shows a modified package folder | decide whether it is the intended pointer move or uncommitted changes inside the package; commit or discard those in the package repository, never through the parent |
 | a push is refused because a package commit is not published | push the package first; `git push --recurse-submodules=check` catches this before the parent is published |

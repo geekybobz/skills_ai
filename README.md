@@ -50,8 +50,8 @@ git clone --recurse-submodules https://github.com/geekybobz/skills_ai.git
 ```
 
 For an existing clone, populate or refresh the pinned packages with
-`git submodule update --init --recursive`. A single package can also be cloned
-without this registry:
+`git submodule update --init --recursive`. Until then each empty package is listed
+as `unavailable`. A single package can also be cloned without this registry:
 
 | Package | Standalone repository |
 |---|---|

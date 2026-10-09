@@ -63,7 +63,8 @@ Skills AI packages are not installed as native Claude skills: a copy under
 `~/.claude/skills/` would be loaded by Claude Code itself and skip the
 orchestrator, so the Claude installer check reports it. That includes a
 standalone package clone. Install the Claude adapter only from a checkout whose
-package submodules are populated.
+package submodules are populated; in a clone without them each empty package is
+listed as `unavailable` with the fix command, and the adapter `--check` warns.
 Neither platform duplicates package triggers, capability selection, project
 context validation, or interaction rules.
 

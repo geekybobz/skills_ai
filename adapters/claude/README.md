@@ -10,8 +10,9 @@ shared rule set in Claude memory.
 
 Install from a checkout whose package submodules are populated: clone with
 `--recurse-submodules`, or run `git submodule update --init --recursive`. With
-empty package folders the hook still lists those packages as available, but
-loading one fails with `FILE_UNAVAILABLE`.
+empty package folders the hook lists those packages as `unavailable` with the
+reason `PACKAGE_NOT_INITIALIZED`, loading one returns that reason with the fix
+command, and `--check` prints a warning that names the empty packages.
 
 Install or verify:
 

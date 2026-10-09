@@ -40,6 +40,7 @@ Its command aliases and phase files are not separate skills.
   internal capabilities appear only in explicit diagnostics.
 - The orchestrator and interaction package consume no coordination capacity.
 - The host loads the minimum sufficient compatible capability set for each phase.
+- A package whose submodule folder is empty is shown as `unavailable`, never as available.
 - Manual packages require exact selection; for example, `#> optimizer`,
   `#> build-system`, and `#> optimize` select the manual Optimizer workflows
   and never activate from ordinary prose. Their scope comes from the explicit request and selected workflow.

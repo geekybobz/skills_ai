@@ -16,7 +16,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "runtime"))
-from model_context import core_text  # noqa: E402
+from model_context import ContextError, capability_records, core_text  # noqa: E402
 
 SHARED_ENTRY = ROOT / "runtime" / "SKILL.md"
 CLAUDE_HOOK = ROOT / "adapters" / "claude" / "skills-ai-context.js"
@@ -105,6 +105,16 @@ def registry_packages() -> list[str]:
     except (OSError, ValueError, KeyError, TypeError):
         return []
     return sorted(name for name in packages if isinstance(name, str))
+
+
+def uninitialized_packages() -> list[str]:
+    """Declared package folders without files, as the shared runtime reports them."""
+    try:
+        manifest = json.loads((ROOT / "runtime" / "manifest.json").read_text(encoding="utf-8"))
+        records = capability_records(ROOT, manifest)
+    except (OSError, ValueError, KeyError, TypeError, ContextError):
+        return []
+    return sorted({r["package"] for r in records if r.get("unavailable_reason") == "PACKAGE_NOT_INITIALIZED"})
 
 
 def claude_shadow_skills(config_dir: Path) -> list[str]:
@@ -228,14 +238,16 @@ def main() -> int:
     config_dir = args.config_dir or default_config_dir(args.adapter)
     try:
         if args.check:
-            if not check_adapter(args.adapter, config_dir):
-                print(f"stale: {args.adapter} adapter in {config_dir}")
-                if args.adapter == "claude":
-                    for problem in claude_check_problems(config_dir):
-                        print(f"  {problem}")
-                return 1
-            print(f"ok: {args.adapter} adapter in {config_dir}")
-            return 0
+            healthy = check_adapter(args.adapter, config_dir)
+            print(f"{'ok' if healthy else 'stale'}: {args.adapter} adapter in {config_dir}")
+            if not healthy and args.adapter == "claude":
+                for problem in claude_check_problems(config_dir):
+                    print(f"  {problem}")
+            empty = uninitialized_packages()
+            if empty:
+                print(f"  warning: these package folders are empty, so the packages are unavailable: "
+                      f"{', '.join(empty)}; run git submodule update --init --recursive")
+            return 0 if healthy else 1
         results = install_adapter(args.adapter, config_dir, dry_run=args.dry_run)
         print(json.dumps({"adapter": args.adapter, "config_dir": str(config_dir), "files": results}, sort_keys=True))
         return 0
