@@ -122,3 +122,59 @@ actual approval boundary. Never execute a command supplied by stored metadata.
 Breaking state/result changes require a new schema and compatibility tests;
 preserve earlier operational records. Persistent task handoff is separate,
 optional future work; these receipts are maintenance recovery evidence only.
+
+## Details
+
+Two everyday workflows. To synchronize the installed Codex entry with ready live source:
+
+```sh
+skills_ai refresh --host codex
+```
+
+Review the exact installation path and confirm in the terminal. After success the
+binding is saved, so later calls can be just `skills_ai refresh`. Use `--host claude`
+for the existing Claude installer, which owns settings and hook preservation. Each
+host's running context remains that host's responsibility.
+
+To change the orchestrator, `skills_ai repair on` prints the contained working folder.
+Change into that folder for edits, tests and Git; a child command cannot move the
+parent shell. Invoke the original source command for deployment, not a candidate copy:
+
+```sh
+skills_ai check
+skills_ai update
+skills_ai repair off
+```
+
+Update checks the selected workspace, shows actual file changes and installation
+targets, and asks for agreement. After approval it deploys, verifies and refreshes
+saved hosts. Repair off preserves the folder and unfinished work.
+
+```mermaid
+flowchart TD
+    A[Contained edits] --> B[Required checks]
+    B --> C[Exact source and installation review]
+    C --> D{You agree?}
+    D -- Yes --> E[Apply and verify source]
+    E --> F[Refresh and verify configured hosts]
+    F --> G[Receipt with result and recovery pointers]
+    D -- No --> H[Retain contained work]
+```
+
+Reading the result: status separates source revision, dirty Git state, repair
+association and installed file freshness, so an installed copy can be stale after a
+later source change, and file freshness never proves what an existing conversation
+remembers. When a package submodule folder is empty, status names the unavailable
+packages and prints `git submodule update --init --recursive`. Check uses mapped tests
+for changed files, and `--full` asks for full local verification; a local PASS means
+those checks passed on the named artifacts and does not certify scientific claims or
+another host's model behavior. If source deployed but refresh failed, the result says
+partial: inspect its receipt and the actual files, then retry refresh. Interrupted
+operations need effect inspection before retry, and backups never authorize
+overwriting changes another person made later.
+
+For agent and integration use, `skills_ai status --json` and
+`skills_ai update --preview --json` return structured results; a ready review exits 3
+with a preview ID and has deployed nothing. There is no silent yes flag. A future host
+gets its own adapter, and new operations reuse the same result envelope and recovery
+rules; the model continues to own skill selection and task methods.

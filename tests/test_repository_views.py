@@ -59,8 +59,8 @@ class RepositoryViewTests(unittest.TestCase):
             {
                 "AGENTS.md",
                 "CLAUDE.md",
-                "docs/human/_LIVE_REPOSITORY_INDEX.md",
-                "docs/human/_LIVE_SKILL_CATALOG.md",
+                "docs/generated/FILE_INDEX.md",
+                "docs/generated/SKILL_CATALOG.md",
                 "graph/orchestration/skills-orchestrator.md",
                 "graph/skills/interaction-protocol.md",
                 "graph/skills/markdown-protocol.md",
@@ -85,13 +85,14 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("Claude-specific access", outputs["CLAUDE.md"])
         self.assertNotIn("Codex-specific access", outputs["CLAUDE.md"])
 
-    def test_human_outputs_are_marked_and_exhaustive(self) -> None:
+    def test_generated_references_are_marked_neutral_and_exhaustive(self) -> None:
         model = load_model(ROOT)
         outputs = render_outputs(ROOT)
-        repository_index = outputs[model["human_outputs"]["repository_index"]]
-        skill_catalog = outputs[model["human_outputs"]["skill_catalog"]]
+        repository_index = outputs[model["generated_references"]["repository_index"]]
+        skill_catalog = outputs[model["generated_references"]["skill_catalog"]]
         for text in (repository_index, skill_catalog):
-            self.assertIn("audience: human", text[:500])
+            self.assertIn("authority: generated-reference", text[:500])
+            self.assertNotIn("audience", text[:500].lower())
             self.assertIn(GENERATED_NOTICE, text[:500])
         self.assertNotIn("classDef", repository_index)
         for path in repository_paths(ROOT, model):
@@ -103,7 +104,7 @@ class RepositoryViewTests(unittest.TestCase):
             self.assertIn(marker, repository_index)
 
     def test_skill_catalog_separates_orchestrator_from_six_skills(self) -> None:
-        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
         orchestrator_section = catalog.split("# Skills Orchestrator", 1)[1].split(
             "# Public Skills", 1
         )[0]
@@ -135,7 +136,7 @@ class RepositoryViewTests(unittest.TestCase):
         self.assertIn("never additional skills", catalog)
 
     def test_orchestrator_and_every_live_skill_have_declared_contents_boundary(self) -> None:
-        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
         orchestrator_contents = catalog.split("# Orchestrator Contents", 1)[1].split(
             "# Skill Contents", 1
         )[0]
@@ -157,7 +158,7 @@ class RepositoryViewTests(unittest.TestCase):
             _token_estimate(external_file, "external-skills/quantum-job-collector/SKILL.md"),
             "—",
         )
-        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
+        catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
         external_section = catalog.split("# Skill Contents", 1)[1].split(
             "## quantum-job-collector", 1
         )[1]
@@ -171,8 +172,8 @@ class RepositoryViewTests(unittest.TestCase):
             "research-context-scout": "shared/SKILL.md",
             "optimizer": "scripts/optimizer_api.py",
         }
-        catalog = render_outputs(ROOT)["docs/human/_LIVE_SKILL_CATALOG.md"]
-        repository_index = render_outputs(ROOT)["docs/human/_LIVE_REPOSITORY_INDEX.md"]
+        catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
+        repository_index = render_outputs(ROOT)["docs/generated/FILE_INDEX.md"]
         for package, relative in expected_files.items():
             package_file = ROOT / package / relative
             self.assertNotEqual(
@@ -190,9 +191,8 @@ class RepositoryViewTests(unittest.TestCase):
             repository_index,
         )
         self.assertIn("codex/SKILL.md]", repository_index)
-        self.assertIn("| Codex |", repository_index)
         self.assertIn("claude/CLAUDE.md]", repository_index)
-        self.assertIn("| Claude |", repository_index)
+        self.assertNotIn("| Audience |", repository_index)
 
     def test_declared_submodules_match_gitmodules_and_track_main(self) -> None:
         declared = {

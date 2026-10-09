@@ -1,6 +1,6 @@
 # Skills Hub
 
-Human-readable maintenance hub. The always-active
+Maintenance hub. The always-active
 [[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] is a compact core delivered to
 the host: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
 

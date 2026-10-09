@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate shared agent entries and exhaustive human repository views."""
+"""Generate shared agent entries, generated references and inventory graph nodes."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ def load_model(root: Path = ROOT) -> dict[str, Any]:
         raise ViewError(f"cannot read {MODEL_PATH}: {type(exc).__name__}") from exc
     if model.get("version") != 1:
         raise ViewError("unsupported documentation model version")
-    for key in ("areas", "agent_entries", "human_outputs", "orchestrator", "packages"):
+    for key in ("areas", "agent_entries", "generated_references", "orchestrator", "packages"):
         if key not in model:
             raise ViewError(f"documentation model is missing {key}")
     return model
@@ -64,7 +64,7 @@ def _excluded(path: str, model: dict[str, Any]) -> bool:
 
 
 def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
-    # Human views describe tracked files plus untracked additions that already
+    # Generated references describe tracked files plus untracked additions that already
     # resolve to a declared repository role. Arbitrary scratch files therefore
     # cannot make generated documentation stale, while a legitimate new source
     # can enter the maintenance transaction before it is staged.
@@ -84,7 +84,7 @@ def repository_paths(root: Path, model: dict[str, Any]) -> list[str]:
     paths.add(model["agent_entries"]["common"])
     paths.update(model["agent_entries"]["outputs"].keys())
     paths.update(model["agent_entries"]["outputs"].values())
-    paths.update(model["human_outputs"].values())
+    paths.update(model["generated_references"].values())
     paths.add(model["orchestrator"]["graph_entry"])
     paths.update(package["graph_entry"] for package in model["packages"])
     for package in model["packages"]:
@@ -197,24 +197,7 @@ def _purpose(
         return area["purpose"]
     if relative.startswith("."):
         return "Repository configuration or support metadata."
-    raise ViewError(f"no human explanation can be derived for repository path: {relative}")
-
-
-def _audience(path: str, model: dict[str, Any]) -> str:
-    if path == "AGENTS.md" or path.startswith("adapters/codex/"):
-        return "Codex"
-    if path == "CLAUDE.md" or path.startswith("adapters/claude/"):
-        return "Claude"
-    if path == "README.md" or path.startswith("docs/human/"):
-        return "Human"
-    package = _package_for_path(path, model)
-    if package and package.get("traversal") == "repository" and Path(path).name == "README.md":
-        return "Human"
-    if package and "/codex/" in path:
-        return "Codex"
-    if package and "/claude/" in path:
-        return "Claude"
-    return "Shared"
+    raise ViewError(f"no explanation can be derived for repository path: {relative}")
 
 
 def _inventory_units(model: dict[str, Any]) -> list[dict[str, Any]]:
@@ -247,8 +230,6 @@ def _kind(path: str, generated: set[str], roles: list[str], model: dict[str, Any
         return "skill source"
     if "test-source" in roles:
         return "verification"
-    if "human-guide" in roles:
-        return "explanation"
     if path.endswith(("CONTRACT.json", "DOCUMENTATION.json")):
         return "canonical contract"
     return "source/support"
@@ -258,14 +239,14 @@ def _escape(value: object) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ").strip()
 
 
-def _link_from_human(path: str) -> str:
+def _link_from_reference(path: str) -> str:
     return f"../../{path}"
 
 
 def _file_cell(path: str, model: dict[str, Any]) -> str:
     if _is_external_pointer(path, model):
         return f"`{_escape(path)}`"
-    return f"[{_escape(path)}]({_link_from_human(path)})"
+    return f"[{_escape(path)}]({_link_from_reference(path)})"
 
 
 def render_agent_entries(root: Path, model: dict[str, Any]) -> dict[str, str]:
@@ -288,7 +269,7 @@ def render_repository_index(
 ) -> str:
     generated = {
         *model["agent_entries"]["outputs"].keys(),
-        *model["human_outputs"].values(),
+        *model["generated_references"].values(),
         *contract.get("generated_outputs", {}).keys(),
     }
     route_by_path = {route["path"]: route for route in manifest["routes"]}
@@ -303,23 +284,21 @@ def render_repository_index(
             "| "
             + f"{_file_cell(relative, model)} | "
             + f"{_escape(purpose)} | {_kind(relative, generated, roles, model)} | "
-            + f"{_audience(relative, model)} | {_escape(role_text)} |"
+            + f"{_escape(role_text)} |"
         )
     return (
         "---\n"
-        "audience: human\n"
-        "authority: generated-explanatory-only\n"
-        "agent_read_policy: explicit-human-guide-task-or-doc-sync-only\n"
+        "authority: generated-reference\n"
         "generated: true\n"
         "---\n\n"
         f"{GENERATED_NOTICE}\n\n"
-        "# Live Repository Index\n\n"
-        "Back to the [repository atlas](08_REPOSITORY_ATLAS.md). This exhaustive "
+        "# File Index\n\n"
+        "Back to the [README](../../README.md). This exhaustive "
         "reference is generated from Git, the repository contract, registry metadata, "
-        "file introductions, and deterministic fallbacks. It explains files but never "
+        "file introductions, and deterministic fallbacks. It describes files but never "
         "overrides their canonical content.\n\n"
-        "| File | What it means | Kind | Audience | Maintenance role |\n"
-        "|---|---|---|---|---|\n"
+        "| File | What it means | Kind | Maintenance role |\n"
+        "|---|---|---|---|\n"
         + "\n".join(rows)
         + "\n"
     )
@@ -359,7 +338,7 @@ def _package_paths(root: Path, package: dict[str, Any], main_paths: Iterable[str
 def _package_file_role(path: str) -> str:
     name = Path(path).name
     if name == "README.md":
-        return "Human orientation for the package."
+        return "Orientation for the package."
     if name == "SKILL.md":
         return "Skill entry or shared workflow instructions."
     if name in {"AGENTS.md", "CLAUDE.md", "CODEX.md"} or "/codex/" in path:
@@ -382,7 +361,7 @@ def _obsidian_target(path: str) -> str:
 
 
 def render_graph_entries(model: dict[str, Any], manifest: dict[str, Any]) -> dict[str, str]:
-    """Generate uniquely named human graph nodes from canonical inventory data."""
+    """Generate uniquely named inventory graph nodes from canonical inventory data."""
     orchestrator = model["orchestrator"]
     live_orchestrator = manifest["orchestrator"]
     skill_links = [
@@ -515,7 +494,7 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
         "| Orchestrator file | Role |",
         "|---|---|",
         *(
-            f"| [{_escape(path)}]({_link_from_human(path)}) | {_package_file_role(path)} |"
+            f"| [{_escape(path)}]({_link_from_reference(path)}) | {_package_file_role(path)} |"
             for path in orchestrator_paths
         ),
     ]
@@ -543,7 +522,7 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
             continue
         package_sections.extend(["| Package file | Role |", "|---|---|"])
         package_sections.extend(
-            f"| [{_escape(path)}]({_link_from_human(path)}) | {_package_file_role(path)} |"
+            f"| [{_escape(path)}]({_link_from_reference(path)}) | {_package_file_role(path)} |"
             for path in paths
         )
         package_sections.append("")
@@ -552,14 +531,12 @@ def render_skill_catalog(root: Path, model: dict[str, Any], manifest: dict[str, 
     deprecated = sum(package["state"] == "deprecated" for package in manifest_packages.values())
     return (
         "---\n"
-        "audience: human\n"
-        "authority: generated-explanatory-only\n"
-        "agent_read_policy: explicit-human-guide-task-or-doc-sync-only\n"
+        "authority: generated-reference\n"
         "generated: true\n"
         "---\n\n"
         f"{GENERATED_NOTICE}\n\n"
-        "# Live Skill Catalog\n\n"
-        "Back to [skill anatomy](09_SKILL_ANATOMY.md). This page is generated from "
+        "# Skill Catalog\n\n"
+        "Back to the [skills registry entry](../SKILLS.md). This page is generated from "
         "the canonical registry and declared inventory boundaries. The always-active "
         "orchestrator is shown separately and never counted as a skill. Public skill inventory "
         "counts packages only; routes, modes, components, and files are internal capabilities, "
@@ -593,10 +570,10 @@ def render_outputs(root: Path = ROOT) -> dict[str, str]:
     contract = load_contract(root)
     manifest = build_manifest(root)
     outputs = render_agent_entries(root, model)
-    outputs[model["human_outputs"]["repository_index"]] = render_repository_index(
+    outputs[model["generated_references"]["repository_index"]] = render_repository_index(
         root, model, contract, manifest
     )
-    outputs[model["human_outputs"]["skill_catalog"]] = render_skill_catalog(
+    outputs[model["generated_references"]["skill_catalog"]] = render_skill_catalog(
         root, model, manifest
     )
     outputs.update(render_graph_entries(model, manifest))

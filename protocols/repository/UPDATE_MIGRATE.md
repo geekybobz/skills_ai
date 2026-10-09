@@ -12,8 +12,8 @@ generated representation, or persistent-state change.
 6. Do not remove old persistent state during the first migration phase unless
    the user explicitly authorizes its exact deletion.
 7. Test the shared contract first, then each affected platform separately.
-8. Update build, API, protocol, installation, troubleshooting, and every mapped
-   human-facing page in the same staged change.
+8. Update build, API, protocol, installation and troubleshooting documents, and
+   the explanation that sits with each changed rule, in the same staged change.
 9. Run the changed and staged scans. Commit migration context and measured
    verification, not only file names. A change that moves a submodule pointer
    also follows [[GIT_GOVERNANCE]].

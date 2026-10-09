@@ -66,11 +66,24 @@ class OrchestratorLayerTests(unittest.TestCase):
                 with self.subTest(page=page.name, target=target):
                     self.assertTrue((page.parent / target).resolve().is_file())
 
-    def test_entry_names_exactly_the_topics_that_exist(self) -> None:
+    def test_entry_names_exactly_the_operational_topics_and_depth_stays_in_the_index(self) -> None:
         entry = core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8"))
         named = set(re.findall(r"`([A-Z]+\.md)`", entry))
+        depth = {"GUIDE.md", "TROUBLESHOOTING.md"}
         existing = {page.name for page in self.pages()} - {"SKILL.md"}
-        self.assertEqual(existing, named)
+        self.assertEqual(existing - depth, named)
+        index = (FOLDER / "INDEX.md").read_text(encoding="utf-8")
+        for page in depth:
+            with self.subTest(depth=page):
+                self.assertIn(f"]({page})", index)
+                self.assertNotIn(page, entry)
+
+    def test_no_separate_audience_layer_remains(self) -> None:
+        self.assertFalse((ROOT / "docs" / "human").exists())
+        self.assertFalse((ROOT / "scripts" / "human_docs_guard.py").exists())
+        for page in [ROOT / "README.md", *self.pages()]:
+            with self.subTest(page=page.name):
+                self.assertNotIn("audience:", page.read_text(encoding="utf-8")[:200])
 
     def test_no_checked_in_acceptance_record_and_build_says_where_evidence_lives(self) -> None:
         self.assertFalse((FOLDER / "ACCEPTANCE.json").exists())

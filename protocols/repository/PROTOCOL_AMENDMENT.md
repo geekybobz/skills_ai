@@ -16,7 +16,7 @@ Operations and platforms affected:
 Compatibility impact:
 New tests:
 Graph-layer and colour-query impact:
-Human-guide pages affected:
+Explanations affected (owning files and depth topics):
 Migration and rollback:
 Permission requested:
 ```
@@ -27,22 +27,23 @@ history preserves the motivation. Recheck protocols after repeated exceptions,
 source-of-truth conflicts, new irreversible actions, host-specific divergence,
 or a validation gap. Any new graph layer or colour must update
 `docs/05_COLOR_LAYERS.md`, the live Obsidian groups, and the graph validator in
-the same approved amendment. Any mapped canonical change must update the
-corresponding derivative human pages in the same staged change.
+the same approved amendment. A changed rule must update the explanation that
+sits with it, under its `## Details` or in its folder's depth topic, in the same
+staged change.
 
-Changing `CONTRACT.json`, scanner severities, executable check mappings, or the
-human-guide rendering limits is itself a protocol amendment. Run the protocol
+Changing `CONTRACT.json`, scanner severities, or executable check mappings is
+itself a protocol amendment. Run the protocol
 plan before editing and both changed and staged scans after editing.
 
 Changing `DOCUMENTATION.json`, shared agent-entry generation, platform overlays,
-generated human indexes, or the source-to-projection rules is also a protocol
+generated references, or the source-to-projection rules is also a protocol
 amendment. Keep the architecture rationale in
 [[docs/SHARED_DOCUMENTATION_MODEL]], regenerate all affected projections, and
-verify that ordinary routing still excludes human-facing material.
+verify that ordinary routing still excludes depth and generated references.
 
 ## Current contract
 
-Protocol version 18 keeps these boundaries:
+Protocol version 19 keeps these boundaries:
 
 - The host model owns intent, compatible capability selection, methods, modes,
   composition and evidence assessment. Local tools check artifacts and expose
@@ -53,8 +54,10 @@ Protocol version 18 keeps these boundaries:
   host permissions, manual/disabled gates and external-action boundaries remain
   separate from selection and stored state.
 - Repository roles, graph layers and generated source-to-view mappings stay
-  explicit. Generated human-guide freshness differs from hand-written coverage;
-  human guides remain outside ordinary runtime loading.
+  explicit. Documentation is one structure organized by depth: a rule's explanation
+  lives with its owner, under `## Details` or in a depth topic its folder's index
+  lists, and there is no parallel audience tree. Generated references differ from
+  hand-written explanation, and depth stays outside ordinary runtime loading.
 - Initial `skill-plans/*/plan.md` ideas remain proposals until explicit promotion.
   Tasks started outside this maintenance workspace use [[EXTERNAL_CHANGE_REQUEST]].
 - Chat-scoped repair uses the source-owned controller and retained rollback.

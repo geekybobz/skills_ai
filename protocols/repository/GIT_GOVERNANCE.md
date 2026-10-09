@@ -13,7 +13,7 @@ user's instruction for the exact action, and no tool performs them on its own.
 
 | repository | owns | must not contain |
 |---|---|---|
-| Skills AI (parent) | orchestrator and tools, adapters, registry and activation, integration contracts, governance, generated views, integration tests, human guide, the in-tree `interaction-protocol`, `.gitmodules` and submodule pointers, the on-demand `scripts/verify_all.py`, its CI workflow and the VS Code workspace file | a child's files, copies of a child's instructions, new tests of a child's wording or behavior |
+| Skills AI (parent) | orchestrator and tools, adapters, registry and activation, integration contracts, governance, generated views, integration tests, the in-tree `interaction-protocol`, `.gitmodules` and submodule pointers, the on-demand `scripts/verify_all.py`, its CI workflow and the VS Code workspace file | a child's files, copies of a child's instructions, new tests of a child's wording or behavior |
 | Skill repository (child) | `SKILL.md` and its references, phases, scripts, templates and assets; host wrappers; its own tests; a README with clone, install, update and rollback; `VERSION`, `CHANGELOG.md`, LICENSE, `.gitignore`, CI | registry or activation files, absolute paths into the parent, a required dependency on the parent's tools |
 
 The packages stored as Git submodules are the entries of `.gitmodules`; each is a
@@ -142,9 +142,8 @@ with a dry run and delete only on instruction. No tool deletes them automaticall
 
 ## Enforcement today
 
-The consistency scan blocks staged paths outside the declared scope, stale
-generated views and missing human-page updates, and its views and unit checks
-need populated submodules. The shared runtime marks a declared package with an
+The consistency scan blocks staged paths outside the declared scope and stale
+generated views, and its views and unit checks need populated submodules. The shared runtime marks a declared package with an
 empty submodule folder `unavailable` in the catalog, refuses to load it with
 `PACKAGE_NOT_INITIALIZED` and its fix, and the adapter `--check` warns.
 `python3 scripts/verify_all.py` runs each package's own checks and then the
@@ -186,6 +185,20 @@ after reading CHANGELOG.md. Version: VERSION. Roll back with git revert or a
 checkout of an earlier tag. Skills AI integration is optional; this repository
 needs nothing from it.
 ```
+
+Common situations:
+
+| situation | action |
+|---|---|
+| a declared package folder is empty or listed as `unavailable` | initialize it: `git submodule update --init --recursive` |
+| `git status` shows a modified package folder | decide whether it is the intended pointer move or uncommitted changes inside the package; commit or discard those in the package repository, never through the parent |
+| a push is refused because a package commit is not published | push the package first; `git push --recurse-submodules=check` catches this before the parent is published |
+| the parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
+
+Cleanup preserves local learning material and active repair work. Abandoned copies are
+archived and verified before removal, redundant branches are deleted only after their
+commits are retained, and a clean canonical Git checkpoint records the intended current
+version without resetting existing work.
 
 Per-clone settings (local to one clone; none are applied automatically):
 

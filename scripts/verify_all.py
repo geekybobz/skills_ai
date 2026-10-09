@@ -26,7 +26,6 @@ PARENT_GATES = (
     ("generated registry", ("scripts/compile_registry.py", "--check")),
     ("generated views", ("scripts/compile_repository_views.py", "--check")),
     ("graph layers", ("scripts/graph_layers.py", "--check")),
-    ("human guide", ("scripts/human_docs_guard.py", "--check")),
     ("registry validation", ("scripts/validate_registry.py",)),
     ("activation register", ("scripts/toggle_registry.py", "--check")),
     ("delivery budgets", ("scripts/measure_context.py",)),

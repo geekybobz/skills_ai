@@ -102,8 +102,8 @@ class ChangeGuardTests(unittest.TestCase):
         report = assess_change("edit", ["registry/optimizer.md"])
         self.assertEqual(
             [
-                "docs/human/_LIVE_REPOSITORY_INDEX.md",
-                "docs/human/_LIVE_SKILL_CATALOG.md",
+                "docs/generated/FILE_INDEX.md",
+                "docs/generated/SKILL_CATALOG.md",
                 "runtime/manifest.json",
             ],
             report["affected_generated_outputs"],

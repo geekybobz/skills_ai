@@ -45,9 +45,9 @@ flowchart LR
   class F L5
 ```
 
-**Solid arrows are the agent's read path**: L0 -> an L1 hub -> the L1 activation
-switchboard -> one L2 family registry -> L4. L3 is dotted because it is a human/graph layer: it
-enriches the graph but is never on the agent's critical path.
+**Solid arrows are the routing read path**: L0 -> an L1 hub -> the L1 activation
+switchboard -> one L2 family registry -> L4. L3 is dotted because it is graph context: it
+enriches the graph but is never on the critical routing path.
 
 ## L3 Cards
 
@@ -71,15 +71,15 @@ first matching group is the file's layer. Exact L1 hub and switchboard paths
 therefore appear before the `registry/` and support fallbacks. Activation, the
 Skills Orchestrator, and every declared graph-concept entry are L1 teal; family
 registry files are L2 green; public skill entries, capability instructions, and
-phases are L4 violet. Operation cards,
-build/release guidance, and the derivative human guide remain L5 support.
+phases are L4 violet. Operation cards
+and build/release guidance remain L5 support.
 
 ## Default overview
 
 The global graph opens with low-level maintenance paths filtered out:
 
 ```text
--path:docs/human/ -path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/ -path:interaction-protocol/ -path:markdown-protocol/ -path:optimizer/ -path:research-context-scout/ -path:theory-reference/ -path:external-skills/
+-path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/ -path:interaction-protocol/ -path:markdown-protocol/ -path:optimizer/ -path:research-context-scout/ -path:theory-reference/ -path:external-skills/
 ```
 
 This changes only the default view. Generated `graph/` nodes keep the
@@ -128,3 +128,35 @@ amendment.
 
 A family large enough to need internal sub-routing gets sections inside its single
 L2 file — not a second hop. The two-read budget is the point of the design.
+
+## Details
+
+Colour describes architectural role, not topic, and public packages do not receive
+individual colours. Graph nodes describe current sources; archived copies and Git history
+do not add inventory entries or skill counts. The overview shows one named orchestrator
+node and one named node per public skill, and technical entries such as `SKILL.md`
+remain reachable through those nodes. Local repair copies, rollback archives and
+personal course notes are outside the public inventory and the generated file index.
+
+Graph validation reports file nodes by architectural layer. A skill may own many violet
+capability or phase files, so the violet count must never be quoted as the number of
+skills: the public skill count comes only from Activation's package table. A
+`skill-plans/*/plan.md` document is not a package or capability, and the plan path is
+excluded from graph nodes and skill counts.
+
+The manual `optimizer/` package is an L4 violet collection like other public package
+entries. Its generated node, `graph/skills/optimizer.md`, stays visible in the overview
+even though the technical package path is filtered out; use Obsidian's Quick Switcher to
+open `Optimizer`, or filter with `path:graph/skills/optimizer.md`, to inspect that
+workflow alone. `research-context-scout/` and `markdown-protocol/` are likewise normal
+L4 collections whose README, root entry, shared phases, wrappers and small formatting
+examples stay linked as one package. `registry/interaction.md` is an L2 green family
+registry; the visible [[interaction-protocol/README|Interaction Protocol hub]] is L1 teal
+and links the skills hub, activation, registry, canonical JSON contract, runtime, API and
+tests, and the [[docs/SHARED_DOCUMENTATION_MODEL|Shared Documentation Model]] is also an
+L1 hub. JSON and test files remain slate support rather than extra hubs.
+
+If a temporary graph search makes a node appear missing, clear that search before
+treating it as a graph-structure problem. The filter deletes and unlinks nothing; zoom,
+force settings, orphan visibility and collapsed panels remain personal view state, and
+colour-group synchronization preserves them.

@@ -5,7 +5,7 @@ literature discovery, extracted-corpus synthesis, project-notation translation
 and evidence-gated iterative review.
 
 Back to [[docs/00_SKILLS_HUB|Skills Hub]] · State:
-[[registry/activation|Activation Register]] · Human guide:
+[[registry/activation|Activation Register]] · Package:
 [[research-context-scout/README|Research Context Scout]]
 
 ## Package Capability

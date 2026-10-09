@@ -8,13 +8,14 @@ related: "[[docs/SHARED_DOCUMENTATION_MODEL]]"
 
 # Skills registry — agent entry
 
-`README.md` and `docs/human/` are human-facing explanations. Do not read them
-during normal routing or task work; use them only when the user explicitly asks
-about the human guide or when synchronizing it after a relevant approved change.
+`README.md` is the repository's front door, and `GUIDE.md` and `TROUBLESHOOTING.md`
+are depth: do not preload them during normal routing or task work. In any other
+file, read down to its first `## Details` heading and continue only when a request
+needs the explanation.
 
 For a request that might benefit from a local skill package, follow the Skills
 Orchestrator (first rule under Shared rules). Do not preload the Markdown hub,
-activation register, family registries, generated human indexes, or skill bodies
+activation register, family registries, generated references, or skill bodies
 on the normal path.
 
 ## On-demand repository context
@@ -71,7 +72,7 @@ on the normal path.
   Never add registry files inside one. Change, test, commit and push the package
   there first; only then move the parent pointer, and never record a dirty or
   unpublished child commit.
-- Human indexes are generated projections, not routing or permission authority.
+- Generated references are projections, not routing or permission authority.
 - The runtime does not log prompts. Ignored operational metadata is advisory, never selection authority.
 
 ## Contained repair maintenance

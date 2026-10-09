@@ -8,8 +8,8 @@ installation, and public behavior.
    and impact closure instead of manually guessing consumers.
 3. Edit the canonical source; never hand-edit a generated mirror.
 4. Preserve unrelated formatting, behavior, and user content.
-5. Check `docs/human/_SOURCE_MAP.json`. If the edited source is mapped, update
-   every listed human page in the same staged change.
+5. Update the explanation that sits with the edited rule (its `## Details` or the
+   depth topic its folder's index lists) in the same change.
 6. Inspect the file-specific diff and run focused tests. The AI review decides
    whether wording changed semantics; deterministic findings remain binding.
 7. Run the changed and staged scans, then report the behavioral effect and any

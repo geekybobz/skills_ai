@@ -10,7 +10,7 @@ Shared Python owns bounded metadata compilation, prompt-free context assembly, e
 
 A single Claude run budget bounds input, Python child execution, core reading and output. The child deadline is shorter than the remaining hook budget; timeout terminates and reaps its process group, including interpreter shims. Host cancellation during input returns a prompt-free reason. The hook does not forward task input to the child. No background watcher, indexer, updater or new ambiguity logger is started.
 
-Local governance scanners inspect repository artifacts; they do not determine the meaning of a user task. External maintenance tasks retain the request-only packet boundary. Generated entries and human guides are projections, not runtime selection or permission authority.
+Local governance scanners inspect repository artifacts; they do not determine the meaning of a user task. External maintenance tasks retain the request-only packet boundary. Generated entries and references are projections, not runtime selection or permission authority.
 
 Contained maintenance uses `#> repair on/off` and `#> update` under [[protocols/repository/REPAIR_WORKSPACE]]; status, repair and update procedures are in [[runtime/skills-orchestrator/MANAGEMENT]]. The host interprets these controls. Source-owned tools snapshot, inspect and transact exact files; they never parse task text or approve deployment. Host-session metadata supports bounded association recovery, not global activation.
 

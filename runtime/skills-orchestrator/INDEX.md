@@ -20,7 +20,8 @@ topic only when the entry names it.
 | Find a command or response shape | [API contract](../API_CONTRACT.md) |
 | Change any repository file | [Change control](../../docs/06_CHANGE_CONTROL.md) |
 | Commit, tag, push, move a submodule pointer or roll back | [Git governance](../../protocols/repository/GIT_GOVERNANCE.md) |
-| Learn the architecture step by step | [Walkthrough](../../docs/human/10_MODEL_LED_ORCHESTRATOR.md) |
+| Learn the architecture step by step, with examples | [GUIDE.md](GUIDE.md) |
+| Diagnose slowness, a stale file or an odd error | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) |
 
 ## Orientation
 
@@ -34,8 +35,9 @@ flowchart LR
 ```
 
 Text version: `SKILL.md` is the compact operational entry, `INDEX.md` is the
-navigation map, each topic owns one subject, and the walkthrough and the
-`## Details` blocks are optional depth that never add a rule.
+navigation map, each topic owns one subject, and [GUIDE.md](GUIDE.md),
+[TROUBLESHOOTING.md](TROUBLESHOOTING.md) and the `## Details` blocks are optional
+depth that never add a rule.
 
 ## Topics
 
@@ -49,6 +51,8 @@ navigation map, each topic owns one subject, and the walkthrough and the
 | [MANAGEMENT.md](MANAGEMENT.md) | management operations, status, repair and update lifecycle, terminal interface | maintenance requests |
 | [CONTRACT.md](CONTRACT.md) | responsibilities, package boundary, rule strengths, result labels, portability | integrating a package or settling a rule's force |
 | [BUILD.md](BUILD.md) | build phases, verification, package documentation rule, replacement and restoration | building, documenting or verifying |
+| [GUIDE.md](GUIDE.md) | depth: why it exists, request flow, vocabulary, examples, promises, capsule, result terms | learning the system; never needed for a rule |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | depth: hot-path loading, measurement, bounds, quick diagnosis | something is slow, stale or failing |
 
 ## Maintenance boundaries
 
@@ -60,8 +64,8 @@ navigation map, each topic owns one subject, and the walkthrough and the
   procedure belongs to [change control](../../docs/06_CHANGE_CONTROL.md) and its
   cards.
 - The orchestrator is not a skill and is never counted as one. Registry state, graph
-  nodes and human pages are projections or explanations of these files and never
-  routing or permission authority.
+  nodes and generated references are projections of these files and never routing
+  or permission authority.
 
 ---
 

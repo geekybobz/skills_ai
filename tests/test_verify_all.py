@@ -66,7 +66,6 @@ class VerifyAllTests(unittest.TestCase):
                 "generated registry",
                 "generated views",
                 "graph layers",
-                "human guide",
                 "registry validation",
                 "activation register",
                 "delivery budgets",

@@ -22,7 +22,7 @@ explicitly requests implementation or creation of `SKILL.md`.
 7. Compile the manifest after routing-source changes.
 8. Validate links, paths, graph layers, selection behavior, token load, and
    focused tests. Run `python3 scripts/graph_layers.py --check` for Markdown
-   and update every human page mapped from the new canonical source.
+   and write the new source's explanation under its `## Details` or depth topic.
 9. Run the changed and staged consistency scans. Report why the addition exists
    and what was deliberately left unchanged.
 

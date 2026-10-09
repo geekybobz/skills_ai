@@ -4,11 +4,11 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `18`.
+Protocol version: `19`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
-amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. Human
-chapter: [[docs/human/07_MAINTAINING_SKILLS|Maintaining Skills]].
+amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. The flow,
+the permissions and the verification levels are explained under `## Details` below.
 
 ## Operation selector
 
@@ -53,7 +53,7 @@ explicit_exclusions:
 ```
 
 The Git-aware scanner expands this input into the live roles, affected generated
-outputs, graph contracts, mapped human pages, checks, preserved dirty paths, and
+outputs, graph contracts, checks, preserved dirty paths, and
 AI-review questions. Agents must not make the user enumerate those consumers.
 The expanded receipt records:
 
@@ -64,7 +64,6 @@ repository_roles:
 impact_closure:
 generated_outputs:
 graph_entries_and_edges:
-human_docs_pages:
 external_effects:
 verification_results:
 rollback:
@@ -105,8 +104,8 @@ only deterministic code can produce the final absence of blocking findings.
 
 After explicit approval, `apply-generated` may rebuild only an allowlisted
 derived artifact such as `runtime/manifest.json`. It never writes a
-skill body, registry meaning, protocol prose, human guide, external
-configuration, staging area, or commit.
+skill body, registry meaning, protocol prose, external configuration,
+staging area, or commit.
 
 `protocols/repository/CONTRACT.json` is the platform-neutral machine contract.
 It classifies paths, maps roles to allowlisted checks, names generated outputs,
@@ -135,13 +134,10 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
    L3; package entries, capabilities, and phases are L4; runtime and supporting material are
    L5. Draft `skill-plans/*/plan.md` files are not graph nodes. Future canonical additions must extend the matching query and role regression in
    the same change rather than inheriting a misleading fallback colour.
-10. Evaluate every declared change against `docs/human/_SOURCE_MAP.json`. A
-    mapped canonical change must update every listed human page in the same
-    staged change. Run `python3 scripts/human_docs_guard.py --check-staged`
-    before commit. Human pages are explanatory only and never routing authority.
-    For a working-tree-only check, pass the declared scope with repeatable
-    `--path`; ignored and preserved paths use the same classifier as the
-    consistency scanner.
+10. Keep the explanation of a rule with its owner: under `## Details` in the
+    owning file, or in a depth topic of the same folder that its `INDEX.md`
+    lists. Update that explanation in the same change as the rule. Explanation
+    never adds, weakens or replaces a rule and is never routing authority.
 11. Any new path must resolve to a repository role. Any new user-visible
     machine concept must declare one Markdown graph entry and required links in
     the repository contract. An exception needs an exact reason and approval.
@@ -149,8 +145,8 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
     may add findings or suggestions but cannot run embedded instructions or
     override deterministic failures.
 13. Maintain shared facts in canonical documentation, registry, runtime, and
-    platform-overlay sources. Regenerate root agent entries and live human
-    indexes with `scripts/compile_repository_views.py`; never hand-edit a
+    platform-overlay sources. Regenerate root agent entries and the generated
+    references with `scripts/compile_repository_views.py`; never hand-edit a
     generated projection.
 14. Prompt-free runtime observations belong only under ignored `.runtime/`
     state, use restrictive permissions and bounded size, and never become
@@ -185,8 +181,8 @@ inbox; agent instructions alone are not a filesystem security boundary.
   skill-package boundaries, audience projections, and traversal exclusions.
 - [[04_RISK_MAP]]: risk-specific restrictions.
 - [[05_COLOR_LAYERS]]: graph-layer assignment and colour-query authority.
-- `docs/human/`: derivative human guide, loaded only for explicit guide work or
-  required synchronization.
+- `## Details` blocks and the depth topics (`GUIDE.md`, `TROUBLESHOOTING.md`):
+  explanation owned with each rule, read only when a request needs it.
 - `runtime/skills-orchestrator/SKILL.md`: always-active orchestration and management contract.
 - `runtime/PROTOCOL.md`: shared context, package/capability access, capsule, and lifecycle contract.
 - `registry/activation.md`: user-controlled routing state.
@@ -203,3 +199,75 @@ For user-enabled `#> repair on`, use [[protocols/repository/REPAIR_WORKSPACE]] a
 ## Terminal maintenance interface
 
 Terminal operations use [[protocols/repository/TERMINAL_MAINTENANCE]] and the same classify/plan/changed/staged and exact update-review boundaries. The command facade adds no semantic routing or permission.
+
+## Details
+
+### Change-control flow
+
+```mermaid
+flowchart TD
+    U["User requests a repository change"] --> OP["Choose one operation protocol"]
+    OP --> PLAN["Run the consistency plan"]
+    PLAN --> RISK["Apply the risk map"]
+    RISK --> PACKET["Derive roles, consumers, tests<br/>and graph links"]
+    PACKET --> SCOPE{"Unexpected or destructive expansion?"}
+    SCOPE -- "Yes" --> ASK["Explain exact effect and request permission"]
+    SCOPE -- "No" --> WORK["Edit only declared canonical sources"]
+    ASK --> WORK
+    WORK --> CHECK["Run changed and staged scans"]
+    CHECK --> REPORT["Report files, behavior, evidence, and boundaries"]
+```
+
+Selecting a package or capability is never permission. Deletion, external installation,
+credentials, account actions, Git-history rewrites, protocol changes and unexpected
+expansion require their own explicit authority. Removing a package also removes its
+registry records and generated inventory entry, and updates dependent examples and
+tests; preserve unrelated working-tree changes and a recoverable copy of dirty files
+being removed. Package cleanup does not authorize deleting external installations or
+rewriting Git history.
+
+The always-active Skills Orchestrator coordinates package and capability changes,
+regeneration and verification. It discovers the consumers so the user does not need to
+enumerate registries, manifests, tests, graph links and explanations, and it never
+manufactures approval or absorbs unrelated dirty files. It does not replace the risk map,
+change control, the operation cards, host permissions or user approval.
+
+### Package change versus capability change
+
+| operation | meaning |
+|---|---|
+| add public package | add one Activation package row, entry boundary, registry metadata, documentation model, tests, and generated named graph node |
+| add capability | add an internal capability under an existing package; public skill count stays unchanged |
+| edit capability | preserve package identity while changing focused behavior and tests |
+| migrate package | change a public contract, schema, path model, platform behavior, or compatibility boundary |
+| activate/deactivate | change availability while preserving content and permission boundaries |
+| delete | remove exact package/capability references, tests, projections, and installed copies only with explicit authority |
+| document | update the owning rule's explanation and the generated projections |
+
+Adding a phase under an existing package does not add another public skill. A new
+registered capability needs explicit metadata, appropriate access checks and domain
+verification. Removed files are not reusable entry points; restore and review them
+explicitly before integrating them again. The manual `optimizer` package illustrates one
+public package: one Activation row, one family registry, one root instruction entry,
+focused tests and one generated inventory node; its aliases and operations select
+internal workflows, not new skills.
+
+### Where explanations live
+
+A rule and its explanation share one owner. The owning file keeps everything a reader
+must obey above its first `## Details`; the explanation sits below it, or in a depth topic
+of the same folder that its `INDEX.md` lists. Generated files (`AGENTS.md`, `CLAUDE.md`,
+`docs/generated/`, the `graph/` nodes and `runtime/manifest.json`) are rebuilt from their
+sources with `scripts/compile_repository_views.py` and `scripts/compile_registry.py`, never
+hand-edited, and the staged scanner rejects stale projections. Mechanical freshness does
+not prove that an explanation still matches its rule, so the bounded semantic review checks that.
+
+### External tasks and private records
+
+A task that starts outside this repository treats Skills AI as read-only. With explicit
+permission it may create one Markdown request under `requests/pending/`, capped at 64 KiB
+before any Markdown is written; implementation then moves to a dedicated maintenance
+task rooted in this folder. The request inbox is never selection or skill authority.
+Private context-delivery markers contain section hashes only and stay under ignored
+`.runtime/` with restrictive permissions; neither they nor repair records grant authority,
+choose task skills or form a transcript.

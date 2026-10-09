@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "principle": "Maintain facts once and project them into bounded human, Codex, and Claude views.",
+  "principle": "Maintain facts once, keep each explanation with its owner, and project the facts into bounded Codex and Claude views and generated references.",
   "areas": [
     {
       "path": ".obsidian",
@@ -15,12 +15,12 @@
     {
       "path": "cards",
       "title": "Graph cards",
-      "purpose": "Human and Obsidian context cards for parked items; never a runtime selection source."
+      "purpose": "Obsidian context cards for parked items; never a runtime selection source."
     },
     {
       "path": "docs",
       "title": "Documentation and governance",
-      "purpose": "Machine maintenance authorities, architecture records, build guidance, and the derivative human learning route."
+      "purpose": "Governance documents, architecture records and build guidance, each with its explanation below its Details heading, plus the generated references under docs/generated."
     },
     {
       "path": "external-skills",
@@ -103,18 +103,18 @@
     ".gitmodules": "Declares each separately owned skill submodule: path, remote URL and tracked branch.",
     "AGENTS.md": "Generated standalone Codex repository entry containing shared rules plus the Codex lifecycle overlay.",
     "CLAUDE.md": "Generated standalone Claude repository entry containing shared rules plus the Claude hook overlay.",
-    "README.md": "Human-facing entry and progressive learning map; it is never runtime routing authority.",
+    "README.md": "Repository front door: what Skills AI is, a map by depth to every folder's entry, and how to clone or share it; it is never runtime routing authority.",
     "adapters/codex/ENTRY.md": "Canonical Codex-only invocation and session-ownership overlay used to generate AGENTS.md.",
     "adapters/claude/ENTRY.md": "Canonical Claude-only hook, child-lifecycle, and acceptance overlay used to generate CLAUDE.md.",
     "runtime/AGENT_ENTRY_SHARED.md": "Canonical agent rules shared by generated Codex and Claude repository entries.",
     "runtime/manifest.json": "Generated capability metadata and activation gates consumed by shared discovery/loading.",
-    "docs/human/_LIVE_REPOSITORY_INDEX.md": "Generated exhaustive human reference for repository files, ownership, roles, and purposes.",
-    "docs/human/_LIVE_SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents.",
     "scripts/skills_ai": "Executable terminal entry for shared inspection, containment, reviewed deployment and host refresh.",
     "scripts/skills_ai.py": "Thin Python entry for the modular maintenance command interface.",
     "protocols/repository/TERMINAL_MAINTENANCE.md": "On-demand agent protocol for terminal maintenance commands, results, approval, host adapters and recovery.",
     "protocols/repository/GIT_GOVERNANCE.md": "On-demand agent protocol for repository ownership, clone modes, the child-first commit order, branches, versions, releases, rollback, dirty state and cleanup.",
-    "skills_ai.code-workspace": "VS Code multi-root workspace listing the parent and each package so every package's own editor settings apply and Source Control shows each repository separately."
+    "skills_ai.code-workspace": "VS Code multi-root workspace listing the parent and each package so every package's own editor settings apply and Source Control shows each repository separately.",
+    "docs/generated/FILE_INDEX.md": "Generated exhaustive reference for repository files, ownership, roles, and purposes.",
+    "docs/generated/SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents."
   },
   "agent_entries": {
     "common": "runtime/AGENT_ENTRY_SHARED.md",
@@ -123,9 +123,9 @@
       "CLAUDE.md": "adapters/claude/ENTRY.md"
     }
   },
-  "human_outputs": {
-    "repository_index": "docs/human/_LIVE_REPOSITORY_INDEX.md",
-    "skill_catalog": "docs/human/_LIVE_SKILL_CATALOG.md"
+  "generated_references": {
+    "repository_index": "docs/generated/FILE_INDEX.md",
+    "skill_catalog": "docs/generated/SKILL_CATALOG.md"
   },
   "orchestrator": {
     "id": "skills-orchestrator",

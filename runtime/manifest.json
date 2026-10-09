@@ -281,11 +281,11 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "b93fe5c3f8c6ab9c94f780fbaeebeef2fcb01e190251ff845c1f00da5cf74a02",
+  "source_hash": "366dae2dbba3191bd46ba04c647cc245ad55ac1925da09028e0669a3eb05c479",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "195c2a1b22ac812d90488c2347ef6313746ef7c8239e045e68fa3db9f0226bce"
+      "sha256": "ee527a6fef044e7b02a945c5136664e3cdda3561b83b0181593fdecc47f82f00"
     },
     {
       "path": "registry/activation.md",
@@ -309,7 +309,7 @@
     },
     {
       "path": "registry/research.md",
-      "sha256": "885a3f1cdb626a4d740c739498929cf86695cbd136feae3a2df557e333e5ab60"
+      "sha256": "e6a51b7b3cee787d06bd0cafe5feeca7371125b6c77004344ec72a9de35e8b20"
     },
     {
       "path": "registry/theory.md",

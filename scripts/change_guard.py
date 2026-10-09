@@ -36,7 +36,6 @@ CHECK_COMMANDS = {
     "benchmark": ("python3 scripts/measure_context.py --json",),
     "consistency": ("python3 scripts/scan_consistency.py changed --path <declared-path>",),
     "graph": ("python3 scripts/graph_layers.py --check",),
-    "human-docs": ("python3 scripts/human_docs_guard.py --check",),
     "lifecycle": ("python3 -m unittest discover -s tests -p test_claude_adapter.py",),
     "registry": (
         "python3 scripts/compile_registry.py --check",

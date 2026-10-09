@@ -38,7 +38,7 @@ Native-host acceptance records actual host/version/configuration, instruction ha
 
 1. Preserve dirty-tree state and declare exact scope; work in containment when repair is on.
 2. Run classify, plan, changed and staged for the approved operation; resolve every new/in-scope block.
-3. Synchronize mapped human pages and regenerate projections.
+3. Update the explanation that sits with each changed rule and regenerate projections.
 4. Make a scoped candidate commit; preserve unrelated and submodule changes. A pointer move follows the child-first order in [[protocols/repository/GIT_GOVERNANCE]].
 5. Prepare the source-owned exact update preview with bound checks and dependencies. Explain it and obtain actual agreement before apply. Later content changes invalidate the preview.
 6. Preserve rollback and the live index. External adapter installation has its own configuration preview/backup boundary.
@@ -58,3 +58,32 @@ Use source-owned repair transaction inspection and recovery preview before repea
 ## Terminal maintenance interface
 
 Validate the terminal facade with `python3 -B -m unittest discover -s tests -p test_maintenance_cli.py`, then the mapped repository checks. Test host refresh in contained configuration directories. [[protocols/repository/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.
+
+## Details
+
+Verification comes in separate levels, and one level never substitutes for another:
+
+1. Structural: paths, roles, package mapping, unique graph labels, default visibility, links, schema and generated freshness.
+2. Behavioral: native-host control interpretation, compatible selection, ambiguity and failure handling; local fixtures separately test metadata and access.
+3. Safety: permissions, capsules, secrets, symlinks, sudo and destructive boundaries.
+4. Platform: shared runtime plus separate Codex and Claude lifecycle acceptance.
+5. External-project: valid, missing, invalid, stale, oversized and symlinked capsule cases.
+6. Performance: context delivery, complete process, context size and selected-capability load.
+
+To check everything at once, run `python3 scripts/verify_all.py`. It runs each package's
+own checks, then the parent gates (full scan, generated files, graph, registry,
+budgets), changes nothing and runs only when you start it. `--list` shows the steps,
+`--only TEXT` narrows them, `--fail-fast` stops at the first failure and `--json` prints
+a report. The parent needs Python 3.11 or newer; the packages alone support 3.10. The CI
+workflow runs the same command on every push, and `skills_ai.code-workspace` opens the
+parent and each package as separate folders in VS Code. Run it once before pushing a
+package change or a pointer move; a clone made without `--recurse-submodules` shows each
+empty package as `unavailable` and says how to fix it.
+
+For a declared submodule package the transaction has two repositories: change, test,
+commit and push the child; confirm the commit is an ancestor of the child's `origin/main`
+and that the child is clean; then move the parent pointer, regenerate projections, run
+the changed and staged scans, stage explicit paths, commit with the old and new hashes,
+and push the parent with `--recurse-submodules=check`. Commits, tags and pushes happen
+only on the user's instruction, and rollback is a new commit, never a rewrite
+([[protocols/repository/GIT_GOVERNANCE]]).

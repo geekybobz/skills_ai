@@ -19,7 +19,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | orchestrator sudo | local procedure bypass could be mistaken for unrestricted privilege | require `#> orchestrator sudo <operation> <exact-target>`; preserve system/developer rules, sandbox, permissions, credentials, external actions, destructive safety, package activation, and exact scope |
 | `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
 | registry runtime compile | atomically rewrites `runtime/manifest.json` | compile after registry changes, then run metadata and exact-access checks |
-| repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, two human indexes, and named Obsidian inventory nodes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
+| repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, the two generated references, and named Obsidian inventory nodes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
 | repository change control | add/edit/update/delete can cross source, generated, submodule, or external boundaries | read [[06_CHANGE_CONTROL]] and one operation card; expansion and protocol amendments need explicit approval |
 | initial skill plan | premature governance can turn a small idea into a large maintenance transaction | `skill-plans/<name>/plan.md` is plan-only and skips skill routing, graph, generated views, and full validation until explicit promotion |
@@ -37,6 +37,6 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 |---|---|
 | editing any package or capability file | not without an explicit request — the registry describes, it does not rewrite |
 | adding files under a package submodule (`theory-reference/`, `markdown-protocol/`, `optimizer/`, `research-context-scout/`) | each is a separately owned repository; registry files belong in `registry/` instead |
-| editing `interaction-protocol/` | update the shared contract, access tests, API docs, and mapped human guide together |
+| editing `interaction-protocol/` | update the shared contract, access tests, API docs, and the hub's explanation together |
 | staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |
 | moving a submodule pointer, tagging, pushing, or rewriting history | it publishes or pins state that others clone: follow [[protocols/repository/GIT_GOVERNANCE]] (child first, clean and published, one concern per commit, only on the user's instruction) and never rewrite published history |

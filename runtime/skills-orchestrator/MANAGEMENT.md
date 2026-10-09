@@ -14,6 +14,16 @@ Ticket scan/list are read-only; resolving a ticket first presents its report and
 
 Repair/update use the source-owned controller and `protocols/repository/REPAIR_WORKSPACE.md`. A candidate cannot deploy itself. Normal maintenance stays in the contained root while repair is on; update binds verification to exact reviewed bytes and waits for actual agreement. Saved state and approval claims never substitute for trusted conversation authority.
 
+## Supported actions
+
+| group | actions |
+|---|---|
+| inventory and diagnosis | `status`, `inspect`, `validate` |
+| project context | `initialize-project`, `show-project-context`, `refresh-project`, `replace-project-context`, `forget-project-context` |
+| lifecycle | `add`, `edit`, `delete`, `activate`, `deactivate`, `migrate`, `repair`, `document` |
+
+Place the control in the leading user-authored block, for example `#> orchestrator status`, `#> orchestrator edit <exact-target>` or `#> orchestrator sudo <operation> <exact-target>`. Report an unsupported action or a missing exact target without substitution. A `delete` first lists the exact files and every reference to them, then waits for the user's explicit approval.
+
 ## Bounded maintenance
 
 Inspect the exact known host session once at the maintenance boundary; recheck after relevant changes or uncertainty. Never search workspace directories, pending queues or history to guess an update target. With no association and no explicitly named target, explain that this chat has no contained update to preview and stop discovery. A retained off workspace can still be reviewed through its known association. Missing/corrupt known state blocks mutations until resolved; it is not an empty update.
@@ -45,6 +55,22 @@ Status reports its repository_root. Use the source checkout's tool for this chat
 ## Terminal interface
 
 Use `scripts/skills_ai` for repeated maintenance operations. Shared command/result contracts, exact review, host bindings and recovery are in `protocols/repository/TERMINAL_MAINTENANCE.md`; read on demand, then reuse its command results. Source-owned repair, actual approval and external-task boundaries remain in force.
+
+## Details
+
+The removed content of a deleted file stays recoverable from Git history and the update's rollback record. The hidden folder that holds a contained workspace, and how to open it, are explained in the [repair protocol](../../protocols/repository/REPAIR_WORKSPACE.md).
+
+Project capsule commands are explicit and bounded; nothing runs merely because it is stored in a capsule:
+
+```bash
+python3 runtime/project_context.py init --project <absolute-project>
+python3 runtime/project_context.py inspect --project <absolute-project>
+python3 runtime/project_context.py show --project <absolute-project>
+python3 runtime/project_context.py check --project <absolute-project>
+python3 runtime/project_context.py refresh --project <absolute-project>
+```
+
+Complete replacement requires `replace --stdin-json`; deletion requires `delete --confirm-delete`. Normal routing receipts omit stored commands and validation commands; an exact `show-project-context` inspection may include their neutralized values.
 
 ---
 

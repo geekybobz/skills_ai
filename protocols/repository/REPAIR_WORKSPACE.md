@@ -85,3 +85,59 @@ become the active association. No automatic deletion, watcher or background job.
 Filesystem separation and advisory locks protect this managed workflow, not
 arbitrary candidate processes. Host write/network restrictions provide the hard
 boundary; tests are deliberate code execution within actual authority.
+
+## Details
+
+Use the controls across ordinary messages:
+
+```text
+#> repair on
+```
+
+This creates or resumes this chat's contained copy. Continue discussing, editing
+and testing there for as many messages as needed. The active source and installed
+adapters remain unchanged. Repeating on resumes the same copy.
+
+```text
+#> update
+```
+
+The assistant compares the contained changes, runs relevant checks and explains
+what would change. After your agreement it applies only the reviewed changes,
+checks the installation and retains rollback and Git history. Update preserves
+repair mode. Changed files or conflicts require an updated review.
+
+```text
+#> repair off
+```
+
+Off returns to normal working locations and retains the contained copy. It does
+not deploy or delete pending work. An explicit live-edit exception applies only
+to that action. New chats default off; repair is independent of use/mode controls.
+
+```mermaid
+flowchart TD
+    A["repair on"] --> B["Create or resume copy"]
+    B --> C["Discuss, edit and test"]
+    C --> D["update: explain exact changes"]
+    D --> E["Your agreement"]
+    E --> F["Apply, verify and retain rollback"]
+    F --> C
+    C --> G["repair off: retain pending work"]
+```
+
+The permanent local folder is `.runtime/repair/workspaces/<workspace-id>/repo/`.
+The leading dot hides it in normal Finder views, and `.runtime/` is ignored by Git.
+Use Finder **Go → Go to Folder** (Command-Shift-G), enter
+`/Users/billabobz/skills_ai/.runtime/repair/`, and open the returned workspace.
+The assistant also reports its exact working location when enabling repair.
+No manual copying or repeated cloning is necessary.
+
+The copy is created once and resumed, which avoids repeated cloning and instruction
+loading. A missing or damaged known workspace stops mutations; it never redirects
+edits live, and changed preview bytes or source drift require a fresh review. Codex
+and Claude use their host session identities, while installation tests use separate
+config directories. A candidate controller cannot approve its own installation, and
+the first version operates in Skills AI maintenance chats; other projects retain the
+request/handoff boundary. Git records are first kept in the contained repository, so
+live staging must exclude inherited changes.

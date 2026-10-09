@@ -28,7 +28,7 @@ need their own evidence; neither kind of test substitutes for it.
 
 Classify the declared paths, follow the matching repository operation card, and
 run plan, changed and staged scans at their respective boundaries. Synchronize
-mapped human pages and regenerate allowlisted views from canonical sources.
+the explanation that sits with each changed rule and regenerate allowlisted views from canonical sources.
 Inspect the final diff for semantic changes and preserve unrelated dirty work.
 
 Use relevant existing checks for documentation-only edits. For runtime work,
@@ -46,9 +46,9 @@ layers and navigation, and the Orchestrator owns lifecycle, change control, and
 verification.
 
 Select the smallest justified package profile. A multi-file package receives a
-human `INDEX.md` when navigation is a distinct job; a genuinely minimal package
+navigation `INDEX.md` when navigation is a distinct job; a genuinely minimal package
 does not receive one for symmetry. Keep `SKILL.md` sufficient for selection and
-initial routing, and do not load the human index during ordinary execution.
+initial routing, and do not load the index during ordinary execution.
 Existing packages migrate one at a time only when the user names and approves
 their scope. This rule does not authorize a repository-wide normalization.
 
@@ -66,7 +66,7 @@ after state, leaves before-identical files alone and refuses conflicting content
 Inspect the recovery preview before writing. Host configuration and external
 effects require separate receipts and restoration procedures.
 
-Learning entry: [Orchestrator walkthrough](../../docs/human/10_MODEL_LED_ORCHESTRATOR.md).
+Learning entry: [Guide](GUIDE.md).
 
 ## Shared verification and update boundary
 

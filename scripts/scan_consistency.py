@@ -32,12 +32,6 @@ from change_guard import (  # noqa: E402
 from compile_registry import atomic_write  # noqa: E402
 from compile_repository_views import render_outputs, stale_outputs  # noqa: E402
 from graph_layers import check_graph  # noqa: E402
-from human_docs_guard import (  # noqa: E402
-    HumanDocsError,
-    coverage_errors,
-    load_source_map,
-    validate_human_docs,
-)
 from registry_runtime import (  # noqa: E402
     RegistryRuntimeError,
     build_manifest,
@@ -550,27 +544,6 @@ def _registry_findings(root: Path, changed_paths: set[str]) -> list[dict[str, An
     return findings
 
 
-def _human_findings(root: Path, changed_paths: list[str]) -> list[dict[str, Any]]:
-    findings = [
-        finding("block", "HUMAN_GUIDE_INVALID", error)
-        for error in validate_human_docs(root)
-    ]
-    try:
-        source_map = load_source_map(root)
-        findings.extend(
-            finding(
-                "block",
-                "HUMAN_GUIDE_NOT_UPDATED",
-                error,
-                suggestion="Update every mapped human page in the same change.",
-            )
-            for error in coverage_errors(changed_paths, source_map)
-        )
-    except HumanDocsError as exc:
-        findings.append(finding("block", "HUMAN_SOURCE_MAP_INVALID", str(exc)))
-    return findings
-
-
 def _view_findings(root: Path) -> list[dict[str, Any]]:
     try:
         stale = stale_outputs(root)
@@ -582,7 +555,7 @@ def _view_findings(root: Path) -> list[dict[str, Any]]:
         finding(
             "block",
             "STALE_GENERATED_VIEW",
-            "Generated Codex, Claude, or human repository views do not match their canonical sources.",
+            "Generated Codex, Claude, or reference views do not match their canonical sources.",
             paths=stale,
             suggestion="Run python3 scripts/compile_repository_views.py after reviewing canonical source changes.",
         )
@@ -810,7 +783,7 @@ def _ai_review_packet(
         "Does the semantic change match the user's approved intent and exclusions?",
         "Do changed triggers have positive, negative, ambiguous, negated, and injection-resistant cases?",
         "Do public behavior, compatibility, privacy, rollback, and platform ownership remain accurate?",
-        "Do the mapped human pages explain the behavior in plain language without becoming routing authority?",
+        "Does the explanation that sits with each changed rule still match it, without becoming routing authority?",
     ]
     if "skill-source" in role_ids:
         questions.append("Is the skill's purpose, trigger, not-for boundary, risk, and family placement precise?")
@@ -921,11 +894,6 @@ def scan(
             findings.extend(_registry_findings(root, set()))
         if "graph" in check_ids:
             findings.extend(_graph_findings(root))
-        if "human-docs" in check_ids:
-            findings.extend(
-                finding("block", "HUMAN_GUIDE_INVALID", error)
-                for error in validate_human_docs(root)
-            )
         if "views" in check_ids:
             findings.extend(_view_findings(root))
     elif mode != "plan":
@@ -934,8 +902,6 @@ def scan(
             findings.extend(_registry_findings(root, set(scoped_paths)))
         if "graph" in check_ids or mode == "full":
             findings.extend(_graph_findings(root))
-        if "human-docs" in check_ids or mode == "full":
-            findings.extend(_human_findings(root, scoped_paths))
         if "views" in check_ids or mode == "full":
             findings.extend(_view_findings(root))
 
@@ -1104,7 +1070,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             if args.baseline_out:
                 report["baseline_written"] = write_baseline(args.baseline_out, report)
-    except (GuardError, HumanDocsError, OSError, ScanError, ValueError) as exc:
+    except (GuardError, OSError, ScanError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     if args.mode == "classify":

@@ -1,12 +1,9 @@
----
-audience: human
-authority: explanatory-only
-agent_read_policy: explicit-human-guide-task-or-doc-sync-only
----
+# Troubleshooting
 
-# Speed and Troubleshooting
-
-Back: [safe changes](04_SAFE_CHANGES.md). Next: [graph and colors](06_GRAPH_AND_COLORS.md).
+Depth for [SKILL.md](SKILL.md): how little the hot path loads, how to measure it, the
+bounds that keep it small, and what to check when something looks wrong. It explains
+and adds no rule; [LOADING.md](LOADING.md), [RECOVERY.md](RECOVERY.md) and the other
+[topics](INDEX.md) own the rules.
 
 ## Hot-path loading
 
@@ -34,9 +31,9 @@ with `rg --files`, searches a literal identifier with `rg -n`, and inspects
 exact references, diffs, and mapped tests. No background index, file watcher,
 telemetry process, or network update checker is part of ordinary work.
 
-An optional package `INDEX.md` is a human navigation surface, not a hot-path
-instruction source. Ordinary execution starts from the compact `SKILL.md` and
-loads only the focused references required for the task.
+A package `INDEX.md` is a navigation surface, not a hot-path instruction source.
+Ordinary execution starts from the compact `SKILL.md` and loads only the focused
+references required for the task.
 
 ## Measure context and latency
 
@@ -54,7 +51,14 @@ python3 scripts/measure_context.py --json
 ```
 
 This command measures context delivery; complete-task measurements also include
-host reasoning, selected references and verification.
+host reasoning, selected references and verification. The reference delivery budgets
+are 5.5 KiB for the core and 8 KiB for the bootstrap, separate from transport limits.
+The bootstrap figure excludes the checkout path, so a clone or repair workspace in a
+longer folder measures the same as the live one. The core figure counts the delivered
+entry only; the focused topics are read on demand and count toward neither budget.
+Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill
+collection. Zero additional bytes on unchanged turns measures delivery, not total
+model usage.
 
 ## Capsule bounds
 
@@ -101,41 +105,17 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | `MANIFEST_UNAVAILABLE` | compile and validate; the original task should continue normally |
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
-| generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
-| an agent opens `runtime/SKILL.md` expecting the instructions | that file is only the Codex install header; the instructions are in `runtime/skills-orchestrator/SKILL.md` and its [index](../../runtime/skills-orchestrator/INDEX.md), which `AGENTS.md` and `CLAUDE.md` point to |
-| a rule is not in the compact entry | open the topic the entry names; the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md) lists every topic and what it owns |
-| looking for `ACCEPTANCE.json` or the orchestrator's `agents/openai.yaml` | both were removed: nothing read them, and the acceptance file's hashes and test counts were stale; current checks are in each commit's Verification line and the update preview |
-| declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
+| generated root entry or generated reference is stale | edit the canonical source and rerun `compile_repository_views.py` |
+| an agent opens `runtime/SKILL.md` expecting the instructions | that file is only the Codex install header; the instructions are in [SKILL.md](SKILL.md) and this [index](INDEX.md), which `AGENTS.md` and `CLAUDE.md` point to |
+| a rule is not in the compact entry | open the topic the entry names; the [index](INDEX.md) lists every page and what it owns |
 | a package is listed `unavailable`, or loading it returns `PACKAGE_NOT_INITIALIZED` | its submodule folder is empty; run `git submodule update --init --recursive`. The catalog, `skills_ai status` and the adapter `--check` all say so, and nothing is substituted. Any other missing entry still returns `FILE_UNAVAILABLE` |
-| parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |
-| `git status` shows a modified package folder | decide whether it is the intended pointer move or uncommitted changes inside the package; commit or discard those in the package repository, never through the parent |
-| a push is refused because a package commit is not published | push the package first; `git push --recurse-submodules=check` catches this before the parent is published |
 | laptop heats during repository lookup | verify no external indexer or watcher is installed; Skills AI requires none |
 
-Maintenance scans and generated-view compilation are cold-path operations. They
-do not add reads or token cost to ordinary work.
+Package, pin and push situations are in the
+[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md). Maintenance scans
+and generated-view compilation are cold-path operations: they add no reads or token
+cost to ordinary work.
 
-Use none avoids unnecessary optional discovery and task bodies. Show one compact bullet receipt for a substantive task, reuse conversation context on ordinary continuations and update changed fields only. Do not scan files or persist state merely to fill or deduplicate a receipt.
+---
 
-For the complete architecture, controls and working examples, see [the walkthrough](10_MODEL_LED_ORCHESTRATOR.md).
-
-## Working with contained changes
-
-Repair copies are created once and resumed, avoiding repeated cloning and instruction loading. A missing or damaged known workspace stops mutations; it never redirects edits live. Changed preview bytes or source drift require fresh review. See [Safe changes](04_SAFE_CHANGES.md).
-
-Declared skill submodules keep independent Git metadata. Generated catalogs
-inspect their tracked files only during cold-path compilation; ordinary routing
-still loads only selected entries and required support. Local host settings are
-excluded, and reference snapshots are never deployed as skill edits. Pin, tag and
-rollback rules for the packages are in the
-[Git governance card](../../protocols/repository/GIT_GOVERNANCE.md).
-
-## Current context flow
-
-Reference-flow delivery budgets are 5.5 KiB core and 8 KiB bootstrap, separate from transport limits. The bootstrap figure excludes the checkout path, so a clone or repair workspace in a longer folder measures the same as the live one. The core figure counts the delivered entry only; the focused topics are read on demand and count toward neither budget. Startup catalog text is capped at 3 KiB with explicit expansion for a larger skill collection. Shared batch bodies can be delivered once while keeping each capability’s gates and identity. Zero additional bytes on unchanged turns measures delivery, not total model usage. Recovery restores missing context; status creates no checkpoint or delivery marker.
-
-Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
-
-## Terminal maintenance
-
-`skills_ai status` exposes version and installation mismatches directly. `skills_ai refresh` reuses explicitly saved host targets; repeated current operations need no repeat approval. These commands run on demand, with no watcher or background updater, and disk freshness does not establish model retention.
+[⌂ Home](INDEX.md)

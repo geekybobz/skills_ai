@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 18,
+  "protocol_version": 19,
   "approval_operations": [
     "move",
     "deprecate",
@@ -34,7 +34,7 @@
       ],
       "check": "views"
     },
-    "docs/human/_LIVE_REPOSITORY_INDEX.md": {
+    "docs/generated/FILE_INDEX.md": {
       "source_patterns": [
         ".gitignore",
         ".gitmodules",
@@ -58,7 +58,7 @@
       ],
       "check": "views"
     },
-    "docs/human/_LIVE_SKILL_CATALOG.md": {
+    "docs/generated/SKILL_CATALOG.md": {
       "source_patterns": [
         "docs/00_SKILLS_HUB.md",
         "registry/**",
@@ -159,22 +159,7 @@
       ],
       "checks": [
         "consistency",
-        "human-docs",
         "unit",
-        "views"
-      ]
-    },
-    {
-      "id": "human-guide",
-      "patterns": [
-        "README.md",
-        "docs/human/**",
-        "research-context-scout/README.md"
-      ],
-      "checks": [
-        "consistency",
-        "graph",
-        "human-docs",
         "views"
       ]
     },
@@ -191,7 +176,6 @@
       "checks": [
         "consistency",
         "graph",
-        "human-docs",
         "unit",
         "views"
       ]
@@ -206,7 +190,6 @@
       "checks": [
         "consistency",
         "graph",
-        "human-docs",
         "registry",
         "unit",
         "views"
@@ -271,7 +254,6 @@
       "checks": [
         "benchmark",
         "consistency",
-        "human-docs",
         "lifecycle",
         "registry",
         "unit",
@@ -303,7 +285,6 @@
         "scripts/compile_repository_views.py",
         "scripts/create_change_request.py",
         "scripts/graph_layers.py",
-        "scripts/human_docs_guard.py",
         "scripts/scan_consistency.py",
         "scripts/skills_ai",
         "scripts/skills_ai.py",
@@ -312,7 +293,6 @@
       "checks": [
         "consistency",
         "graph",
-        "human-docs",
         "unit",
         "views"
       ]
@@ -326,7 +306,6 @@
       "checks": [
         "adapter",
         "consistency",
-        "human-docs",
         "unit",
         "views"
       ]
@@ -350,7 +329,6 @@
       "checks": [
         "consistency",
         "graph",
-        "human-docs",
         "views"
       ]
     },
@@ -362,7 +340,6 @@
       ],
       "checks": [
         "graph",
-        "human-docs",
         "views"
       ]
     },
@@ -381,12 +358,14 @@
     {
       "id": "repository-support",
       "patterns": [
+        "README.md",
         ".github/workflows/**",
         ".gitignore",
         ".gitmodules",
         ".obsidian/*.json",
         "cards/**",
         "docs/*.md",
+        "docs/generated/**",
         "docs/CLAUDE_VERIFICATION_PROMPT.md",
         "docs/SKILLS.md",
         "skills_ai.code-workspace",
@@ -411,6 +390,32 @@
         ".runtime/**"
       ],
       "checks": []
+    },
+    {
+      "id": "retired-deletion-checkpoint",
+      "patterns": [
+        "docs/human/00_START_HERE.md",
+        "docs/human/01_FOLLOW_A_REQUEST.md",
+        "docs/human/02_FOLDER_AND_PLATFORMS.md",
+        "docs/human/03_SKILLS_AND_CONTROLS.md",
+        "docs/human/04_SAFE_CHANGES.md",
+        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
+        "docs/human/06_GRAPH_AND_COLORS.md",
+        "docs/human/07_MAINTAINING_SKILLS.md",
+        "docs/human/08_REPOSITORY_ATLAS.md",
+        "docs/human/09_SKILL_ANATOMY.md",
+        "docs/human/10_MODEL_LED_ORCHESTRATOR.md",
+        "docs/human/11_TERMINAL_MAINTENANCE.md",
+        "docs/human/_LIVE_REPOSITORY_INDEX.md",
+        "docs/human/_LIVE_SKILL_CATALOG.md",
+        "docs/human/_SOURCE_MAP.json",
+        "scripts/human_docs_guard.py"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "views"
+      ]
     }
   ],
   "graph_role_policy": {
@@ -512,8 +517,7 @@
         "docs/06_CHANGE_CONTROL.md": [
           "docs/07_BUILD_AND_RELEASE",
           "protocols/repository/PROTOCOL_AMENDMENT",
-          "protocols/repository/GIT_GOVERNANCE",
-          "docs/human/07_MAINTAINING_SKILLS"
+          "protocols/repository/GIT_GOVERNANCE"
         ],
         "docs/07_BUILD_AND_RELEASE.md": [
           "docs/06_CHANGE_CONTROL"
@@ -542,8 +546,7 @@
       "required_links": {
         "docs/SHARED_DOCUMENTATION_MODEL.md": [
           "docs/06_CHANGE_CONTROL",
-          "docs/human/08_REPOSITORY_ATLAS",
-          "docs/human/09_SKILL_ANATOMY"
+          "docs/SKILLS"
         ],
         "protocols/repository/PROTOCOL_AMENDMENT.md": [
           "docs/SHARED_DOCUMENTATION_MODEL"
