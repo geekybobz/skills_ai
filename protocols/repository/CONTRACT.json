@@ -390,32 +390,6 @@
         ".runtime/**"
       ],
       "checks": []
-    },
-    {
-      "id": "retired-deletion-checkpoint",
-      "patterns": [
-        "docs/human/00_START_HERE.md",
-        "docs/human/01_FOLLOW_A_REQUEST.md",
-        "docs/human/02_FOLDER_AND_PLATFORMS.md",
-        "docs/human/03_SKILLS_AND_CONTROLS.md",
-        "docs/human/04_SAFE_CHANGES.md",
-        "docs/human/05_SPEED_AND_TROUBLESHOOTING.md",
-        "docs/human/06_GRAPH_AND_COLORS.md",
-        "docs/human/07_MAINTAINING_SKILLS.md",
-        "docs/human/08_REPOSITORY_ATLAS.md",
-        "docs/human/09_SKILL_ANATOMY.md",
-        "docs/human/10_MODEL_LED_ORCHESTRATOR.md",
-        "docs/human/11_TERMINAL_MAINTENANCE.md",
-        "docs/human/_LIVE_REPOSITORY_INDEX.md",
-        "docs/human/_LIVE_SKILL_CATALOG.md",
-        "docs/human/_SOURCE_MAP.json",
-        "scripts/human_docs_guard.py"
-      ],
-      "checks": [
-        "consistency",
-        "graph",
-        "views"
-      ]
     }
   ],
   "graph_role_policy": {
