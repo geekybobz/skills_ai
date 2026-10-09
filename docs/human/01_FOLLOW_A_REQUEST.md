@@ -101,7 +101,7 @@ For the complete architecture, controls and working examples, see [the walkthrou
 
 ## Working with contained changes
 
-Repair mode changes where edits and generated outputs go, independently of the chosen skills or adherence. On resumes this chat’s copy; update presents a checked delta and waits for agreement; off retains pending work. See [Safe changes](04_SAFE_CHANGES.md).
+Repair mode changes where edits and generated outputs go, independently of the chosen skills or adherence. On resumes this chat’s copy; update presents a checked delta and waits for agreement, and the commit that follows records its checks in a Verification line; off retains pending work. See [Safe changes](04_SAFE_CHANGES.md).
 
 Contained submodule references use independent Git metadata so package wrappers and generated catalogs remain readable. Local host settings are excluded, and reference snapshots are never deployed as skill edits.
 

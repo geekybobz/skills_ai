@@ -153,6 +153,8 @@ The host reports unsupported actions or missing exact targets without substituti
 higher authority, permissions, credentials, external actions, destructive
 safety, package activation, or exact scope.
 
+A `delete` first lists the exact files and every reference to them, then waits for your explicit approval. The removed content stays recoverable from Git history and the update's rollback record.
+
 ## Project capsule commands
 
 ```bash

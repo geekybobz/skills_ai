@@ -72,6 +72,14 @@ class OrchestratorLayerTests(unittest.TestCase):
         existing = {page.name for page in self.pages()} - {"SKILL.md"}
         self.assertEqual(existing, named)
 
+    def test_no_checked_in_acceptance_record_and_build_says_where_evidence_lives(self) -> None:
+        self.assertFalse((FOLDER / "ACCEPTANCE.json").exists())
+        # An empty folder may remain after a file-level update, so check for files, not the folder.
+        self.assertEqual([], sorted(p.name for p in (FOLDER / "agents").rglob("*") if p.is_file()))
+        build = " ".join((FOLDER / "BUILD.md").read_text(encoding="utf-8").split())
+        self.assertNotIn("ACCEPTANCE.json", build)
+        self.assertIn("Record current checks in the scoped commit's Verification line", build)
+
     def test_entry_keeps_the_obligations_that_must_not_move_out(self) -> None:
         entry = " ".join(core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8")).split())
         for phrase in OBLIGATIONS:

@@ -104,6 +104,7 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | generated root entry or live index is stale | edit canonical source and rerun `compile_repository_views.py` |
 | an agent opens `runtime/SKILL.md` expecting the instructions | that file is only the Codex install header; the instructions are in `runtime/skills-orchestrator/SKILL.md` and its [index](../../runtime/skills-orchestrator/INDEX.md), which `AGENTS.md` and `CLAUDE.md` point to |
 | a rule is not in the compact entry | open the topic the entry names; the [orchestrator index](../../runtime/skills-orchestrator/INDEX.md) lists every topic and what it owns |
+| looking for `ACCEPTANCE.json` or the orchestrator's `agents/openai.yaml` | both were removed: nothing read them, and the acceptance file's hashes and test counts were stale; current checks are in each commit's Verification line and the update preview |
 | declared package appears empty | initialize submodules recursively, then regenerate the live indexes |
 | loading a declared package returns `FILE_UNAVAILABLE` | its submodule folder is empty; run `git submodule update --init --recursive` |
 | parent points to an unavailable package commit | push the child commit first, then update and push the parent pointer |

@@ -46,7 +46,6 @@ These technical routes select focused instructions inside a public task package.
 
 | Orchestrator file | Role |
 |---|---|
-| [runtime/skills-orchestrator/ACCEPTANCE.json](../../runtime/skills-orchestrator/ACCEPTANCE.json) | Package support file. |
 | [runtime/skills-orchestrator/BUILD.md](../../runtime/skills-orchestrator/BUILD.md) | Package support file. |
 | [runtime/skills-orchestrator/COMPOSITION.md](../../runtime/skills-orchestrator/COMPOSITION.md) | Package support file. |
 | [runtime/skills-orchestrator/CONTRACT.md](../../runtime/skills-orchestrator/CONTRACT.md) | Package support file. |
@@ -56,7 +55,6 @@ These technical routes select focused instructions inside a public task package.
 | [runtime/skills-orchestrator/MANAGEMENT.md](../../runtime/skills-orchestrator/MANAGEMENT.md) | Package support file. |
 | [runtime/skills-orchestrator/RECOVERY.md](../../runtime/skills-orchestrator/RECOVERY.md) | Package support file. |
 | [runtime/skills-orchestrator/SKILL.md](../../runtime/skills-orchestrator/SKILL.md) | Skill entry or shared workflow instructions. |
-| [runtime/skills-orchestrator/agents/openai.yaml](../../runtime/skills-orchestrator/agents/openai.yaml) | Package support file. |
 
 # Skill Contents
 

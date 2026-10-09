@@ -76,7 +76,8 @@ Opt-in batch v2 delivers exact shared bodies once; read-only status and referenc
 metadata standardize access for any connected host. Host settings remain owned
 by each integration.
 
-Record current checks and instruction hashes in `ACCEPTANCE.json`; retained Git
+Record current checks in the scoped commit's Verification line
+([Git governance](../../protocols/repository/GIT_GOVERNANCE.md)); retained Git
 history and ignored transaction receipts preserve earlier evidence. Candidate
 verification does not mean live deployment. Source-owned update previews bind
 checks to the exact candidate; application waits for actual agreement. Installed

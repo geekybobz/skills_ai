@@ -167,7 +167,7 @@ This prepares the exact changes and checks, explains them and waits for your agr
 
 From the source checkout, use `python3 scripts/install_runtime_adapter.py --adapter codex --dry-run` or substitute claude. Inspect the preview, run without dry-run to install, then use `--check`. Alternate configuration directories can be supplied with `--config-dir`.
 
-Codex installs one rendered core entry. Claude installs its lifecycle hook and merges owned settings while preserving foreign hooks and configuration backups. Runtime shared tests, disposable installer tests and actual native-host semantic acceptance are separate evidence. Read [the build record](../../runtime/skills-orchestrator/BUILD.md) for what has actually been verified.
+Codex installs one rendered core entry. Claude installs its lifecycle hook and merges owned settings while preserving foreign hooks and configuration backups. Runtime shared tests, disposable installer tests and actual native-host semantic acceptance are separate evidence. Read [the build record](../../runtime/skills-orchestrator/BUILD.md) for what has actually been verified. There is no checked-in acceptance file: each change records its checks in the commit's Verification line, and the update preview binds them to the exact bytes.
 
 Discovery/access checks the manifest's bounded registry-source bindings first. Stale activation or family metadata stops capability access until an authorized rebuild; skill bodies are not scanned to perform that check. Optional failure still preserves required task and repair obligations.
 
