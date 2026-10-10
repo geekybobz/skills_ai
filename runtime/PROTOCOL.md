@@ -2,9 +2,21 @@
 
 The orchestrator's instructions are split by job: responsibility and rule strengths live in [[runtime/skills-orchestrator/CONTRACT]], the control vocabulary and receipt in [[runtime/skills-orchestrator/CONTROLS]], loading and retention in [[runtime/skills-orchestrator/LOADING]]. Exact process and access boundaries live in [[runtime/API_CONTRACT]]. Keep those facts there rather than duplicating them here.
 
-The host reads the coordination core, resolves user intent and leading controls, discovers bounded metadata, selects the minimum sufficient compatible capability set for the phase without a fixed package-count limit, loads complete selected entries and required support, performs authorized work, and assesses artifact-bound evidence. Public counts remain package counts; interaction modes and capability files are internal details. There is no new semantic parser, classifier, task logger or automatic approval gate.
+The host reads the coordination core, resolves user intent and leading controls,
+loads mandatory Project Manager support for project or repository work, discovers
+bounded metadata, selects the minimum sufficient compatible task capability set
+for the phase without a fixed package-count limit, loads complete selected entries
+and required support, performs authorized work, and assesses artifact-bound
+evidence. Public counts remain package counts; supporting roles, interaction modes,
+and capability files are internal behavior. There is no new semantic parser,
+classifier, transcript logger, background watcher, or automatic approval gate.
 
-Optional tool or adapter failures fail open to ordinary host work. Failed required evidence obligations remain unresolved. Selection, override, sudo, adherence, autonomy and saved state confer no host authority. Result validation and certification require the named evidence, not a successful transport or identity comparison.
+Optional task tool or adapter failures fail open to ordinary host work. Missing or
+invalid Project Manager state is reported and initialization is proposed without a
+silent write. Failed required evidence obligations remain unresolved. Selection,
+override, sudo, adherence, autonomy and saved state confer no host authority. Result
+validation and certification require the named evidence, not a successful transport
+or identity comparison.
 
 Shared Python owns bounded metadata compilation, prompt-free context assembly, exact file access and structured errors. Codex owns its entry loading and invocation cleanup. Claude owns hook input deadlines, child process-group termination, output injection and native live acceptance. Adapters must not add semantic selection forks. Host-specific settings and transport fixes belong to each host integration.
 

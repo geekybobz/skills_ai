@@ -20,7 +20,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Risk: [[04_RISK_MAP]]
 | L1 | Hubs, switchboards, orchestrator, and declared graph entries | `#00897B` teal | `path:docs/00_SKILLS_HUB.md OR path:registry/activation.md OR path:graph/orchestration/skills-orchestrator.md OR path:interaction-protocol/README.md OR path:docs/SHARED_DOCUMENTATION_MODEL.md OR path:docs/03_COMBO_MAP.md OR path:docs/04_RISK_MAP.md OR path:docs/05_COLOR_LAYERS.md OR path:docs/06_CHANGE_CONTROL.md` |
 | L2 | Family registries | `#2E7D32` green | `path:registry/` |
 | L3 | Context cards and parked-package cards | `#EF6C00` orange | `path:cards/` |
-| L4 | Public skill entries, internal capability instructions, external pointers, and phases | `#6A1B9A` violet | `path:markdown-protocol/ OR path:optimizer/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/` |
+| L4 | Public skill entries, internal capability instructions, external pointers, and phases | `#6A1B9A` violet | `path:markdown-protocol/ OR path:optimizer/ OR path:project-manager/ OR path:theory-reference/SKILL.md OR path:graph/skills/ OR path:theory-reference/shared/SKILL.md OR path:theory-reference/shared/phases/ OR path:external-skills/ OR path:research-context-scout/` |
 | L5 | Governance cards, runtime, adapters, scripts, tests, templates, requests, and support notes | `#546E7A` slate | `path:docs/ OR path:protocols/ OR path:runtime/ OR path:adapters/ OR path:scripts/ OR path:tests/ OR path:requests/ OR path:theory-reference/` |
 
 ## Reading the graph
@@ -79,7 +79,7 @@ and build/release guidance remain L5 support.
 The global graph opens with low-level maintenance paths filtered out:
 
 ```text
--path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/ -path:interaction-protocol/ -path:markdown-protocol/ -path:optimizer/ -path:research-context-scout/ -path:theory-reference/ -path:external-skills/
+-path:protocols/repository/ -path:runtime/ -path:adapters/ -path:scripts/ -path:tests/ -path:requests/ -path:interaction-protocol/ -path:markdown-protocol/ -path:optimizer/ -path:project-manager/ -path:research-context-scout/ -path:theory-reference/ -path:external-skills/
 ```
 
 This changes only the default view. Generated `graph/` nodes keep the
@@ -148,7 +148,8 @@ The manual `optimizer/` package is an L4 violet collection like other public pac
 entries. Its generated node, `graph/skills/optimizer.md`, stays visible in the overview
 even though the technical package path is filtered out; use Obsidian's Quick Switcher to
 open `Optimizer`, or filter with `path:graph/skills/optimizer.md`, to inspect that
-workflow alone. `research-context-scout/` and `markdown-protocol/` are likewise normal
+workflow alone. `project-manager/`, `research-context-scout/`, and
+`markdown-protocol/` are likewise normal
 L4 collections whose README, root entry, shared phases, wrappers and small formatting
 examples stay linked as one package. `registry/interaction.md` is an L2 green family
 registry; the visible [[interaction-protocol/README|Interaction Protocol hub]] is L1 teal

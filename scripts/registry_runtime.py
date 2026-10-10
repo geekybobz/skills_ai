@@ -16,7 +16,7 @@ ACTIVATION_PATH=ROOT/'registry/activation.md'
 ACTIVE_STATES={'active','manual'}
 INACTIVE_STATES={'off','hidden','deprecated'}
 VALID_STATES=ACTIVE_STATES|INACTIVE_STATES
-VALID_PACKAGE_ROLES={'interaction','task'}
+VALID_PACKAGE_ROLES={'interaction','supporting','task'}
 ORCHESTRATOR_ID='skills-orchestrator'
 INTERACTION_PACKAGE_ID='interaction-protocol'
 VALID_REGISTRY_VIEWS={'auto','inventory','catalog','diagnostic'}
@@ -249,7 +249,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         package = packages.get(package_id)
         if package is None:
             errors.append(f"family {family_id} references unknown package: {package_id or '(missing)'}")
-        elif package["role"] not in {"task", "interaction"}:
+        elif package["role"] not in {"task", "interaction", "supporting"}:
             errors.append(f"family {family_id} references non-routable package: {package_id}")
         family_path = root / family["path"]
         source_paths.append(family_path)

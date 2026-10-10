@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "protocol_version": 19,
+  "protocol_version": 20,
   "approval_operations": [
     "move",
     "deprecate",
@@ -47,6 +47,7 @@
         "interaction-protocol/**",
         "markdown-protocol/**",
         "optimizer/**",
+        "project-manager/**",
         "protocols/**",
         "research-context-scout/**",
         "registry/**",
@@ -67,6 +68,7 @@
         "theory-reference",
         "external-skills/**",
         "optimizer/**",
+        "project-manager/**",
         "runtime/skills-orchestrator/**",
         "research-context-scout/**",
         "protocols/repository/DOCUMENTATION.json",
@@ -99,6 +101,14 @@
       "check": "views"
     },
     "graph/skills/markdown-protocol.md": {
+      "source_patterns": [
+        "registry/activation.md",
+        "protocols/repository/DOCUMENTATION.json",
+        "scripts/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "graph/skills/project-manager.md": {
       "source_patterns": [
         "registry/activation.md",
         "protocols/repository/DOCUMENTATION.json",
@@ -201,6 +211,7 @@
         "external-skills/**/SKILL.md",
         "markdown-protocol/SKILL.md",
         "optimizer/SKILL.md",
+        "project-manager/SKILL.md",
         "research-context-scout/SKILL.md",
         "theory-reference/SKILL.md",
         "theory-reference/shared/SKILL.md"
@@ -226,6 +237,7 @@
         "external-skills/**",
         "markdown-protocol/**",
         "optimizer/**",
+        "project-manager/**",
         "research-context-scout/**",
         "theory-reference/shared/phases/**"
       ],
@@ -401,8 +413,10 @@
       "cards/parked/quantum-job-collector.md": "L3",
       "optimizer/SKILL.md": "L4",
       "markdown-protocol/SKILL.md": "L4",
+      "project-manager/SKILL.md": "L4",
       "graph/skills/markdown-protocol.md": "L4",
       "graph/skills/optimizer.md": "L4",
+      "graph/skills/project-manager.md": "L4",
       "graph/skills/research-context-scout.md": "L4",
       "runtime/PROTOCOL.md": "L5"
     }
@@ -435,6 +449,7 @@
           "runtime/skills-orchestrator/SKILL",
           "graph/skills/interaction-protocol",
           "graph/skills/markdown-protocol",
+          "graph/skills/project-manager",
           "graph/skills/theory-reference",
           "graph/skills/research-context-scout",
           "graph/skills/optimizer",

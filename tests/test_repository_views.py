@@ -65,6 +65,7 @@ class RepositoryViewTests(unittest.TestCase):
                 "graph/skills/interaction-protocol.md",
                 "graph/skills/markdown-protocol.md",
                 "graph/skills/optimizer.md",
+                "graph/skills/project-manager.md",
                 "graph/skills/quantum-job-collector.md",
                 "graph/skills/research-context-scout.md",
                 "graph/skills/theory-reference.md",
@@ -103,7 +104,7 @@ class RepositoryViewTests(unittest.TestCase):
             )
             self.assertIn(marker, repository_index)
 
-    def test_skill_catalog_separates_orchestrator_from_six_skills(self) -> None:
+    def test_skill_catalog_separates_orchestrator_from_seven_skills(self) -> None:
         catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
         orchestrator_section = catalog.split("# Skills Orchestrator", 1)[1].split(
             "# Public Skills", 1
@@ -118,6 +119,7 @@ class RepositoryViewTests(unittest.TestCase):
         for package_id in (
             "interaction-protocol",
             "markdown-protocol",
+            "project-manager",
             "theory-reference",
             "research-context-scout",
             "optimizer",
@@ -129,7 +131,7 @@ class RepositoryViewTests(unittest.TestCase):
             for line in public_section.splitlines()
             if line.startswith("| ") and not line.startswith("| Public skill |")
         ]
-        self.assertEqual(6, len(public_rows))
+        self.assertEqual(7, len(public_rows))
         self.assertNotIn("skills-orchestrator", public_section)
         self.assertNotIn("| code-explainer |", public_section)
         self.assertIn("| theory-reference | theory-reference |", internal_section)
@@ -145,6 +147,7 @@ class RepositoryViewTests(unittest.TestCase):
         for package_id in (
             "interaction-protocol",
             "markdown-protocol",
+            "project-manager",
             "theory-reference",
             "research-context-scout",
             "optimizer",
@@ -171,6 +174,7 @@ class RepositoryViewTests(unittest.TestCase):
             "theory-reference": "shared/SKILL.md",
             "research-context-scout": "shared/SKILL.md",
             "optimizer": "scripts/optimizer_api.py",
+            "project-manager": "project_manager/cli.py",
         }
         catalog = render_outputs(ROOT)["docs/generated/SKILL_CATALOG.md"]
         repository_index = render_outputs(ROOT)["docs/generated/FILE_INDEX.md"]
@@ -255,6 +259,7 @@ class RepositoryViewTests(unittest.TestCase):
         for skill_id in (
             "interaction-protocol",
             "markdown-protocol",
+            "project-manager",
             "theory-reference",
             "research-context-scout",
             "optimizer",

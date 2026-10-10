@@ -24,6 +24,7 @@ Back to the [skills registry entry](../SKILLS.md). This page is generated from t
 | theory-reference | task | active | theory notes, LaTeX, derivation planning, and reference work | git-submodule | [theory-reference/SKILL.md](../../theory-reference/SKILL.md) | 1 |
 | research-context-scout | task | manual | exact package request, `#> scout`, or `#> scout-again` only | git-submodule | [research-context-scout/SKILL.md](../../research-context-scout/SKILL.md) | 1 |
 | optimizer | task | manual | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates | git-submodule | [optimizer/SKILL.md](../../optimizer/SKILL.md) | 1 |
+| project-manager | supporting | active | mandatory for every project or repository task; reads portable memory, maintains one active HANDOFF, proposes durable updates, and remains active under `#> use none` | git-submodule | [project-manager/SKILL.md](../../project-manager/SKILL.md) | — |
 | quantum-job-collector | task | off | exhaustive Quantum Career Radar job collection | external-symlink | `external-skills/quantum-job-collector/SKILL.md` | 1 |
 
 # Internal Capabilities
@@ -32,6 +33,7 @@ These technical routes select focused instructions inside a public task package.
 
 | Package | Capability | Family | State | Purpose | Trigger | Not for | Structure | Source | Approx. tokens |
 |---|---|---|---|---|---|---|---|---|---:|
+| project-manager | project-manager | project-memory | active | reads and validates portable project memory, maintains one active task HANDOFF, proposes durable rules and preferences, captures bounded feedback, and exposes deterministic terminal operations | every project or repository task; explicit memory, save, handoff, resume, feedback, initialization, or recovery request | conversation with no project or working directory, transcript logging, hidden reasoning storage, background watching, or carrying action approval | submodule capability | [project-manager/SKILL.md](../../project-manager/SKILL.md) | 1514 |
 | interaction-protocol | interaction.general | interaction | active | Present the result first with sufficient clear context and precise terms. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
 | interaction-protocol | interaction.math | interaction | active | Explain mathematical reasoning through results, defined symbols and justified equations. | purpose metadata |  | package capability | [interaction-protocol/protocol.json](../../interaction-protocol/protocol.json) | 489 |
 | markdown-protocol | markdown-protocol | markdown | active | creates, edits, reviews, or restructures Markdown artifacts with proportional design review, adaptive layouts, progressive disclosure, portable navigation, selective visual patterns, and explicit validation | any requested Markdown creation, edit, review, or restructuring, including README, documentation, notes, knowledge bases, or Markdown changed inside another task | merely reading Markdown instructions as operational input, non-Markdown work, unrequested plugin installation, or unverified renderer claims | submodule capability | [markdown-protocol/SKILL.md](../../markdown-protocol/SKILL.md) | 831 |
@@ -241,6 +243,39 @@ These technical routes select focused instructions inside a public task package.
 | [optimizer/situation-analysis.md](../../optimizer/situation-analysis.md) | Package support file. |
 | [optimizer/tests/test_optimizer_api.py](../../optimizer/tests/test_optimizer_api.py) | Package support file. |
 | [optimizer/tests/test_package_contract.py](../../optimizer/tests/test_package_contract.py) | Package support file. |
+
+## project-manager
+
+**Type:** `git-submodule`
+
+**Purpose:** Always-on supporting package for portable repository memory, one active task handoff, structured feedback, explicit review-gated persistence, and a shared command-line contract.
+
+| Package file | Role |
+|---|---|
+| [project-manager/.gitignore](../../project-manager/.gitignore) | Package support file. |
+| [project-manager/CHANGELOG.md](../../project-manager/CHANGELOG.md) | Package support file. |
+| [project-manager/INDEX.md](../../project-manager/INDEX.md) | Package support file. |
+| [project-manager/LICENSE](../../project-manager/LICENSE) | Package support file. |
+| [project-manager/README.md](../../project-manager/README.md) | Orientation for the package. |
+| [project-manager/SKILL.md](../../project-manager/SKILL.md) | Skill entry or shared workflow instructions. |
+| [project-manager/VERSION](../../project-manager/VERSION) | Package support file. |
+| [project-manager/agents/openai.yaml](../../project-manager/agents/openai.yaml) | Package support file. |
+| [project-manager/project_manager/__init__.py](../../project-manager/project_manager/__init__.py) | Package support file. |
+| [project-manager/project_manager/__main__.py](../../project-manager/project_manager/__main__.py) | Package support file. |
+| [project-manager/project_manager/cli.py](../../project-manager/project_manager/cli.py) | Package support file. |
+| [project-manager/project_manager/core.py](../../project-manager/project_manager/core.py) | Package support file. |
+| [project-manager/project_manager/templates/project-memory/HANDOFF.md](../../project-manager/project_manager/templates/project-memory/HANDOFF.md) | Package support file. |
+| [project-manager/project_manager/templates/project-memory/README.md](../../project-manager/project_manager/templates/project-memory/README.md) | Orientation for the package. |
+| [project-manager/project_manager/templates/project-memory/manifest.json](../../project-manager/project_manager/templates/project-memory/manifest.json) | Package support file. |
+| [project-manager/project_manager/templates/project-memory/rules/README.md](../../project-manager/project_manager/templates/project-memory/rules/README.md) | Orientation for the package. |
+| [project-manager/pyproject.toml](../../project-manager/pyproject.toml) | Package support file. |
+| [project-manager/references/change-review.md](../../project-manager/references/change-review.md) | Package support file. |
+| [project-manager/references/core-protocol.md](../../project-manager/references/core-protocol.md) | Package support file. |
+| [project-manager/references/feedback.md](../../project-manager/references/feedback.md) | Package support file. |
+| [project-manager/references/handoff.md](../../project-manager/references/handoff.md) | Package support file. |
+| [project-manager/references/initialization-and-recovery.md](../../project-manager/references/initialization-and-recovery.md) | Package support file. |
+| [project-manager/scripts/verify_package.py](../../project-manager/scripts/verify_package.py) | Deterministic support, installation, synchronization, or validation script. |
+| [project-manager/tests/test_cli.py](../../project-manager/tests/test_cli.py) | Package support file. |
 
 ## quantum-job-collector
 

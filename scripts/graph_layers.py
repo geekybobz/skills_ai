@@ -43,7 +43,7 @@ LAYERS = (
     {
         "id": "L4",
         "query": (
-            "path:markdown-protocol/ OR path:optimizer/ OR "
+            "path:markdown-protocol/ OR path:optimizer/ OR path:project-manager/ OR "
             "path:theory-reference/SKILL.md OR "
             "path:graph/skills/ OR "
             "path:theory-reference/shared/SKILL.md OR "

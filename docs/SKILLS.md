@@ -62,6 +62,7 @@ inventory row.
 |---|---|
 | `interaction-protocol` | canonical JSON contract, hub, general/math modes independent of task selection |
 | `markdown-protocol` | submodule package with compact operational entry, optional navigation index and generated inventory, proportional review workflow, selectively loaded references, on-demand checker, add-ons, and small learning examples |
+| `project-manager` | submodule package with an always-on operational entry, portable `.ai-memory/` templates, one active HANDOFF, review-gated change plans, feedback capture, deterministic CLI, and package-local tests |
 | `theory-reference` | submodule package with entry, shared router, phases, rules, templates, and scripts |
 | `research-context-scout` | submodule package with entry, initial/deepen phases, an optional math-method lens, gate-sized rules for alignment, acquisition/extraction, evidence, relation mapping and collective synthesis, templates, and wrappers |
 | `optimizer` | submodule package with a stable-route resolver, guarded TeX-to-OLGS build workflow, adaptive campaign and situation-analysis workflows, and read-only discovery helper |
@@ -83,6 +84,11 @@ this shape: `SKILL.md` is the delivered entry, `INDEX.md` is the map, each topic
 holds one subject, and `GUIDE.md` and `TROUBLESHOOTING.md` are optional depth. The
 orchestrator is a control plane rather than a skill, so it is not counted in the
 inventory.
+
+Project Manager has the `supporting` role: it is mandatory for project and
+repository work and is therefore independent of optional task-skill selection.
+`#> use none` suppresses optional task packages, not project memory or HANDOFF
+duties. Saved material remains advisory and never grants action authority.
 
 For future skill creation, documentation or substantial Markdown restructuring, the
 orchestrator composes the Markdown Protocol's skill-package add-on with the native skill

@@ -12,6 +12,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | `interaction.general` | response structure only | no file writes; adequate context is preserved rather than mechanically compressed |
 | `interaction.math` | equation-led response structure only | no file writes; analytic reasoning precedes optional requested code |
 | `markdown-protocol` | automatic Markdown handling could over-structure small edits, fragment user content, or rely on renderer-specific syntax | activate only when Markdown is the requested artifact; announce it, use a proportional user-reviewed proposal before writes, preserve useful existing structure and user edits, keep portable text authoritative, and verify any claimed diagram or equation rendering |
+| `project-manager` | always-on support could silently rewrite project context, expose secrets, retain transcripts, or make stale memory look authoritative | read only bounded `.ai-memory/` entries needed for the task; never store secrets, transcripts, hidden reasoning, skill bodies, or reusable approvals; show exact before/after or add/delete proposals and require approval before every memory write; keep HANDOFF current without turning it into history |
 | `optimizer` | system construction and numerical runs can be mistaken for blanket authority | manual invocation only; resolve the selected stable route before ordinary work; for a new OLGS system produce a plan and wait for user review before writing `system.py`; route library updates to contained `main`; never auto-promote |
 | `skills-orchestrator` | orchestration could be mistaken for authority | always active for routing and management, but never grants write, network, credential, external-action, destructive, staging, or commit authority |
 | contained repair workspace | candidate work could edit live source, deploy itself or commit inherited dirty files | use source-owned controller; default writes remain contained until off; update previews and waits for exact agreement; preserve rollback and live index; host permissions enforce the hard boundary |
@@ -36,7 +37,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | action | rule |
 |---|---|
 | editing any package or capability file | not without an explicit request — the registry describes, it does not rewrite |
-| adding files under a package submodule (`theory-reference/`, `markdown-protocol/`, `optimizer/`, `research-context-scout/`) | each is a separately owned repository; registry files belong in `registry/` instead |
+| adding files under a package submodule (`theory-reference/`, `markdown-protocol/`, `optimizer/`, `project-manager/`, `research-context-scout/`) | each is a separately owned repository; registry files belong in `registry/` instead |
 | editing `interaction-protocol/` | update the shared contract, access tests, API docs, and the hub's explanation together |
 | staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |
 | moving a submodule pointer, tagging, pushing, or rewriting history | it publishes or pins state that others clone: follow [[protocols/repository/GIT_GOVERNANCE]] (child first, clean and published, one concern per commit, only on the user's instruction) and never rewrite published history |

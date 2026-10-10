@@ -21,4 +21,5 @@ Canonical control plane: [[runtime/skills-orchestrator/SKILL|runtime instruction
 - [[graph/skills/theory-reference|Theory Reference]]
 - [[graph/skills/research-context-scout|Research Context Scout]]
 - [[graph/skills/optimizer|Optimizer]]
+- [[graph/skills/project-manager|Project Manager]]
 - [[graph/skills/quantum-job-collector|Quantum Job Collector]]

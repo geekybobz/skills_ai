@@ -8,6 +8,20 @@
       "skill_id": "optimizer"
     },
     {
+      "boundary": "correction text follows; prepare one bounded case without changing rules automatically",
+      "command": "#> feedback",
+      "family": "project-memory",
+      "mode": "feedback",
+      "skill_id": "project-manager"
+    },
+    {
+      "boundary": "propose the smallest complete transfer checkpoint; no silent write",
+      "command": "#> handoff",
+      "family": "project-memory",
+      "mode": "handoff",
+      "skill_id": "project-manager"
+    },
+    {
       "boundary": "first task directive; optional target text may follow; read-only unless a separate write is requested",
       "command": "#> md_check",
       "family": "markdown",
@@ -29,6 +43,13 @@
       "skill_id": "markdown-protocol"
     },
     {
+      "boundary": "optional `init` or `save` text follows; every write is previewed and explicitly approved",
+      "command": "#> memory",
+      "family": "project-memory",
+      "mode": "route",
+      "skill_id": "project-manager"
+    },
+    {
       "boundary": "first task directive; requires an existing system/project and stated goal",
       "command": "#> optimize",
       "family": "optimizer-workflow",
@@ -41,6 +62,13 @@
       "family": "optimizer-workflow",
       "mode": "route",
       "skill_id": "optimizer"
+    },
+    {
+      "boundary": "read-only progressive recovery unless a separate change is approved",
+      "command": "#> resume",
+      "family": "project-memory",
+      "mode": "resume",
+      "skill_id": "project-manager"
     },
     {
       "boundary": "first task directive; presentation controls may precede",
@@ -134,6 +162,12 @@
       "path": "registry/optimizer.md",
       "state": "manual"
     },
+    "project-memory": {
+      "boundary": "portable project context, durable rules and preferences, active handoff, resume, and feedback evidence",
+      "package": "project-manager",
+      "path": "registry/project-memory.md",
+      "state": "active"
+    },
     "research": {
       "boundary": "early project orientation, evidence, applications and paper direction",
       "package": "research-context-scout",
@@ -172,6 +206,12 @@
       "path": "optimizer/SKILL.md",
       "role": "task",
       "state": "manual"
+    },
+    "project-manager": {
+      "boundary": "mandatory for every project or repository task; reads portable memory, maintains one active HANDOFF, proposes durable updates, and remains active under `#> use none`",
+      "path": "project-manager/SKILL.md",
+      "role": "supporting",
+      "state": "active"
     },
     "quantum-job-collector": {
       "boundary": "exhaustive Quantum Career Radar job collection",
@@ -249,6 +289,25 @@
       ]
     },
     {
+      "description": "reads and validates portable project memory, maintains one active task HANDOFF, proposes durable rules and preferences, captures bounded feedback, and exposes deterministic terminal operations",
+      "family": "project-memory",
+      "family_state": "active",
+      "id": "project-manager",
+      "not_for": "conversation with no project or working directory, transcript logging, hidden reasoning storage, background watching, or carrying action approval",
+      "package": "project-manager",
+      "path": "project-manager/SKILL.md",
+      "state": "active",
+      "triggers": [
+        "every project or repository task; explicit memory",
+        "save",
+        "handoff",
+        "resume",
+        "feedback",
+        "initialization",
+        "or recovery request"
+      ]
+    },
+    {
       "description": "align a structured project context before broad search, build a bounded acquisition and extracted-paper corpus, normalize relations, synthesize useful ideas collectively, translate them into project notation, and return a concise beginner-facing orientation with evidence boundaries and the next decisive test",
       "family": "research",
       "family_state": "active",
@@ -281,15 +340,15 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "366dae2dbba3191bd46ba04c647cc245ad55ac1925da09028e0669a3eb05c479",
+  "source_hash": "9d0a514e65379cd7a11ae5ab18bce25b47083326eff0eed837cebafc218869a5",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
-      "sha256": "ee527a6fef044e7b02a945c5136664e3cdda3561b83b0181593fdecc47f82f00"
+      "sha256": "14469811e6574d5ad11fd0ac57a97cda33936109f4e292766c0bbe3e5df1645b"
     },
     {
       "path": "registry/activation.md",
-      "sha256": "d8742ee5f66b835e0b3cedad340c0c188d97f54d500a24d07f2831c185fa64d7"
+      "sha256": "279a1171303d21e87d5f9ee773e8e827cf74265adf59a9cb877fb4c66d5a0435"
     },
     {
       "path": "registry/career.md",
@@ -308,6 +367,10 @@
       "sha256": "ae18a8c272b5581a7182a1b1f6d80d41e7c00f6af39b4c36b4b36548f75fad8e"
     },
     {
+      "path": "registry/project-memory.md",
+      "sha256": "cb3463e621a3f984c1f1545039184a383ddc97f57cf0fe2ee282f901e42b43ea"
+    },
+    {
       "path": "registry/research.md",
       "sha256": "e6a51b7b3cee787d06bd0cafe5feeca7371125b6c77004344ec72a9de35e8b20"
     },
@@ -317,15 +380,15 @@
     }
   ],
   "stats": {
-    "active_packages": 3,
-    "active_routes": 2,
-    "families": 6,
+    "active_packages": 4,
+    "active_routes": 3,
+    "families": 7,
     "inactive_packages": 1,
     "inactive_routes": 1,
     "manual_packages": 2,
     "manual_routes": 2,
-    "packages": 6,
-    "routes": 5
+    "packages": 7,
+    "routes": 6
   },
   "warnings": []
 }

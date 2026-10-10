@@ -61,11 +61,12 @@ class RegistryRuntimeTests(unittest.TestCase):
         with self.assertRaisesRegex(RegistryRuntimeError, "inventory view exceeds"):
             registry_summary(oversized, view="inventory")
 
-    def test_manifest_separates_six_skills_from_one_orchestrator(self) -> None:
+    def test_manifest_separates_seven_skills_from_one_orchestrator(self) -> None:
         self.assertEqual(
             {
                 "interaction-protocol",
                 "markdown-protocol",
+                "project-manager",
                 "theory-reference",
                 "research-context-scout",
                 "optimizer",
@@ -76,6 +77,7 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("skills-orchestrator", self.manifest["orchestrator"]["id"])
         self.assertEqual("model-led", self.manifest["orchestrator"]["mode"])
         self.assertTrue(all(route.get("package") for route in self.manifest["routes"]))
+        self.assertEqual("supporting", self.manifest["packages"]["project-manager"]["role"])
 
 
 

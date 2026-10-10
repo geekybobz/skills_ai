@@ -17,3 +17,7 @@
 	path = optimizer
 	url = https://github.com/geekybobz/optimizer-skill.git
 	branch = main
+[submodule "project-manager"]
+	path = project-manager
+	url = https://github.com/geekybobz/project-manager.git
+	branch = main

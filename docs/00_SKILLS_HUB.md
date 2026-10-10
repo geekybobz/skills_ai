@@ -13,6 +13,7 @@ pick the enabled family registry and load the selected package capability.
 
 | task looks like | if enabled in [[registry/activation]], read |
 |---|---|
+| any project or repository work, project memory, HANDOFF, resume, durable preference, or feedback capture | [[registry/project-memory\|project memory]] |
 | concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
 | Markdown file creation, editing, review, restructuring, README, documentation, notes, knowledge base, or `#> md_protocol` | [[registry/markdown\|markdown]] |
 | LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
@@ -27,7 +28,9 @@ This hub is for bounded maintenance inspection. Normal work uses the model-led c
 1. Read [[registry/activation]] for user-controlled availability. Off, hidden and deprecated capabilities cannot be loaded.
 2. Inspect exactly the relevant family for maintenance; do not preload every registry or skill body.
 3. The host chooses the minimum sufficient compatible capability set, exact entries and required support using semantic reasoning. It never invents an ID or grants permissions through selection.
-4. Normal host work is valid when no optional capability helps. Resolve material ambiguity and ownership conflicts before dependent work; see [[03_COMBO_MAP]].
+4. Normal host work is valid when no optional capability helps. Project Manager
+   support still applies to project or repository work. Resolve material ambiguity
+   and ownership conflicts before dependent work; see [[03_COMBO_MAP]].
 5. Before governed writes or registry scripts, read [[04_RISK_MAP]] and change control.
 
 ## Layers
@@ -39,4 +42,6 @@ L0 entry · L1 hubs and switchboards · L2 family registries · L3 cards · L4 s
 
 - Do not preload a family "to see what's there". The registry is the answer to that question.
 - The interaction skill shapes responses and is independent of task capability selection.
+- Project Manager is mandatory supporting context for project and repository work;
+  `#> use none` does not disable it.
 - Do not modify skill files unless the user explicitly asks.

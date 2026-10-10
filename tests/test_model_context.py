@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class SpecificationTests(unittest.TestCase):
  def test_case_set_is_unique_and_covers_boundary_scenarios(self):
   data=json.loads((ROOT/'tests/model_orchestration_cases.json').read_text())
-  cases=data['cases'];self.assertEqual(78,len(cases));self.assertEqual(78,len({c['id'] for c in cases}))
+  cases=data['cases'];self.assertEqual(83,len(cases));self.assertEqual(83,len({c['id'] for c in cases}))
   self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume'} <= {c['id'] for c in cases})
   for c in cases:
    self.assertTrue(c['request']);self.assertTrue(c['rubric']);self.assertEqual(['codex','claude'],c['hosts'])
@@ -161,6 +161,10 @@ class MetadataMigrationTests(unittest.TestCase):
   self.assertEqual(('markdown-protocol','check'),aliases['#> md_check'])
   self.assertEqual(('markdown-protocol','deepen'),aliases['#> md_deepen'])
   self.assertEqual(('markdown-protocol','guided'),aliases['#> md_protocol'])
+  self.assertEqual(('project-manager','route'),aliases['#> memory'])
+  self.assertEqual(('project-manager','handoff'),aliases['#> handoff'])
+  self.assertEqual(('project-manager','resume'),aliases['#> resume'])
+  self.assertEqual(('project-manager','feedback'),aliases['#> feedback'])
   self.assertEqual(('research-context-scout','deepen'),aliases['#> scout-again'])
  def test_state_gate_is_capability_specific(self):
   with tempfile.TemporaryDirectory() as directory:
@@ -282,10 +286,14 @@ class MetadataEfficiencyTests(unittest.TestCase):
   with self.assertRaisesRegex(ContextError,'DISABLED'):load_capability(self.root,self.manifest,'a.new',explicit=True)
  def test_interaction_capabilities_are_discoverable_with_real_component_states(self):
   page=discover(ROOT,build_manifest(ROOT),limit=32)
+  self.assertEqual('project-manager',page['items'][0]['capability'])
   records={r['capability']:r for r in page['items']}
   self.assertEqual('interaction',records['interaction.math']['package_role'])
+  self.assertEqual('supporting',records['project-manager']['package_role'])
   loaded=load_capability(ROOT,build_manifest(ROOT),'interaction.math',explicit=True)
   self.assertIn('"response_contract"',loaded['body']);self.assertIn('"math"',loaded['body'])
+  project=load_capability(ROOT,build_manifest(ROOT),'project-manager')
+  self.assertIn('private model memory',project['body'])
 
 class EfficientLoadingTests(unittest.TestCase):
  setUp = ExplicitAccessTests.setUp

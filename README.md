@@ -2,11 +2,14 @@
 
 Skills AI is managed by one always-active Skills Orchestrator. It reads compact
 compiled metadata, optionally uses one validated project-local context capsule,
-composes the Interaction Protocol, and selects the minimum sufficient compatible capability set through host-model reasoning. Bounded tools supply metadata and exact access.
+composes mandatory Project Manager support and the Interaction Protocol, and
+selects the minimum sufficient compatible capability set through host-model
+reasoning. Bounded tools supply metadata and exact access.
 
 ```mermaid
 flowchart TD
     U["User request"] --> S["Always-active Skills Orchestrator"]
+    S --> M["Maintain Project Manager memory and HANDOFF"]
     S --> I["Compose Interaction Protocol"]
     S --> C{"Project capsule valid?"}
     C -- "Yes: bounded hints" --> R["Package decision"]
@@ -15,6 +18,7 @@ flowchart TD
     R -- "Useful capabilities" --> P["Compatible capability set"]
     P --> K["Load selected entries and required support"]
     K --> A
+    M --> A
     I --> A
 ```
 
@@ -47,7 +51,7 @@ entry.
 | `runtime/` | the orchestrator ([skills-orchestrator/](runtime/skills-orchestrator/INDEX.md)), capsule validator and schema, API, protocol, agent-entry source and manifest |
 | `registry/` | public package states plus internal family and capability metadata |
 | `interaction-protocol/` | one public interaction package with general and math modes |
-| `markdown-protocol/`, `theory-reference/`, `research-context-scout/`, `optimizer/` | separately owned skill packages, each its own repository pinned here as a submodule |
+| `markdown-protocol/`, `project-manager/`, `theory-reference/`, `research-context-scout/`, `optimizer/` | separately owned skill packages, each its own repository pinned here as a submodule |
 | `external-skills/` | non-traversed pointers to externally owned packages |
 | `protocols/repository/` | operation-specific repository rules, plus the Git governance card |
 | `docs/` | governance documents, each with its explanation below `## Details`, and `docs/generated/` references |
@@ -78,6 +82,7 @@ as `unavailable`, and `scripts/skills_ai status` names the empty folders with th
 | Package | Standalone repository |
 |---|---|
 | Markdown Protocol | <https://github.com/geekybobz/markdown-protocol> |
+| Project Manager | <https://github.com/geekybobz/project-manager> |
 | Research Context Scout | <https://github.com/geekybobz/research-context-scout> |
 | Optimizer Skill | <https://github.com/geekybobz/optimizer-skill> |
 | Theory Reference | <https://github.com/geekybobz/theory-reference> |
@@ -92,7 +97,7 @@ cleanup are defined in [the Git governance card](protocols/repository/GIT_GOVERN
 
 ## Public skills
 
-Public inventory contains exactly these six package records. Internal capabilities,
+Public inventory contains exactly these seven package records. Internal capabilities,
 components, modes, phases, and Markdown files are never additional skills; the
 orchestrator is a control plane and is never counted.
 
@@ -100,6 +105,7 @@ orchestrator is a control plane and is never counted.
 |---|---|---|
 | `interaction-protocol` | active | interaction skill; no skill-count contribution |
 | `markdown-protocol` | active | automatic handling of any requested Markdown creation/edit/review, including inside another task, with proportional design approval, compact/deep boundaries, optional navigation and generated inventories, focused add-ons, visual fallbacks, and validation |
+| `project-manager` | active | mandatory supporting package for repository-local memory, one active HANDOFF, review-gated persistence, feedback capture, and portable terminal access across models |
 | `theory-reference` | active | theory and LaTeX task package |
 | `research-context-scout` | manual | user-aligned physics research orientation from an extracted paper corpus to collective mathematical ideas and project-notation translations |
 | `optimizer` | manual | explicit TeX-to-OLGS build review and adaptive evidence-led campaign workflow |
@@ -127,6 +133,7 @@ Replace the example package names with actual available packages. Use `#> use au
 for automatic selection or `#> use none` to work without task skills. Each listed
 package is explicitly requested; list order does not force a workflow or authorize
 parallel agents. Required support and incompatible targets are resolved openly.
+`#> use none` does not disable mandatory Project Manager duties for project work.
 `mode` chooses method flexibility; ordinary language states the execution boundary.
 At the start of a substantive task you see a short task receipt (task understood,
 plan, skills, mode); the [guide](runtime/skills-orchestrator/GUIDE.md) shows one.

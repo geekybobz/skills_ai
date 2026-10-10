@@ -3,6 +3,7 @@
     { "name": "skills_ai (parent)", "path": "." },
     { "name": "markdown-protocol", "path": "markdown-protocol" },
     { "name": "optimizer", "path": "optimizer" },
+    { "name": "project-manager", "path": "project-manager" },
     { "name": "research-context-scout", "path": "research-context-scout" },
     { "name": "theory-reference", "path": "theory-reference" }
   ],
@@ -11,6 +12,7 @@
     "files.exclude": {
       "markdown-protocol": true,
       "optimizer": true,
+      "project-manager": true,
       "research-context-scout": true,
       "theory-reference": true
     }

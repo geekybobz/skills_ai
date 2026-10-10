@@ -53,6 +53,11 @@
       "purpose": "Manual generic optimizer workflow for stable-version resolution, OLGS build planning and review, adaptive evidence-led campaigns, situation analysis, and contained update proposals."
     },
     {
+      "path": "project-manager",
+      "title": "Project Manager package",
+      "purpose": "Always-on portable project memory, active handoff, review-gated changes, feedback capture, and deterministic terminal access for non-trivial project work."
+    },
+    {
       "path": "protocols",
       "title": "Repository protocols",
       "purpose": "Operation-specific rules and machine contracts for safe additions, edits, migrations, moves, deletion, installation, and amendments."
@@ -181,6 +186,15 @@
       "kind": "git-submodule",
       "traversal": "declared-submodule",
       "purpose": "Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence."
+    },
+    {
+      "id": "project-manager",
+      "display_name": "Project Manager",
+      "path": "project-manager",
+      "graph_entry": "graph/skills/project-manager.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Always-on supporting package for portable repository memory, one active task handoff, structured feedback, explicit review-gated persistence, and a shared command-line contract."
     },
     {
       "id": "quantum-job-collector",

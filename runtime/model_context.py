@@ -15,7 +15,7 @@ from typing import Any
 MAX_FILE_BYTES = 1024 * 1024
 MAX_DISCOVERY_BYTES = 12 * 1024
 MAX_PAGE_ITEMS = 32
-STARTUP_CATALOG_BYTES = 3072
+STARTUP_CATALOG_BYTES = 2048
 CONTRACT_BYTES = 32 * 1024
 _FRONT_MATTER = re.compile(r'^---[\s\S]*?---\s*')
 _HOME_FOOTER = re.compile(r'\n*---\n+\[⌂ Home\]\([^)\n]*\)\s*$')
@@ -204,7 +204,12 @@ def capability_records(root: Path, manifest: dict) -> list[dict]:
     records = []
     ids = set()
     declared = _declared_submodules(root)
-    for package_id, package in sorted(manifest['packages'].items()):
+    role_order = {'supporting': 0, 'interaction': 1, 'task': 2}
+    packages = sorted(
+        manifest['packages'].items(),
+        key=lambda item: (role_order.get(item[1].get('role', 'task'), 3), item[0]),
+    )
+    for package_id, package in packages:
         contract, contract_digest = _contract_snapshot(root, package_id)
         caps = contract['capabilities'] if contract else [
             {'id': r['id'], 'entry': r['path'], 'purpose': r['description'],

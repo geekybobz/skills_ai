@@ -18,7 +18,7 @@ chooses a wider scope. A conflict is asked about once, never settled by order.
 
 | control | values | default | effect |
 |---|---|---|---|
-| `#> use` | `auto`, `none`, `ID, ID` | `auto` | Selection of optional task skills. `auto` lets the host select from compact metadata, which adds no authority. `none` skips task discovery and loading even when a task fits a package strongly, but keeps coordination, obligations and independently gated interaction support. A list invokes every named package: exact IDs, no substitution, and no write, run or worker authority. Repeated IDs are harmless and list order grants no topology. |
+| `#> use` | `auto`, `none`, `ID, ID` | `auto` | Selection of optional task skills. `auto` lets the host select from compact metadata, which adds no authority. `none` skips optional task discovery and loading even when a task fits a package strongly, but keeps coordination, obligations, mandatory Project Manager support for project work, and independently gated interaction support. A list invokes every named package: exact IDs, no substitution, and no write, run or worker authority. Repeated IDs are harmless and list order grants no topology. |
 | `#> mode`, also `#> adherence` | `advisory`, `adaptive`, `strict`; `inspire` means `advisory` | `adaptive` | Adherence only, never autonomy. Advisory uses guidance without compliance claims; adaptive may improve defaults with a stated reason; strict follows the designated required methods. Authority and evidence requirements, invariants, assumptions, provenance, gates and scope hold in every mode. |
 | `#> autonomy` | `review-first`, `standard`, `autonomous` | `standard` | Execution boundary. Review-first prepares a concrete proposal at the declared action boundary; standard continues within scope and explicit gates; autonomous continues authorized phases within limits. A natural instruction such as "prepare the proposal and wait before edits" sets it too. Approval covers only its actual scope. |
 | `#> composition` | `auto`, `single`, `sequential`, `cooperative`, `parallel`, `structured` | `auto` | Topology ([COMPOSITION.md](COMPOSITION.md)). `structured` adds typed artifacts and recovery to any topology: auto topology plus structured durability. |
@@ -44,6 +44,10 @@ chooses a wider scope. A conflict is asked about once, never settled by order.
   user actually gave for the task.
 - A natural-language exclusion ("do not use X") is honored. If it excludes required
   support, resolve that before dependent work.
+- Project Manager is required supporting context for every project or repository
+  task. It is not optional task selection, and `#> use none` does not disable its
+  memory and HANDOFF duties. A direct request not to use project memory is a
+  conflict with the project rule and must be resolved before project work.
 
 ### Conflicts and aliases
 
@@ -88,7 +92,7 @@ chat defaults, `receipt-*` for presentation. Examples:
 
 ```text
 #> use optimizer, theory-reference    invokes both, no write or run authority
-#> use none                           normal host work, no task discovery
+#> use none                           no optional task discovery; project memory remains
 #> mode strict for this chat          chat default; the next turn may say #> mode adaptive
 #> use none  +  #> use optimizer      conflict: ask once, load nothing optional first
 ```

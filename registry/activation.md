@@ -27,7 +27,7 @@ The orchestrator is the always-active control plane. It is not a skill package a
 
 ## Skill Packages
 
-These six records are the public skills. Families, routes, modes, and
+These seven records are the public skills. Families, routes, modes, and
 components below are internal routing structure and are never counted as
 additional skills.
 
@@ -35,6 +35,7 @@ additional skills.
 |---|---|---|---|---|
 | interaction-protocol | active | [[interaction-protocol/README\|interaction-protocol]] | interaction | response support independent of task selection |
 | markdown-protocol | active | [[markdown-protocol/SKILL\|markdown-protocol]] | task | automatic for any requested Markdown creation, edit, review, or restructuring, including inside another task; proportional user-reviewed design before writes; `#> md_protocol` forces guided mode |
+| project-manager | active | [[project-manager/SKILL\|project-manager]] | supporting | mandatory for every project or repository task; reads portable memory, maintains one active HANDOFF, proposes durable updates, and remains active under `#> use none` |
 | theory-reference | active | [[theory-reference/SKILL\|theory-reference]] | task | theory notes, LaTeX, derivation planning, and reference work |
 | research-context-scout | manual | [[research-context-scout/SKILL\|research-context-scout]] | task | exact package request, `#> scout`, or `#> scout-again` only |
 | optimizer | manual | [[optimizer/SKILL\|optimizer]] | task | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates |
@@ -46,6 +47,7 @@ additional skills.
 |---|---|---|---|---|
 | interaction | active | [[registry/interaction\|interaction]] | compact general responses and equation-led mathematical reasoning | interaction-protocol |
 | markdown | active | [[registry/markdown\|markdown]] | Markdown creation, editing, review, layered architecture, formatting patterns, visual fallbacks, and validation | markdown-protocol |
+| project-memory | active | [[registry/project-memory\|project-memory]] | portable project context, durable rules and preferences, active handoff, resume, and feedback evidence | project-manager |
 | theory | active | [[registry/theory\|theory]] | LaTeX theory reference and math notes | theory-reference |
 | research | active | [[registry/research\|research]] | early project orientation, evidence, applications and paper direction | research-context-scout |
 | optimizer-workflow | manual | [[registry/optimizer\|optimizer]] | exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates | optimizer |
