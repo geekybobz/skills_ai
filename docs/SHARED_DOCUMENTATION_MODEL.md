@@ -44,17 +44,17 @@ flowchart TD
 
 Canonical inputs are:
 
-- `protocols/repository/DOCUMENTATION.json`: repository areas, file-purpose
+- `orchestrator/governance/DOCUMENTATION.json`: repository areas, file-purpose
   overrides, package boundaries, projections, and exclusions.
-- `protocols/repository/CONTRACT.json`: path roles, checks, generated outputs,
+- `orchestrator/governance/CONTRACT.json`: path roles, checks, generated outputs,
   graph contracts, graph-node role policy, and protected boundaries.
 - Registry and activation sources: package role, capability purpose, triggers,
   exclusions, state, and canonical path.
-- `runtime/skills-orchestrator/` (entry `SKILL.md`, map `INDEX.md`, topics such as
+- `orchestrator/runtime/skills-orchestrator/` (entry `SKILL.md`, map `INDEX.md`, topics such as
   `MANAGEMENT.md`) and the project-context schema/runtime: management, documentation
   coordination, capsule validation, and safety boundaries.
-- `runtime/AGENT_ENTRY_SHARED.md`: common Codex and Claude repository rules.
-- `adapters/codex/ENTRY.md` and `adapters/claude/ENTRY.md`: the platform-only
+- `orchestrator/runtime/AGENT_ENTRY_SHARED.md`: common Codex and Claude repository rules.
+- `orchestrator/adapters/codex/ENTRY.md` and `orchestrator/adapters/claude/ENTRY.md`: the platform-only
   lifecycle differences.
 
 Generated outputs are:
@@ -62,9 +62,9 @@ Generated outputs are:
 - `AGENTS.md` and `CLAUDE.md`.
 - `docs/generated/FILE_INDEX.md`: every tracked file, what it means, its kind and role.
 - `docs/generated/SKILL_CATALOG.md`: the orchestrator, then the public skills.
-- `graph/orchestration/skills-orchestrator.md` and one `graph/skills/<id>.md`
+- `docs/graph/orchestration/skills-orchestrator.md` and one `docs/graph/skills/<id>.md`
   node per declared skill.
-- The separately compiled `runtime/manifest.json`.
+- The separately compiled `orchestrator/runtime/manifest.json`.
 
 Each declared documentation or protocol concept has one visible L1 graph hub.
 The graph role policy prevents that hub from being colored as a family registry
@@ -120,7 +120,7 @@ request needs them.
   histories remain separately owned. The parent registry pins tested commits,
   while each initialized child remains independently cloneable and maintainable.
   Ownership, commit order, versions, releases and rollback are defined once in
-  [[protocols/repository/GIT_GOVERNANCE]].
+  [[orchestrator/governance/GIT_GOVERNANCE]].
 - Generated files are written atomically and never edited as canonical sources.
 - Generated references are freshness-checked by the compiler; they are not
   falsely required to receive a hand edit when regeneration is byte-identical.
@@ -135,10 +135,10 @@ request needs them.
 ## Build and check
 
 ```bash
-python3 scripts/compile_repository_views.py
-python3 scripts/compile_repository_views.py --check
-python3 scripts/scan_consistency.py changed --operation protocol
-python3 scripts/scan_consistency.py staged --operation protocol
+python3 orchestrator/tools/compile_repository_views.py
+python3 orchestrator/tools/compile_repository_views.py --check
+python3 orchestrator/tools/scan_consistency.py changed --operation protocol
+python3 orchestrator/tools/scan_consistency.py staged --operation protocol
 ```
 
 Any changed source that makes a projection stale blocks release. Mechanical
@@ -167,4 +167,4 @@ rewrite shared Git history.
 
 The core is model-led: semantic decisions belong to Codex or Claude; generated metadata and artifact checks only supply evidence. Codex installation binds the source root, while Claude injects that root with the shared core. Full contracts, composition and recovery instructions are loaded on demand.
 
-Contained repair workspaces are local operational state under ignored `.runtime/repair/`, not documentation sources or graph concepts. [[protocols/repository/REPAIR_WORKSPACE]] owns the lifecycle and explains on/off/update and how to find the hidden folder. No new graph layer or public skill is introduced.
+Contained repair workspaces are local operational state under ignored `.runtime/repair/`, not documentation sources or graph concepts. [[orchestrator/governance/REPAIR_WORKSPACE]] owns the lifecycle and explains on/off/update and how to find the hidden folder. No new graph layer or public skill is introduced.

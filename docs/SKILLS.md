@@ -1,15 +1,15 @@
 # Skills Registry Entry
 
-Normal tasks start from the always-active Skills Orchestrator core, [[runtime/skills-orchestrator/SKILL]]; its map is [[runtime/skills-orchestrator/INDEX]]. The host model uses it to select the minimum sufficient compatible capability set, or continues with normal host tools. Read [[00_SKILLS_HUB]] only for bounded registry maintenance and audits.
+Normal tasks start from the always-active Skills Orchestrator core, [[orchestrator/runtime/skills-orchestrator/SKILL]]; its map is [[orchestrator/runtime/skills-orchestrator/INDEX]]. The host model uses it to select the minimum sufficient compatible capability set, or continues with normal host tools. Read [[00_SKILLS_HUB]] only for bounded registry maintenance and audits.
 
 Flow: host reasoning → compact discovery → exact selected entries and required support → authorized work and artifact-bound evidence. Tools provide metadata and identity/path checks; they never rank skills or select modes. Public inventory counts packages, not capability files.
 
-Composition: [[03_COMBO_MAP]]. Risk: [[04_RISK_MAP]]. Repository changes: [[06_CHANGE_CONTROL]] and one operation card. Guide: [[runtime/skills-orchestrator/GUIDE]].
+Composition: [[03_COMBO_MAP]]. Risk: [[04_RISK_MAP]]. Repository changes: [[06_CHANGE_CONTROL]] and one operation card. Guide: [[orchestrator/runtime/skills-orchestrator/GUIDE]].
 
 An explicit question about available skills uses the live manifest summary; do
 not answer from remembered skill names. A task started outside this workspace
-uses [[protocols/repository/EXTERNAL_CHANGE_REQUEST]] and may write only one new
-packet under `requests/pending/` before a dedicated maintenance handoff.
+uses [[orchestrator/governance/EXTERNAL_CHANGE_REQUEST]] and may write only one new
+packet under `workbench/requests/pending/` before a dedicated maintenance handoff.
 
 ## Details
 
@@ -25,13 +25,13 @@ packet under `requests/pending/` before a dedicated maintenance handoff.
 
 An internal capability cannot bypass its package or family state. Selection chooses
 among available capabilities; it grants no authority. The package list and its states
-live in [[registry/activation]]; the generated `docs/generated/SKILL_CATALOG.md` shows
+live in [[orchestrator/registry/activation]]; the generated `docs/generated/SKILL_CATALOG.md` shows
 them with the orchestrator first and a separately labelled capability appendix.
 
 ```bash
-python3 scripts/list_registry.py
-python3 scripts/list_registry.py --catalog
-python3 scripts/list_registry.py --routes
+python3 orchestrator/tools/list_registry.py
+python3 orchestrator/tools/list_registry.py --catalog
+python3 orchestrator/tools/list_registry.py --routes
 ```
 
 The first command lists public skills, the second adds package-level purpose and
@@ -72,7 +72,7 @@ Every submodule package also carries what lets it verify and update on its own: 
 tests, one declared version, a short `CHANGELOG.md`, a `.gitignore`, CI and a
 standalone-use note in its README. The package's public identity is independent of
 storage form: declared submodules keep their own Git histories and release paths while
-the parent pins the tested combination ([[protocols/repository/GIT_GOVERNANCE]]).
+the parent pins the tested combination ([[orchestrator/governance/GIT_GOVERNANCE]]).
 
 ### Operational and navigation entries
 
@@ -139,7 +139,7 @@ rather than separate public capabilities or visible report sections.
 
 ### Promotion boundary
 
-An idea containing only `skill-plans/<name>/plan.md` is not a skill package. Creating a
+An idea containing only `workbench/plans/<name>/plan.md` is not a skill package. Creating a
 new package normally introduces a governed `SKILL.md` and package record. Existing
 composite and protocol packages may use another explicitly declared canonical entry,
 such as a registry hub or protocol README. In every case, exactly one Activation row

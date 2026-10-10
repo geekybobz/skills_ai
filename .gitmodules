@@ -1,23 +1,23 @@
 [submodule "theory-reference"]
-	path = theory-reference
+	path = skills/theory-reference
 	url = https://github.com/geekybobz/theory-reference.git
 	branch = main
 
 [submodule "markdown-protocol"]
-	path = markdown-protocol
+	path = skills/markdown-protocol
 	url = https://github.com/geekybobz/markdown-protocol.git
 	branch = main
 
 [submodule "research-context-scout"]
-	path = research-context-scout
+	path = skills/research-context-scout
 	url = https://github.com/geekybobz/research-context-scout.git
 	branch = main
 
 [submodule "optimizer"]
-	path = optimizer
+	path = skills/optimizer
 	url = https://github.com/geekybobz/optimizer-skill.git
 	branch = main
 [submodule "project-manager"]
-	path = project-manager
+	path = skills/project-manager
 	url = https://github.com/geekybobz/project-manager.git
 	branch = main

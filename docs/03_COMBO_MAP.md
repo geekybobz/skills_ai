@@ -1,6 +1,6 @@
 # Composition map
 
-Back: [[docs/00_SKILLS_HUB]]. Normative composition: [[runtime/skills-orchestrator/COMPOSITION]].
+Back: [[docs/00_SKILLS_HUB]]. Normative composition: [[orchestrator/runtime/skills-orchestrator/COMPOSITION]].
 
 The host selects the minimum sufficient compatible capability set for the current phase. Single work has one owner; sequential work has explicit producer/consumer artifacts; cooperative work has one output owner and complete supporting constraints; parallel work has authorized independent contexts, controlled write sets and one synthesis owner. Structured checkpoints provide durability across any topology.
 

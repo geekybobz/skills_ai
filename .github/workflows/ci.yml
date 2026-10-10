@@ -23,4 +23,4 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Verify every package and the parent
-        run: python scripts/verify_all.py
+        run: python orchestrator/tools/verify_all.py

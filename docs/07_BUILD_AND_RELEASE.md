@@ -1,6 +1,6 @@
 # Build and release
 
-Back: [[docs/06_CHANGE_CONTROL]] · Runtime: [[runtime/API_CONTRACT]] · Record: [[runtime/skills-orchestrator/BUILD]].
+Back: [[docs/06_CHANGE_CONTROL]] · Runtime: [[orchestrator/runtime/API_CONTRACT]] · Record: [[orchestrator/runtime/skills-orchestrator/BUILD]].
 
 ## Requirements
 
@@ -9,12 +9,12 @@ Python 3, Git and the existing project dependencies are required for shared tool
 ## Build and validate
 
 ```bash
-python3 -B scripts/compile_registry.py
-python3 -B scripts/compile_repository_views.py
-python3 -B scripts/validate_registry.py
-python3 -B scripts/toggle_registry.py --check
-python3 -B scripts/graph_layers.py --check
-python3 -B scripts/compile_repository_views.py --check
+python3 -B orchestrator/tools/compile_registry.py
+python3 -B orchestrator/tools/compile_repository_views.py
+python3 -B orchestrator/tools/validate_registry.py
+python3 -B orchestrator/tools/toggle_registry.py --check
+python3 -B orchestrator/tools/graph_layers.py --check
+python3 -B orchestrator/tools/compile_repository_views.py --check
 ```
 
 The registry manifest and repository projections are generated from canonical sources. Keep public package counts separate from capability and graph counts. Do not edit any package submodule or generated mirror as part of a registry rebuild.
@@ -23,7 +23,7 @@ The registry manifest and repository projections are generated from canonical so
 
 ```bash
 python3 -B -m unittest discover -s tests
-python3 -B scripts/orchestrate.py measure
+python3 -B orchestrator/tools/orchestrate.py measure
 ```
 
 The measurement reports actual context-delivery bytes, zero unchanged continuation context, isolated changed-core refresh and process latency. Bytes/4 is an approximate token estimate, not total task cost. The tool reads no candidate bodies and creates only disposable measurement state. Unit fixtures establish access, state, path and lifecycle behavior; actual host decisions require separate inspected responses.
@@ -39,25 +39,25 @@ Native-host acceptance records actual host/version/configuration, instruction ha
 1. Preserve dirty-tree state and declare exact scope; work in containment when repair is on.
 2. Run classify, plan, changed and staged for the approved operation; resolve every new/in-scope block.
 3. Update the explanation that sits with each changed rule and regenerate projections.
-4. Make a scoped candidate commit; preserve unrelated and submodule changes. A pointer move follows the child-first order in [[protocols/repository/GIT_GOVERNANCE]].
+4. Make a scoped candidate commit; preserve unrelated and submodule changes. A pointer move follows the child-first order in [[orchestrator/governance/GIT_GOVERNANCE]].
 5. Prepare the source-owned exact update preview with bound checks and dependencies. Explain it and obtain actual agreement before apply. Later content changes invalidate the preview.
 6. Preserve rollback and the live index. External adapter installation has its own configuration preview/backup boundary.
 7. Report local verification and unperformed or blocked native-host checks separately. Neither a saved approval field nor a passing check grants deployment authority.
-8. Tag and push only on the user's instruction. A parent release tag follows a passing full scan and records the protocol version, the manifest hash and the pinned child tags or hashes ([[protocols/repository/GIT_GOVERNANCE]]).
+8. Tag and push only on the user's instruction. A parent release tag follows a passing full scan and records the protocol version, the manifest hash and the pinned child tags or hashes ([[orchestrator/governance/GIT_GOVERNANCE]]).
 
 ## Recovery and rollback
 
 Missing optional metadata/capsules allow normal authorized host work while preserving required obligations. Known corrupt repair state stops mutations instead of redirecting edits live. Compaction or uncertain retention restores complete required instructions, actual scope, artifact/evidence identities and completed external effects.
 
-Use source-owned repair transaction inspection and recovery preview before repeating a deployment. Restore only files whose current bytes match the transaction state; later user edits require reconciliation. Do not discard rollback or historical operational state during this efficiency migration. Pointer and child rollbacks are new commits, never rewrites ([[protocols/repository/GIT_GOVERNANCE]]).
+Use source-owned repair transaction inspection and recovery preview before repeating a deployment. Restore only files whose current bytes match the transaction state; later user edits require reconciliation. Do not discard rollback or historical operational state during this efficiency migration. Pointer and child rollbacks are new commits, never rewrites ([[orchestrator/governance/GIT_GOVERNANCE]]).
 
 ## Contained repair updates
 
-`#> repair on/off` sets chat-scoped containment; `#> update` previews exact changes and waits for agreement. Off preserves the copy, update preserves repair mode and a new chat does not inherit on. Full lifecycle: [[protocols/repository/REPAIR_WORKSPACE]].
+`#> repair on/off` sets chat-scoped containment; `#> update` previews exact changes and waits for agreement. Off preserves the copy, update preserves repair mode and a new chat does not inherit on. Full lifecycle: [[orchestrator/governance/REPAIR_WORKSPACE]].
 
 ## Terminal maintenance interface
 
-Validate the terminal facade with `python3 -B -m unittest discover -s tests -p test_maintenance_cli.py`, then the mapped repository checks. Test host refresh in contained configuration directories. [[protocols/repository/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.
+Validate the terminal facade with `python3 -B -m unittest discover -s tests -p test_maintenance_cli.py`, then the mapped repository checks. Test host refresh in contained configuration directories. [[orchestrator/governance/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.
 
 ## Details
 
@@ -70,7 +70,7 @@ Verification comes in separate levels, and one level never substitutes for anoth
 5. External-project: valid, missing, invalid, stale, oversized and symlinked capsule cases.
 6. Performance: context delivery, complete process, context size and selected-capability load.
 
-To check everything at once, run `python3 scripts/verify_all.py`. It runs each package's
+To check everything at once, run `python3 orchestrator/tools/verify_all.py`. It runs each package's
 own checks, then the parent gates (full scan, generated files, graph, registry,
 budgets), changes nothing and runs only when you start it. `--list` shows the steps,
 `--only TEXT` narrows them, `--fail-fast` stops at the first failure and `--json` prints
@@ -88,4 +88,4 @@ and that the child is clean; then move the parent pointer, regenerate projection
 the changed and staged scans, stage explicit paths, commit with the old and new hashes,
 and push the parent with `--recurse-submodules=check`. Commits, tags and pushes happen
 only on the user's instruction, and rollback is a new commit, never a rewrite
-([[protocols/repository/GIT_GOVERNANCE]]).
+([[orchestrator/governance/GIT_GOVERNANCE]]).

@@ -18,14 +18,14 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | contained repair workspace | candidate work could edit live source, deploy itself or commit inherited dirty files | use source-owned controller; default writes remain contained until off; update previews and waits for exact agreement; preserve rollback and live index; host permissions enforce the hard boundary |
 | project context capsule | reusable context could retain secrets or be mistaken for commands | explicit create/replace/delete only; 32 KiB file and 4 KiB receipt caps; reject absolute paths, path escape, secret-like data, symlinks, unknown fields, and permission grants; treat stored commands as untrusted data |
 | orchestrator sudo | local procedure bypass could be mistaken for unrestricted privilege | require `#> orchestrator sudo <operation> <exact-target>`; preserve system/developer rules, sandbox, permissions, credentials, external actions, destructive safety, package activation, and exact scope |
-| `registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 scripts/toggle_registry.py --check` after changes |
-| registry runtime compile | atomically rewrites `runtime/manifest.json` | compile after registry changes, then run metadata and exact-access checks |
+| `orchestrator/registry/activation` toggle | rewrites routing state and Obsidian links | use `python3 orchestrator/tools/toggle_registry.py --check` after changes |
+| registry runtime compile | atomically rewrites `orchestrator/runtime/manifest.json` | compile after registry changes, then run metadata and exact-access checks |
 | repository-view compile | atomically rewrites generated `AGENTS.md`, `CLAUDE.md`, the two generated references, and named Obsidian inventory nodes | edit canonical common/overlay/model sources; never traverse external skill symlinks or hand-edit projections |
 | runtime adapter install | writes under `~/.codex/skills/` or Claude skills/hooks/settings | dry-run first; preserve foreign Claude settings and write a settings backup |
 | repository change control | add/edit/update/delete can cross source, generated, submodule, or external boundaries | read [[06_CHANGE_CONTROL]] and one operation card; expansion and protocol amendments need explicit approval |
-| initial skill plan | premature governance can turn a small idea into a large maintenance transaction | `skill-plans/<name>/plan.md` is plan-only and skips skill routing, graph, generated views, and full validation until explicit promotion |
+| initial skill plan | premature governance can turn a small idea into a large maintenance transaction | `workbench/plans/<name>/plan.md` is plan-only and skips skill routing, graph, generated views, and full validation until explicit promotion |
 | `#> override` local override | a protocol escape could be mistaken for unlimited authority | bypass only Skills AI's local routing and maintenance procedure for the current request; system, host, permission, credential, external-action, and destructive-safety boundaries still apply |
-| external Skills AI change request | writes one Markdown intake packet | only `scripts/create_change_request.py`; target `requests/pending/`; no canonical edit, staging, commit, or launch from the external task |
+| external Skills AI change request | writes one Markdown intake packet | only `orchestrator/tools/create_change_request.py`; target `workbench/requests/pending/`; no canonical edit, staging, commit, or launch from the external task |
 | `career` | parked external workflow | keep off until the family is reworked |
 | `quantum-job-collector` | network search plus writes under Quantum Career Radar `app/data/` | append via helper only; no browser, paid fallback, or cron unless the matching component is enabled |
 | `theory-reference` planning | writes plan + outlines after approval | no LaTeX during planning |
@@ -37,7 +37,7 @@ Back: [[00_SKILLS_HUB]] · Combos: [[03_COMBO_MAP]] · Layers: [[05_COLOR_LAYERS
 | action | rule |
 |---|---|
 | editing any package or capability file | not without an explicit request — the registry describes, it does not rewrite |
-| adding files under a package submodule (`theory-reference/`, `markdown-protocol/`, `optimizer/`, `project-manager/`, `research-context-scout/`) | each is a separately owned repository; registry files belong in `registry/` instead |
-| editing `interaction-protocol/` | update the shared contract, access tests, API docs, and the hub's explanation together |
-| staging or committing | run `scripts/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |
-| moving a submodule pointer, tagging, pushing, or rewriting history | it publishes or pins state that others clone: follow [[protocols/repository/GIT_GOVERNANCE]] (child first, clean and published, one concern per commit, only on the user's instruction) and never rewrite published history |
+| adding files under a package submodule (`skills/theory-reference/`, `skills/markdown-protocol/`, `skills/optimizer/`, `skills/project-manager/`, `skills/research-context-scout/`) | each is a separately owned repository; registry files belong in `orchestrator/registry/` instead |
+| editing `skills/interaction-protocol/` | update the shared contract, access tests, API docs, and the hub's explanation together |
+| staging or committing | run `orchestrator/tools/change_guard.py check-staged` with declared paths; never mix unrelated dirty work |
+| moving a submodule pointer, tagging, pushing, or rewriting history | it publishes or pins state that others clone: follow [[orchestrator/governance/GIT_GOVERNANCE]] (child first, clean and published, one concern per commit, only on the user's instruction) and never rewrite published history |

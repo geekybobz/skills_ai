@@ -1,0 +1,591 @@
+{
+  "version": 1,
+  "protocol_version": 20,
+  "approval_operations": [
+    "move",
+    "deprecate",
+    "delete",
+    "install",
+    "scope",
+    "protocol"
+  ],
+  "protected_prefixes": [
+    "skills/interaction-protocol/",
+    "orchestrator/runtime/skills-orchestrator/",
+    "skills/theory-reference/"
+  ],
+  "request_inbox": "workbench/requests/pending",
+  "generated_outputs": {
+    "AGENTS.md": {
+      "source_patterns": [
+        "orchestrator/runtime/AGENT_ENTRY_SHARED.md",
+        "orchestrator/adapters/codex/ENTRY.md",
+        "orchestrator/tools/compile_repository_views.py",
+        "orchestrator/governance/DOCUMENTATION.json"
+      ],
+      "check": "views"
+    },
+    "CLAUDE.md": {
+      "source_patterns": [
+        "orchestrator/runtime/AGENT_ENTRY_SHARED.md",
+        "orchestrator/adapters/claude/ENTRY.md",
+        "orchestrator/tools/compile_repository_views.py",
+        "orchestrator/governance/DOCUMENTATION.json"
+      ],
+      "check": "views"
+    },
+    "docs/generated/FILE_INDEX.md": {
+      "source_patterns": [
+        ".gitignore",
+        ".gitmodules",
+        ".obsidian/**",
+        "orchestrator/adapters/**",
+        "docs/graph/cards/**",
+        "docs/**",
+        "skills/external/**",
+        "docs/graph/**",
+        "skills/interaction-protocol/**",
+        "skills/markdown-protocol/**",
+        "skills/optimizer/**",
+        "skills/project-manager/**",
+        "skills/research-context-scout/**",
+        "orchestrator/registry/**",
+        "workbench/requests/**",
+        "orchestrator/runtime/**",
+        "orchestrator/tools/**",
+        "orchestrator/tests/**",
+        "orchestrator/governance/**",
+        "skills/theory-reference/**",
+        "workbench/**",
+        "scripts/skills_ai"
+      ],
+      "check": "views"
+    },
+    "docs/generated/SKILL_CATALOG.md": {
+      "source_patterns": [
+        "docs/00_SKILLS_HUB.md",
+        "orchestrator/registry/**",
+        "skills/interaction-protocol/**",
+        "skills/markdown-protocol/**",
+        "skills/theory-reference/**",
+        "skills/external/**",
+        "skills/optimizer/**",
+        "skills/project-manager/**",
+        "orchestrator/runtime/skills-orchestrator/**",
+        "skills/research-context-scout/**",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "orchestrator/runtime/manifest.json": {
+      "source_patterns": [
+        "skills/interaction-protocol/protocol.json",
+        "docs/00_SKILLS_HUB.md",
+        "orchestrator/registry/**"
+      ],
+      "check": "registry"
+    },
+    "docs/graph/orchestration/skills-orchestrator.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/interaction-protocol.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/markdown-protocol.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/project-manager.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/theory-reference.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/research-context-scout.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/optimizer.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    },
+    "docs/graph/skills/quantum-job-collector.md": {
+      "source_patterns": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "check": "views"
+    }
+  },
+  "ignored_worktree_patterns": [
+    ".runtime/**",
+    "feedback-tickets/**",
+    "sample_resources/**",
+    "workbench/examples/**"
+  ],
+  "user_owned_paths": [
+    ".obsidian/graph.json"
+  ],
+  "allowed_external_symlinks": [
+    "skills/external/quantum-job-collector"
+  ],
+  "roles": [
+    {
+      "id": "platform-entry",
+      "patterns": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "checks": [
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "governance",
+      "patterns": [
+        "docs/03_COMBO_MAP.md",
+        "docs/04_RISK_MAP.md",
+        "docs/05_COLOR_LAYERS.md",
+        "docs/06_CHANGE_CONTROL.md",
+        "docs/07_BUILD_AND_RELEASE.md",
+        "orchestrator/governance/**"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "registry-source",
+      "patterns": [
+        "docs/00_SKILLS_HUB.md",
+        "orchestrator/registry/**",
+        "skills/interaction-protocol/**"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "registry",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "skill-source",
+      "patterns": [
+        "skills/external/**/SKILL.md",
+        "skills/markdown-protocol/SKILL.md",
+        "skills/optimizer/SKILL.md",
+        "skills/project-manager/SKILL.md",
+        "skills/research-context-scout/SKILL.md",
+        "skills/theory-reference/SKILL.md",
+        "skills/theory-reference/shared/SKILL.md",
+        "skills/**/SKILL.md"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "registry",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "skill-plan-draft",
+      "patterns": [
+        "workbench/plans/*/plan.md"
+      ],
+      "checks": []
+    },
+    {
+      "id": "skill-support",
+      "patterns": [
+        "skills/external/**",
+        "skills/markdown-protocol/**",
+        "skills/optimizer/**",
+        "skills/project-manager/**",
+        "skills/research-context-scout/**",
+        "skills/theory-reference/shared/phases/**",
+        "skills/**"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "shared-runtime",
+      "patterns": [
+        "orchestrator/runtime/**",
+        "orchestrator/tools/**"
+      ],
+      "checks": [
+        "benchmark",
+        "consistency",
+        "lifecycle",
+        "registry",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "ticket-hub-cli",
+      "patterns": [
+        "orchestrator/tools/ticket_hub.py"
+      ],
+      "checks": [
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "ticket-hub-local-state",
+      "patterns": [
+        "feedback-tickets/**"
+      ],
+      "checks": []
+    },
+    {
+      "id": "maintenance-runtime",
+      "patterns": [
+        "orchestrator/tools/change_guard.py",
+        "orchestrator/tools/compile_repository_views.py",
+        "orchestrator/tools/create_change_request.py",
+        "orchestrator/tools/graph_layers.py",
+        "orchestrator/tools/scan_consistency.py",
+        "orchestrator/tools/skills_ai",
+        "orchestrator/tools/skills_ai.py",
+        "orchestrator/tools/verify_all.py"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "platform-adapter",
+      "patterns": [
+        "orchestrator/adapters/**",
+        "orchestrator/tools/install_runtime_adapter.py"
+      ],
+      "checks": [
+        "adapter",
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "test-source",
+      "patterns": [
+        "orchestrator/tests/**"
+      ],
+      "checks": [
+        "consistency",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "graph-entry",
+      "patterns": [
+        "docs/graph/**"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "views"
+      ]
+    },
+    {
+      "id": "graph-configuration",
+      "patterns": [
+        ".obsidian/graph.json",
+        "docs/05_COLOR_LAYERS.md"
+      ],
+      "checks": [
+        "graph",
+        "views"
+      ]
+    },
+    {
+      "id": "change-request",
+      "patterns": [
+        "workbench/requests/**"
+      ],
+      "checks": [
+        "change-request",
+        "consistency",
+        "graph",
+        "views"
+      ]
+    },
+    {
+      "id": "repository-support",
+      "patterns": [
+        "README.md",
+        ".github/workflows/**",
+        ".gitignore",
+        ".gitmodules",
+        ".obsidian/*.json",
+        "docs/graph/cards/**",
+        "docs/*.md",
+        "docs/generated/**",
+        "docs/NATIVE_HOST_ACCEPTANCE.md",
+        "docs/SKILLS.md",
+        "skills_ai.code-workspace",
+        "sample_resources",
+        "scripts",
+        "scripts/skills_ai",
+        "skills",
+        "orchestrator",
+        "docs/graph",
+        "workbench"
+      ],
+      "checks": [
+        "consistency",
+        "graph",
+        "views"
+      ]
+    },
+    {
+      "id": "migration-legacy-path",
+      "patterns": [
+        "adapters/**",
+        "cards/**",
+        "external-skills/**",
+        "graph/**",
+        "interaction-protocol/**",
+        "markdown-protocol",
+        "optimizer",
+        "project-manager",
+        "protocols/repository/**",
+        "registry/**",
+        "requests/**",
+        "research-context-scout",
+        "runtime/**",
+        "scripts/**",
+        "skill-plans/**",
+        "tests/**",
+        "theory-reference"
+      ],
+      "checks": [
+        "adapter",
+        "benchmark",
+        "change-request",
+        "consistency",
+        "graph",
+        "lifecycle",
+        "registry",
+        "unit",
+        "views"
+      ]
+    },
+    {
+      "id": "ignored-sample",
+      "patterns": [
+        "sample_resources/**",
+        "workbench/examples/**"
+      ],
+      "checks": []
+    },
+    {
+      "id": "ignored-runtime-state",
+      "patterns": [
+        ".runtime/**"
+      ],
+      "checks": []
+    }
+  ],
+  "graph_role_policy": {
+    "graph_contract_entry_layer": "L1",
+    "required_paths": {
+      "orchestrator/registry/activation.md": "L1",
+      "docs/graph/orchestration/skills-orchestrator.md": "L1",
+      "orchestrator/registry/theory.md": "L2",
+      "docs/graph/cards/parked/quantum-job-collector.md": "L3",
+      "skills/optimizer/SKILL.md": "L4",
+      "skills/markdown-protocol/SKILL.md": "L4",
+      "skills/project-manager/SKILL.md": "L4",
+      "docs/graph/skills/markdown-protocol.md": "L4",
+      "docs/graph/skills/optimizer.md": "L4",
+      "docs/graph/skills/project-manager.md": "L4",
+      "docs/graph/skills/research-context-scout.md": "L4",
+      "orchestrator/runtime/PROTOCOL.md": "L5"
+    }
+  },
+  "graph_inventory_policy": {
+    "documentation_model": "orchestrator/governance/DOCUMENTATION.json",
+    "orchestrator_layer": "L1",
+    "skill_layer": "L4",
+    "reserved_entry_names": [
+      "SKILL.md",
+      "README.md",
+      "CLAUDE.md",
+      "CODEX.md",
+      "ENTRY.md"
+    ],
+    "require_default_visibility": true
+  },
+  "graph_contracts": [
+    {
+      "id": "skills-orchestrator",
+      "entry": "docs/graph/orchestration/skills-orchestrator.md",
+      "canonical_sources": [
+        "orchestrator/registry/activation.md",
+        "orchestrator/governance/DOCUMENTATION.json"
+      ],
+      "required_links": {
+        "docs/graph/orchestration/skills-orchestrator.md": [
+          "docs/00_SKILLS_HUB",
+          "orchestrator/registry/activation",
+          "orchestrator/runtime/skills-orchestrator/SKILL",
+          "docs/graph/skills/interaction-protocol",
+          "docs/graph/skills/markdown-protocol",
+          "docs/graph/skills/project-manager",
+          "docs/graph/skills/theory-reference",
+          "docs/graph/skills/research-context-scout",
+          "docs/graph/skills/optimizer",
+          "docs/graph/skills/quantum-job-collector"
+        ]
+      }
+    },
+    {
+      "id": "interaction-protocol",
+      "entry": "skills/interaction-protocol/README.md",
+      "canonical_sources": [
+        "skills/interaction-protocol/protocol.json"
+      ],
+      "required_links": {
+        "docs/00_SKILLS_HUB.md": [
+          "orchestrator/registry/interaction",
+          "skills/interaction-protocol/README"
+        ],
+        "orchestrator/registry/interaction.md": [
+          "docs/00_SKILLS_HUB",
+          "orchestrator/registry/activation",
+          "skills/interaction-protocol/README",
+          "orchestrator/runtime/PROTOCOL"
+        ],
+        "skills/interaction-protocol/README.md": [
+          "docs/00_SKILLS_HUB",
+          "orchestrator/registry/activation",
+          "orchestrator/registry/interaction",
+          "orchestrator/runtime/PROTOCOL",
+          "orchestrator/runtime/API_CONTRACT"
+        ],
+        "orchestrator/runtime/README.md": [
+          "skills/interaction-protocol/README"
+        ],
+        "orchestrator/runtime/PROTOCOL.md": [
+          "skills/interaction-protocol/README"
+        ],
+        "orchestrator/runtime/API_CONTRACT.md": [
+          "skills/interaction-protocol/README"
+        ]
+      }
+    },
+    {
+      "id": "repository-maintenance",
+      "entry": "docs/06_CHANGE_CONTROL.md",
+      "canonical_sources": [
+        "orchestrator/governance/CONTRACT.json",
+        "orchestrator/tools/scan_consistency.py",
+        "orchestrator/governance/TERMINAL_MAINTENANCE.md",
+        "orchestrator/governance/GIT_GOVERNANCE.md",
+        "orchestrator/tools/skills_ai.py"
+      ],
+      "required_links": {
+        "docs/06_CHANGE_CONTROL.md": [
+          "docs/07_BUILD_AND_RELEASE",
+          "orchestrator/governance/PROTOCOL_AMENDMENT",
+          "orchestrator/governance/GIT_GOVERNANCE"
+        ],
+        "docs/07_BUILD_AND_RELEASE.md": [
+          "docs/06_CHANGE_CONTROL"
+        ],
+        "orchestrator/governance/PROTOCOL_AMENDMENT.md": [
+          "docs/06_CHANGE_CONTROL"
+        ],
+        "orchestrator/governance/TERMINAL_MAINTENANCE.md": [
+          "docs/06_CHANGE_CONTROL",
+          "orchestrator/governance/REPAIR_WORKSPACE"
+        ],
+        "orchestrator/governance/GIT_GOVERNANCE.md": [
+          "docs/06_CHANGE_CONTROL",
+          "orchestrator/governance/REPAIR_WORKSPACE"
+        ]
+      }
+    },
+    {
+      "id": "shared-documentation",
+      "entry": "docs/SHARED_DOCUMENTATION_MODEL.md",
+      "canonical_sources": [
+        "orchestrator/governance/DOCUMENTATION.json",
+        "orchestrator/runtime/AGENT_ENTRY_SHARED.md",
+        "orchestrator/tools/compile_repository_views.py"
+      ],
+      "required_links": {
+        "docs/SHARED_DOCUMENTATION_MODEL.md": [
+          "docs/06_CHANGE_CONTROL",
+          "docs/SKILLS"
+        ],
+        "orchestrator/governance/PROTOCOL_AMENDMENT.md": [
+          "docs/SHARED_DOCUMENTATION_MODEL"
+        ],
+        "orchestrator/runtime/AGENT_ENTRY_SHARED.md": [
+          "docs/SHARED_DOCUMENTATION_MODEL"
+        ],
+        "orchestrator/adapters/codex/ENTRY.md": [
+          "docs/SHARED_DOCUMENTATION_MODEL"
+        ],
+        "orchestrator/adapters/claude/ENTRY.md": [
+          "docs/SHARED_DOCUMENTATION_MODEL"
+        ]
+      }
+    }
+  ]
+}

@@ -7,35 +7,35 @@ one operation below, read only its card, and also apply [[04_RISK_MAP]].
 Protocol version: `20`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
-amendments: [[protocols/repository/PROTOCOL_AMENDMENT|Protocol Amendment]]. The flow,
+amendments: [[orchestrator/governance/PROTOCOL_AMENDMENT|Protocol Amendment]]. The flow,
 the permissions and the verification levels are explained under `## Details` below.
 
 ## Operation selector
 
 ### Initial skill-plan fast path
 
-An unimplemented idea may use exactly `skill-plans/<skill-name>/plan.md`.
+An unimplemented idea may use exactly `workbench/plans/<skill-name>/plan.md`.
 That folder is an idea, not a skill: it has no `SKILL.md`, route, activation
 state, graph node, generated view, or full-scan obligation. Keep the plan in
 the form approved by the user; no fixed frontmatter or template is required.
 
 This exception ends when the user explicitly asks to create, implement, or
 promote the skill. Creating `SKILL.md` starts the normal `ADD` transaction and
-all applicable skill governance. Any other file under `skill-plans/` is
+all applicable skill governance. Any other file under `workbench/plans/` is
 unmapped and therefore blocked.
 
 | intended change | read |
 |---|---|
-| add a canonical file, route, package, capability, adapter, script, or document | [[protocols/repository/ADD\|ADD]] |
-| localized change that preserves identity and public contracts | [[protocols/repository/EDIT\|EDIT]] |
-| change a schema, protocol, dependency, installer, or public behavior | [[protocols/repository/UPDATE_MIGRATE\|UPDATE_MIGRATE]] |
-| change an identifier, path, or owner | [[protocols/repository/MOVE_RENAME\|MOVE_RENAME]] |
-| disable, deprecate, or remove behavior or files | [[protocols/repository/DEPRECATE_DELETE\|DEPRECATE_DELETE]] |
-| write under Codex, Claude, or another external configuration root | [[protocols/repository/INSTALL_UNINSTALL\|INSTALL_UNINSTALL]] |
-| work beyond the authorized request | [[protocols/repository/SCOPE_EXPANSION\|SCOPE_EXPANSION]] |
-| change these governance rules | [[protocols/repository/PROTOCOL_AMENDMENT\|PROTOCOL_AMENDMENT]] |
-| request a Skills AI change from a task outside this workspace | [[protocols/repository/EXTERNAL_CHANGE_REQUEST\|EXTERNAL_CHANGE_REQUEST]] |
-| commit, tag, push, clone, move a submodule pointer, roll back, or clean up plans, handoffs and runtime state | [[protocols/repository/GIT_GOVERNANCE\|GIT_GOVERNANCE]], in addition to the operation card |
+| add a canonical file, route, package, capability, adapter, script, or document | [[orchestrator/governance/ADD\|ADD]] |
+| localized change that preserves identity and public contracts | [[orchestrator/governance/EDIT\|EDIT]] |
+| change a schema, protocol, dependency, installer, or public behavior | [[orchestrator/governance/UPDATE_MIGRATE\|UPDATE_MIGRATE]] |
+| change an identifier, path, or owner | [[orchestrator/governance/MOVE_RENAME\|MOVE_RENAME]] |
+| disable, deprecate, or remove behavior or files | [[orchestrator/governance/DEPRECATE_DELETE\|DEPRECATE_DELETE]] |
+| write under Codex, Claude, or another external configuration root | [[orchestrator/governance/INSTALL_UNINSTALL\|INSTALL_UNINSTALL]] |
+| work beyond the authorized request | [[orchestrator/governance/SCOPE_EXPANSION\|SCOPE_EXPANSION]] |
+| change these governance rules | [[orchestrator/governance/PROTOCOL_AMENDMENT\|PROTOCOL_AMENDMENT]] |
+| request a Skills AI change from a task outside this workspace | [[orchestrator/governance/EXTERNAL_CHANGE_REQUEST\|EXTERNAL_CHANGE_REQUEST]] |
+| commit, tag, push, clone, move a submodule pointer, roll back, or clean up plans, handoffs and runtime state | [[orchestrator/governance/GIT_GOVERNANCE\|GIT_GOVERNANCE]], in addition to the operation card |
 
 Do not combine several operation cards by default. Pick the operation with the
 largest contract or lifecycle effect. A localized edit that changes a public
@@ -92,9 +92,9 @@ deletion, activation change, adapter change, or governance amendment. The
 initial skill-plan fast path above is deliberately excluded:
 
 ```bash
-python3 scripts/scan_consistency.py plan --operation <operation> --path <primary-path>
-python3 scripts/scan_consistency.py changed --operation <operation> --path <allowed-path>
-python3 scripts/scan_consistency.py staged --operation <operation> --path <allowed-path>
+python3 orchestrator/tools/scan_consistency.py plan --operation <operation> --path <primary-path>
+python3 orchestrator/tools/scan_consistency.py changed --operation <operation> --path <allowed-path>
+python3 orchestrator/tools/scan_consistency.py staged --operation <operation> --path <allowed-path>
 ```
 
 `plan` computes the expected impact before editing. `changed` checks the live
@@ -103,11 +103,11 @@ working tree and preserves unrelated changes. `staged` is the commit gate. A
 only deterministic code can produce the final absence of blocking findings.
 
 After explicit approval, `apply-generated` may rebuild only an allowlisted
-derived artifact such as `runtime/manifest.json`. It never writes a
+derived artifact such as `orchestrator/runtime/manifest.json`. It never writes a
 skill body, registry meaning, protocol prose, external configuration,
 staging area, or commit.
 
-`protocols/repository/CONTRACT.json` is the platform-neutral machine contract.
+`orchestrator/governance/CONTRACT.json` is the platform-neutral machine contract.
 It classifies paths, maps roles to allowlisted checks, names generated outputs,
 declares visible graph concepts, and records protected and user-owned paths.
 Repository text never supplies executable commands. Codex and Claude consume
@@ -119,7 +119,7 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 2. Modify canonical sources, not generated mirrors.
 3. Never cross a submodule or external-configuration boundary implicitly.
 4. Package or capability selection does not grant write or installation authority.
-5. Run `scripts/scan_consistency.py plan` before structural work, `changed`
+5. Run `orchestrator/tools/scan_consistency.py plan` before structural work, `changed`
    after edits, and `staged` before committing. `change_guard.py` remains the
    compatible authority/scope classifier used by the scanner.
 6. Keep governance, shared runtime, Codex integration, and Claude integration
@@ -128,11 +128,11 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 8. Stage only the declared scope.
 9. Classify every new or moved canonical Markdown file under [[05_COLOR_LAYERS]], require
    its path to match a canonical colour query, and run
-   `python3 scripts/graph_layers.py --check`. A new layer or colour is a
+   `python3 orchestrator/tools/graph_layers.py --check`. A new layer or colour is a
    protocol amendment. Every declared graph-concept entry is an L1 hub;
    Activation is an L1 switchboard; family registries are L2; parked cards are
    L3; package entries, capabilities, and phases are L4; runtime and supporting material are
-   L5. Draft `skill-plans/*/plan.md` files are not graph nodes. Future canonical additions must extend the matching query and role regression in
+   L5. Draft `workbench/plans/*/plan.md` files are not graph nodes. Future canonical additions must extend the matching query and role regression in
    the same change rather than inheriting a misleading fallback colour.
 10. Keep the explanation of a rule with its owner: under `## Details` in the
     owning file, or in a depth topic of the same folder that its `INDEX.md`
@@ -146,12 +146,12 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
     override deterministic failures.
 13. Maintain shared facts in canonical documentation, registry, runtime, and
     platform-overlay sources. Regenerate root agent entries and the generated
-    references with `scripts/compile_repository_views.py`; never hand-edit a
+    references with `orchestrator/tools/compile_repository_views.py`; never hand-edit a
     generated projection.
 14. Prompt-free runtime observations belong only under ignored `.runtime/`
     state, use restrictive permissions and bounded size, and never become
     routing authority or a generated-document input.
-15. At a Git boundary follow [[protocols/repository/GIT_GOVERNANCE|Git governance]].
+15. At a Git boundary follow [[orchestrator/governance/GIT_GOVERNANCE|Git governance]].
     A skill under a declared submodule is changed, tested, committed and pushed
     in its own repository before the parent pointer moves, and commits, tags,
     pushes and deletions happen only on the user's instruction.
@@ -160,7 +160,7 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
 
 A task whose initial workspace is outside `/Users/billabobz/skills_ai` has no
 direct edit path into this repository. An explicit external change request
-authorizes only a new generated Markdown packet under `requests/pending/`.
+authorizes only a new generated Markdown packet under `workbench/requests/pending/`.
 Implementation requires a dedicated maintenance task rooted here and scoped by
 the request, risk map, selected operation card, and change guard. Host workspace
 permissions must enforce read-only repository access plus the narrow request
@@ -171,22 +171,22 @@ inbox; agent instructions alone are not a filesystem security boundary.
 - `AGENTS.md` and `CLAUDE.md`: generated standalone platform entries built from
   one common source plus one platform overlay.
 - This file: operation selection.
-- `protocols/repository/`: execution procedure for one operation.
-- [[protocols/repository/GIT_GOVERNANCE|Git governance]]: repository ownership,
+- `orchestrator/governance/`: execution procedure for one operation.
+- [[orchestrator/governance/GIT_GOVERNANCE|Git governance]]: repository ownership,
   clone modes, the child-first commit order, branches, versions, releases,
   rollback, dirty state and cleanup.
-- `protocols/repository/CONTRACT.json`: path roles, dependency checks, generated
+- `orchestrator/governance/CONTRACT.json`: path roles, dependency checks, generated
   outputs, and generic graph-concept declarations.
-- `protocols/repository/DOCUMENTATION.json`: repository areas, file meanings,
+- `orchestrator/governance/DOCUMENTATION.json`: repository areas, file meanings,
   skill-package boundaries, audience projections, and traversal exclusions.
 - [[04_RISK_MAP]]: risk-specific restrictions.
 - [[05_COLOR_LAYERS]]: graph-layer assignment and colour-query authority.
 - `## Details` blocks and the depth topics (`GUIDE.md`, `TROUBLESHOOTING.md`):
   explanation owned with each rule, read only when a request needs it.
-- `runtime/skills-orchestrator/SKILL.md`: always-active orchestration and management contract.
-- `runtime/PROTOCOL.md`: shared context, package/capability access, capsule, and lifecycle contract.
-- `registry/activation.md`: user-controlled routing state.
-- `requests/pending/`: external intent packets, never skill or routing source.
+- `orchestrator/runtime/skills-orchestrator/SKILL.md`: always-active orchestration and management contract.
+- `orchestrator/runtime/PROTOCOL.md`: shared context, package/capability access, capsule, and lifecycle contract.
+- `orchestrator/registry/activation.md`: user-controlled routing state.
+- `workbench/requests/pending/`: external intent packets, never skill or routing source.
 
 The registry remains routing metadata. Repository governance is not a task
 package; the orchestrator invokes it for management work without compiling its
@@ -194,11 +194,11 @@ procedures as task capabilities.
 
 ## Contained repair work
 
-For user-enabled `#> repair on`, use [[protocols/repository/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. Update means preview and user review before exact application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.
+For user-enabled `#> repair on`, use [[orchestrator/governance/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. Update means preview and user review before exact application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.
 
 ## Terminal maintenance interface
 
-Terminal operations use [[protocols/repository/TERMINAL_MAINTENANCE]] and the same classify/plan/changed/staged and exact update-review boundaries. The command facade adds no semantic routing or permission.
+Terminal operations use [[orchestrator/governance/TERMINAL_MAINTENANCE]] and the same classify/plan/changed/staged and exact update-review boundaries. The command facade adds no semantic routing or permission.
 
 ## Details
 
@@ -257,15 +257,15 @@ internal workflows, not new skills.
 A rule and its explanation share one owner. The owning file keeps everything a reader
 must obey above its first `## Details`; the explanation sits below it, or in a depth topic
 of the same folder that its `INDEX.md` lists. Generated files (`AGENTS.md`, `CLAUDE.md`,
-`docs/generated/`, the `graph/` nodes and `runtime/manifest.json`) are rebuilt from their
-sources with `scripts/compile_repository_views.py` and `scripts/compile_registry.py`, never
+`docs/generated/`, the `docs/graph/` nodes and `orchestrator/runtime/manifest.json`) are rebuilt from their
+sources with `orchestrator/tools/compile_repository_views.py` and `orchestrator/tools/compile_registry.py`, never
 hand-edited, and the staged scanner rejects stale projections. Mechanical freshness does
 not prove that an explanation still matches its rule, so the bounded semantic review checks that.
 
 ### External tasks and private records
 
 A task that starts outside this repository treats Skills AI as read-only. With explicit
-permission it may create one Markdown request under `requests/pending/`, capped at 64 KiB
+permission it may create one Markdown request under `workbench/requests/pending/`, capped at 64 KiB
 before any Markdown is written; implementation then moves to a dedicated maintenance
 task rooted in this folder. The request inbox is never selection or skill authority.
 Private context-delivery markers contain section hashes only and stay under ignored

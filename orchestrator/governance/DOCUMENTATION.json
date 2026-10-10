@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "principle": "Maintain facts once, keep each explanation with its owner, and project the facts into bounded Codex and Claude views and generated references.",
+  "areas": [
+    {
+      "path": ".obsidian",
+      "title": "Obsidian configuration",
+      "purpose": "Personal graph and vault display configuration; graph colors are validated while personal view state is preserved."
+    },
+    {
+      "path": "docs",
+      "title": "Documentation and graph",
+      "purpose": "Human architecture and build guidance, generated references, and generated Obsidian entries; never runtime selection authority."
+    },
+    {
+      "path": "orchestrator",
+      "title": "Skills Orchestrator control plane",
+      "purpose": "Shared runtime, registry, host adapters, deterministic tools, governance contracts, and integration tests."
+    },
+    {
+      "path": "scripts",
+      "title": "Compatibility command",
+      "purpose": "Temporary one-release wrapper for scripts/skills_ai; all implementation lives in orchestrator/tools."
+    },
+    {
+      "path": "skills",
+      "title": "Public skill packages",
+      "purpose": "Repository-owned packages, separately owned Git submodules, and declared external pointers grouped under one visible package root."
+    },
+    {
+      "path": "workbench",
+      "title": "Non-runtime workbench",
+      "purpose": "External change requests, unimplemented plans, and optional reviewed examples; never skill or routing authority."
+    }
+  ],
+  "artifact_overrides": {
+    ".gitignore": "Declares repository-local paths Git should not track.",
+    ".gitmodules": "Declares each separately owned skill submodule: path, remote URL and tracked branch.",
+    "AGENTS.md": "Generated standalone Codex repository entry containing shared rules plus the Codex lifecycle overlay.",
+    "CLAUDE.md": "Generated standalone Claude repository entry containing shared rules plus the Claude hook overlay.",
+    "README.md": "Repository front door: what Skills AI is, a map by depth to every folder's entry, and how to clone or share it; it is never runtime routing authority.",
+    "orchestrator/adapters/codex/ENTRY.md": "Canonical Codex-only invocation and session-ownership overlay used to generate AGENTS.md.",
+    "orchestrator/adapters/claude/ENTRY.md": "Canonical Claude-only hook, child-lifecycle, and acceptance overlay used to generate CLAUDE.md.",
+    "orchestrator/runtime/AGENT_ENTRY_SHARED.md": "Canonical agent rules shared by generated Codex and Claude repository entries.",
+    "orchestrator/runtime/manifest.json": "Generated capability metadata and activation gates consumed by shared discovery/loading.",
+    "orchestrator/tools/skills_ai": "Executable terminal entry for shared inspection, containment, reviewed deployment and host refresh.",
+    "orchestrator/tools/skills_ai.py": "Thin Python entry for the modular maintenance command interface.",
+    "orchestrator/governance/TERMINAL_MAINTENANCE.md": "On-demand agent protocol for terminal maintenance commands, results, approval, host adapters and recovery.",
+    "orchestrator/governance/GIT_GOVERNANCE.md": "On-demand agent protocol for repository ownership, clone modes, the child-first commit order, branches, versions, releases, rollback, dirty state and cleanup.",
+    "skills_ai.code-workspace": "VS Code multi-root workspace listing the parent and each package so every package's own editor settings apply and Source Control shows each repository separately.",
+    "docs/generated/FILE_INDEX.md": "Generated exhaustive reference for repository files, ownership, roles, and purposes.",
+    "docs/generated/SKILL_CATALOG.md": "Generated package-first reference for public skills, internal capabilities, triggers, states, and package contents."
+  },
+  "agent_entries": {
+    "common": "orchestrator/runtime/AGENT_ENTRY_SHARED.md",
+    "outputs": {
+      "AGENTS.md": "orchestrator/adapters/codex/ENTRY.md",
+      "CLAUDE.md": "orchestrator/adapters/claude/ENTRY.md"
+    }
+  },
+  "generated_references": {
+    "repository_index": "docs/generated/FILE_INDEX.md",
+    "skill_catalog": "docs/generated/SKILL_CATALOG.md"
+  },
+  "orchestrator": {
+    "id": "skills-orchestrator",
+    "display_name": "Skills Orchestrator",
+    "path": "orchestrator/runtime/skills-orchestrator",
+    "graph_entry": "docs/graph/orchestration/skills-orchestrator.md",
+    "kind": "control-plane",
+    "traversal": "repository",
+    "purpose": "Always-active control plane for routing, lifecycle management, documentation coordination, and bounded project context; never counted as a skill."
+  },
+  "packages": [
+    {
+      "id": "interaction-protocol",
+      "display_name": "Interaction Protocol",
+      "path": "skills/interaction-protocol",
+      "graph_entry": "docs/graph/skills/interaction-protocol.md",
+      "kind": "interaction-package",
+      "traversal": "repository",
+      "purpose": "Public interaction skill package with general and mathematical response modes, independent of task-skill selection."
+    },
+    {
+      "id": "markdown-protocol",
+      "display_name": "Markdown Protocol",
+      "path": "skills/markdown-protocol",
+      "graph_entry": "docs/graph/skills/markdown-protocol.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Automatic portable-first Markdown skill with proportional design review, compact routing, adaptive layouts, a selectively loaded pattern gallery, visual reliability rules, and structural validation."
+    },
+    {
+      "id": "theory-reference",
+      "display_name": "Theory Reference",
+      "path": "skills/theory-reference",
+      "graph_entry": "docs/graph/skills/theory-reference.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Multi-file theory skill with platform wrappers, shared phases, rules, templates, and scripts."
+    },
+    {
+      "id": "research-context-scout",
+      "display_name": "Research Context Scout",
+      "path": "skills/research-context-scout",
+      "graph_entry": "docs/graph/skills/research-context-scout.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Physics-objective-first research orientation with shared initial/deepening phases, an optional math-method lens, anti-hallucination, relation, evidence and journal-threshold rules, a project record template, and thin platform wrappers."
+    },
+    {
+      "id": "optimizer",
+      "display_name": "Optimizer",
+      "path": "skills/optimizer",
+      "graph_entry": "docs/graph/skills/optimizer.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Manual version-resolved optimizer workflow with separate TeX-to-OLGS build-review and adaptive evidence-led campaign paths; it validates analytical gradients, supports bounded interventions, and preserves reproducible campaign evidence."
+    },
+    {
+      "id": "project-manager",
+      "display_name": "Project Manager",
+      "path": "skills/project-manager",
+      "graph_entry": "docs/graph/skills/project-manager.md",
+      "kind": "git-submodule",
+      "traversal": "declared-submodule",
+      "purpose": "Always-on supporting package for portable repository memory, one active task handoff, structured feedback, explicit review-gated persistence, and a shared command-line contract."
+    },
+    {
+      "id": "quantum-job-collector",
+      "display_name": "Quantum Job Collector",
+      "path": "skills/external/quantum-job-collector",
+      "graph_entry": "docs/graph/skills/quantum-job-collector.md",
+      "kind": "external-symlink",
+      "traversal": "none",
+      "purpose": "Externally owned career workflow pointer; Skills AI controls only its registry state."
+    }
+  ],
+  "exclusions": [
+    ".git/**",
+    ".runtime/**",
+    ".DS_Store",
+    "sample_resources/**",
+    "workbench/plans/**"
+  ]
+}

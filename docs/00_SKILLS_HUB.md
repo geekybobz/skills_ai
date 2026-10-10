@@ -1,31 +1,31 @@
 # Skills Hub
 
 Maintenance hub. The always-active
-[[runtime/skills-orchestrator/SKILL|Skills Orchestrator]] is a compact core delivered to
+[[orchestrator/runtime/skills-orchestrator/SKILL|Skills Orchestrator]] is a compact core delivered to
 the host: the host selects compatible phase capabilities from compact metadata and exact access without loading this hub during normal work.
 
-Shared response behavior: [[interaction-protocol/README|Interaction Protocol]].
+Shared response behavior: [[skills/interaction-protocol/README|Interaction Protocol]].
 
-When maintaining or auditing the registry, check [[registry/activation]], then
+When maintaining or auditing the registry, check [[orchestrator/registry/activation]], then
 pick the enabled family registry and load the selected package capability.
 
 ## Route
 
-| task looks like | if enabled in [[registry/activation]], read |
+| task looks like | if enabled in [[orchestrator/registry/activation]], read |
 |---|---|
-| any project or repository work, project memory, HANDOFF, resume, durable preference, or feedback capture | [[registry/project-memory\|project memory]] |
-| concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[registry/interaction]] |
-| Markdown file creation, editing, review, restructuring, README, documentation, notes, knowledge base, or `#> md_protocol` | [[registry/markdown\|markdown]] |
-| LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[registry/theory]] |
-| `#> scout`, `#> scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[registry/research]] |
-| `#> optimizer` | [[registry/optimizer\|optimizer]] |
-| quantum jobs, career radar, update review queue, pending jobs, source coverage | `registry/career.md` (off in activation) |
+| any project or repository work, project memory, HANDOFF, resume, durable preference, or feedback capture | [[orchestrator/registry/project-memory\|project memory]] |
+| concise answer, direct context, equation-led reasoning, mathematical derivation, math first | [[orchestrator/registry/interaction]] |
+| Markdown file creation, editing, review, restructuring, README, documentation, notes, knowledge base, or `#> md_protocol` | [[orchestrator/registry/markdown\|markdown]] |
+| LaTeX, theory notes, math reference, chapter plan, outline, refresher | [[orchestrator/registry/theory]] |
+| `#> scout`, `#> scout-again`, new-project research orientation, supervisor assessment, applications and paper direction | [[orchestrator/registry/research]] |
+| `#> optimizer` | [[orchestrator/registry/optimizer\|optimizer]] |
+| quantum jobs, career radar, update review queue, pending jobs, source coverage | `orchestrator/registry/career.md` (off in activation) |
 
 ## Rules
 
 This hub is for bounded maintenance inspection. Normal work uses the model-led core and compact discovery, rather than the Markdown hub or trigger tables. Trigger phrases below are descriptive metadata, never a keyword routing engine.
 
-1. Read [[registry/activation]] for user-controlled availability. Off, hidden and deprecated capabilities cannot be loaded.
+1. Read [[orchestrator/registry/activation]] for user-controlled availability. Off, hidden and deprecated capabilities cannot be loaded.
 2. Inspect exactly the relevant family for maintenance; do not preload every registry or skill body.
 3. The host chooses the minimum sufficient compatible capability set, exact entries and required support using semantic reasoning. It never invents an ID or grants permissions through selection.
 4. Normal host work is valid when no optional capability helps. Project Manager

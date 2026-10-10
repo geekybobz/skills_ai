@@ -1,20 +1,20 @@
 {
   "folders": [
     { "name": "skills_ai (parent)", "path": "." },
-    { "name": "markdown-protocol", "path": "markdown-protocol" },
-    { "name": "optimizer", "path": "optimizer" },
-    { "name": "project-manager", "path": "project-manager" },
-    { "name": "research-context-scout", "path": "research-context-scout" },
-    { "name": "theory-reference", "path": "theory-reference" }
+    { "name": "markdown-protocol", "path": "skills/markdown-protocol" },
+    { "name": "optimizer", "path": "skills/optimizer" },
+    { "name": "project-manager", "path": "skills/project-manager" },
+    { "name": "research-context-scout", "path": "skills/research-context-scout" },
+    { "name": "theory-reference", "path": "skills/theory-reference" }
   ],
   "settings": {
     "git.detectSubmodules": false,
     "files.exclude": {
-      "markdown-protocol": true,
-      "optimizer": true,
-      "project-manager": true,
-      "research-context-scout": true,
-      "theory-reference": true
+      "skills/markdown-protocol": true,
+      "skills/optimizer": true,
+      "skills/project-manager": true,
+      "skills/research-context-scout": true,
+      "skills/theory-reference": true
     }
   }
 }
