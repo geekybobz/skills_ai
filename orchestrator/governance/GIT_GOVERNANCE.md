@@ -56,24 +56,35 @@ never discard the child commit to make the parent pass.
 ## Branches
 
 `main` is the only long-lived branch in every repository and stays releasable:
-all checks pass at every commit on it. Multi-commit work uses `topic/<slug>` and
-returns by `git merge --ff-only`. The parent's `main` pins only commits that are
-on the child's `main` or carry a release tag. Published history is never
-rewritten or force-pushed, and parent approval never authorizes rewriting a
-child. `.gitmodules` records `branch = main` for every submodule as the default
-of an explicit `git submodule update --remote`; the pinned commit stays
-authoritative for builds.
+all checks pass at every published commit on it. Multi-step work may use
+`topic/<slug>` and local fixup commits, but fold those unpublished steps into the
+smallest coherent reviewed milestone before fast-forward integration. The
+parent's `main` pins only commits that are on the child's `main` or carry a
+release tag. Published history is never rewritten or force-pushed, and parent
+approval never authorizes rewriting a child. `.gitmodules` records `branch =
+main` for every submodule as the default of an explicit `git submodule update
+--remote`; the pinned commit stays authoritative for builds.
 
 ## Commits
 
-One concern per commit. The subject is imperative and at most 72 characters. The
-body gives the reason, scope and operation, verification with results, and a
-rollback hint. A pointer commit also names the child, the old and new short
-hashes, the version or tag and the child's commit subjects. Commit generated
-files with their sources so every commit passes `--check`. Stage explicit paths:
-never `git add .`, `git add -A` or `git commit -a` in the live checkout, and never
-include unrelated dirty work or inherited repair changes. Keep the attribution
-trailer the host requires.
+One published commit represents one coherent, reviewed user intention. Do not
+publish a separate commit merely for each file, implementation phase, backup, or
+minor correction; fold related unpublished fixups into the milestone first.
+Separate commits remain required for separate repositories, independent
+rollback or release boundaries, or a child-first transaction whose first commit
+must be published before the parent can reference it.
+
+The subject is imperative and at most 72 characters. The body records the
+abstracted user intent, behavioral change and affected areas, measured
+verification, and rollback. A pointer commit also names the child, the old and
+new short hashes, the version or tag and the child's commit subjects. Commit
+generated files with their sources so the milestone passes `--check`. Stage
+explicit paths: never `git add .`, `git add -A` or `git commit -a` in the live
+checkout, and never include unrelated dirty work or inherited repair changes.
+Do not add AI/model `Co-Authored-By` or attribution trailers. Use the configured
+human author and committer identity; another trailer is allowed only when the
+user explicitly requests it or documented repository tooling strictly requires
+it.
 
 ## Versions and releases
 
@@ -162,8 +173,8 @@ Commit body:
 ```text
 <imperative subject, at most 72 characters>
 
-Why: <reason or the user's request>
-Scope: <paths or package>; operation <operation>; approval <reference>
+Intent: <concise abstraction of the user's request>
+Change: <behavior and affected areas>; operation <operation>; approval <reference>
 Verification: <checks run and their results>
 Rollback: <how to revert>
 Pointer: <child> <old>..<new> (<version or tag>): <child commit subjects>

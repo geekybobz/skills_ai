@@ -64,6 +64,12 @@ At the beginning of substantive work you see:
 
 The bullets make the four fields easy to distinguish. Planned selection is not a claim that instructions are loaded. Boundary is optional. `#> receipt auto` shows this once per substantive task; on shows it for each new request; off hides it. Progress messages do not repeat it. Equivalent visible host fields are reused. The receipt adds no approval pause of its own and creates no memory file.
 
+After material work, the completion receipt is deliberately smaller: a plain
+outcome followed by what changed and what was checked, with pending work and the
+exact next command only when they exist. Approval previews explicitly say that
+nothing was changed. Internal hashes remain machine evidence rather than the
+user's requested action. Trivial answers do not need a ceremonial receipt.
+
 ## Follow a request
 
 ```mermaid

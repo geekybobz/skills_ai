@@ -6,8 +6,8 @@ ROOT=Path(__file__).resolve().parents[2]
 class SpecificationTests(unittest.TestCase):
  def test_case_set_is_unique_and_covers_boundary_scenarios(self):
   data=json.loads((ROOT/'orchestrator/tests/model_orchestration_cases.json').read_text())
-  cases=data['cases'];self.assertEqual(83,len(cases));self.assertEqual(83,len({c['id'] for c in cases}))
-  self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume'} <= {c['id'] for c in cases})
+  cases=data['cases'];self.assertEqual(104,len(cases));self.assertEqual(104,len({c['id'] for c in cases}))
+  self.assertTrue({'use-none','use-multiple','use-conflict','mode-conflict','receipt-new','receipt-native-partial','receipt-resume','completion-receipt-success','completion-receipt-approval','completion-receipt-blocked','status-quick','skills-ai-help','skill-help-project-manager','skill-help-manual','skill-help-off','skill-help-unknown','skills-ai-update','skills-ai-doctor','lifecycle-add-skill','lifecycle-stale-global'} <= {c['id'] for c in cases})
   for c in cases:
    self.assertTrue(c['request']);self.assertTrue(c['rubric']);self.assertEqual(['codex','claude'],c['hosts'])
  def test_contract_schema_does_not_grant_activation_or_authority(self):

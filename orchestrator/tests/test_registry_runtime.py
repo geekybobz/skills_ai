@@ -21,7 +21,10 @@ from registry_runtime import (  # noqa: E402
     RegistryRuntimeError,
     build_manifest,
     load_manifest,
+    parse_help_operations,
+    parse_distribution,
     registry_summary,
+    skill_help,
 )
 from install_runtime_adapter import check_adapter, install_adapter  # noqa: E402
 from compile_registry import atomic_write as atomic_write_manifest  # noqa: E402
@@ -78,6 +81,80 @@ class RegistryRuntimeTests(unittest.TestCase):
         self.assertEqual("model-led", self.manifest["orchestrator"]["mode"])
         self.assertTrue(all(route.get("package") for route in self.manifest["routes"]))
         self.assertEqual("supporting", self.manifest["packages"]["project-manager"]["role"])
+
+    def test_every_public_skill_has_bounded_help_metadata(self) -> None:
+        self.assertEqual(
+            set(self.manifest["packages"]),
+            {item["package"] for item in self.manifest["help_operations"]},
+        )
+        for package in self.manifest["packages"]:
+            with self.subTest(package=package):
+                card = skill_help(self.manifest, package)
+                self.assertEqual("skills-ai/skill-help/1", card["schema"])
+                self.assertEqual("none", card["authority"])
+                self.assertTrue(card["chat"] or card["terminal"] or card["keywords"])
+                self.assertNotIn("body", json.dumps(card))
+
+    def test_project_manager_help_includes_controls_cli_and_normalized_name(self) -> None:
+        card = skill_help(self.manifest, "Project_Manager")
+        self.assertEqual("project-manager", card["skill"]["id"])
+        self.assertTrue(card["skill"]["available"])
+        chat = {item["syntax"] for item in card["chat"]}
+        terminal = {item["syntax"] for item in card["terminal"]}
+        self.assertIn("#> memory init", chat)
+        self.assertIn("#> feedback <correction>", chat)
+        self.assertIn("project-manager check .", terminal)
+        self.assertIn("project-manager context . --format json", terminal)
+
+    def test_manual_and_off_help_never_changes_availability(self) -> None:
+        manual = skill_help(self.manifest, "optimizer")
+        disabled = skill_help(self.manifest, "quantum job collector")
+        self.assertEqual(("manual", True), (manual["skill"]["state"], manual["skill"]["available"]))
+        self.assertEqual(("off", False), (disabled["skill"]["state"], disabled["skill"]["available"]))
+        self.assertIn("does not select, load, activate, or authorize", manual["limits"])
+
+    def test_hidden_help_and_invalid_help_rows_fail_closed(self) -> None:
+        hidden = copy.deepcopy(self.manifest)
+        hidden["packages"]["optimizer"]["state"] = "hidden"
+        with self.assertRaisesRegex(RegistryRuntimeError, "unknown public skill"):
+            skill_help(hidden, "optimizer")
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "family.md"
+            source.write_text(
+                "## Help operations\n\n"
+                "| kind | syntax | does | boundary |\n"
+                "|---|---|---|---|\n"
+                "| `invented` | `run` | does something | no authority |\n"
+            )
+            with self.assertRaisesRegex(RegistryRuntimeError, "invalid help operation kind"):
+                parse_help_operations(source)
+
+    def test_distribution_contract_resolves_declared_versions_and_surfaces(self) -> None:
+        distributions = self.manifest["distributions"]
+        self.assertEqual(
+            {"markdown-protocol", "project-manager", "skills-orchestrator"},
+            set(distributions),
+        )
+        self.assertEqual("0.3.0", distributions["markdown-protocol"]["expected_version"])
+        self.assertEqual("0.4.0", distributions["project-manager"]["expected_version"])
+        self.assertEqual(
+            ["project-manager", "pmem"],
+            [item["name"] for item in distributions["project-manager"]["commands"]],
+        )
+        self.assertEqual(["codex", "claude"], distributions["skills-orchestrator"]["host_adapters"])
+        self.assertIn(
+            "orchestrator/registry/distribution.json",
+            {source["path"] for source in self.manifest["sources"]},
+        )
+
+    def test_distribution_contract_rejects_duplicate_command_ownership(self) -> None:
+        source = json.loads((ROOT / "orchestrator/registry/distribution.json").read_text(encoding="utf-8"))
+        source["records"]["project-manager"]["commands"][0]["name"] = "mdp"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "distribution.json"
+            path.write_text(json.dumps(source), encoding="utf-8")
+            with self.assertRaisesRegex(RegistryRuntimeError, "duplicate command distribution"):
+                parse_distribution(path, self.manifest["packages"], root=ROOT)
 
 
 

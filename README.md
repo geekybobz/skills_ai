@@ -168,8 +168,10 @@ promises is in the [guide](orchestrator/runtime/skills-orchestrator/GUIDE.md).
 
 `#> repair on` creates or resumes this chat's contained copy, where you can discuss,
 edit and test across messages while the active source and installed adapters stay
-unchanged. `#> update` explains the exact changes and checks and, after your
-agreement, applies only the reviewed changes with rollback and Git history retained.
+unchanged. `#> skills_ai repair apply` explains the exact contained changes and
+checks and, after your agreement, applies only the reviewed changes with rollback
+and Git history retained. The shorter `#> update` remains a compatibility spelling
+for that contained operation, not the repository/global updater.
 `#> repair off` returns to normal working locations and keeps the copy. New chats
 default off, and repair is independent of the use and mode controls. The hidden
 folder `.runtime/repair/` and the full procedure are in the
@@ -177,7 +179,16 @@ folder `.runtime/repair/` and the full procedure are in the
 
 ## Terminal maintenance
 
-Use `skills_ai status`, `skills_ai skills`, `skills_ai repair on/off`, `skills_ai check`,
-`skills_ai update` and `skills_ai refresh` for repeated maintenance. Updates combine
-exact review, source verification and configured installation refresh; the walkthrough
+Use `#> skills_ai status` in a model conversation, or `skills_ai status` in a
+terminal, for the compact public-skill versions, source, global-command and host
+freshness summary. `skills_ai help` lists the everyday commands: `status`, `help`,
+`check`, `work NAME`, `finish NAME`, `update [NAME]`, `skills [NAME]`, and
+`doctor`. `work`/`finish` provide one contained skill workflow with a compact
+task report and the next exact approval or update command. Package-scoped `update`
+preserves unrelated dirty parent work when the selected published child is safe,
+then previews declared source, global-command, or configured-host changes; it
+never applies them without approval. Advanced
+operations are `lifecycle [PACKAGE]`, `repair on/off/apply`, and
+`refresh --host HOST`. Singular `skill_ai` is accepted in model controls as a
+compatibility spelling; the terminal executable is `skills_ai`. The walkthrough
 is in [terminal maintenance](orchestrator/governance/TERMINAL_MAINTENANCE.md).

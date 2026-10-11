@@ -24,7 +24,10 @@ chooses a wider scope. A conflict is asked about once, never settled by order.
 | `#> composition` | `auto`, `single`, `sequential`, `cooperative`, `parallel`, `structured` | `auto` | Topology ([COMPOSITION.md](COMPOSITION.md)). `structured` adds typed artifacts and recovery to any topology: auto topology plus structured durability. |
 | `#> receipt` | `auto`, `on`, `off` | `auto` | Visibility of the task receipt, defined below. The value set belongs to the interaction protocol. |
 | `#> interaction`, `#> format`, `#> depth` | see the interaction protocol | none | Response presentation, owned by the [interaction protocol](../../../skills/interaction-protocol/README.md); `brief` and `detailed` are aliases of `compact` and `deep`. |
-| `#> repair on`, `#> repair off`, `#> update` | none | off | Contained maintenance ([MANAGEMENT.md](MANAGEMENT.md)). `repair on` is the only control that outlasts its request, until `repair off`; it sets no selection, adherence or autonomy. |
+| `#> repair on`, `#> repair off`, `#> skills_ai repair apply` | none | off | Contained maintenance ([MANAGEMENT.md](MANAGEMENT.md)). `repair on` is the only control that outlasts its request, until `repair off`; it sets no selection, adherence or autonomy. `#> update` is the compatibility spelling for contained repair apply. |
+| `#> skills_ai status|help|check|work NAME|finish NAME|update [NAME]|skills [NAME]|doctor` | none | none | Everyday Skills AI command family. Status, help, and skills inspect; check verifies current changed scope; work/finish contain one public skill and return compact next-command reports; doctor runs full local diagnosis; update fetches declared remotes and prepares exact reviewed repository/global synchronization, optionally for one package. `#> skill_ai ...` is the singular compatibility spelling; compact `#>skill_ai status` is also accepted. Advanced commands are lifecycle, repair, and refresh. |
+| `#> help` | none | none | Bare orchestrator help. Return the important everyday and advanced Skills AI commands plus a bounded public-skill summary containing each package's ID, state, role, and purpose. It is the model-side equivalent of terminal `skills_ai help`. It does not select, load, activate, or authorize a skill or operation. |
+| `#> <public-skill-id> help` | one public package ID; spaces and underscores normalize to hyphens only when exact | none | Return the package's bounded quick reference: purpose, use and exclusion cues, important chat controls, terminal commands, workflow keywords, and boundaries. Help is metadata inspection only: it does not select, load, activate, or authorize the skill. Manual packages remain uninvoked; off packages report that they are disabled; hidden and deprecated IDs are not disclosed. Terminal equivalent: `skills_ai skills <ID> help`. |
 | `#> override`, `#> orchestrator sudo OPERATION EXACT_TARGET` | none | none | Bypass local Skills AI procedure for this request only, never higher instructions, host permissions, disabled states, credentials or external and destructive boundaries. Bare `sudo` has no meaning. |
 | a package alias such as `#> scout` | declared in the catalog | none | Selects its package and mode; aliases are descriptive data interpreted by the host. |
 
@@ -84,6 +87,27 @@ scanned merely to fill it.
   a host shows them. No task-state file is created to show or deduplicate a receipt,
   and stored commands stay advisory and out of ordinary receipts.
 
+### Completion receipt
+
+After a material action, lead with one plain outcome and use this compact shape:
+
+```text
+Done — <what is now true>
+Changed: <actual changes, or “Nothing”>
+Checked: <named checks and honest result>
+Pending: <remaining issue; omit when none>
+Next: <exact command or approval phrase; omit when none>
+```
+
+For an awaiting-approval result, say that no target was changed, summarize the
+reviewed effect, and give the ordinary interactive command or plain-language chat
+reply. Keep digests, transaction IDs, and recovery paths in JSON or an optional
+technical detail, not as the action the user must interpret. For a blocked or
+partial result, replace `Done` with the honest outcome and name preserved state.
+Skip the template for trivial answers and explanations with no material action.
+`receipt off` hides only the opening task receipt, not a required lifecycle,
+approval, failure, or recovery result.
+
 ## Details
 
 The scenarios in `orchestrator/tests/model_orchestration_cases.json` exercise each row above:
@@ -94,6 +118,10 @@ chat defaults, `receipt-*` for presentation. Examples:
 #> use optimizer, theory-reference    invokes both, no write or run authority
 #> use none                           no optional task discovery; project memory remains
 #> mode strict for this chat          chat default; the next turn may say #> mode adaptive
+#> skills_ai status                   compact read-only package and global freshness
+#> help                               important orchestrator commands and skill summary
+#> project-manager help               bounded controls and commands; no skill invocation
+#> skills_ai update                   foreground verification and exact global update review
 #> use none  +  #> use optimizer      conflict: ask once, load nothing optional first
 ```
 

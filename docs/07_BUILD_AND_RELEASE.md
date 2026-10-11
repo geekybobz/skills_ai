@@ -44,6 +44,10 @@ Native-host acceptance records actual host/version/configuration, instruction ha
 6. Preserve rollback and the live index. External adapter installation has its own configuration preview/backup boundary.
 7. Report local verification and unperformed or blocked native-host checks separately. Neither a saved approval field nor a passing check grants deployment authority.
 8. Tag and push only on the user's instruction. A parent release tag follows a passing full scan and records the protocol version, the manifest hash and the pinned child tags or hashes ([[orchestrator/governance/GIT_GOVERNANCE]]).
+9. End every skill lifecycle operation with `skills_ai lifecycle [PACKAGE]` or
+   equivalent inspected evidence. Report committed, published, released,
+   integrated, installed and host-current state separately; suggest the first
+   missing action without performing it.
 
 ## Recovery and rollback
 
@@ -53,11 +57,15 @@ Use source-owned repair transaction inspection and recovery preview before repea
 
 ## Contained repair updates
 
-`#> repair on/off` sets chat-scoped containment; `#> update` previews exact changes and waits for agreement. Off preserves the copy, update preserves repair mode and a new chat does not inherit on. Full lifecycle: [[orchestrator/governance/REPAIR_WORKSPACE]].
+`#> repair on/off` sets chat-scoped containment; `#> skills_ai repair apply`
+previews exact contained changes and waits for agreement. The shorter `#> update`
+is its compatibility spelling. Off preserves the copy, repair apply preserves
+repair mode, and a new chat does not inherit on. Full lifecycle:
+[[orchestrator/governance/REPAIR_WORKSPACE]].
 
 ## Terminal maintenance interface
 
-Validate the terminal facade with `python3 -B -m unittest discover -s tests -p test_maintenance_cli.py`, then the mapped repository checks. Test host refresh in contained configuration directories. [[orchestrator/governance/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.
+Validate the terminal facade with `python3 -B -m unittest discover -s orchestrator/tests -p test_maintenance_cli.py`, then the mapped repository checks. Test lifecycle publication and installation states with disposable local repositories, and host refresh in contained configuration directories. [[orchestrator/governance/TERMINAL_MAINTENANCE]] defines the JSON envelope, approval, receipts and partial failure boundary.
 
 ## Details
 

@@ -4,7 +4,7 @@ Repository-governance entry for changes under `/Users/billabobz/skills_ai`.
 Normal task routing does not load this file. Before a repository write, identify
 one operation below, read only its card, and also apply [[04_RISK_MAP]].
 
-Protocol version: `20`.
+Protocol version: `25`.
 
 Build and release: [[docs/07_BUILD_AND_RELEASE|Build and Release]]. Protocol
 amendments: [[orchestrator/governance/PROTOCOL_AMENDMENT|Protocol Amendment]]. The flow,
@@ -155,6 +155,28 @@ the same JSON receipt but retain ownership of their platform-specific lifecycle.
     A skill under a declared submodule is changed, tested, committed and pushed
     in its own repository before the parent pointer moves, and commits, tags,
     pushes and deletions happen only on the user's instruction.
+16. Every skill-package lifecycle operation ends with the compact lifecycle
+    receipt defined by the Orchestrator. It distinguishes committed, published,
+    released, integrated, installed and host-current state, names the first
+    pending action, and grants no authority to perform it.
+17. Model `#> skills_ai ...` and terminal `skills_ai ...` share one command
+    family. The everyday set is status, help, check, update, skills and doctor;
+    lifecycle, repair and refresh are advanced. Singular `skill_ai` is accepted
+    only as a model-control compatibility spelling. Status and skills remain
+    bounded reads; update performs an explicit foreground remote check and full
+    verification, then binds any source/global installation effects to an exact
+    preview and actual approval. It never commits, tags, pushes or silently moves
+    a parent pointer.
+18. Every public package has bounded quick-help metadata. A leading
+    `#> <public-skill-id> help` and terminal `skills_ai skills <ID> help` return
+    the same read-only purpose, use cues, controls, commands, keywords and
+    boundaries without loading, selecting, activating or authorizing the package.
+    Manual packages remain uninvoked, off packages report disabled state, and
+    hidden/deprecated identifiers are not disclosed.
+19. Bare `#> help` and terminal `skills_ai help` return the same bounded
+    orchestrator overview: important commands plus every public package's ID,
+    state, role, and purpose. This read-only overview never selects, loads,
+    activates, or authorizes a skill or operation.
 
 ## External-task boundary
 
@@ -194,7 +216,7 @@ procedures as task capabilities.
 
 ## Contained repair work
 
-For user-enabled `#> repair on`, use [[orchestrator/governance/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. Update means preview and user review before exact application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.
+For user-enabled `#> repair on`, use [[orchestrator/governance/REPAIR_WORKSPACE]] and keep edits, checks and Git in the returned copy. Repair off retains it. `skills_ai repair apply` means preview and user review before exact contained application; it does not approve itself. Existing classify/plan/changed/staged checks and external-task boundaries still apply.
 
 ## Terminal maintenance interface
 

@@ -43,7 +43,7 @@ verify that ordinary routing still excludes depth and generated references.
 
 ## Current contract
 
-Protocol version 19 keeps these boundaries:
+Protocol version 25 keeps these boundaries:
 
 - The host model owns intent, compatible capability selection, methods, modes,
   composition and evidence assessment. Local tools check artifacts and expose
@@ -69,9 +69,9 @@ Protocol version 19 keeps these boundaries:
   recovery. Codex uses one source-bound installed entry.
 - The shared interface is context, discovery and exact loading, with current-flow
   measurement. Native-host acceptance remains separate from local tool checks.
-- Only current controls, aliases and file layouts are documented and supported.
-  Retired syntax, compatibility aliases and migration records are deleted rather
-  than kept as history; Git retains earlier revisions.
+- Only current controls, file layouts, and explicitly declared compatibility
+  spellings are documented and supported. Retired syntax and migration records
+  are deleted rather than kept as history; Git retains earlier revisions.
 - Skill packages stored as Git submodules are separately owned repositories. A
   change is made, tested, committed and pushed in the child first; the parent then
   moves its pointer to a clean, published commit. Clone modes, branches, versions,
@@ -81,6 +81,26 @@ Protocol version 19 keeps these boundaries:
   and refuses loading with `PACKAGE_NOT_INITIALIZED` and its fix. `orchestrator/tools/verify_all.py`
   runs each package's own checks and the parent gates only on demand, and CI runs it on
   push. A package declares its one SemVer in one place.
+- Skill lifecycle completion is visible through one compact advisory receipt.
+  Parent-owned distribution metadata declares publication, release, global CLI
+  and host-adapter surfaces without supplying executable commands or granting
+  Git/installation authority. Published commits represent coherent reviewed
+  user intentions; AI/model co-author trailers are prohibited.
+- Model `#> skills_ai ...` and terminal `skills_ai ...` share the everyday status,
+  help, check, update, skills, and doctor command family. Singular `skill_ai` is a
+  model-control compatibility spelling. Status and skills remain bounded reads.
+  Update explicitly fetches declared remotes, runs full verification, and binds
+  any repository/global effects to an exact preview plus actual approval; it never
+  supplies commit, tag, push, parent-pointer, or unrelated installation authority.
+- Every public package has one bounded registry-backed quick-help surface.
+  `#> <public-skill-id> help` and `skills_ai skills <ID> help` inspect the same
+  metadata without loading, selecting, activating or authorizing the package.
+  Manual packages remain uninvoked, off packages report disabled state, and
+  hidden/deprecated identifiers remain undisclosed.
+- Bare `#> help`, model `#> skills_ai help`, and terminal `skills_ai help`
+  share one bounded orchestrator overview: important commands plus public-skill
+  ID, state, role, and purpose. The overview is read-only metadata and grants no
+  selection, loading, activation, operation, or authority.
 
 Keep this card current when amending the contract. Git history and private
 rollback receipts retain previous revisions; operational documentation explains

@@ -137,6 +137,84 @@
       "state": "off"
     }
   },
+  "distributions": {
+    "markdown-protocol": {
+      "commands": [
+        {
+          "distribution": "markdown-protocol",
+          "kind": "python-distribution",
+          "name": "mdp",
+          "required": true
+        }
+      ],
+      "expected_version": "0.3.0",
+      "host_adapters": [],
+      "release": {
+        "kind": "semver-tag",
+        "required": true
+      },
+      "repository": {
+        "kind": "submodule",
+        "path": "skills/markdown-protocol"
+      },
+      "version_source": {
+        "kind": "pyproject",
+        "path": "skills/markdown-protocol/pyproject.toml"
+      }
+    },
+    "project-manager": {
+      "commands": [
+        {
+          "distribution": "project-manager-memory",
+          "kind": "python-distribution",
+          "name": "project-manager",
+          "required": true
+        },
+        {
+          "distribution": "project-manager-memory",
+          "kind": "python-distribution",
+          "name": "pmem",
+          "required": true
+        }
+      ],
+      "expected_version": "0.4.0",
+      "host_adapters": [],
+      "release": {
+        "kind": "semver-tag",
+        "required": true
+      },
+      "repository": {
+        "kind": "submodule",
+        "path": "skills/project-manager"
+      },
+      "version_source": {
+        "kind": "pyproject",
+        "path": "skills/project-manager/pyproject.toml"
+      }
+    },
+    "skills-orchestrator": {
+      "commands": [
+        {
+          "kind": "source-launcher",
+          "name": "skills_ai",
+          "required": true,
+          "target": "scripts/skills_ai"
+        }
+      ],
+      "host_adapters": [
+        "codex",
+        "claude"
+      ],
+      "release": {
+        "kind": "date-tag",
+        "required": true
+      },
+      "repository": {
+        "kind": "parent",
+        "path": "."
+      }
+    }
+  },
   "families": {
     "career": {
       "boundary": "career radar and job-search workflows",
@@ -181,6 +259,400 @@
       "state": "active"
     }
   },
+  "help_operations": [
+    {
+      "boundary": "Does not remove required context, evidence, or safety boundaries.",
+      "does": "Choose the explanation depth for the current request.",
+      "family": "interaction",
+      "kind": "chat",
+      "package": "interaction-protocol",
+      "syntax": "#> depth compact / standard / deep"
+    },
+    {
+      "boundary": "Renderer and factual verification remain separate.",
+      "does": "Request a supported output form such as a summary or Mermaid diagram.",
+      "family": "interaction",
+      "kind": "chat",
+      "package": "interaction-protocol",
+      "syntax": "#> format <form>"
+    },
+    {
+      "boundary": "Changes presentation only; grants no task or tool authority.",
+      "does": "Request the general response mode for the current request.",
+      "family": "interaction",
+      "kind": "chat",
+      "package": "interaction-protocol",
+      "syntax": "#> interaction general"
+    },
+    {
+      "boundary": "Changes presentation only; mathematical intent and evidence boundaries still apply.",
+      "does": "Request equation-led mathematical reasoning for the current request.",
+      "family": "interaction",
+      "kind": "chat",
+      "package": "interaction-protocol",
+      "syntax": "#> interaction math"
+    },
+    {
+      "boundary": "Hides or shows the receipt only; it never changes approvals or obligations.",
+      "does": "Control visibility of the task receipt.",
+      "family": "interaction",
+      "kind": "chat",
+      "package": "interaction-protocol",
+      "syntax": "#> receipt auto / on / off"
+    },
+    {
+      "boundary": "Does not prove factual or renderer correctness and does not authorize repairs.",
+      "does": "Run a read-only structural check on the named Markdown collection.",
+      "family": "markdown",
+      "kind": "chat",
+      "package": "markdown-protocol",
+      "syntax": "#> md_check [target]"
+    },
+    {
+      "boundary": "Does not authorize research or invent missing subject matter.",
+      "does": "Propose a deeper linked note for one term.",
+      "family": "markdown",
+      "kind": "chat",
+      "package": "markdown-protocol",
+      "syntax": "#> md_deepen <term>"
+    },
+    {
+      "boundary": "Writing still requires proportional review and the applicable approval boundary.",
+      "does": "Force the guided Markdown workflow.",
+      "family": "markdown",
+      "kind": "chat",
+      "package": "markdown-protocol",
+      "syntax": "#> md_protocol"
+    },
+    {
+      "boundary": "Adoption changes require the normal reviewed write workflow.",
+      "does": "Inspect an unadopted collection and report migration warnings.",
+      "family": "markdown",
+      "kind": "terminal",
+      "package": "markdown-protocol",
+      "syntax": "mdp adopt <collection>"
+    },
+    {
+      "boundary": "Read-only structural verification.",
+      "does": "Verify an adopted Markdown collection.",
+      "family": "markdown",
+      "kind": "terminal",
+      "package": "markdown-protocol",
+      "syntax": "mdp verify <collection>"
+    },
+    {
+      "boundary": "Produces a plan first; it does not optimize or silently construct physics.",
+      "does": "Build a reviewed OLGS system from a user-pointed derivation.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> build-system <problem.tex>"
+    },
+    {
+      "boundary": "Does not silently redesign the system or claim numerical globality.",
+      "does": "Start an evidence-led campaign on an existing verified system.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimize <system/project> <goal>"
+    },
+    {
+      "boundary": "Branch type and changed assumptions must remain explicit.",
+      "does": "Propose a tactic or new-problem branch.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer branch <campaign> <change>"
+    },
+    {
+      "boundary": "Discovery only; does not run optimization.",
+      "does": "Search the narrow optimizer catalog.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer catalog <query>"
+    },
+    {
+      "boundary": "Refuses silent changes to the scientific problem.",
+      "does": "Continue an identity-compatible campaign.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer continue <campaign>"
+    },
+    {
+      "boundary": "No tactic or problem change is applied silently.",
+      "does": "Rank viable responses to an unexpected situation.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer explore <system/project> <question>"
+    },
+    {
+      "boundary": "Requires an explicit proposal and preserves problem identity.",
+      "does": "Assess an explicit tactic change.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer intervene <campaign> <proposal>"
+    },
+    {
+      "boundary": "Read-only inspection.",
+      "does": "Report the resolved optimizer route and live version.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer status"
+    },
+    {
+      "boundary": "Read-only; contract display grants no run authority.",
+      "does": "Display the resolved optimizer contract.",
+      "family": "optimizer-workflow",
+      "kind": "terminal",
+      "package": "optimizer",
+      "syntax": "python optimizer/scripts/optimizer_api.py contract"
+    },
+    {
+      "boundary": "Read-only discovery.",
+      "does": "Search available optimizer routes.",
+      "family": "optimizer-workflow",
+      "kind": "terminal",
+      "package": "optimizer",
+      "syntax": "python optimizer/scripts/optimizer_api.py discover <query>"
+    },
+    {
+      "boundary": "Read-only; does not import or run a project system.",
+      "does": "Resolve the active optimizer route and version.",
+      "family": "optimizer-workflow",
+      "kind": "terminal",
+      "package": "optimizer",
+      "syntax": "python optimizer/scripts/optimizer_api.py status"
+    },
+    {
+      "boundary": "Does not automatically change a rule, skill, or protocol.",
+      "does": "Propose one bounded feedback case.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> feedback <correction>"
+    },
+    {
+      "boundary": "No silent write and no chronological task diary.",
+      "does": "Propose the smallest complete transfer checkpoint.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> handoff"
+    },
+    {
+      "boundary": "Preview only until the exact memory change is approved.",
+      "does": "Inspect a project and propose minimal `.ai-memory/` initialization.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> memory init"
+    },
+    {
+      "boundary": "Never writes silently; saved context grants no later action authority.",
+      "does": "Propose durable memory and active-handoff updates.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> memory save"
+    },
+    {
+      "boundary": "Read-only; preserves live task state and mode.",
+      "does": "Re-anchor the active chat to current project memory and applicable rules.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> project-manager refresh"
+    },
+    {
+      "boundary": "Read-only unless a separate memory change is approved.",
+      "does": "Recover bounded current project context.",
+      "family": "project-memory",
+      "kind": "chat",
+      "package": "project-manager",
+      "syntax": "#> resume"
+    },
+    {
+      "boundary": "Requires actual approval matching the unchanged staged plan.",
+      "does": "Compatibility apply for a plan matching the pending review.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager change apply PLAN.json --approval-ref REF"
+    },
+    {
+      "boundary": "Standard input is preferred; durable memory is unchanged.",
+      "does": "Read, validate, content-bind, and visibly stage one exact memory proposal.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager change preview - ."
+    },
+    {
+      "boundary": "Read-only.",
+      "does": "Validate structure, hashes, links, and privacy markers.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager check ."
+    },
+    {
+      "boundary": "Read-only; stored approvals remain historical context.",
+      "does": "Return bounded recovery context.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager context . --format json"
+    },
+    {
+      "boundary": "Does not apply the feedback change.",
+      "does": "Prepare and visibly stage a bounded feedback change from standard input.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager feedback draft . --input -"
+    },
+    {
+      "boundary": "Read-only.",
+      "does": "Display the active handoff.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager handoff show ."
+    },
+    {
+      "boundary": "Add `--apply` only after reviewing and approving the exact preview.",
+      "does": "Preview minimal project-memory initialization.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager init ."
+    },
+    {
+      "boundary": "Writes no persistent refresh state.",
+      "does": "Return a read-only active-context refresh packet.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager refresh . --format json"
+    },
+    {
+      "boundary": "Rechecks exact content and current memory before writing.",
+      "does": "Interactively review and apply the pending proposal.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager review apply ."
+    },
+    {
+      "boundary": "Does not change durable memory.",
+      "does": "Reject and remove the pending proposal.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager review discard ."
+    },
+    {
+      "boundary": "Read-only; the pending proposal grants no authority.",
+      "does": "Resume inspection of `.ai-memory/review/pending.json`.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager review show ."
+    },
+    {
+      "boundary": "Read-only.",
+      "does": "Show compact initialization and freshness state.",
+      "family": "project-memory",
+      "kind": "terminal",
+      "package": "project-manager",
+      "syntax": "project-manager status ."
+    },
+    {
+      "boundary": "Disabled while the public package is off; help does not activate it.",
+      "does": "Historical package invocation retained for inspection.",
+      "family": "career",
+      "kind": "chat",
+      "package": "quantum-job-collector",
+      "syntax": "/quantum-job-collector"
+    },
+    {
+      "boundary": "The package is off and cannot be selected until it is reviewed and activated.",
+      "does": "Identifies the parked Quantum Job Collector workflow.",
+      "family": "career",
+      "kind": "keyword",
+      "package": "quantum-job-collector",
+      "syntax": "quantum jobs / career radar / update review queue"
+    },
+    {
+      "boundary": "Manual invocation only; source acquisition and evidence limits remain explicit.",
+      "does": "Start the initial research-context alignment and bounded literature workflow.",
+      "family": "research",
+      "kind": "chat",
+      "package": "research-context-scout",
+      "syntax": "#> scout"
+    },
+    {
+      "boundary": "Requires an existing mature orientation; it does not claim exhaustive coverage.",
+      "does": "Deepen an existing research orientation after new evidence or corrections.",
+      "family": "research",
+      "kind": "chat",
+      "package": "research-context-scout",
+      "syntax": "#> scout-again"
+    },
+    {
+      "boundary": "Mode must still be resolved before dependent work.",
+      "does": "Select the package without fixing initial or deepen mode.",
+      "family": "research",
+      "kind": "chat",
+      "package": "research-context-scout",
+      "syntax": "#> use research-context-scout"
+    },
+    {
+      "boundary": "Selection grants no write authority; project discovery still chooses the phase.",
+      "does": "Select the theory-reference package for the current request.",
+      "family": "theory",
+      "kind": "chat",
+      "package": "theory-reference",
+      "syntax": "#> use theory-reference"
+    },
+    {
+      "boundary": "Loads only the relevant outline, rules, and templates; writes after approval.",
+      "does": "Route to the requested chapter build after project discovery.",
+      "family": "theory",
+      "kind": "keyword",
+      "package": "theory-reference",
+      "syntax": "build chapter <chapter>"
+    },
+    {
+      "boundary": "Does not reorder the plan or write LaTeX without approval.",
+      "does": "Route to evaluation of the existing plan and outlines.",
+      "family": "theory",
+      "kind": "keyword",
+      "package": "theory-reference",
+      "syntax": "evaluate / audit plan / review plan"
+    },
+    {
+      "boundary": "Planning writes only after approval and produces no LaTeX.",
+      "does": "Route to planning and outline design.",
+      "family": "theory",
+      "kind": "keyword",
+      "package": "theory-reference",
+      "syntax": "new theory reference / no plan"
+    },
+    {
+      "boundary": "Read-only unless edits are separately requested and approved.",
+      "does": "Present the requested outline for review.",
+      "family": "theory",
+      "kind": "keyword",
+      "package": "theory-reference",
+      "syntax": "review outline <outline>"
+    }
+  ],
   "orchestrator": {
     "boundary": "model-led selection, composition, management, evidence and recovery",
     "id": "skills-orchestrator",
@@ -340,7 +812,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "d9bc91465e5a179e23138eb587b5d610223765d22c087485d659404ee0fbfcc9",
+  "source_hash": "62e6fc45114fead0391fa034d22bd83f3ed8cc158378f9edb3720dd60c818363",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -352,37 +824,42 @@
     },
     {
       "path": "orchestrator/registry/career.md",
-      "sha256": "51b5517cfd97837abfbec3d25ca365b3cb2c00fa044060582c46247fe0ad7ee9"
+      "sha256": "643f414a5b36df55501a70437f8fcb53c4ffb938cc11d4a6bf74d32aa0afeeb4"
+    },
+    {
+      "path": "orchestrator/registry/distribution.json",
+      "sha256": "2967d257a02668d93a4aa6517d707b97dc503ecbc6228f6902a3fc2ce4f6415c"
     },
     {
       "path": "orchestrator/registry/interaction.md",
-      "sha256": "dd65b06e93793fbc75fd4b34c7a459e0935d6daff7b666e88c5f6fee2b6ec1a3"
+      "sha256": "4b74b6f57d068535bfd7e6218d3ce3188292cd34b3f8fe72e2f2dba5fc077b83"
     },
     {
       "path": "orchestrator/registry/markdown.md",
-      "sha256": "8dc03f883f87f35594c840d80f628c691836a58b97eb7db5663e0a21561244e5"
+      "sha256": "89e582a145e38f52c7110a20ef151cd64f190102e956a87dae83b812a9da1733"
     },
     {
       "path": "orchestrator/registry/optimizer.md",
-      "sha256": "76a0c0e2b21bfb3c2630d031b8671852606f9e105c3edff9b1275c08740457a7"
+      "sha256": "81f063d36d00fb23e8316d5c71d5a8770c7edeeb87505ae4ec4f6be2d40dd3a4"
     },
     {
       "path": "orchestrator/registry/project-memory.md",
-      "sha256": "42e01d65b5b3dfff30ab46b133da0cce908602abcb6c8cc033f7c82748fd5d56"
+      "sha256": "be8786201e9f855d9b51c737b46eb8b3553db21e40217308cae48e6f8571b6e0"
     },
     {
       "path": "orchestrator/registry/research.md",
-      "sha256": "068cbef1c6d7f17fcaaed246216152f302a1028ba8720105338d5f3660821a69"
+      "sha256": "f5af530c5096cb5068b252f25140fee19912d7e1670276123e5d9cce496abd1c"
     },
     {
       "path": "orchestrator/registry/theory.md",
-      "sha256": "df05ae1f27dbf38ba5384b66d828ee04c7c7341dbc8dc700723ae37ca4f42709"
+      "sha256": "5bbd00ed868b87ec9b9a87cbe2a4d00c4fbf0b6da5b26d00f60462c666947557"
     }
   ],
   "stats": {
     "active_packages": 4,
     "active_routes": 3,
     "families": 7,
+    "help_operations": 49,
     "inactive_packages": 1,
     "inactive_routes": 1,
     "manual_packages": 2,

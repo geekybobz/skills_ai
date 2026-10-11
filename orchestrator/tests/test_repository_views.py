@@ -232,6 +232,13 @@ class RepositoryViewTests(unittest.TestCase):
             self.assertIn("listed in `.gitmodules` is a separately owned Git repository", text)
             self.assertIn("orchestrator/governance/GIT_GOVERNANCE.md", text)
 
+    def test_git_governance_uses_intent_commits_without_ai_attribution(self) -> None:
+        text = (ROOT / "orchestrator/governance/GIT_GOVERNANCE.md").read_text(encoding="utf-8")
+        self.assertIn("one coherent, reviewed user intention", text)
+        self.assertIn("Intent: <concise abstraction of the user's request>", text)
+        self.assertIn("Do not add AI/model `Co-Authored-By`", text)
+        self.assertNotIn("Keep the attribution trailer the host requires", text)
+
     def test_agent_entries_point_at_the_orchestrator_core_not_the_codex_header(self) -> None:
         outputs = render_outputs(ROOT)
         for entry in ("AGENTS.md", "CLAUDE.md"):

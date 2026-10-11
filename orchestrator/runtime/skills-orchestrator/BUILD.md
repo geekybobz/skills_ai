@@ -19,8 +19,11 @@ Use operational receipts to record actual observations and unresolved limits.
 | Integration | Complete workflows and bounded replacement | Artifact checks, live host observations and restoration rehearsal |
 | Package integration | Capabilities connected to the standard contract | Domain obligations and exact selected context |
 
-For each phase, record the concrete change, relevant checks, unresolved limits and
-a scoped Git commit. Tool fixtures establish mechanical behavior. Semantic
+For each phase, record the concrete change, relevant checks and unresolved
+limits. After the reviewed milestone is complete, publish one coherent commit
+for its user intention rather than one commit per phase; separate repositories
+and independent rollback or release boundaries remain separate transactions.
+Tool fixtures establish mechanical behavior. Semantic
 evaluation needs actual host decisions and inspected artifacts. Domain claims
 need their own evidence; neither kind of test substitutes for it.
 

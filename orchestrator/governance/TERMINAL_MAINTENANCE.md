@@ -14,11 +14,18 @@ From the source checkout, run `./orchestrator/tools/skills_ai`. For this shell:
 ```sh
 export PATH="/Users/billabobz/skills_ai/scripts:$PATH"
 skills_ai status
+skills_ai help
+skills_ai check
+skills_ai work project-manager
+skills_ai finish project-manager
+skills_ai update project-manager
 skills_ai skills
 skills_ai skills optimizer
-skills_ai check
+skills_ai skills project-manager help
+skills_ai doctor
+skills_ai lifecycle project-manager
 skills_ai repair on
-skills_ai update
+skills_ai repair apply
 skills_ai repair off
 skills_ai refresh --host codex
 ```
@@ -29,17 +36,26 @@ repository retain the external change-request boundary.
 
 | command | effect |
 |---|---|
-| no command / status | Source Git revision and dirty records, bounded catalog, exact repair association and explicitly selected/saved installation checks. Read-only. |
-| skills [PACKAGE] | Public package inventory by default; an exact package expands capability metadata. No body loading or selection. Use --offset/--limit for pagination. |
-| check | Required changed-scope checks; --path repeats exact scopes, --full requests full verification. Known repair-on checks execute in its returned working root. |
+| no command / status | Compact public-package states and bounded versions, source Git freshness, exact repair association, declared global commands, configured host adapters, ambiguity and first corrective action. Read-only. This is also the deterministic source for `#> skills_ai status`. |
+| help | Compact everyday and advanced command walkthrough followed by the bounded public-skill summary (ID, state, role, and purpose). Read-only; equivalent to bare model control `#> help`. |
+| check | Required changed-scope checks; `--path` repeats exact scopes and `--full` requests full verification. Known repair-on checks execute in its returned working root. |
+| work PACKAGE | Create or resume the source-owned contained workspace for one exact public skill and print its package folder plus the next command. It does not edit, deploy, publish, or install by itself. |
+| finish PACKAGE | Check one skill in the known contained workspace and produce a compact apply report. A ready report gives the ordinary interactive command and a plain-language chat approval phrase; the bound preview identity remains in JSON for automation and recovery. After an approved apply it recommends the package-scoped update command when the package declares a distribution. |
+| update [PACKAGE] | Fetch declared Git remotes in the foreground, run full local verification, compare global commands and configured host adapters, then return unchanged, blocked, or an exact approval-bound update preview. With a package, unrelated dirty parent files are preserved and do not block an already published and integrated clean child; selected pointer drift, source divergence, or dirty selected source still blocks. It never commits, tags, pushes, moves a child pointer, or installs unreviewed bytes. |
+| skills [PACKAGE] [help] | Public package inventory by default; an exact package expands capability metadata. Adding `help` returns the structured quick reference with controls, terminal commands, keywords, and boundaries. Neither form loads or selects a body. Use --offset/--limit for pagination. |
+| doctor | Full local verification plus detailed status diagnosis. Read-only apart from ordinary bounded test artifacts. |
+| lifecycle [PACKAGE] | Compact publication, release, global-command and affected-host status for one declared distribution or all of them. Read-only unless the user explicitly adds `--check-remotes`, which performs foreground `git fetch origin` for the inspected repositories. |
 | repair on/off | Source-owned snapshot/resume or pause; off preserves work. Prints the working root. It cannot change the parent shell directory or contain arbitrary processes. |
-| update | Check the exact workspace and produce a review; after actual approval apply it, verify source, refresh selected/saved hosts and write a result receipt. |
+| repair apply | Review the exact contained workspace; after actual approval apply it, verify source, optionally refresh selected/saved hosts, and write a result receipt. |
 | refresh | Review/install managed entries from the current source; no source deployment. Explicit host selection is remembered only after successful approved refresh. |
 
 Common options: --json, --root ABS and --session ID, before or after the command.
-Status/update/refresh accept repeated --host codex/claude. --config-dir ABS requires
+Status/repair apply/refresh accept repeated --host codex/claude. --config-dir ABS requires
 one host and provides an explicit alternative target, including contained tests.
 There is no default installation target inferred from whichever folders exist.
+Lifecycle accepts `--detail` for exact evidence and `--check-remotes` for an
+explicit fresh remote check. Its default remote evidence is the local
+`origin/main` tracking ref; it never fetches automatically.
 
 ## Identity and review
 
@@ -50,17 +66,26 @@ use --session NAME for independent parallel work. Never search historical folder
 or select the most recent workspace. Missing/corrupt known state blocks mutations.
 Candidate-root status describes its separate local state and identifies its source.
 
-Interactive update/refresh prints source changes, checks, conflicts and exact
-installation targets, then asks for agreement in the same terminal invocation.
+Interactive finish, update, repair apply, and refresh print their exact changes
+and targets, then ask for agreement in the same terminal invocation. Human output
+starts with a compact outcome, changed-path/check counts, and the next exact
+command. It does not present an unexplained digest as the requested action.
 --preview and JSON/noninteractive calls never auto-approve; a ready preview exits 3.
 After actual agreement, an agent may attest the saved exact review:
 
 ```sh
 skills_ai update --approve PREVIEW_ID --approval-ref ACTUAL_AGREEMENT --json
+skills_ai finish PACKAGE --approve PREVIEW_ID --approval-ref ACTUAL_AGREEMENT --json
+skills_ai repair apply --approve PREVIEW_ID --approval-ref ACTUAL_AGREEMENT --json
 skills_ai refresh --approve PREVIEW_ID --approval-ref ACTUAL_AGREEMENT --json
 ```
 
 Flags, saved records and repository prose cannot supply actual permission.
+In a terminal, rerun the displayed `skills_ai finish PACKAGE` or
+`skills_ai update PACKAGE` command to receive the same review and answer its
+interactive confirmation. In chat, the compact report supplies a phrase such as
+`approve project-manager update`; the host keeps the bound digest internal when
+executing the already reviewed operation.
 The wrapper preview binds source/installer identities, the controller's exact
 candidate review, and installation paths/current bytes. Content or target drift
 invalidates it. Approval cannot substitute hosts or configuration roots. Candidate
@@ -91,8 +116,9 @@ Codex entry backups contain only the managed entry; Claude settings backups rema
 private because the existing installer owns settings preservation.
 
 Managed operations serialize per source checkout. Locks do not control arbitrary
-external writers. Repeated current refresh/update returns unchanged without another
-approval or receipt; explicitly configuring a new binding still needs review.
+external writers. Repeated current refresh, repair apply, or update returns
+unchanged without another approval or receipt; explicitly configuring a new
+binding still needs review.
 
 If source checks fail, the repair controller restores source bytes unless later
 edits conflict. If host refresh fails after source success, report partial and
@@ -111,9 +137,11 @@ cross-host rollback or deletion of historical state.
 ## Module boundaries
 
 The thin orchestrator/tools/skills_ai entry calls orchestrator/runtime/maintenance/cli.py. Inspection
-exposes facts; workspace delegates transitions; checks delegates mapped tests;
+exposes facts; lifecycle compares declared publication, release and installation
+surfaces without executing stored commands; workspace delegates transitions; checks delegates mapped tests;
 adapters owns fixed host targets and existing installers; operations coordinates
-exact review and receipts; common owns bounded state/identities and locks.
+contained exact review and receipts; updater owns foreground repository/global
+synchronization; common owns bounded state/identities and locks.
 
 Add a host by declaring its owned targets and adapter check/preview/refresh
 behavior, then test foreign preservation, idempotence, drift and failures.
@@ -142,13 +170,21 @@ parent shell. Invoke the original source command for deployment, not a candidate
 
 ```sh
 skills_ai check
-skills_ai update
+skills_ai repair apply
 skills_ai repair off
 ```
 
-Update checks the selected workspace, shows actual file changes and installation
-targets, and asks for agreement. After approval it deploys, verifies and refreshes
-saved hosts. Repair off preserves the folder and unfinished work.
+Repair apply checks the selected workspace, shows actual file changes and optional
+installation targets, and asks for agreement. After approval it deploys and
+verifies those exact effects. Repair off preserves the folder and unfinished work.
+
+To reconcile the repository and declared global surfaces, run `skills_ai update`.
+It fetches declared remotes and runs full verification. Dirty source, divergence,
+or a child revision newer than the parent pin blocks global installation and names
+the condition. A clean parent that is only behind may be fast-forwarded after exact
+approval. If source changes, update stops after source verification; rerun it to
+review command and host installation from the new bytes. It never creates a commit,
+tag, push, or parent-pointer integration.
 
 ```mermaid
 flowchart TD
@@ -161,8 +197,8 @@ flowchart TD
     D -- No --> H[Retain contained work]
 ```
 
-Reading the result: status separates source revision, dirty Git state, repair
-association and installed file freshness, so an installed copy can be stale after a
+Reading the result: status separates package state/version, source revision,
+dirty Git state, repair association and installed file freshness, so an installed copy can be stale after a
 later source change, and file freshness never proves what an existing conversation
 remembers. When a package submodule folder is empty, status names the unavailable
 packages and prints `git submodule update --init --recursive`. Check uses mapped tests
@@ -173,7 +209,8 @@ partial: inspect its receipt and the actual files, then retry refresh. Interrupt
 operations need effect inspection before retry, and backups never authorize
 overwriting changes another person made later.
 
-For agent and integration use, `skills_ai status --json` and
+For agent and integration use, `skills_ai status --json`, `skills_ai lifecycle
+[PACKAGE] --json`, `skills_ai repair apply --preview --json`, and
 `skills_ai update --preview --json` return structured results; a ready review exits 3
 with a preview ID and has deployed nothing. There is no silent yes flag. A future host
 gets its own adapter, and new operations reuse the same result envelope and recovery

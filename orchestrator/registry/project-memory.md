@@ -24,6 +24,29 @@ small `.ai-memory/` collection and one replaceable active HANDOFF.
 | `#> resume` | `project-manager` | `resume` | read-only progressive recovery unless a separate change is approved |
 | `#> feedback` | `project-manager` | `feedback` | correction text follows; prepare one bounded case without changing rules automatically |
 
+## Help operations
+
+| kind | syntax | does | boundary |
+|---|---|---|---|
+| `chat` | `#> memory init` | Inspect a project and propose minimal `.ai-memory/` initialization. | Preview only until the exact memory change is approved. |
+| `chat` | `#> memory save` | Propose durable memory and active-handoff updates. | Never writes silently; saved context grants no later action authority. |
+| `chat` | `#> handoff` | Propose the smallest complete transfer checkpoint. | No silent write and no chronological task diary. |
+| `chat` | `#> resume` | Recover bounded current project context. | Read-only unless a separate memory change is approved. |
+| `chat` | `#> project-manager refresh` | Re-anchor the active chat to current project memory and applicable rules. | Read-only; preserves live task state and mode. |
+| `chat` | `#> feedback <correction>` | Propose one bounded feedback case. | Does not automatically change a rule, skill, or protocol. |
+| `terminal` | `project-manager init .` | Preview minimal project-memory initialization. | Add `--apply` only after reviewing and approving the exact preview. |
+| `terminal` | `project-manager status .` | Show compact initialization and freshness state. | Read-only. |
+| `terminal` | `project-manager check .` | Validate structure, hashes, links, and privacy markers. | Read-only. |
+| `terminal` | `project-manager context . --format json` | Return bounded recovery context. | Read-only; stored approvals remain historical context. |
+| `terminal` | `project-manager refresh . --format json` | Return a read-only active-context refresh packet. | Writes no persistent refresh state. |
+| `terminal` | `project-manager change preview - .` | Read, validate, content-bind, and visibly stage one exact memory proposal. | Standard input is preferred; durable memory is unchanged. |
+| `terminal` | `project-manager review show .` | Resume inspection of `.ai-memory/review/pending.json`. | Read-only; the pending proposal grants no authority. |
+| `terminal` | `project-manager review apply .` | Interactively review and apply the pending proposal. | Rechecks exact content and current memory before writing. |
+| `terminal` | `project-manager review discard .` | Reject and remove the pending proposal. | Does not change durable memory. |
+| `terminal` | `project-manager change apply PLAN.json --approval-ref REF` | Compatibility apply for a plan matching the pending review. | Requires actual approval matching the unchanged staged plan. |
+| `terminal` | `project-manager handoff show .` | Display the active handoff. | Read-only. |
+| `terminal` | `project-manager feedback draft . --input -` | Prepare and visibly stage a bounded feedback change from standard input. | Does not apply the feedback change. |
+
 ## Details
 
 - Repository authority files and current user instructions outrank saved memory.
@@ -35,6 +58,8 @@ small `.ai-memory/` collection and one replaceable active HANDOFF.
   state and propose the exact recovery or initialization change.
 - Every memory mutation uses a structured before/add/change/delete preview and
   explicit approval of that exact proposal.
+- One unapproved proposal may persist at the fixed visible review path; it is
+  excluded from the manifest and removed after apply or explicit rejection.
 - Saved context is advisory. It never authorizes a commit, push, deployment,
   deletion, purchase, external message, retry, or other consequential action.
 - Do not store secrets, credentials, transcripts, hidden reasoning, skill

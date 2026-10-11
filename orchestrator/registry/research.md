@@ -27,3 +27,11 @@ research-context-scout`, or one of the commands below.
 
 Aliases select the same manual skill and fix its mode; they do not create
 separate capabilities or grant extra write authority.
+
+## Help operations
+
+| kind | syntax | does | boundary |
+|---|---|---|---|
+| `chat` | `#> scout` | Start the initial research-context alignment and bounded literature workflow. | Manual invocation only; source acquisition and evidence limits remain explicit. |
+| `chat` | `#> scout-again` | Deepen an existing research orientation after new evidence or corrections. | Requires an existing mature orientation; it does not claim exhaustive coverage. |
+| `chat` | `#> use research-context-scout` | Select the package without fixing initial or deepen mode. | Mode must still be resolved before dependent work. |

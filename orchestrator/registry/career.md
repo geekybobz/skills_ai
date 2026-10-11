@@ -25,6 +25,13 @@ Graph card: [[docs/graph/cards/parked/quantum-job-collector|quantum-job-collecto
 | `quantum-job-collector.paid-fallback` | off | paid or remote fallback tools |
 | `quantum-job-collector.cron` | off | scheduled automation |
 
+## Help operations
+
+| kind | syntax | does | boundary |
+|---|---|---|---|
+| `keyword` | `quantum jobs / career radar / update review queue` | Identifies the parked Quantum Job Collector workflow. | The package is off and cannot be selected until it is reviewed and activated. |
+| `chat` | `/quantum-job-collector` | Historical package invocation retained for inspection. | Disabled while the public package is off; help does not activate it. |
+
 ## Rework Notes
 
 - Prefer deterministic platform adapters before browser fallback.

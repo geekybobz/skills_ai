@@ -79,4 +79,4 @@ on the normal path.
 
 Use `orchestrator/governance/REPAIR_WORKSPACE.md` for source-owned containment and exact update review. Inspect the known chat association before maintenance mutations and after uncertainty; known missing/corrupt state blocks mutations instead of redirecting them live. Preserve dirty live changes and rollback. External tasks retain the request-only boundary.
 
-For terminal maintenance, read `orchestrator/governance/TERMINAL_MAINTENANCE.md` once and use `orchestrator/tools/skills_ai` for structured status, metadata, checks, containment, reviewed updates and host refresh. This interface grants no authority and does not choose skills.
+For terminal maintenance, read `orchestrator/governance/TERMINAL_MAINTENANCE.md` once; use `orchestrator/tools/skills_ai`. Everyday: status, help, check, work, finish, update, skills, doctor. Advanced: lifecycle, repair, refresh. Work/finish contain package work; update may name one package. Mutations remain approval-bound. This interface grants no authority and chooses no skills.

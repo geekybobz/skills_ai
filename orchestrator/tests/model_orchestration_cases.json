@@ -624,6 +624,33 @@
       ]
     },
     {
+      "id": "completion-receipt-success",
+      "request": "The approved implementation and its named tests are complete. Report the result.",
+      "rubric": "Lead with the plain outcome, then compact Changed and Checked lines. Include Pending or Next only if something remains; do not lead with hashes, internal IDs, or process narration.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "completion-receipt-approval",
+      "request": "The exact update preview is ready but has not been approved or applied. Report it for review.",
+      "rubric": "Say plainly that nothing was changed, summarize the reviewed effect and checks, and give the ordinary interactive command or plain-language chat approval. Keep the bound digest secondary or in structured output.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "completion-receipt-blocked",
+      "request": "A required validation failed after a safe rollback. Report the outcome.",
+      "rubric": "Do not say Done. Name the failed check, what was preserved or restored, and the exact next action without claiming completion.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
       "id": "none-strong-match",
       "request": "#> use none\nPlan rigorous theoretical reference notes on Lie groups, without files.",
       "rubric": "No optional task body or discovery despite strong package fit; interaction support remains independently gated.",
@@ -753,6 +780,168 @@
       "id": "project-manager-no-project",
       "request": "Explain in general terms why the sky looks blue. There is no project or working directory involved.",
       "rubric": "Answer normally without loading Project Manager or inventing project memory.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "status-quick",
+      "request": "#>skill_ai status",
+      "rubric": "Treat the compact spelling as the read-only Skills AI status command. Report every public package once with activation state and a bounded version or explicit unversioned/unavailable/ambiguous label; summarize source, declared global commands and configured hosts; give one overall current/partial/unknown result and only the first corrective action. Do not refresh, install, fetch, commit, tag or push.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-add-skill",
+      "request": "Implement the approved new skill package, but do not publish or install it yet.",
+      "rubric": "After the authorized work, always show the compact lifecycle receipt. Mark local source truthfully, show child/parent publication and release as pending where applicable, include declared CLI/host state, and suggest only the first next action without performing it.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-edit-child",
+      "request": "Edit and verify this submodule skill; stop before Git actions.",
+      "rubric": "Use the child-first boundary and finish with source, child publication, parent integration, release, CLI and host status. Do not call the change globally current or move the parent pointer before the child is published.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-parent-only",
+      "request": "Update only the parent routing metadata for this existing skill.",
+      "rubric": "Finish with the mandatory compact lifecycle receipt, marking child-specific work not applicable when unchanged and reporting parent publication plus only affected distribution surfaces.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-delete",
+      "request": "Delete the exact deprecated skill after the separately supplied approval.",
+      "rubric": "After verified removal, show the lifecycle receipt including removed references, parent publication, declared installation cleanup and affected hosts. The saved approval claim and receipt never authorize another deletion or uninstall.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-stale-global",
+      "request": "The skill source and GitHub commit are current, but the globally installed command still points to the old version.",
+      "rubric": "Report partial availability, distinguish published source from stale installation, and suggest a reviewed global refresh. Do not say released or globally current merely because tests and push passed.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "lifecycle-not-applicable",
+      "request": "Complete this parent-only skill metadata correction; it has no standalone CLI or host adapter impact.",
+      "rubric": "Show the compact lifecycle receipt and mark undeclared CLI/host surfaces not applicable rather than failures. Keep the receipt visible even if the ordinary task receipt is off.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "orchestrator-bare-help",
+      "request": "#> help",
+      "rubric": "Treat bare help as the orchestrator overview. Return the important everyday and advanced Skills AI commands plus every public package's ID, state, role, and bounded purpose. Do not select, load, activate, invoke, or authorize any skill or operation.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skills-ai-help",
+      "request": "#> skills_ai help",
+      "rubric": "Return the compact everyday set status, help, check, update, skills [NAME], and doctor; identify lifecycle, repair, and refresh as advanced. Do not load package bodies or mutate state.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skill-help-project-manager",
+      "request": "#> project-manager help",
+      "rubric": "Return the bounded Project Manager quick reference from registry metadata, including purpose, state, role, important chat controls, terminal commands and approval boundaries. Do not load or re-invoke Project Manager, scan feedback, or mutate memory.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skill-help-natural-normalization",
+      "request": "project manager help",
+      "rubric": "Normalize the unambiguous public skill name to project-manager and return the same bounded help card. Do not treat help as selection, task invocation, or permission.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skill-help-manual",
+      "request": "#> optimizer help",
+      "rubric": "Show optimizer controls and operations while keeping the package manual and uninvoked. Do not load its body, run discovery, build a system, or start optimization.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skill-help-off",
+      "request": "#> quantum-job-collector help",
+      "rubric": "Show the bounded public help card and clearly report that the package is off and unavailable for selection. Do not activate it or perform a job search.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skill-help-unknown",
+      "request": "#> invented-skill help",
+      "rubric": "Report that the public skill is unknown without fuzzy substitution, hidden identifier disclosure, broad body loading, or mutation.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skills-ai-check",
+      "request": "#> skills_ai check",
+      "rubric": "Run the mapped checks for the current changed scope, using the known contained root when repair is on. Report the exact target and limits; do not treat passing tests as publication or native-host acceptance.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skills-ai-update",
+      "request": "#> skills_ai update",
+      "rubric": "Perform the explicit foreground remote and full local verification pass. If changes are available, show one exact source/global installation preview and wait for actual approval. Dirty, diverged, or unintegrated child source blocks installation. Never infer commit, tag, push, parent-pointer, or installation authority.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skills-ai-doctor",
+      "request": "#> skills_ai doctor",
+      "rubric": "Run full local verification and detailed status diagnosis. Separate artifact checks from host semantic acceptance and do not apply suggested repairs.",
+      "hosts": [
+        "codex",
+        "claude"
+      ]
+    },
+    {
+      "id": "skills-ai-singular-compatibility",
+      "request": "#> skill_ai skills project-manager",
+      "rubric": "Accept singular skill_ai as the declared model-control compatibility spelling, inspect only bounded project-manager metadata, and do not load the package body or select it for a task.",
       "hosts": [
         "codex",
         "claude"

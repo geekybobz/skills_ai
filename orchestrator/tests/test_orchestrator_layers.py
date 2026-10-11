@@ -93,6 +93,38 @@ class OrchestratorLayerTests(unittest.TestCase):
         self.assertNotIn("ACCEPTANCE.json", build)
         self.assertIn("Record current checks in the scoped commit's Verification line", build)
 
+    def test_lifecycle_receipt_stays_compact_and_mandatory(self) -> None:
+        entry = " ".join(core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8")).split())
+        self.assertIn("compact lifecycle receipt", entry)
+        self.assertIn("`receipt off` cannot hide it", entry)
+        management = " ".join((FOLDER / "MANAGEMENT.md").read_text(encoding="utf-8").split())
+        self.assertIn("source | child | parent | release | CLI | hosts", management)
+        self.assertIn("never a watcher", management)
+
+    def test_quick_status_alias_is_shared_and_read_only(self) -> None:
+        entry = " ".join(core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8")).split())
+        controls = " ".join((FOLDER / "CONTROLS.md").read_text(encoding="utf-8").split())
+        management = " ".join((FOLDER / "MANAGEMENT.md").read_text(encoding="utf-8").split())
+        self.assertIn("#> skill_ai status", entry)
+        self.assertIn("#>skill_ai status", controls)
+        self.assertIn("`skills_ai status` in the terminal", management)
+        self.assertIn("It never refreshes, installs, fetches, commits, tags, or pushes", management)
+
+    def test_per_skill_help_is_shared_read_only_and_non_selecting(self) -> None:
+        entry = " ".join(core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8")).split())
+        controls = " ".join((FOLDER / "CONTROLS.md").read_text(encoding="utf-8").split())
+        management = " ".join((FOLDER / "MANAGEMENT.md").read_text(encoding="utf-8").split())
+        self.assertIn("#> ID help", entry)
+        self.assertIn("skills_ai skills <ID> help", controls)
+        self.assertIn("skills NAME help", management)
+        for text in (entry, controls, management):
+            self.assertIn("does not select", text)
+
+    def test_build_records_phases_but_publishes_one_milestone_commit(self) -> None:
+        build = " ".join((FOLDER / "BUILD.md").read_text(encoding="utf-8").split())
+        self.assertIn("one coherent commit", build)
+        self.assertNotIn("a scoped Git commit", build)
+
     def test_entry_keeps_the_obligations_that_must_not_move_out(self) -> None:
         entry = " ".join(core_text((FOLDER / "SKILL.md").read_text(encoding="utf-8")).split())
         for phrase in OBLIGATIONS:
@@ -110,7 +142,12 @@ class OrchestratorLayerTests(unittest.TestCase):
         controls = (FOLDER / "CONTROLS.md").read_text(encoding="utf-8")
         for name in sorted(used - aliases):
             with self.subTest(control=name):
-                self.assertIn(f"#> {name}", controls)
+                is_help_target = any(
+                    re.search(rf"(?m)^#> {re.escape(name)} help(?:\s|$)", text)
+                    for case in cases
+                    for text in [case.get("request", ""), *case.get("turns", [])]
+                )
+                self.assertIn("#> <public-skill-id> help" if is_help_target else f"#> {name}", controls)
 
     @unittest.skipUnless(shutil.which("mdp"), "the optional Markdown Protocol checker is not installed")
     def test_markdown_protocol_checker_finds_no_errors(self) -> None:

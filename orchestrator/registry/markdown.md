@@ -25,6 +25,16 @@ and skill packages.
 | `#> md_deepen` | `markdown-protocol` | `deepen` | first task directive; required term text follows; proportional review still applies |
 | `#> md_protocol` | `markdown-protocol` | `guided` | first task directive; presentation controls may precede |
 
+## Help operations
+
+| kind | syntax | does | boundary |
+|---|---|---|---|
+| `chat` | `#> md_protocol` | Force the guided Markdown workflow. | Writing still requires proportional review and the applicable approval boundary. |
+| `chat` | `#> md_deepen <term>` | Propose a deeper linked note for one term. | Does not authorize research or invent missing subject matter. |
+| `chat` | `#> md_check [target]` | Run a read-only structural check on the named Markdown collection. | Does not prove factual or renderer correctness and does not authorize repairs. |
+| `terminal` | `mdp verify <collection>` | Verify an adopted Markdown collection. | Read-only structural verification. |
+| `terminal` | `mdp adopt <collection>` | Inspect an unadopted collection and report migration warnings. | Adoption changes require the normal reviewed write workflow. |
+
 ## Rules
 
 - Select automatically whenever requested work will create, edit, review, or

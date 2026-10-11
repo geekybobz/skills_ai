@@ -1,0 +1,79 @@
+{
+  "schema": "skills-ai/distribution/1",
+  "records": {
+    "markdown-protocol": {
+      "repository": {
+        "kind": "submodule",
+        "path": "skills/markdown-protocol"
+      },
+      "version_source": {
+        "kind": "pyproject",
+        "path": "skills/markdown-protocol/pyproject.toml"
+      },
+      "release": {
+        "kind": "semver-tag",
+        "required": true
+      },
+      "commands": [
+        {
+          "name": "mdp",
+          "kind": "python-distribution",
+          "distribution": "markdown-protocol",
+          "required": true
+        }
+      ],
+      "host_adapters": []
+    },
+    "project-manager": {
+      "repository": {
+        "kind": "submodule",
+        "path": "skills/project-manager"
+      },
+      "version_source": {
+        "kind": "pyproject",
+        "path": "skills/project-manager/pyproject.toml"
+      },
+      "release": {
+        "kind": "semver-tag",
+        "required": true
+      },
+      "commands": [
+        {
+          "name": "project-manager",
+          "kind": "python-distribution",
+          "distribution": "project-manager-memory",
+          "required": true
+        },
+        {
+          "name": "pmem",
+          "kind": "python-distribution",
+          "distribution": "project-manager-memory",
+          "required": true
+        }
+      ],
+      "host_adapters": []
+    },
+    "skills-orchestrator": {
+      "repository": {
+        "kind": "parent",
+        "path": "."
+      },
+      "release": {
+        "kind": "date-tag",
+        "required": true
+      },
+      "commands": [
+        {
+          "name": "skills_ai",
+          "kind": "source-launcher",
+          "target": "scripts/skills_ai",
+          "required": true
+        }
+      ],
+      "host_adapters": [
+        "codex",
+        "claude"
+      ]
+    }
+  }
+}

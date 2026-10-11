@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 
-from registry_runtime import RegistryRuntimeError, load_manifest, registry_summary
+from registry_runtime import RegistryRuntimeError, load_manifest, registry_summary, skill_help
 
 
 def render_human(summary: dict, state: str, *, routes: bool = False) -> str:
@@ -64,6 +64,33 @@ def render_human(summary: dict, state: str, *, routes: bool = False) -> str:
     return "\n".join(lines)
 
 
+def render_help_card(card: dict) -> str:
+    skill = card["skill"]
+    lines = [
+        f"Skill help — {skill['id']}",
+        f"State: {skill['state']} · Role: {skill['role']}",
+        f"Purpose: {skill['purpose']}",
+    ]
+    for key, label in (
+        ("use_when", "Use when"),
+        ("not_for", "Do not use for"),
+    ):
+        if card[key]:
+            lines += ["", label] + [f"- {item}" for item in card[key]]
+    for key, label in (
+        ("chat", "Chat controls"),
+        ("terminal", "Terminal commands"),
+        ("keywords", "Workflow keywords"),
+    ):
+        if card[key]:
+            lines += ["", label]
+            for item in card[key]:
+                lines += [f"- {item['syntax']} — {item['does']}", f"  Boundary: {item['boundary']}"]
+    lines += ["", "More detail"] + [f"- {entry}" for entry in card["entries"]]
+    lines += ["", card["limits"]]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -75,19 +102,29 @@ def main() -> int:
     view_group = parser.add_mutually_exclusive_group()
     view_group.add_argument("--routes", action="store_true", help="list internal capability diagnostics instead of skills")
     view_group.add_argument("--catalog", action="store_true", help="include skill-level purpose, family, and trigger metadata")
+    view_group.add_argument("--help-skill", metavar="NAME", help="show one bounded public-skill quick reference")
     parser.add_argument("--json", action="store_true", help="emit stable JSON")
     args = parser.parse_args()
     try:
         include_hidden = args.include_hidden or args.state in {"hidden", "deprecated"}
-        view = "diagnostic" if args.routes else "catalog" if args.catalog else "inventory"
-        summary = registry_summary(load_manifest(), include_hidden=include_hidden, view=view)
+        manifest = load_manifest()
+        if args.help_skill:
+            summary = skill_help(manifest, args.help_skill)
+        else:
+            view = "diagnostic" if args.routes else "catalog" if args.catalog else "inventory"
+            summary = registry_summary(manifest, include_hidden=include_hidden, view=view)
         if args.json:
             print(json.dumps(summary, indent=2, sort_keys=True))
+        elif args.help_skill:
+            print(render_help_card(summary))
         else:
             print(render_human(summary, args.state, routes=args.routes))
         return 0
     except (OSError, RegistryRuntimeError, ValueError) as exc:
-        print(f"error: {exc}")
+        if args.json:
+            print(json.dumps({"schema":"skills-ai/error/1", "reason":str(exc), "authority":"none"}))
+        else:
+            print(f"error: {exc}")
         return 1
 
 

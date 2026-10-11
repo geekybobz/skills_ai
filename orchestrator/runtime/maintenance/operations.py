@@ -14,7 +14,9 @@ def locked(function):
 
 @locked
 def make_preview(root, session, kind, hosts, approval_ref=None):
-    repair = workspace.transition(root, session, 'preview', checks=True, approval_ref=approval_ref) if kind == 'update' else None
+    if kind not in {'repair-apply', 'refresh'}:
+        raise MaintenanceError('INVALID_OPERATION_KIND')
+    repair = workspace.transition(root, session, 'preview', checks=True, approval_ref=approval_ref) if kind == 'repair-apply' else None
     installations = [adapters.preview(root, host) for host in hosts]
     candidate_identity = None
     if repair and repair.get('action') != 'no-changes':
@@ -55,7 +57,7 @@ def apply_preview(root, preview_id, approval_ref, *, expected_kind):
     adapters.bindings(root)  # Corrupt known host state must fail before effects.
     if not isinstance(plan['installations'], list) or len(plan['installations']) > len(adapters.HOSTS):
         raise MaintenanceError('INVALID_INSTALLATION_PLAN')
-    if candidate_source(root) and plan['kind'] == 'update':
+    if candidate_source(root) and plan['kind'] == 'repair-apply':
         raise MaintenanceError('CANDIDATE_CANNOT_CONTROL_SOURCE')
     for installation in plan['installations']:
         if not isinstance(installation, dict) or set(installation) != {'binding', 'before', 'changes'}:

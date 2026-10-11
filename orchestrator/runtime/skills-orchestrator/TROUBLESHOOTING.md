@@ -104,6 +104,8 @@ deadline. Codex owns its own session cleanup. Neither host certifies the other.
 | maintenance selects a task package | let the host interpret exact management scope; the transport never scores tasks |
 | `MANIFEST_UNAVAILABLE` | compile and validate; the original task should continue normally |
 | installed adapter is stale | dry-run, inspect, then reinstall with platform-owner approval |
+| a skill change is committed but global availability is unclear | run `skills_ai lifecycle PACKAGE`; read committed, published, released, integrated, CLI and host states separately, and use `--check-remotes` only when a fresh foreground fetch is intended |
+| lifecycle reports a stale or absent global CLI | inspect the declared expected version and installed path, then review the package-owned installer; the receipt does not authorize installation |
 | Claude check names a native skill that shadows a package | Claude Code would load that copy with its own Skill tool and skip the orchestrator; move it out of `~/.claude/skills/` |
 | generated root entry or generated reference is stale | edit the canonical source and rerun `compile_repository_views.py` |
 | an agent opens `orchestrator/runtime/SKILL.md` expecting the instructions | that file is only the Codex install header; the instructions are in [SKILL.md](SKILL.md) and this [index](INDEX.md), which `AGENTS.md` and `CLAUDE.md` point to |

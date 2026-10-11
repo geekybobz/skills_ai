@@ -15,6 +15,16 @@ this file is the whole registry entry for that family.
 |---|---|---|---|
 | [[skills/theory-reference/SKILL\|theory-reference]] | build a rigorous compact LaTeX reference through planning, evaluation and chapter phases | theoretical references and mathematical learning documents | unrelated prose or software implementation |
 
+## Help operations
+
+| kind | syntax | does | boundary |
+|---|---|---|---|
+| `chat` | `#> use theory-reference` | Select the theory-reference package for the current request. | Selection grants no write authority; project discovery still chooses the phase. |
+| `keyword` | `new theory reference / no plan` | Route to planning and outline design. | Planning writes only after approval and produces no LaTeX. |
+| `keyword` | `evaluate / audit plan / review plan` | Route to evaluation of the existing plan and outlines. | Does not reorder the plan or write LaTeX without approval. |
+| `keyword` | `build chapter <chapter>` | Route to the requested chapter build after project discovery. | Loads only the relevant outline, rules, and templates; writes after approval. |
+| `keyword` | `review outline <outline>` | Present the requested outline for review. | Read-only unless edits are separately requested and approved. |
+
 ## Load route
 
 ```text
