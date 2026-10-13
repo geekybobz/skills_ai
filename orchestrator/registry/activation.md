@@ -38,7 +38,7 @@ additional skills.
 | project-manager | active | [[skills/project-manager/SKILL\|project-manager]] | supporting | mandatory for every project or repository task; reads portable memory, maintains one active HANDOFF, proposes durable updates, and remains active under `#> use none` |
 | theory-reference | active | [[skills/theory-reference/SKILL\|theory-reference]] | task | theory notes, LaTeX, derivation planning, and reference work |
 | research-context-scout | manual | [[skills/research-context-scout/SKILL\|research-context-scout]] | task | exact package request, `#> scout`, or `#> scout-again` only |
-| optimizer | manual | [[skills/optimizer/SKILL\|optimizer]] | task | exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates |
+| optimizer | manual | [[skills/optimizer/SKILL\|optimizer]] | task | leading `#> optimizer`, `#> bloch` or `#> build-system`; reviewed OLGS/OLSS construction, reproducible optimization, and plan/review before shared-renderer Bloch plotting |
 | quantum-job-collector | off | `skills/external/quantum-job-collector/SKILL.md` | task | exhaustive Quantum Career Radar job collection |
 
 ## Family Gates
@@ -50,7 +50,7 @@ additional skills.
 | project-memory | active | [[orchestrator/registry/project-memory\|project-memory]] | portable project context, durable rules and preferences, active handoff, resume, and feedback evidence | project-manager |
 | theory | active | [[orchestrator/registry/theory\|theory]] | LaTeX theory reference and math notes | theory-reference |
 | research | active | [[orchestrator/registry/research\|research]] | early project orientation, evidence, applications and paper direction | research-context-scout |
-| optimizer-workflow | manual | [[orchestrator/registry/optimizer\|optimizer]] | exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates | optimizer |
+| optimizer-workflow | manual | [[orchestrator/registry/optimizer\|optimizer]] | exact optimizer workflow: reviewed OLGS/OLSS construction, multistart optimization, verification, CLI/MCP persistence and diagnostics | optimizer |
 | career | off | `orchestrator/registry/career.md` | career radar and job-search workflows | quantum-job-collector |
 
 ## Interaction Protocol Components

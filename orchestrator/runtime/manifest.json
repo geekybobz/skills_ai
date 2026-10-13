@@ -1,7 +1,14 @@
 {
   "command_aliases": [
     {
-      "boundary": "first task directive; requires a user-pointed derivation/problem source",
+      "boundary": "first task directive; requires a reviewed plotting plan before propagation/rendering",
+      "command": "#> bloch",
+      "family": "optimizer-workflow",
+      "mode": "bloch",
+      "skill_id": "optimizer"
+    },
+    {
+      "boundary": "reviewed OLGS/OLSS/both construction shortcut; requires a theory/project target",
       "command": "#> build-system",
       "family": "optimizer-workflow",
       "mode": "build-system",
@@ -48,13 +55,6 @@
       "family": "project-memory",
       "mode": "route",
       "skill_id": "project-manager"
-    },
-    {
-      "boundary": "first task directive; requires an existing system/project and stated goal",
-      "command": "#> optimize",
-      "family": "optimizer-workflow",
-      "mode": "optimize",
-      "skill_id": "optimizer"
     },
     {
       "boundary": "first task directive; presentation controls may precede; an operation may follow",
@@ -235,7 +235,7 @@
       "state": "active"
     },
     "optimizer-workflow": {
-      "boundary": "exact optimizer workflow: OLGS build planning, validation, runs, diagnostics, and contained updates",
+      "boundary": "exact optimizer workflow: reviewed OLGS/OLSS construction, multistart optimization, verification, CLI/MCP persistence and diagnostics",
       "package": "optimizer",
       "path": "orchestrator/registry/optimizer.md",
       "state": "manual"
@@ -341,20 +341,20 @@
       "syntax": "mdp verify <collection>"
     },
     {
-      "boundary": "Produces a plan first; it does not optimize or silently construct physics.",
-      "does": "Build a reviewed OLGS system from a user-pointed derivation.",
+      "boundary": "Initial invocation does not authorize rendering; wait for review.",
+      "does": "Plan and review a Bloch plot, then use the shared installed renderer.",
       "family": "optimizer-workflow",
       "kind": "chat",
       "package": "optimizer",
-      "syntax": "#> build-system <problem.tex>"
+      "syntax": "#> bloch <trajectory/system/candidate>"
     },
     {
-      "boundary": "Does not silently redesign the system or claim numerical globality.",
-      "does": "Start an evidence-led campaign on an existing verified system.",
+      "boundary": "Select OLGS/OLSS/both; plan and review before construction.",
+      "does": "Route to the shared reviewed construction workflow.",
       "family": "optimizer-workflow",
       "kind": "chat",
       "package": "optimizer",
-      "syntax": "#> optimize <system/project> <goal>"
+      "syntax": "#> build-system <theory/project> [OLGS/OLSS/both]"
     },
     {
       "boundary": "Branch type and changed assumptions must remain explicit.",
@@ -363,6 +363,14 @@
       "kind": "chat",
       "package": "optimizer",
       "syntax": "#> optimizer branch <campaign> <change>"
+    },
+    {
+      "boundary": "Produces a plan first; it does not optimize or silently construct physics.",
+      "does": "Build the reviewed OLGS, OLSS, or both formulations from supplied theory.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer build-system <theory/project> [OLGS/OLSS/both]"
     },
     {
       "boundary": "Discovery only; does not run optimization.",
@@ -397,8 +405,16 @@
       "syntax": "#> optimizer intervene <campaign> <proposal>"
     },
     {
+      "boundary": "Does not silently redesign the system or claim numerical globality.",
+      "does": "Start an evidence-led campaign on an existing verified system.",
+      "family": "optimizer-workflow",
+      "kind": "chat",
+      "package": "optimizer",
+      "syntax": "#> optimizer optimize <system/project> <goal>"
+    },
+    {
       "boundary": "Read-only inspection.",
-      "does": "Report the resolved optimizer route and live version.",
+      "does": "Report the installed runtime and source context.",
       "family": "optimizer-workflow",
       "kind": "chat",
       "package": "optimizer",
@@ -406,7 +422,7 @@
     },
     {
       "boundary": "Read-only; contract display grants no run authority.",
-      "does": "Display the resolved optimizer contract.",
+      "does": "Display the installed OLGS contract; pass olss for shooting.",
       "family": "optimizer-workflow",
       "kind": "terminal",
       "package": "optimizer",
@@ -414,7 +430,7 @@
     },
     {
       "boundary": "Read-only discovery.",
-      "does": "Search available optimizer routes.",
+      "does": "Search the installed optimizer catalog.",
       "family": "optimizer-workflow",
       "kind": "terminal",
       "package": "optimizer",
@@ -422,7 +438,7 @@
     },
     {
       "boundary": "Read-only; does not import or run a project system.",
-      "does": "Resolve the active optimizer route and version.",
+      "does": "Inspect the installed optimizer version and source context.",
       "family": "optimizer-workflow",
       "kind": "terminal",
       "package": "optimizer",
@@ -674,7 +690,7 @@
       "state": "active"
     },
     "optimizer": {
-      "boundary": "exact package request, `#> optimizer`, `#> build-system`, or `#> optimize`; live-route resolution with separate OLGS build review, adaptive campaign, and explicit intervention gates",
+      "boundary": "leading `#> optimizer`, `#> bloch` or `#> build-system`; reviewed OLGS/OLSS construction, reproducible optimization, and plan/review before shared-renderer Bloch plotting",
       "path": "skills/optimizer/SKILL.md",
       "role": "task",
       "state": "manual"
@@ -744,7 +760,7 @@
       ]
     },
     {
-      "description": "independently build a reviewed OLGS system from TeX, or adaptively optimize, explore, intervene, continue, and branch around a verified system through bounded live campaign modes and validation evidence",
+      "description": "plan and build reviewed theory-derived OLGS and/or OLSS systems, then run reproducible low-energy multistart optimization through installed CLI or available MCP tools with independent verification, plus reviewed Bloch plotting through the shared library renderer",
       "family": "optimizer-workflow",
       "family_state": "manual",
       "id": "optimizer",
@@ -753,11 +769,9 @@
       "path": "skills/optimizer/SKILL.md",
       "state": "manual",
       "triggers": [
-        "exact `#> optimizer",
-        "#> build-system",
-        "#> optimize",
-        "#> use optimizer",
-        "or exact request to use the optimizer skill"
+        "#> optimizer",
+        "#> bloch",
+        "#> build-system"
       ]
     },
     {
@@ -812,7 +826,7 @@
     }
   ],
   "schema_version": 1,
-  "source_hash": "62e6fc45114fead0391fa034d22bd83f3ed8cc158378f9edb3720dd60c818363",
+  "source_hash": "fb0d69fd43d670ba64f12dff87d188eb23d7350550204ac32578804220e6c8f3",
   "sources": [
     {
       "path": "docs/00_SKILLS_HUB.md",
@@ -820,7 +834,7 @@
     },
     {
       "path": "orchestrator/registry/activation.md",
-      "sha256": "a6877f51cb014b3cd3fadf8755b9de5ddbb049bdd95fa349ce3abf387946a0fa"
+      "sha256": "308768792688a59a822ec1c9cb421b2e3734941ea3a5bd090092dd3804ba5dc6"
     },
     {
       "path": "orchestrator/registry/career.md",
@@ -840,7 +854,7 @@
     },
     {
       "path": "orchestrator/registry/optimizer.md",
-      "sha256": "81f063d36d00fb23e8316d5c71d5a8770c7edeeb87505ae4ec4f6be2d40dd3a4"
+      "sha256": "27fd4015f08097e31f95d51a141612db1394bf981674d75348a1b3a72408f5c2"
     },
     {
       "path": "orchestrator/registry/project-memory.md",
@@ -859,7 +873,7 @@
     "active_packages": 4,
     "active_routes": 3,
     "families": 7,
-    "help_operations": 49,
+    "help_operations": 51,
     "inactive_packages": 1,
     "inactive_routes": 1,
     "manual_packages": 2,

@@ -157,7 +157,9 @@ class MetadataMigrationTests(unittest.TestCase):
   manifest=build_manifest(ROOT)
   page=discover(ROOT,manifest)
   aliases={a['command']:(a['package'],a['mode']) for a in page['aliases']}
+  self.assertEqual(('optimizer','bloch'),aliases['#> bloch'])
   self.assertEqual(('optimizer','build-system'),aliases['#> build-system'])
+  self.assertNotIn('#> optimize',aliases)
   self.assertEqual(('markdown-protocol','check'),aliases['#> md_check'])
   self.assertEqual(('markdown-protocol','deepen'),aliases['#> md_deepen'])
   self.assertEqual(('markdown-protocol','guided'),aliases['#> md_protocol'])

@@ -184,8 +184,8 @@
     },
     {
       "id": "alias",
-      "request": "#> build-system problem.tex",
-      "rubric": "Manual optimizer alias requests build review, not optimization.",
+      "request": "#> optimizer build-system problem.tex",
+      "rubric": "Manual optimizer construction requests build review, not optimization.",
       "hosts": [
         "codex",
         "claude"

@@ -25,8 +25,8 @@ class OptimizerSkillTests(unittest.TestCase):
         self.assertEqual("skills/optimizer/SKILL.md", route["path"])
         self.assertEqual(
             [
+                ("#> bloch", "bloch"),
                 ("#> build-system", "build-system"),
-                ("#> optimize", "optimize"),
                 ("#> optimizer", "route"),
             ],
             sorted(
